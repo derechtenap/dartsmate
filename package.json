@@ -1,9 +1,10 @@
 {
   "private": true,
-  "name": "my-nextron-app",
-  "description": "My application description",
+  "name": "dartmate",
+  "productName": "DartMate",
+  "description": "Analyze, track and compare your dart games.",
   "version": "1.0.0",
-  "author": "Yoshihide Shiono <shiono.yoshihide@gmail.com>",
+  "author": "DartMate Contributors",
   "main": "app/background.js",
   "scripts": {
     "dev": "nextron",
