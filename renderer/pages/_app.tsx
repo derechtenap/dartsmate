@@ -1,10 +1,16 @@
-import React from 'react';
-import type { AppProps } from 'next/app';
+import { useEffect } from "react";
+import type { AppProps } from "next/app";
 
-import '../styles/globals.css';
+import "../styles/main.scss";
 
-function MyApp({ Component, pageProps }: AppProps) {
+const App = ({ Component, pageProps }: AppProps) => {
+  // Fix: Server Error `ReferenceError: document is not defined`
+  // Wait until the DOM is ready and then require the bootstrap js
+  useEffect(() => {
+    require("bootstrap/dist/js/bootstrap.bundle.min.js");
+  }, []);
+
   return <Component {...pageProps} />;
-}
+};
 
-export default MyApp
+export default App;
