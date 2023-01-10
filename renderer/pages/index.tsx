@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import SideNavigation from "../components/SideNavigation";
 
-const menuPage: NextPage = () => {
+const Index: NextPage = () => {
   return (
     <main className="grid grid-cols-6 gap-4 w-screen h-screen">
       <aside className="col-span-1 bg-gray-800">
@@ -14,4 +14,4 @@ const menuPage: NextPage = () => {
   );
 };
 
-export default menuPage;
+export default Index;
