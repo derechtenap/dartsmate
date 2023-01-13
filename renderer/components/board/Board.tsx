@@ -20,6 +20,11 @@ const Board = () => {
     white: "var(--bs-white)",
   };
 
+  /*
+   * x1 = Single Area
+   * x2 = Double Ring
+   * x3 = Triple Ring
+   */
   const paths = ["x1", "x2", "x3"];
 
   const numbers = [
