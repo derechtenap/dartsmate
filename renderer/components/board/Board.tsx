@@ -78,6 +78,7 @@ const Board = () => {
           ></path>
         </defs>
         <g
+          id="board"
           fontFamily="var(--bs-font-sans-serif)"
           fontSize="var(--bs-body-font-size)"
           strokeLinejoin="round"
@@ -87,7 +88,6 @@ const Board = () => {
             <React.Fragment key={i}>
               {numbers.map((number, idx) => (
                 <use
-                  className="cursor-pointer"
                   data-score={number * (i + 1)}
                   key={idx}
                   fill={setFillColor(`#${path}`, idx)}
@@ -99,14 +99,12 @@ const Board = () => {
             </React.Fragment>
           ))}
           <circle
-            className="cursor-pointer"
             fill={circles.outerBullseye.fill}
             stroke={circles.outerBullseye.stroke}
             r={circles.outerBullseye.radius}
             onClick={() => console.info(circles.outerBullseye.score)}
           />
           <circle
-            className="cursor-pointer"
             fill={circles.bullseye.fill}
             stroke={circles.bullseye.stroke}
             r={circles.bullseye.radius}

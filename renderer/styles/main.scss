@@ -11,6 +11,11 @@ a {
   width: 100vw;
 }
 
-.cursor-pointer {
-  cursor: pointer;
+// Dartboard
+
+#board {
+  use,
+  circle {
+    cursor: pointer;
+  }
 }
