@@ -24,6 +24,14 @@ const Board = () => {
    * x1 = Single Area
    * x2 = Double Ring
    * x3 = Triple Ring
+   *
+   * There are additionally the zones: `x4`, `x5` and `x6`. These are not
+   * included in the array because it is not necessary to loop through them
+   *
+   * x4 = Outer Bullseye
+   * x5 = Inner Bullseye
+   * x6 = "Missing" Button (Pressed when the player failed to hit any
+   * zones (x1-x5) on the board)
    */
   const paths = ["x1", "x2", "x3"];
 
