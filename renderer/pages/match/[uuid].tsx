@@ -8,7 +8,7 @@ import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
 
-import Dartboard from "../../components/Dartboard";
+import Board from "../../components/board/Board";
 import MainNav from "../../components/navs/MainNav";
 
 import fs from "fs";
@@ -133,8 +133,8 @@ const Match = () => {
               </Table>
             </Col>
 
-            <Col className="d-flex justify-content-end">
-              <Dartboard />
+            <Col className="d-flex flex-column justify-content-center">
+              <Board />
             </Col>
           </Row>
         </Container>
