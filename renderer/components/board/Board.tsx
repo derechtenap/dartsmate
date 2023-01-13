@@ -89,6 +89,7 @@ const Board = () => {
               {numbers.map((number, idx) => (
                 <use
                   data-score={number * (i + 1)}
+                  data-zone={`x${i + 1}-n${number}`}
                   key={idx}
                   fill={setFillColor(`#${path}`, idx)}
                   transform={`rotate(${idx * 18})`}
@@ -100,6 +101,7 @@ const Board = () => {
           ))}
           <circle
             data-score={circles.outerBullseye.score}
+            data-zone="x4_n1"
             fill={circles.outerBullseye.fill}
             stroke={circles.outerBullseye.stroke}
             r={circles.outerBullseye.radius}
@@ -107,6 +109,7 @@ const Board = () => {
           />
           <circle
             data-score={circles.bullseye.score}
+            data-zone="x5_n1"
             fill={circles.bullseye.fill}
             stroke={circles.bullseye.stroke}
             r={circles.bullseye.radius}
