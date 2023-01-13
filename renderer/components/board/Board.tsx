@@ -99,12 +99,14 @@ const Board = () => {
             </React.Fragment>
           ))}
           <circle
+            data-score={circles.outerBullseye.score}
             fill={circles.outerBullseye.fill}
             stroke={circles.outerBullseye.stroke}
             r={circles.outerBullseye.radius}
             onClick={() => console.info(circles.outerBullseye.score)}
           />
           <circle
+            data-score={circles.bullseye.score}
             fill={circles.bullseye.fill}
             stroke={circles.bullseye.stroke}
             r={circles.bullseye.radius}
