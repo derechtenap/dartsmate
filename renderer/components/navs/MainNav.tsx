@@ -1,31 +1,21 @@
 import { useEffect, useState } from "react";
 
-import { NextPage } from "next";
 import Link from "next/link";
 
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
-import Card from "react-bootstrap/Card";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import Stack from "react-bootstrap/Stack";
 
-import {
-  BsDoorOpenFill,
-  BsGearFill,
-  BsMoonFill,
-  BsPlusCircleDotted,
-  BsSunFill,
-} from "react-icons/bs";
-
+import { BsGear, BsMoonFill, BsPersonCircle, BsSunFill } from "react-icons/bs";
 import {
   getStoredTheme,
   setStoredTheme,
   updateDataAttribute,
-} from "../utils/ts/appTheme";
+} from "../../utils/ts/appTheme";
 
-import Layout from "../components/layouts/DefaultCentered";
-
-const Index: NextPage = () => {
+const MainNav = () => {
   const [show, setShow] = useState<boolean>(false);
   const [theme, setTheme] = useState<string>("");
 
@@ -40,42 +30,30 @@ const Index: NextPage = () => {
     setTheme(currentTheme);
     updateDataAttribute(currentTheme);
   }, []);
+
   return (
-    <Layout title="DartMate Alpha">
-      <Stack className="text-center" direction="horizontal" gap={5}>
-        <Card className="border-0">
-          <Card.Body>
-            <Link href="/lobby">
-              <Button className="rounded-4 p-3" variant="primary">
-                <BsPlusCircleDotted className="display-1" />
-              </Button>
-            </Link>
-          </Card.Body>
-          <p className="fs-5 mt-2">New Match</p>
-        </Card>
-
-        <Card className="border-0 rounded-4">
-          <Card.Body>
+    <>
+      <Container
+        as="nav"
+        className="d-flex justify-content-between bg-body-tertiary py-2"
+        fluid
+      >
+        <Nav as="ul">
+          <Nav.Item as="li">
+            <Link href="/">DartMate</Link>
+          </Nav.Item>
+        </Nav>
+        <Nav as="ul">
+          <Nav.Item as="li">
             <Button
-              className="rounded-4 p-3"
-              variant="secondary"
-              onClick={() => setShow(true)}
+              className="m-0 p-0 d-flex align-items-center"
+              variant="link"
             >
-              <BsGearFill className="display-1" />
+              <BsGear className="fs-4" onClick={() => setShow(true)} />
             </Button>
-          </Card.Body>
-          <p className="fs-5 mt-2">Settings</p>
-        </Card>
-
-        <Card className="border-0">
-          <Card.Body>
-            <Button className="rounded-4 p-3" variant="light">
-              <BsDoorOpenFill className="display-1 text-dark" />
-            </Button>
-          </Card.Body>
-          <p className="fs-5 mt-2">Quit App</p>
-        </Card>
-      </Stack>
+          </Nav.Item>
+        </Nav>
+      </Container>
 
       <Offcanvas show={show} onHide={() => setShow(false)}>
         <Offcanvas.Header closeButton>
@@ -105,8 +83,8 @@ const Index: NextPage = () => {
           </ButtonGroup>
         </Offcanvas.Body>
       </Offcanvas>
-    </Layout>
+    </>
   );
 };
 
-export default Index;
+export default MainNav;
