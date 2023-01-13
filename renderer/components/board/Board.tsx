@@ -125,6 +125,7 @@ const Board = () => {
       <Button
         className="mt-3"
         data-score={0}
+        data-zone="x6_n1"
         onClick={() => console.info(0)}
         variant="danger"
       >
