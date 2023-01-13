@@ -49,7 +49,7 @@ const Board = () => {
       case "#x3":
         return idx % 2 == 0 ? colors.red : colors.green;
       default:
-        throw new Error(`Can't set color for path "${path}"!`);
+        throw new Error(`Color for path "${path}" cannot be set!`);
     }
   };
 
