@@ -78,8 +78,8 @@ const Board = () => {
           ></path>
         </defs>
         <g
-          fontFamily="Helvetica,Arial,sans-serif"
-          fontSize="18"
+          fontFamily="var(--bs-font-sans-serif)"
+          fontSize="var(--bs-body-font-size)"
           strokeLinejoin="round"
           strokeWidth="0.5"
         >
