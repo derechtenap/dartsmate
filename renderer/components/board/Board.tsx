@@ -2,6 +2,8 @@ import React from "react";
 
 import Button from "react-bootstrap/Button";
 
+import { handleBoardClick } from "../../utils/dartboard/handleBoardClick";
+
 const Board = () => {
   /*
    * ORIGINAL FILE: Dartboard_heatmap.svg <https://commons.wikimedia.org/wiki/Category:Dartboards_in_art#/media/File:Dartboard_heatmap.svg>
@@ -106,7 +108,7 @@ const Board = () => {
                   key={idx}
                   fill={setFillColor(`#${path}`, idx)}
                   transform={`rotate(${idx * 18})`}
-                  onClick={() => console.info(number * (i + 1))}
+                  onClick={(e) => handleBoardClick(e)}
                   xlinkHref={`#${path}`}
                 />
               ))}
@@ -118,7 +120,7 @@ const Board = () => {
             fill={circles.outerBullseye.fill}
             stroke={circles.outerBullseye.stroke}
             r={circles.outerBullseye.radius}
-            onClick={() => console.info(circles.outerBullseye.score)}
+            onClick={(e) => handleBoardClick(e)}
           />
           <circle
             data-score={circles.bullseye.score}
@@ -126,7 +128,7 @@ const Board = () => {
             fill={circles.bullseye.fill}
             stroke={circles.bullseye.stroke}
             r={circles.bullseye.radius}
-            onClick={() => console.info(circles.bullseye.score)}
+            onClick={(e) => handleBoardClick(e)}
           />
         </g>
       </svg>
@@ -134,7 +136,7 @@ const Board = () => {
         className="mt-3"
         data-score={0}
         data-zone="x6_n1"
-        onClick={() => console.info(0)}
+        onClick={(e) => handleBoardClick(e)}
         variant="danger"
       >
         Missed
