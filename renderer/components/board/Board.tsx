@@ -116,7 +116,7 @@ const Board = () => {
           ))}
           <circle
             data-score={circles.outerBullseye.score}
-            data-zone="x4_n1"
+            data-zone="x4-n1"
             fill={circles.outerBullseye.fill}
             stroke={circles.outerBullseye.stroke}
             r={circles.outerBullseye.radius}
@@ -124,7 +124,7 @@ const Board = () => {
           />
           <circle
             data-score={circles.bullseye.score}
-            data-zone="x5_n1"
+            data-zone="x5-n1"
             fill={circles.bullseye.fill}
             stroke={circles.bullseye.stroke}
             r={circles.bullseye.radius}
@@ -135,7 +135,7 @@ const Board = () => {
       <Button
         className="mt-3"
         data-score={0}
-        data-zone="x6_n1"
+        data-zone="x6-n1"
         onClick={(e) => handleBoardClick(e)}
         variant="danger"
       >
