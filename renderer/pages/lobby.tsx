@@ -1,4 +1,6 @@
 import { randomUUID } from "crypto";
+import { NextPage } from "next";
+
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
@@ -14,7 +16,7 @@ import Stack from "react-bootstrap/Stack";
 
 import MainNav from "../components/navs/MainNav";
 
-const Lobby = () => {
+const lobby: NextPage = () => {
   const router = useRouter();
   const os = require("os");
   const fs = require("fs");

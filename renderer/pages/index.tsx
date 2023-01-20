@@ -25,7 +25,6 @@ import {
 
 import Layout from "../components/layouts/DefaultCentered";
 
-const Index: NextPage = () => {
   const [show, setShow] = useState<boolean>(false);
   const [theme, setTheme] = useState<string>("");
 
@@ -40,6 +39,7 @@ const Index: NextPage = () => {
     setTheme(currentTheme);
     updateDataAttribute(currentTheme);
   }, []);
+const indexPage: NextPage = () => {
   return (
     <Layout title="DartMate Alpha">
       <Stack className="text-center" direction="horizontal" gap={5}>
@@ -109,4 +109,4 @@ const Index: NextPage = () => {
   );
 };
 
-export default Index;
+export default indexPage;

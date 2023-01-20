@@ -1,3 +1,5 @@
+import { NextPage } from "next";
+
 import { useEffect, useState } from "react";
 
 import Badge from "react-bootstrap/Badge";
@@ -24,6 +26,8 @@ type Player = {
 const Match = () => {
   const router = useRouter();
   const [match, setMatch] = useState(undefined);
+const match: NextPage = () => {
+  const [match, setMatch] = useState<Match>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [modalShow, setModalShow] = useState<boolean>(true);
   const [currentPlayer, setCurrentPlayer] = useState<number>(0);
