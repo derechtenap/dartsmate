@@ -1,38 +1,25 @@
-<p align="center"><img src="https://i.imgur.com/a9QWW0v.png"></p>
+# :dart: DartMate
 
-## Usage
+**Analayze, compare and track your dart games with DartMate - Build with [nextron](https://github.com/saltyshiomix/nextron), [Next.js](https://github.com/vercel/next.js), [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss) and [daisyUI](https://github.com/saadeghi/daisyui)**
 
-### Create an App
+:warning: The project is currently still a work in progress. Many functions and ideas are not implemented yet!
 
-```
-# with npx
-$ npx create-nextron-app my-app --example with-typescript-tailwindcss
+## :sparkles: Features
 
-# with yarn
-$ yarn create nextron-app my-app --example with-typescript-tailwindcss
+:construction: Soon:tm:
 
-# with pnpx
-$ pnpx create-nextron-app my-app --example with-typescript-tailwindcss
-```
+## :robot: Scripts
 
-### Install Dependencies
+| Script                |                                                                                     |
+| --------------------- | ----------------------------------------------------------------------------------- |
+| `npm run dev`         |                                                                                     |
+| `npm run build`       |                                                                                     |
+| `npm run build:all`   |                                                                                     |
+| `npm run build:win32` |                                                                                     |
+| `npm run build:win64` |                                                                                     |
+| `npm run build:mac`   | :warning: To successfully build for macOS, the host computer must be running macOS! |
+| `npm run build:linux` |                                                                                     |
 
-```
-$ cd my-app
+## :construction_worker: Contributors
 
-# using yarn or npm
-$ yarn (or `npm install`)
-
-# using pnpm
-$ pnpm install --shamefully-hoist
-```
-
-### Use it
-
-```
-# development mode
-$ yarn dev (or `npm run dev` or `pnpm run dev`)
-
-# production build
-$ yarn build (or `npm run build` or `pnpm run build`)
-```
+- Tim Deres ([@derechtenap](https://github.com/derechtenap))
