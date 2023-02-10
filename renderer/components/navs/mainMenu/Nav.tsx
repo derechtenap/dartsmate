@@ -1,40 +1,6 @@
-import {
-  HiInboxIn,
-  HiPlusCircle,
-  HiSortAscending,
-  HiUserGroup,
-  HiXCircle,
-} from "react-icons/hi";
-
 import Card from "./Card";
 
-const links = [
-  {
-    icon: <HiPlusCircle />,
-    name: "New Game",
-    href: "/lobby",
-  },
-  {
-    icon: <HiInboxIn />,
-    name: "Load Game",
-    href: "/loadGame",
-  },
-  {
-    icon: <HiUserGroup />,
-    name: "Profiles",
-    href: "/profiles",
-  },
-  {
-    icon: <HiSortAscending />,
-    name: "Ranking",
-    href: "/ranking",
-  },
-  {
-    icon: <HiXCircle />,
-    name: "Quit",
-    href: "/quit",
-  },
-];
+import { mainNavLinks as links } from "utils/ui/navigation";
 
 const MainMenuNav = () => {
   return (

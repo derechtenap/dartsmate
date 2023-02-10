@@ -1,33 +1,12 @@
-import {
-  HiCog,
-  HiOutlineFolderOpen,
-  HiOutlineInformationCircle,
-} from "react-icons/hi";
+import { optionsNavLinks as links } from "utils/ui/navigation";
 
 const List = () => {
-  const Links = [
-    {
-      icon: <HiOutlineFolderOpen />,
-      name: "Open Save Directory",
-      href: "#",
-    },
-    {
-      icon: <HiOutlineInformationCircle />,
-      name: "About",
-      href: "/about",
-    },
-    {
-      icon: <HiCog />,
-      name: "Settings",
-      href: "/settings",
-    },
-  ];
   return (
     <ul
       className="flex flex-row justify-center gap-4 text-xl text-white"
       role="navigation"
     >
-      {Links.map((link) => (
+      {links.map((link) => (
         <li className="cursor-pointer" key={link.href}>
           {link.icon}
         </li>
