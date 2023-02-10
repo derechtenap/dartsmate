@@ -1,7 +1,5 @@
 import React from "react";
 
-import Button from "react-bootstrap/Button";
-
 import { handleBoardClick } from "../../utils/dartboard/handleBoardClick";
 
 const Board = () => {
@@ -132,15 +130,17 @@ const Board = () => {
           />
         </g>
       </svg>
-      <Button
-        className="mt-3"
+      <button
+        className="mt-3 px-5"
         data-score={0}
         data-zone="x6-n1"
         onClick={(e) => handleBoardClick(e)}
-        variant="danger"
       >
         Missed
-      </Button>
+      </button>
+      <button className="mt-3 w-full" disabled>
+        Next Round
+      </button>
     </>
   );
 };
