@@ -11,7 +11,7 @@ import {
 
 // TODO: Add optional onClick prop e.g. for the openSaveDir
 
-const about = {
+export const about = {
   href: "/about",
   icon: <HiOutlineInformationCircle />,
   name: "About",
@@ -23,37 +23,37 @@ const loadGame = {
   name: "Load Game",
 };
 
-const openSaveDir = {
+export const openSaveDir = {
   href: "#",
   icon: <HiOutlineFolderOpen />,
   name: "Open Save Directory",
 };
 
-const profiles = {
+export const profiles = {
   href: "/profiles",
   icon: <HiUserGroup />,
   name: "Profiles",
 };
 
-const quit = {
+export const quit = {
   href: "/quit",
   icon: <HiXCircle />,
   name: "Quit",
 };
 
-const ranking = {
+export const ranking = {
   href: "/ranking",
   icon: <HiSortAscending />,
   name: "Ranking",
 };
 
-const settings = {
+export const settings = {
   href: "/settings",
   icon: <HiCog />,
   name: "Settings",
 };
 
-const newGame = {
+export const newGame = {
   href: "/lobby",
   icon: <HiPlusCircle />,
   name: "New Game",
