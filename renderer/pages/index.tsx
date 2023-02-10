@@ -6,7 +6,7 @@ import Nav from "@/components/navs/mainMenu/Nav";
 
 import app from "../../package.json";
 
-const indexPage: NextPage = () => {
+const IndexPage: NextPage = () => {
   return (
     <Layout title="DartMate">
       <Nav />
@@ -18,4 +18,4 @@ const indexPage: NextPage = () => {
   );
 };
 
-export default indexPage;
+export default IndexPage;
