@@ -1,5 +1,6 @@
 import {
   HiCog,
+  HiHome,
   HiInboxIn,
   HiOutlineFolderOpen,
   HiOutlineInformationCircle,
@@ -17,7 +18,13 @@ export const about = {
   name: "About",
 };
 
-const loadGame = {
+export const home = {
+  href: "/",
+  icon: <HiHome />,
+  name: "Home",
+};
+
+export const loadGame = {
   href: "/loadGame",
   icon: <HiInboxIn />,
   name: "Load Game",
