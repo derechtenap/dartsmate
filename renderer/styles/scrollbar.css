@@ -1,0 +1,13 @@
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* `hsl` values are defined in the daisyUI theme config --> tailwind.config.js */
+
+*::-webkit-scrollbar-track {
+  background: hsl(var(--b2)); /* `--b2` = base-200 */
+}
+
+*::-webkit-scrollbar-thumb {
+  background: hsl(var(--p)); /* `--p` = primary */
+}
