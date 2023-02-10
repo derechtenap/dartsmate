@@ -10,7 +10,21 @@ module.exports = {
   daisyui: {
     themes: [
       {
-        mytheme: {
+        // TODO: Update both themes with nice colors :)
+        light: {
+          primary: "#264574",
+          secondary: "#f4f0d4",
+          accent: "#1FB2A5",
+          neutral: "#ebeaec",
+          "base-100": "#f5f6fa",
+          info: "#3ABFF8",
+          success: "#36D399",
+          warning: "#FBBD23",
+          error: "#F87272",
+        },
+      },
+      {
+        dark: {
           primary: "#264574",
           secondary: "#f4f0d4",
           accent: "#1FB2A5",
