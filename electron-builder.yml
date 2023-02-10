@@ -1,6 +1,6 @@
 appId: com.example.nextron
 productName: DartMate
-copyright: Copyright © 2022 DartMate Contributors
+copyright: Copyright © 2022-2023 DartMate Contributors
 directories:
   output: dist
   buildResources: resources
