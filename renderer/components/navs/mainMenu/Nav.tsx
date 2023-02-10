@@ -5,6 +5,7 @@ import {
   HiUserGroup,
   HiXCircle,
 } from "react-icons/hi";
+
 import Card from "./Card";
 
 const links = [
@@ -43,7 +44,7 @@ const MainMenuNav = () => {
     >
       {links.map((link) => (
         <li className="rounded-lg first:scale-110" key={link.href}>
-          <Card>
+          <Card href={link.href}>
             {link.icon}
             <span className="text-lg opacity-95">{link.name}</span>
           </Card>
