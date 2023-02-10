@@ -68,3 +68,4 @@ export const newGame = {
 
 export const mainNavLinks = [newGame, loadGame, profiles, ranking, quit];
 export const optionsNavLinks = [openSaveDir, about, settings];
+export const sidebarLinks = [home, profiles, ranking];
