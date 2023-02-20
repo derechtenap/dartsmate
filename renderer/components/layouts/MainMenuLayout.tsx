@@ -17,7 +17,7 @@ const DefaultLayout = ({ children, title }: Props) => {
 
       <main className="flex h-screen w-screen">
         <aside className="h-full w-16 flex-none bg-base-300 text-white">
-          <p className="absolute bottom-16 w-16 -rotate-90 transform whitespace-nowrap opacity-80">
+          <p className="absolute bottom-16 w-16 -rotate-90 transform select-none whitespace-nowrap opacity-80">
             DartMate &mdash; {appVersion}
           </p>
           <OptionsList />
