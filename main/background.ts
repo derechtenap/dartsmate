@@ -1,21 +1,28 @@
-import { app } from 'electron';
-import serve from 'electron-serve';
-import { createWindow } from './helpers';
+import { app } from "electron";
+import serve from "electron-serve";
+import { createWindow } from "./helpers";
 
-const isProd: boolean = process.env.NODE_ENV === 'production';
+const isProd: boolean = process.env.NODE_ENV === "production";
+
+const windowWidth = {
+  height: 768,
+  width: 1024,
+};
 
 if (isProd) {
-  serve({ directory: 'app' });
+  serve({ directory: "app" });
 } else {
-  app.setPath('userData', `${app.getPath('userData')} (development)`);
+  app.setPath("userData", `${app.getPath("userData")} (development)`);
 }
 
 (async () => {
   await app.whenReady();
 
-  const mainWindow = createWindow('main', {
-    width: 1000,
-    height: 600,
+  const mainWindow = createWindow("main", {
+    height: windowWidth.height,
+    width: windowWidth.width,
+    minHeight: windowWidth.height,
+    minWidth: windowWidth.width,
   });
 
   if (isProd) {
@@ -27,6 +34,6 @@ if (isProd) {
   }
 })();
 
-app.on('window-all-closed', () => {
+app.on("window-all-closed", () => {
   app.quit();
 });
