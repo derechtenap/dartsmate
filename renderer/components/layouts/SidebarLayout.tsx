@@ -13,7 +13,7 @@ const SidebarLayout = ({ children, title }: Props) => {
       <Head>
         <title>{title}</title>
       </Head>
-      <main className="grid h-screen w-screen grid-cols-12 grid-rows-6">
+      <main className="flex h-screen w-screen">
         <Sidebar />
         {children}
       </main>
