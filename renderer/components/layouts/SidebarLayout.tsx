@@ -4,14 +4,14 @@ import Sidebar from "../navs/Sidebar";
 
 type Props = {
   children: React.ReactNode;
-  title: string;
+  title?: string;
 };
 
 const SidebarLayout = ({ children, title }: Props) => {
   return (
     <>
       <Head>
-        <title>{title}</title>
+        <title>{title ? `${title} - DartMate` : "DartMate"}</title>
       </Head>
       <main className="flex h-screen w-screen">
         <Sidebar />
