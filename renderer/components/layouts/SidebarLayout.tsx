@@ -13,10 +13,8 @@ const SidebarLayout = ({ children, title }: Props) => {
       <Head>
         <title>{title ? `${title} - DartMate` : "DartMate"}</title>
       </Head>
-      <main className="flex h-screen w-screen">
-        <Sidebar />
-        {children}
-      </main>
+      <Sidebar />
+      <main className="flex-1">{children}</main>
     </>
   );
 };
