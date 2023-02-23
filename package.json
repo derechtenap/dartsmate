@@ -21,6 +21,7 @@
     "electron-store": "^8.1.0"
   },
   "devDependencies": {
+    "@headlessui/react": "^1.7.11",
     "@splidejs/react-splide": "^0.7.12",
     "@types/node": "^18.11.18",
     "@types/react": "^18.0.26",
