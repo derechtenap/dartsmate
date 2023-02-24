@@ -4,7 +4,7 @@
 
 @layer base {
   body > #__next {
-    @apply flex h-screen w-screen;
+    @apply flex h-screen w-screen select-none;
   }
 
   h1 {

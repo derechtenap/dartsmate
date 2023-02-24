@@ -3,7 +3,7 @@ import NavLink from "./NavLink";
 
 const MainMenuNav = () => {
   return (
-    <nav className="h-2/6 select-none bg-base-200 font-semibold">
+    <nav className="h-2/6 bg-base-200 font-semibold">
       <ul className="flex h-full cursor-pointer justify-evenly">
         {links.map((link) => (
           <NavLink
