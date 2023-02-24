@@ -19,9 +19,9 @@ const Lobby: NextPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setProfiles([]);
     getProfiles();
-    console.log(profiles);
-  }, [isLoading]);
+  }, []);
 
   const getProfiles = async () => {
     // Load profiles from fs
