@@ -19,7 +19,7 @@ const Lobby: NextPage = () => {
 
   const EmptySate = () => {
     return (
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg border-4 border-dotted border-base-300 px-16 py-8 text-center">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-16 py-8 text-center">
         <HiUserAdd className="mx-auto mb-4 text-8xl" />
         <h1 className="mb-6 text-2xl font-bold text-white">
           Oh snap! The Lobby is currently empty...
