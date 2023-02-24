@@ -9,6 +9,7 @@ const Avatar = ({ imgSrc, name }: Props) => {
   const nameInitial = name
     .split(" ")
     .map((char) => char.charAt(0))
+    .slice(0, 3) // Return only the first 3 characters to avoid overflowing
     .join("");
 
   if (imgSrc)
