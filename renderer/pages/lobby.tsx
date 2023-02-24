@@ -42,13 +42,30 @@ const Lobby: NextPage = () => {
 
   const EmptySate = () => {
     return (
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-16 py-8 text-center">
+      <div className="m-16 rounded-xl border-2 border-dotted  bg-base-300 py-4 px-2 text-center">
         <HiUserAdd className="mx-auto mb-4 text-8xl" />
         <h1 className="mb-6 text-2xl font-bold text-white">
           Oh snap! The Lobby is currently empty...
         </h1>
-        <p>You must add at least one player to continue.</p>
-        <button className="btn-primary btn mt-8">Add Player</button>
+        {!isLoading && (
+          <p>
+            We found{" "}
+            <span className="font-bold">
+              {profiles.length === 1
+                ? "1 player profile"
+                : `${profiles.length} player profiles`}
+            </span>{" "}
+            on your device. Would you like to add existing profiles?
+          </p>
+        )}
+        <div className="mt-8 flex w-full items-center justify-center">
+          <button className="btn btn-primary m-8">Add Player</button>
+          <div className="divider divider-horizontal">OR</div>
+          <button className="btn-outline btn btn-ghost btn-sm ml-8 mr-4">
+            Create A New Player
+          </button>
+          <button className="btn btn-ghost btn-sm">Add Guest</button>
+        </div>
       </div>
     );
   };
