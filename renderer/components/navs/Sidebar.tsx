@@ -1,37 +1,37 @@
 import Link from "next/link";
-
-import {
-  settings as settingsLink,
-  sidebarLinks as links,
-} from "utils/ui/navigation";
-
+import { useRouter } from "next/router";
+import { home, mainNavLinks as links, settings } from "utils/ui/navigation";
 const Sidebar = () => {
+  const router = useRouter();
+  const currentPath = router.asPath;
+
   return (
-    <aside className="col-span-1 row-span-6 flex h-screen flex-col content-between items-center bg-primary p-2 text-3xl text-secondary">
-      <ul className="rounded-box mt-4 flex w-full flex-col items-center gap-6 py-4">
-        {links.map((link) => (
-          <Link key={link.name} href={link.href}>
-            <div
-              className="tooltip tooltip-right cursor-pointer transition-colors hover:text-white"
-              data-tip={link.name}
-            >
-              {link.icon}
-            </div>
+    <aside className="h-full w-16 flex-none bg-base-300 text-white">
+      <nav className="flex justify-center text-xl">
+        <ul className="cursor-pointer text-primary-content">
+          <Link href={home.href}>
+            <li className="p-4 transition-all hover:scale-125 hover:bg-primary hover:text-white">
+              {home.icon}
+            </li>
           </Link>
-        ))}
-      </ul>
-      <ul className="mt-auto mb-4 flex w-full justify-center border-t pt-4">
-        <li>
-          <Link href={settingsLink.href}>
-            <div
-              className="tooltip tooltip-right cursor-pointer transition-colors hover:text-white"
-              data-tip={settingsLink.name}
-            >
-              {settingsLink.icon}
-            </div>
+          {links.map((link) => (
+            <Link href={link.href} key={link.name}>
+              <li
+                className={`p-4 transition-all hover:scale-125 hover:bg-primary hover:text-white ${
+                  currentPath === link.href ? "scale-125 text-white" : ""
+                }`}
+              >
+                {link.icon}
+              </li>
+            </Link>
+          ))}
+          <Link href={settings.href}>
+            <li className="p-4 transition-all hover:scale-125 hover:bg-primary hover:text-white">
+              {settings.icon}
+            </li>
           </Link>
-        </li>
-      </ul>
+        </ul>
+      </nav>
     </aside>
   );
 };
