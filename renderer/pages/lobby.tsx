@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Avatar from "@/components/avatars/Avatar";
 import SidebarLayout from "@/components/layouts/SidebarLayout";
@@ -9,9 +9,32 @@ import Table from "@/components/table/Table";
 import { matchMaxPlayers } from "utils/constants";
 
 import { HiMinusCircle, HiUserAdd } from "react-icons/hi";
+import { loadProfileList } from "utils/profiles/loadProfileList";
+import { loadProfile } from "utils/profiles/loadProfile";
+import { profileDir } from "utils/profiles/profileFolderHandling";
 
 const Lobby: NextPage = () => {
   const [playerList, setPlayerList] = useState([]);
+  const [profiles, setProfiles] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    getProfiles();
+    console.log(profiles);
+  }, [isLoading]);
+
+  const getProfiles = async () => {
+    // Load profiles from fs
+    const profileList = loadProfileList();
+    console.info(profileList);
+
+    // Open each profile and write them into useState
+    profileList.forEach((profile) => {
+      loadProfile(profile).then((p) => setProfiles((state) => [...state, p]));
+    });
+
+    setIsLoading(false);
+  };
 
   const removePlayer = (id: number) => {
     setPlayerList(playerList.splice(id + 1, 1));
@@ -25,15 +48,12 @@ const Lobby: NextPage = () => {
           Oh snap! The Lobby is currently empty...
         </h1>
         <p>You must add at least one player to continue.</p>
-        <button
-          className="btn-primary btn mt-8"
-          onClick={() => setPlayerList(["New Player"])}
-        >
-          Add Player
-        </button>
+        <button className="btn-primary btn mt-8">Add Player</button>
       </div>
     );
   };
+
+  if (isLoading) return <>Loading..</>;
 
   return (
     <SidebarLayout title="Lobby">
@@ -43,32 +63,8 @@ const Lobby: NextPage = () => {
           Please select all players who want to participate in the game.
         </p>
       </header>
-      <section className="m-2 flex flex-col">
-        {playerList.length === 0 ? (
-          <>{<EmptySate />}</>
-        ) : (
-          <>
-            <p className="mx-2 my-1 text-right text-sm font-thin">
-              {playerList.length} / {matchMaxPlayers} Players
-            </p>
-            <Table head={["Player", ""]}>
-              {playerList.map((player, _idx) => (
-                <tr key={player}>
-                  <td className="flex items-center">
-                    <Avatar name={player} />
-                    <span className="ml-4">{player}</span>
-                  </td>
-                  <td>
-                    <HiMinusCircle
-                      className="text-xl text-error"
-                      onClick={() => removePlayer(_idx)}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </Table>
-          </>
-        )}
+      <section className="m-2">
+        {playerList.length === 0 ? <EmptySate /> : <></>}
       </section>
     </SidebarLayout>
   );
