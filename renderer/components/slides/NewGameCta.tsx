@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import SlideContainer from "./utils/SlideContainer";
 
 const NewGameCta = () => {
@@ -8,9 +10,11 @@ const NewGameCta = () => {
         Create and customize a new game with DartMate.
       </p>
 
-      <button className="btn-primary btn text-white">
-        Start a new game...
-      </button>
+      <Link href="/lobby">
+        <button className="btn-primary btn text-white">
+          Start a new game...
+        </button>
+      </Link>
     </SlideContainer>
   );
 };
