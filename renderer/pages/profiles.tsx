@@ -6,10 +6,12 @@ import SidebarLayout from "@/components/layouts/SidebarLayout";
 import { loadProfile, readProfileDir } from "utils/profiles/load";
 import Link from "next/link";
 import Avatar from "@/components/avatars/Avatar";
-import { HiPlusCircle, HiUsers } from "react-icons/hi";
+import { HiUserCircle, HiUsers } from "react-icons/hi";
+import { profileFileExtension } from "utils/profiles/profileFolderHandling";
 
 const ProfilesPage: NextPage = () => {
   const [profiles, setProfiles] = useState<ProfileFile[]>([]);
+  const [currentProfile, setCurrentProfile] = useState<ProfileFile>();
   const [isLoading, setIsLoading] = useState(true);
 
   const getProfiles = async () => {
@@ -21,11 +23,29 @@ const ProfilesPage: NextPage = () => {
     });
   };
 
+  const openProfile = async (uuid: string) => {
+    const currentProfile = await loadProfile(`${uuid}${profileFileExtension}`);
+    setCurrentProfile(currentProfile);
+  };
+
   useEffect(() => {
     getProfiles().then(() => {
       setIsLoading(false);
     });
   }, []);
+
+  const EmptyState = () => {
+    return (
+      <main className="flex h-full w-full flex-1 items-center justify-center">
+        <div className="bg-diagonal-lines w-3/4 max-w-2xl rounded-lg px-4 py-8 text-center">
+          <HiUsers className="mx-auto mb-8 text-7xl" />
+          <h1 className="text-xl">
+            Please select a profile from the sidebar or create a new profile.
+          </h1>
+        </div>
+      </main>
+    );
+  };
 
   return (
     <SidebarLayout title="Profiles">
@@ -35,34 +55,50 @@ const ProfilesPage: NextPage = () => {
             <li className="bg-primary font-semibold">
               <Link href="#">
                 <span className="flex items-center">
-                  <HiPlusCircle className="h-8 w-8" />
+                  <HiUserCircle className="h-8 w-8" />
                   Create a new Profile
                 </span>
               </Link>
             </li>
-            {profiles.map((p) => (
+            {profiles.map(({ avatarImage, name, uuid }) => (
               <li
                 className="bg-transparent odd:bg-base-300 hover:bg-base-100"
-                key={p.uuid}
+                key={uuid}
               >
                 <Link href="#">
-                  <span className="flex min-w-0">
-                    <Avatar imgSrc={p.avatarImage} name={p.name} />
-                    <span className="flex-1 truncate">{p.name}</span>
+                  <span
+                    className="flex min-w-0"
+                    onClick={() => openProfile(uuid)}
+                  >
+                    <Avatar imgSrc={avatarImage} name={name} />
+                    {name}
                   </span>
                 </Link>
               </li>
             ))}
           </ul>
         </aside>
-        <main className="flex h-full w-full flex-1 items-center justify-center">
-          <div className="bg-diagonal-lines w-3/4 max-w-2xl rounded-lg px-4 py-8 text-center">
-            <HiUsers className="mx-auto mb-8 text-7xl" />
-            <h1 className="text-xl">
-              Please select a profile from the sidebar or create a new profile.
-            </h1>
-          </div>
-        </main>
+        {!currentProfile ? (
+          <EmptyState />
+        ) : (
+          <main className="flex-1">
+            <header className="bg-diagonal-lines flex items-center gap-x-16 rounded-lg p-4">
+              <Avatar
+                imgSrc={currentProfile.avatarImage}
+                name={currentProfile.name}
+                size="w-32"
+              />
+
+              <h1 className="font-bold">
+                {currentProfile.name}
+                <small className="mt-4 block text-base font-normal">
+                  Created at:{" "}
+                  {new Date(currentProfile.createdAt).toLocaleDateString()}
+                </small>
+              </h1>
+            </header>
+          </main>
+        )}
       </div>
     </SidebarLayout>
   );
