@@ -10,7 +10,7 @@ import { matchMaxPlayers } from "utils/constants";
 
 import { HiMinusCircle, HiUserAdd } from "react-icons/hi";
 import { loadProfileList } from "utils/profiles/loadProfileList";
-import { loadProfile } from "utils/profiles/loadProfile";
+import { loadProfile } from "utils/profiles/load";
 import { profileDir } from "utils/profiles/profileFolderHandling";
 
 const Lobby: NextPage = () => {

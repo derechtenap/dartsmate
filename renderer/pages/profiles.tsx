@@ -1,12 +1,14 @@
 import { NextPage } from "next";
 
 import SidebarLayout from "@/components/layouts/SidebarLayout";
-import { loadAllProfiles } from "utils/profiles/loadProfile";
+import { loadProfile } from "utils/profiles/load";
 
 const ProfilesPage: NextPage = () => {
-  const profiles = loadAllProfiles();
+  const getProfile = async () => {
+    console.log(await loadProfile("9272980a-d8cd-410b-bf3c-db267e98e7cd"));
+  };
 
-  console.info(profiles);
+  getProfile();
   return (
     <SidebarLayout title="Profiles">
       <h1>Profiles</h1>
