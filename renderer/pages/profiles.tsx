@@ -62,7 +62,11 @@ const ProfilesPage: NextPage = () => {
             </li>
             {profiles.map(({ avatarImage, name, uuid }) => (
               <li
-                className="bg-transparent odd:bg-base-300 hover:bg-base-100"
+                className={`${
+                  currentProfile?.uuid === uuid
+                    ? "bg-base-100"
+                    : "bg-transparent"
+                }`}
                 key={uuid}
               >
                 <Link href="#">
