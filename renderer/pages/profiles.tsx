@@ -1,16 +1,38 @@
 import { NextPage } from "next";
+import { useEffect, useState } from "react";
 
 import SidebarLayout from "@/components/layouts/SidebarLayout";
-import { loadProfile } from "utils/profiles/load";
+
+import { loadProfile, readProfileDir } from "utils/profiles/load";
 
 const ProfilesPage: NextPage = () => {
-  const getProfile = async () => {
-    console.log(await loadProfile("9272980a-d8cd-410b-bf3c-db267e98e7cd"));
+  const [profiles, setProfiles] = useState<ProfileFile[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getProfiles = async () => {
+    setProfiles([]);
+    const profileList = await readProfileDir();
+    profileList.forEach(async (p) => {
+      const profile = await loadProfile(p);
+      setProfiles((prev) => [...prev, profile]);
+    });
   };
 
-  getProfile();
+  useEffect(() => {
+    getProfiles().then(() => {
+      setIsLoading(false);
+    });
+  }, []);
+
   return (
     <SidebarLayout title="Profiles">
+      <aside>
+        <ul>
+          {profiles.map((p) => (
+            <li key={p.uuid}>{p.name}</li>
+          ))}
+        </ul>
+      </aside>
       <h1>Profiles</h1>
     </SidebarLayout>
   );

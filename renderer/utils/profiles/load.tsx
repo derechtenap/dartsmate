@@ -1,9 +1,9 @@
-import { readFileSync } from "fs";
-import { profileDir, profileFileExtension } from "./profileFolderHandling";
+import { readdirSync, readFileSync } from "fs";
+import { profileDir } from "./profileFolderHandling";
 
 // Loads the file content of a specific profile using the profile uuid
-export const loadProfile = async (uuid: string) => {
-  const profile = readFileSync(`${profileDir}/${uuid}${profileFileExtension}`, {
+export const loadProfile = async (file: string) => {
+  const profile = readFileSync(`${profileDir}/${file}`, {
     encoding: "utf-8",
     flag: "r",
   });
@@ -11,9 +11,9 @@ export const loadProfile = async (uuid: string) => {
   return await JSON.parse(profile);
 };
 
-// Loads all available profiles from the fs
-export const loadAllProfiles = async () => {
-  // TODO: Read the profile dir and get a list of all profiles
-  // TODO: Map through the list and store the content in a array
-  // TODO: Return data
+// Returns a array with each file in the profile directory
+export const readProfileDir = async () => {
+  return readdirSync(profileDir, {
+    encoding: "utf-8",
+  });
 };
