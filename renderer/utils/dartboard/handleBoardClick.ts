@@ -1,3 +1,6 @@
+let roundThrows = 0;
+let roundScore = 0;
+
 export const handleBoardClick = (
   e:
     | React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -5,11 +8,13 @@ export const handleBoardClick = (
     | React.MouseEvent<SVGUseElement, MouseEvent>
 ) => {
   const { score, zone } = e.currentTarget.dataset;
-  const settings = JSON.parse(sessionStorage.getItem("settings"));
-  const playerList = JSON.parse(sessionStorage.getItem("playerList"));
+  const settings: Settings = JSON.parse(sessionStorage.getItem("settings"));
+  const playerList: PlayerList = JSON.parse(
+    sessionStorage.getItem("playerList")
+  );
   const currentPlayer = sessionStorage.getItem("currentPlayer"); // uuid: string
 
-  // TODO: Handle errors with a modal containing  user-friendly
+  // TODO: Handle errors with a modal containing user-friendly
   // error messages and a redirect to the index or lobby page...
   if (!score || !zone)
     throw new Error(
@@ -21,12 +26,18 @@ export const handleBoardClick = (
       "Couldn't load settings, playerList or currentPlayer! Is the Session Storage empty?"
     );
 
-  console.info(parseInt(score), zone, settings, playerList);
+  // Game loop starts here
+  if (roundThrows < 3) {
+    // Normally you throw three darts per round
+    console.info(
+      `Player ${currentPlayer} hit ${zone}, which is worth ${score} points!`
+    );
 
-  /* TODO: Next steps:
-   * (1) Get current player
-   * (2) Get settings (eg. when the game is won, legs, ...)
-   * (3) Add each throw/score to a array and check if the player can win
-   * Future: Write zones to array (for heatmaps...)
-   */
+    roundThrows++;
+  } else {
+    console.info(`Player ${currentPlayer} has thrown three times!`);
+    // TODO: Update currentPlayer here...
+
+    roundThrows = 0;
+  }
 };

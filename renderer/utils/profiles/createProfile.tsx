@@ -25,7 +25,7 @@ export const createProfile = async (profile: ProfileFile) => {
     }
 
     fs.writeFileSync(
-      `${profileDir}/${profile.uuid}-${profile.createdAt}.save`,
+      `${profileDir}/${profile.uuid}.save`,
       JSON.stringify(profile)
     );
   } catch (e) {

@@ -44,7 +44,7 @@ const Lobby: NextPage = () => {
     return (
       <div className="m-16 mx-auto max-w-4xl rounded-xl border-2 border-dotted bg-base-300 py-4 px-2 text-center">
         <HiUserAdd className="mx-auto mb-4 text-8xl" />
-        <h1 className="mb-6 text-2xl font-bold text-white">
+        <h1 className="text-white mb-6 text-2xl font-bold">
           Oh snap! The Lobby is currently empty...
         </h1>
         {!isLoading && (
@@ -59,12 +59,12 @@ const Lobby: NextPage = () => {
           </p>
         )}
         <div className="mt-8 flex w-full items-center justify-center">
-          <button className="btn btn-primary m-8">Add Player</button>
+          <button className="btn-primary btn m-8">Add Player</button>
           <div className="divider divider-horizontal">OR</div>
-          <button className="btn-outline btn btn-ghost btn-sm ml-8 mr-4">
+          <button className="btn-outline btn-ghost btn-sm btn ml-8 mr-4">
             Create A New Player
           </button>
-          <button className="btn btn-ghost btn-sm">Add Guest</button>
+          <button className="bg- btn-ghost btn-sm btn">Add Guest</button>
         </div>
       </div>
     );
