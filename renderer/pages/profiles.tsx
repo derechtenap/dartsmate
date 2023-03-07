@@ -71,6 +71,25 @@ const ProfilesPage: NextPage = () => {
     });
   }, []);
 
+  const actionButtons = [
+    {
+      color: "info",
+      icon: <HiPencil />,
+      name: "Edit",
+    },
+    {
+      action: () => setCurrentProfile(undefined),
+      icon: <HiX />,
+      name: "Close",
+    },
+    {
+      action: () => handleDelete(currentProfile.uuid),
+      color: "error",
+      icon: <HiTrash />,
+      name: "Delete",
+    },
+  ];
+
   const EmptyState = () => {
     return (
       <main className="flex h-full w-full flex-1 items-center justify-center">
@@ -194,7 +213,6 @@ const ProfilesPage: NextPage = () => {
                     name={currentProfile.name}
                     size="w-32"
                   />
-
                   <h1 className="font-bold">
                     {currentProfile.name}
                     <small className="mt-4 block text-base font-normal">
@@ -204,32 +222,17 @@ const ProfilesPage: NextPage = () => {
                   </h1>
                 </header>
                 <ul className="navbar gap-x-4 bg-base-200 xl:justify-end">
-                  <li>
-                    <button
-                      className="btn-outline btn-info btn-sm btn"
-                      type="button"
-                    >
-                      <HiPencil className="mr-2" /> Edit
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      className="btn-outline btn-sm btn"
-                      onClick={() => setCurrentProfile(undefined)}
-                      type="button"
-                    >
-                      <HiX className="mr-2" /> Close
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      className="btn-outline btn-error btn-sm btn"
-                      onClick={() => handleDelete(currentProfile.uuid)}
-                      type="button"
-                    >
-                      <HiTrash className="mr-2" /> Delete
-                    </button>
-                  </li>
+                  {actionButtons.map(({ action, color, icon, name }) => (
+                    <li key={name}>
+                      <button
+                        className={`btn-outline btn-${color} btn-sm btn`}
+                        onClick={action}
+                        type="button"
+                      >
+                        {icon} <span className="ml-2">{name}</span>
+                      </button>
+                    </li>
+                  ))}
                 </ul>
                 <section className="p-2">
                   <h2>Statistics</h2>
