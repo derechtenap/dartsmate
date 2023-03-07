@@ -1,7 +1,7 @@
 import fs from "fs";
 import { randomUUID } from "crypto";
 
-import { profileDir } from "./profileFolderHandling";
+import { profileDir, profileFileExtension } from "./profileFolderHandling";
 
 export const createProfile = async (profile: ProfileFile) => {
   try {
@@ -25,7 +25,7 @@ export const createProfile = async (profile: ProfileFile) => {
     }
 
     fs.writeFileSync(
-      `${profileDir}/${profile.uuid}.save`,
+      `${profileDir}/${profile.uuid + profileFileExtension}`,
       JSON.stringify(profile)
     );
   } catch (e) {
@@ -33,7 +33,7 @@ export const createProfile = async (profile: ProfileFile) => {
   }
 };
 
-const getBase64 = async (file) => {
+const getBase64 = async (file: any) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
