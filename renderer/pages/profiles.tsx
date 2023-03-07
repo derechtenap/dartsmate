@@ -237,7 +237,9 @@ const ProfilesPage: NextPage = () => {
                     {Object.entries(currentProfile.stats).map(
                       ([stat, value]) => (
                         <div className="stat" key={value}>
-                          <div className="stat-title">{stat}</div>
+                          <div className="stat-title capitalize">
+                            {stat.replace("_", " ")}
+                          </div>
                           <div className="stat-value">{value}</div>
                         </div>
                       )
