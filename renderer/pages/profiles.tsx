@@ -6,7 +6,7 @@ import SidebarLayout from "@/components/layouts/SidebarLayout";
 import { loadProfile, readProfileDir } from "utils/profiles/load";
 import Link from "next/link";
 import Avatar from "@/components/avatars/Avatar";
-import { HiPencil, HiTrash, HiUserCircle, HiUsers } from "react-icons/hi";
+import { HiPencil, HiTrash, HiUserCircle, HiUsers, HiX } from "react-icons/hi";
 import { profileFileExtension } from "utils/profiles/profileFolderHandling";
 import { deleteProfile } from "utils/profiles/delete";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -203,13 +203,22 @@ const ProfilesPage: NextPage = () => {
                     </small>
                   </h1>
                 </header>
-                <ul className="navbar gap-x-4 bg-base-200">
+                <ul className="navbar gap-x-4 bg-base-200 xl:justify-end">
                   <li>
                     <button
                       className="btn-outline btn-info btn-sm btn"
                       type="button"
                     >
                       <HiPencil className="mr-2" /> Edit
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="btn-outline btn-sm btn"
+                      onClick={() => setCurrentProfile(undefined)}
+                      type="button"
+                    >
+                      <HiX className="mr-2" /> Close
                     </button>
                   </li>
                   <li>
