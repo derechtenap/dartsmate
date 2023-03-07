@@ -6,22 +6,22 @@ import { profileDir, profileFileExtension } from "./profileFolderHandling";
 export const createProfile = async (profile: ProfileFile) => {
   try {
     // Append additional profile
-    profile.avatarImage = profile.avatarImage[0];
-    profile.createdAt = Date.now();
-    profile.updatedAt = Date.now();
+    profile.avatar_image = profile.avatar_image[0];
+    profile.created_at = Date.now();
+    profile.updated_at = Date.now();
     profile.uuid = randomUUID();
     profile.stats = {
       games: 0,
       wins: 0,
       avg: 0,
       throws: 0,
-      totalScore: 0,
-      missedThrows: 0,
+      total_score: 0,
+      missed_throws: 0,
     };
 
     // Convert profile avatar to base64
-    if (profile.avatarImage) {
-      profile.avatarImage = (await getBase64(profile.avatarImage)) as string;
+    if (profile.avatar_image) {
+      profile.avatar_image = (await getBase64(profile.avatar_image)) as string;
     }
 
     fs.writeFileSync(

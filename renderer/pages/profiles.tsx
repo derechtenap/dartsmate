@@ -32,7 +32,7 @@ const ProfilesPage: NextPage = () => {
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     createProfile({
       name: data.userName,
-      avatarImage: data.avatar,
+      avatar_image: data.avatar,
       uuid: "",
     }).then(() => {
       getProfiles().then(() => {
@@ -162,7 +162,7 @@ const ProfilesPage: NextPage = () => {
                     </span>
                   </Link>
                 </li>
-                {profiles.map(({ avatarImage, name, uuid }) => (
+                {profiles.map(({ avatar_image, name, uuid }) => (
                   <li
                     className={`${
                       currentProfile?.uuid === uuid
@@ -176,7 +176,7 @@ const ProfilesPage: NextPage = () => {
                         className="flex min-w-0"
                         onClick={() => openProfile(uuid)}
                       >
-                        <Avatar imgSrc={avatarImage as string} name={name} />
+                        <Avatar imgSrc={avatar_image as string} name={name} />
                         {name}
                       </span>
                     </Link>
@@ -190,7 +190,7 @@ const ProfilesPage: NextPage = () => {
               <main className="flex-1">
                 <header className="bg-diagonal-lines flex items-center gap-x-16 rounded-lg p-4">
                   <Avatar
-                    imgSrc={currentProfile.avatarImage as string}
+                    imgSrc={currentProfile.avatar_image as string}
                     name={currentProfile.name}
                     size="w-32"
                   />
@@ -199,7 +199,7 @@ const ProfilesPage: NextPage = () => {
                     {currentProfile.name}
                     <small className="mt-4 block text-base font-normal">
                       Created at:{" "}
-                      {new Date(currentProfile.createdAt).toLocaleDateString()}
+                      {new Date(currentProfile.created_at).toLocaleDateString()}
                     </small>
                   </h1>
                 </header>
@@ -231,6 +231,19 @@ const ProfilesPage: NextPage = () => {
                     </button>
                   </li>
                 </ul>
+                <section className="p-2">
+                  <h2>Statistics</h2>
+                  <div className="stats">
+                    {Object.entries(currentProfile.stats).map(
+                      ([stat, value]) => (
+                        <div className="stat" key={value}>
+                          <div className="stat-title">{stat}</div>
+                          <div className="stat-value">{value}</div>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </section>
               </main>
             )}
           </div>
