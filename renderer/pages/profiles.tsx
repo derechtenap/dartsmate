@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import SidebarLayout from "@/components/layouts/SidebarLayout";
 
@@ -13,6 +13,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { createProfile } from "utils/profiles/create";
 import Button from "@/components/Button";
 
+import AvatarEditor from "react-avatar-editor";
+
 type Inputs = {
   avatar: FileList;
   userName: string;
@@ -23,6 +25,9 @@ const ProfilesPage: NextPage = () => {
   const [currentProfile, setCurrentProfile] = useState<ProfileFile>(undefined);
   const [isLoading, setIsLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
+  const [imageRef, setImageRef] = useState<string>();
+
+  const editor = useRef(null);
 
   const {
     register,
@@ -30,10 +35,22 @@ const ProfilesPage: NextPage = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const getImageURL = async () => {
+    const dataUrl = editor.current.getImageScaledToCanvas().toDataURL();
+    const result = await fetch(dataUrl);
+    const blob = await result.blob();
+
+    console.log(result);
+
+    return result.url;
+  };
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const base64 = await getImageURL();
+
     createProfile({
       name: data.userName,
-      avatar_image: data.avatar,
+      avatar_image: base64,
       uuid: "",
     }).then(() => {
       getProfiles().then(() => {
@@ -104,7 +121,7 @@ const ProfilesPage: NextPage = () => {
     );
   };
 
-  if (!isLoading) {
+  if (isLoading) {
     return (
       <main className="flex h-full w-full items-center justify-center">
         <div className="radial-progress animate-spin">
@@ -121,19 +138,43 @@ const ProfilesPage: NextPage = () => {
           className="flex h-screen w-screen flex-col items-center justify-center"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="form-control">
-            <label htmlFor="avatar" className="label">
-              <span className="label-text">Avatar</span>
-            </label>
-            <input
-              aria-invalid={errors.avatar ? "true" : "false"}
-              autoFocus
-              className="file-input input-bordered w-full max-w-xs"
-              id="avatar"
-              type="file"
-              {...register("avatar", {})}
+          {imageRef ? (
+            <AvatarEditor
+              className="card m-2"
+              image={imageRef}
+              ref={editor}
+              width={124}
+              height={124}
+              border={0}
+              borderRadius={100}
+              color={[0, 0, 0, 0.4]} // RGBA
+              scale={1.2}
+              rotate={0}
+              onImageChange={() => console.log("CHANGE")}
+              onImageReady={() => console.info("READY")}
+              onPositionChange={() => console.info("POS CHANGE")}
             />
-          </div>
+          ) : (
+            <div className="form-control">
+              <label htmlFor="avatar" className="label">
+                <span className="label-text">Avatar</span>
+              </label>
+              <input
+                aria-invalid={errors.avatar ? "true" : "false"}
+                autoFocus
+                className="file-input input-bordered w-full max-w-xs"
+                id="avatar"
+                type="file"
+                {...register("avatar", {
+                  onChange(e) {
+                    // console.info(e.target.files[0]);
+                    setImageRef(e.target.files[0]);
+                  },
+                })}
+              />
+            </div>
+          )}
+
           <div className="form-control">
             <label htmlFor="name" className="label">
               <span className="label-text">Name</span>
@@ -171,7 +212,10 @@ const ProfilesPage: NextPage = () => {
           <button
             className="btn-ghost btn"
             type="button"
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              setIsOpen(false);
+              setImageRef(undefined);
+            }}
           >
             close
           </button>

@@ -4,7 +4,7 @@ declare global {
   type ProfileFile = {
     name: string;
     uuid: string;
-    avatar_image?: string | FileList; // Base64 string
+    avatar_image?: string | File | FileList | Blob; // Base64 string
     created_at?: number; // Number of milliseconds since January 1, 1970
     updated_at?: number;
     stats?: {

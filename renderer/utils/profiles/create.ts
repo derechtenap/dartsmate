@@ -6,7 +6,7 @@ import { profileDir, profileFileExtension } from "./profileFolderHandling";
 export const createProfile = async (profile: ProfileFile) => {
   try {
     // Append additional profile
-    profile.avatar_image = profile.avatar_image[0];
+    // profile.avatar_image = profile.avatar_image[0];
     profile.created_at = Date.now();
     profile.updated_at = Date.now();
     profile.uuid = randomUUID();
@@ -20,9 +20,9 @@ export const createProfile = async (profile: ProfileFile) => {
     };
 
     // Convert profile avatar to base64
-    if (profile.avatar_image) {
-      profile.avatar_image = (await getBase64(profile.avatar_image)) as string;
-    }
+    //if (profile.avatar_image) {
+    //  profile.avatar_image = (await getBase64(profile.avatar_image)) as string;
+    //}
 
     fs.writeFileSync(
       `${profileDir}/${profile.uuid + profileFileExtension}`,
@@ -33,11 +33,11 @@ export const createProfile = async (profile: ProfileFile) => {
   }
 };
 
-const getBase64 = async (file: any) => {
+const getBase64 = async (file: any): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
+    reader.onload = () => resolve(reader.result as string);
     reader.onerror = (error) => reject(error);
   });
 };
