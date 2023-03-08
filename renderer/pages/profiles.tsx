@@ -25,9 +25,9 @@ const ProfilesPage: NextPage = () => {
   const [currentProfile, setCurrentProfile] = useState<ProfileFile>(undefined);
   const [isLoading, setIsLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
-  const [imageRef, setImageRef] = useState<string>();
+  const [imageRef, setImageRef] = useState<string>(undefined);
 
-  const editor = useRef(null);
+  const editor = useRef<AvatarEditor>(null);
 
   const {
     register,
@@ -55,6 +55,7 @@ const ProfilesPage: NextPage = () => {
     }).then(() => {
       getProfiles().then(() => {
         setIsOpen(false);
+        setImageRef(undefined);
       });
     });
   };
