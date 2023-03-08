@@ -1,12 +1,14 @@
 import fs from "fs";
 import { randomUUID } from "crypto";
 
-import { profileDir, profileFileExtension } from "./profileFolderHandling";
+import {
+  profileDir as dir,
+  profileFileExtension as fileExtension,
+} from "./profileFolderHandling";
 
 export const createProfile = async (profile: ProfileFile) => {
   try {
     // Append additional profile
-    // profile.avatar_image = profile.avatar_image[0];
     profile.created_at = Date.now();
     profile.updated_at = Date.now();
     profile.uuid = randomUUID();
@@ -19,25 +21,12 @@ export const createProfile = async (profile: ProfileFile) => {
       missed_throws: 0,
     };
 
-    // Convert profile avatar to base64
-    //if (profile.avatar_image) {
-    //  profile.avatar_image = (await getBase64(profile.avatar_image)) as string;
-    //}
-
+    // Write profle to file system
     fs.writeFileSync(
-      `${profileDir}/${profile.uuid + profileFileExtension}`,
+      `${dir}/${profile.uuid + fileExtension}`,
       JSON.stringify(profile)
     );
   } catch (e) {
     console.error(e);
   }
-};
-
-const getBase64 = async (file: any): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
 };

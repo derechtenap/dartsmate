@@ -139,21 +139,23 @@ const ProfilesPage: NextPage = () => {
           onSubmit={handleSubmit(onSubmit)}
         >
           {imageRef ? (
-            <AvatarEditor
-              className="card m-2"
-              image={imageRef}
-              ref={editor}
-              width={124}
-              height={124}
-              border={0}
-              borderRadius={100}
-              color={[0, 0, 0, 0.4]} // RGBA
-              scale={1.2}
-              rotate={0}
-              onImageChange={() => console.log("CHANGE")}
-              onImageReady={() => console.info("READY")}
-              onPositionChange={() => console.info("POS CHANGE")}
-            />
+            <>
+              <AvatarEditor
+                className="card m-2"
+                image={imageRef}
+                ref={editor}
+                width={124}
+                height={124}
+                border={0}
+                borderRadius={100}
+                color={[0, 0, 0, 0.4]} // RGBA
+                scale={1.2}
+                rotate={0}
+              />
+              <button onClick={() => setImageRef(undefined)}>
+                REMOVE_IMAGE_BTN
+              </button>
+            </>
           ) : (
             <div className="form-control">
               <label htmlFor="avatar" className="label">
@@ -167,7 +169,6 @@ const ProfilesPage: NextPage = () => {
                 type="file"
                 {...register("avatar", {
                   onChange(e) {
-                    // console.info(e.target.files[0]);
                     setImageRef(e.target.files[0]);
                   },
                 })}
