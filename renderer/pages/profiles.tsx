@@ -103,6 +103,16 @@ const ProfilesPage: NextPage = () => {
     );
   };
 
+  if (!isLoading) {
+    return (
+      <main className="flex h-full w-full items-center justify-center">
+        <div className="radial-progress animate-spin">
+          <span className="sr-only">Loading..</span>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <>
       {isOpen ? (
