@@ -11,6 +11,7 @@ import { profileFileExtension } from "utils/profiles/profileFolderHandling";
 import { deleteProfile } from "utils/profiles/delete";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { createProfile } from "utils/profiles/create";
+import Button from "@/components/Button";
 
 type Inputs = {
   avatar: FileList;
@@ -234,13 +235,14 @@ const ProfilesPage: NextPage = () => {
                 <ul className="navbar gap-x-4 bg-base-200 xl:justify-end">
                   {actionButtons.map(({ action, color, icon, name }) => (
                     <li key={name}>
-                      <button
-                        className={`btn-outline btn-${color} btn-sm btn`}
-                        onClick={action}
-                        type="button"
+                      <Button
+                        action={action}
+                        color={color}
+                        size="sm"
+                        outline={true}
                       >
                         {icon} <span className="ml-2">{name}</span>
-                      </button>
+                      </Button>
                     </li>
                   ))}
                 </ul>
