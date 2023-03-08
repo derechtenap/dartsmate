@@ -21,7 +21,7 @@ export const createProfile = async (profile: ProfileFile) => {
       missed_throws: 0,
     };
 
-    // Write profle to file system
+    // Write profile to file system
     fs.writeFileSync(
       `${dir}/${profile.uuid + fileExtension}`,
       JSON.stringify(profile)
