@@ -36,13 +36,13 @@ const ProfilesPage: NextPage = () => {
   } = useForm<Inputs>();
 
   const getImageURL = async () => {
-    const dataUrl = editor.current.getImageScaledToCanvas().toDataURL();
-    const result = await fetch(dataUrl);
-    const blob = await result.blob();
+    if (editor.current) {
+      const dataUrl = editor.current.getImageScaledToCanvas().toDataURL();
+      const result = await fetch(dataUrl);
+      return result.url;
+    }
 
-    console.log(result);
-
-    return result.url;
+    return undefined;
   };
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
