@@ -15,7 +15,7 @@ const Avatar = ({ imgSrc, name, size = "w-8" }: Props) => {
 
   if (imgSrc)
     return (
-      <div className={`avatar ${size}`}>
+      <div className={`avatar ${size} pointer-events-none`}>
         <img alt={`${name}'s avatar`} className="rounded-full" src={imgSrc} />
       </div>
     );
