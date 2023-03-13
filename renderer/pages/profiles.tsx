@@ -52,12 +52,15 @@ const ProfilesPage: NextPage = () => {
     const base64 = await getImageURL();
 
     try {
-      if (setIsEdit) {
+      if (isEdit) {
+        // Edit current profile
+
         editProfile(currentProfile, data.userName, base64);
         setIsOpen(false);
         setImageRef(undefined);
       } else {
         // Create new profile
+
         createProfile({
           name: data.userName,
           avatar_image: base64,
@@ -65,9 +68,12 @@ const ProfilesPage: NextPage = () => {
         });
       }
     } catch (e) {
+      // TODO: Add better error handling
       console.error(e);
     } finally {
       getProfiles().then(() => {
+        // Reset all states and values to default
+        setIsEdit(false);
         setIsOpen(false);
         setImageRef(undefined);
         setValue("avatar", undefined);
@@ -91,7 +97,6 @@ const ProfilesPage: NextPage = () => {
   };
 
   const handleEdit = async (uuid: string) => {
-    console.info("edit", uuid);
     setIsEdit(true);
     setValue("userName", currentProfile.name);
     setImageRef(currentProfile.avatar_image || undefined);

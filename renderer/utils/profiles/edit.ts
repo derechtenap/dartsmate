@@ -1,5 +1,4 @@
 import fs from "fs";
-import { loadProfile } from "./load";
 import {
   profileDir as dir,
   profileFileExtension as fileExtension,
