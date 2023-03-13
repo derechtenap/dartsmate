@@ -9,6 +9,7 @@ import Avatar from "@/components/avatars/Avatar";
 import { HiPencil, HiTrash, HiUserCircle, HiUsers, HiX } from "react-icons/hi";
 import { profileFileExtension } from "utils/profiles/profileFolderHandling";
 import { deleteProfile } from "utils/profiles/delete";
+import { editProfile } from "utils/profiles/edit";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { createProfile } from "utils/profiles/create";
 import Button from "@/components/Button";
@@ -24,12 +25,14 @@ const ProfilesPage: NextPage = () => {
   const [profiles, setProfiles] = useState<ProfileFile[]>([]);
   const [currentProfile, setCurrentProfile] = useState<ProfileFile>(undefined);
   const [isLoading, setIsLoading] = useState(true);
+  const [isEdit, setIsEdit] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [imageRef, setImageRef] = useState<string>(undefined);
 
   const editor = useRef<AvatarEditor>(null);
 
   const {
+    setValue,
     register,
     handleSubmit,
     formState: { errors },
@@ -48,16 +51,29 @@ const ProfilesPage: NextPage = () => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const base64 = await getImageURL();
 
-    createProfile({
-      name: data.userName,
-      avatar_image: base64,
-      uuid: "",
-    }).then(() => {
+    try {
+      if (setIsEdit) {
+        editProfile(currentProfile, data.userName, base64);
+        setIsOpen(false);
+        setImageRef(undefined);
+      } else {
+        // Create new profile
+        createProfile({
+          name: data.userName,
+          avatar_image: base64,
+          uuid: "",
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
       getProfiles().then(() => {
         setIsOpen(false);
         setImageRef(undefined);
+        setValue("avatar", undefined);
+        setValue("userName", undefined);
       });
-    });
+    }
   };
 
   const getProfiles = async () => {
@@ -72,6 +88,14 @@ const ProfilesPage: NextPage = () => {
   const openProfile = async (uuid: string) => {
     const currentProfile = await loadProfile(`${uuid}${profileFileExtension}`);
     setCurrentProfile(currentProfile);
+  };
+
+  const handleEdit = async (uuid: string) => {
+    console.info("edit", uuid);
+    setIsEdit(true);
+    setValue("userName", currentProfile.name);
+    setImageRef(currentProfile.avatar_image || undefined);
+    setIsOpen(true);
   };
 
   const handleDelete = (uuid: string) => {
@@ -92,6 +116,7 @@ const ProfilesPage: NextPage = () => {
 
   const actionButtons = [
     {
+      action: () => handleEdit(currentProfile.uuid),
       color: "info",
       icon: <HiPencil />,
       name: "Edit",
@@ -135,37 +160,49 @@ const ProfilesPage: NextPage = () => {
   return (
     <>
       {isOpen ? (
-        <form
-          className="flex h-screen w-screen flex-col items-center justify-center"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          {imageRef ? (
-            <>
-              <AvatarEditor
-                className="card m-2"
-                image={imageRef}
-                ref={editor}
-                width={124}
-                height={124}
-                border={0}
-                borderRadius={100}
-                color={[0, 0, 0, 0.4]} // RGBA
-                scale={1.2}
-                rotate={0}
-              />
-              <button onClick={() => setImageRef(undefined)}>
-                REMOVE_IMAGE_BTN
-              </button>
-            </>
-          ) : (
-            <div className="form-control">
+        <main className="flex h-screen w-screen items-center justify-center">
+          <form
+            className="card-side card-body max-w-xl rounded-xl bg-base-200"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <aside className="form-control mb-8">
               <label htmlFor="avatar" className="label">
-                <span className="label-text">Avatar</span>
+                <span
+                  className={`label-text mx-auto text-4xl ${
+                    imageRef ? "" : "cursor-pointer"
+                  }`}
+                >
+                  {imageRef ? (
+                    <div className="flex flex-col items-center gap-y-3">
+                      <AvatarEditor
+                        className="rounded-full"
+                        image={imageRef}
+                        ref={editor}
+                        width={128}
+                        height={128}
+                        border={0}
+                        borderRadius={100}
+                        scale={1.1}
+                        rotate={0}
+                      />
+                      <Button
+                        action={() => setImageRef(undefined)}
+                        size="sm"
+                        color="ghost"
+                      >
+                        Replace Image
+                      </Button>
+                    </div>
+                  ) : (
+                    <Avatar name="D M" size="w-32" />
+                  )}
+                </span>
               </label>
               <input
                 aria-invalid={errors.avatar ? "true" : "false"}
-                autoFocus
-                className="file-input input-bordered w-full max-w-xs"
+                accept="image/*"
+                className="hidden"
+                disabled={imageRef ? true : false}
                 id="avatar"
                 type="file"
                 {...register("avatar", {
@@ -174,54 +211,55 @@ const ProfilesPage: NextPage = () => {
                   },
                 })}
               />
-            </div>
-          )}
+            </aside>
 
-          <div className="form-control">
-            <label htmlFor="name" className="label">
-              <span className="label-text">Name</span>
-            </label>
-            <input
-              aria-invalid={errors.userName ? "true" : "false"}
-              className="input-bordered input w-full max-w-xs"
-              id="name"
-              placeholder="Name"
-              type="text"
-              {...register("userName", {
-                required: {
-                  message: "This field is required!",
-                  value: true,
-                },
-                minLength: {
-                  message: "The name must heave at least 2 characters",
-                  value: 2,
-                },
-                maxLength: {
-                  message: "Max 16 characters",
-                  value: 16,
-                },
-              })}
-            />
-            <label htmlFor="name" className="label">
-              {errors.userName && (
-                <span className="label-text text-error">
-                  {errors.userName.message}
-                </span>
-              )}
-            </label>
-          </div>
-          <input className="btn mt-6" type="submit" />
-          <button
-            className="btn-ghost btn"
-            type="button"
-            onClick={() => {
-              setIsOpen(false);
-              setImageRef(undefined);
-            }}
-          >
-            close
-          </button>
-        </form>
+            <section>
+              <div className="form-control">
+                <label htmlFor="name" className="label">
+                  <span className="label-text">Name</span>
+                </label>
+                <input
+                  aria-invalid={errors.userName ? "true" : "false"}
+                  className="input-bordered input w-full max-w-xs"
+                  id="name"
+                  placeholder="Please insert a user name..."
+                  type="text"
+                  {...register("userName", {
+                    required: {
+                      message: "This field is required!",
+                      value: true,
+                    },
+                    minLength: {
+                      message: "The name must heave at least 2 characters",
+                      value: 2,
+                    },
+                    maxLength: {
+                      message: "Max 16 characters",
+                      value: 16,
+                    },
+                  })}
+                />
+                <label htmlFor="name" className="label">
+                  {errors.userName && (
+                    <span className="label-text text-error">
+                      {errors.userName.message}
+                    </span>
+                  )}
+                </label>
+              </div>
+              <input className="btn mt-6" type="submit" />
+              <Button
+                action={() => {
+                  setIsOpen(false);
+                  setImageRef(undefined);
+                }}
+                color="ghost"
+              >
+                close
+              </Button>
+            </section>
+          </form>
+        </main>
       ) : (
         <SidebarLayout title="Profiles">
           <div className="flex h-full">
@@ -266,7 +304,7 @@ const ProfilesPage: NextPage = () => {
               <main className="flex-1">
                 <header className="bg-diagonal-lines flex items-center gap-x-16 rounded-lg p-4">
                   <Avatar
-                    imgSrc={currentProfile.avatar_image as string}
+                    imgSrc={currentProfile.avatar_image}
                     name={currentProfile.name}
                     size="w-32"
                   />
