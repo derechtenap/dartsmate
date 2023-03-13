@@ -15,6 +15,7 @@ import { createProfile } from "utils/profiles/create";
 import Button from "@/components/Button";
 
 import AvatarEditor from "react-avatar-editor";
+import { getBase64 } from "utils/images";
 
 type Inputs = {
   avatar: FileList;
@@ -38,18 +39,8 @@ const ProfilesPage: NextPage = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const getImageURL = async () => {
-    if (editor.current) {
-      const dataUrl = editor.current.getImageScaledToCanvas().toDataURL();
-      const result = await fetch(dataUrl);
-      return result.url;
-    }
-
-    return undefined;
-  };
-
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const base64 = await getImageURL();
+    const base64 = await getBase64(editor);
 
     try {
       if (isEdit) {
