@@ -1,0 +1,24 @@
+name: Build App Artefacts
+
+on:
+  push:
+    branches:
+      - bh/workflows
+
+jobs:
+  build-and-upload-artefact:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: node --version
+      - run: npm --version
+      - run: npm install
+      - run: npm run build:win64
+      - uses: action/upload-artifact@v3
+        with:
+          name: artefacts-for-download
+          path: dist
+
+    
