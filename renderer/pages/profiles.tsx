@@ -26,7 +26,7 @@ const ProfilesPage: NextPage = () => {
   const [currentProfile, setCurrentProfile] = useState<ProfileFile>(undefined);
   const [isLoading, setIsLoading] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [imageRef, setImageRef] = useState<string>(undefined);
 
   const editor = useRef<AvatarEditor>(null);
@@ -56,7 +56,7 @@ const ProfilesPage: NextPage = () => {
         // Edit current profile
 
         editProfile(currentProfile, data.userName, base64);
-        setIsOpen(false);
+        setIsFormOpen(false);
         setImageRef(undefined);
       } else {
         // Create new profile
@@ -74,7 +74,7 @@ const ProfilesPage: NextPage = () => {
       getProfiles().then(() => {
         // Reset all states and values to default
         setIsEdit(false);
-        setIsOpen(false);
+        setIsFormOpen(false);
         setImageRef(undefined);
         setValue("avatar", undefined);
         setValue("userName", undefined);
@@ -100,7 +100,7 @@ const ProfilesPage: NextPage = () => {
     setIsEdit(true);
     setValue("userName", currentProfile.name);
     setImageRef(currentProfile.avatar_image || undefined);
-    setIsOpen(true);
+    setIsFormOpen(true);
   };
 
   const handleDelete = (uuid: string) => {
@@ -164,7 +164,7 @@ const ProfilesPage: NextPage = () => {
 
   return (
     <>
-      {isOpen ? (
+      {isFormOpen ? (
         <main className="flex h-screen w-screen items-center justify-center">
           <form
             className="card-side card-body max-w-xl rounded-xl bg-base-200"
@@ -255,7 +255,7 @@ const ProfilesPage: NextPage = () => {
               <input className="btn mt-6" type="submit" />
               <Button
                 action={() => {
-                  setIsOpen(false);
+                  setIsFormOpen(false);
                   setImageRef(undefined);
                 }}
                 color="ghost"
@@ -274,7 +274,7 @@ const ProfilesPage: NextPage = () => {
                   <Link href="#">
                     <span
                       className="flex items-center"
-                      onClick={() => setIsOpen(true)}
+                      onClick={() => setIsFormOpen(true)}
                     >
                       <HiUserCircle className="h-8 w-8" />
                       Create a new Profile
