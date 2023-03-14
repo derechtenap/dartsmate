@@ -14,7 +14,7 @@ const ProfilesPage: NextPage = () => {
     const getProfileList = await readProfileDir();
 
     return Promise.all(
-      getProfileList.map(async (p) => {
+      getProfileList.map((p) => {
         return loadProfile(p);
       })
     );
