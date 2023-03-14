@@ -1,147 +1,32 @@
 import { NextPage } from "next";
-import { useEffect, useRef, useState } from "react";
 
 import SidebarLayout from "@/components/layouts/SidebarLayout";
 
 import { loadProfile, readProfileDir } from "utils/profiles/load";
-import Link from "next/link";
-import Avatar from "@/components/avatars/Avatar";
-import { HiPencil, HiTrash, HiUserCircle, HiUsers, HiX } from "react-icons/hi";
-import { profileFileExtension } from "utils/profiles/profileFolderHandling";
-import { deleteProfile } from "utils/profiles/delete";
-import { editProfile } from "utils/profiles/edit";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { createProfile } from "utils/profiles/create";
-import Button from "@/components/Button";
 
-import AvatarEditor from "react-avatar-editor";
-import { getBase64 } from "utils/images";
-
-type Inputs = {
-  avatar: FileList;
-  userName: string;
-};
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const ProfilesPage: NextPage = () => {
-  const [profiles, setProfiles] = useState<ProfileFile[]>([]);
-  const [currentProfile, setCurrentProfile] = useState<ProfileFile>(undefined);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isEdit, setIsEdit] = useState(false);
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [imageRef, setImageRef] = useState<string>(undefined);
-
-  const editor = useRef<AvatarEditor>(null);
-
-  const {
-    setValue,
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>();
-
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const base64 = await getBase64(editor);
-
-    try {
-      if (isEdit) {
-        // Edit current profile
-
-        editProfile(currentProfile, data.userName, base64);
-        setIsFormOpen(false);
-        setImageRef(undefined);
-      } else {
-        // Create new profile
-
-        createProfile({
-          name: data.userName,
-          avatar_image: base64,
-          uuid: "",
-        });
-      }
-    } catch (e) {
-      // TODO: Add better error handling
-      console.error(e);
-    } finally {
-      getProfiles().then(() => {
-        // Reset all states and values to default
-        setIsEdit(false);
-        setIsFormOpen(false);
-        setImageRef(undefined);
-        setValue("avatar", undefined);
-        setValue("userName", undefined);
-      });
-    }
-  };
+  const queryClient = useQueryClient();
+  console.info(queryClient);
 
   const getProfiles = async () => {
-    setProfiles([]);
-    const profileList = await readProfileDir();
-    profileList.forEach(async (p) => {
-      const profile = await loadProfile(p);
-      setProfiles((prev) => [...prev, profile]);
-    });
-  };
+    const getProfileList = await readProfileDir();
 
-  const openProfile = async (uuid: string) => {
-    const currentProfile = await loadProfile(`${uuid}${profileFileExtension}`);
-    setCurrentProfile(currentProfile);
-  };
-
-  const handleEdit = async (uuid: string) => {
-    setIsEdit(true);
-    setValue("userName", currentProfile.name);
-    setImageRef(currentProfile.avatar_image || undefined);
-    setIsFormOpen(true);
-  };
-
-  const handleDelete = (uuid: string) => {
-    deleteProfile(uuid)
-      .then(() => {
-        setCurrentProfile(undefined);
+    return Promise.all(
+      getProfileList.map(async (p) => {
+        return loadProfile(p);
       })
-      .then(() => {
-        getProfiles();
-      });
-  };
-
-  useEffect(() => {
-    getProfiles().then(() => {
-      setIsLoading(false);
-    });
-  }, []);
-
-  const actionButtons = [
-    {
-      action: () => handleEdit(currentProfile.uuid),
-      color: "info",
-      icon: <HiPencil />,
-      name: "Edit",
-    },
-    {
-      action: () => setCurrentProfile(undefined),
-      icon: <HiX />,
-      name: "Close",
-    },
-    {
-      action: () => handleDelete(currentProfile.uuid),
-      color: "error",
-      icon: <HiTrash />,
-      name: "Delete",
-    },
-  ];
-
-  const EmptyState = () => {
-    return (
-      <main className="flex h-full w-full flex-1 items-center justify-center">
-        <div className="bg-diagonal-lines w-3/4 max-w-2xl rounded-lg px-4 py-8 text-center">
-          <HiUsers className="mx-auto mb-8 text-7xl" />
-          <h1 className="text-xl">
-            Please select a profile from the sidebar or create a new profile.
-          </h1>
-        </div>
-      </main>
     );
   };
+
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ["profiles"],
+    queryFn: getProfiles,
+    select: (data) => data as ProfileFile[],
+  });
+
+  console.info(isLoading, isError, data, error);
 
   if (isLoading) {
     return (
@@ -154,199 +39,13 @@ const ProfilesPage: NextPage = () => {
   }
 
   return (
-    <>
-      {isFormOpen ? (
-        <main className="flex h-screen w-screen items-center justify-center">
-          <form
-            className="card-side card-body max-w-xl rounded-xl bg-base-200"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <aside className="form-control mb-8">
-              <label htmlFor="avatar" className="label">
-                <span
-                  className={`label-text mx-auto text-4xl ${
-                    imageRef ? "" : "cursor-pointer"
-                  }`}
-                >
-                  {imageRef ? (
-                    <div className="flex flex-col items-center gap-y-3">
-                      <AvatarEditor
-                        className="rounded-full"
-                        image={imageRef}
-                        ref={editor}
-                        width={128}
-                        height={128}
-                        border={0}
-                        borderRadius={100}
-                        scale={1.1}
-                        rotate={0}
-                      />
-                      <Button
-                        action={() => setImageRef(undefined)}
-                        size="sm"
-                        color="ghost"
-                      >
-                        Replace Image
-                      </Button>
-                    </div>
-                  ) : (
-                    <Avatar name="D M" size="w-32" />
-                  )}
-                </span>
-              </label>
-              <input
-                aria-invalid={errors.avatar ? "true" : "false"}
-                accept="image/*"
-                className="hidden"
-                disabled={imageRef ? true : false}
-                id="avatar"
-                type="file"
-                {...register("avatar", {
-                  onChange(e) {
-                    setImageRef(e.target.files[0]);
-                  },
-                })}
-              />
-            </aside>
-
-            <section>
-              <div className="form-control">
-                <label htmlFor="name" className="label">
-                  <span className="label-text">Name</span>
-                </label>
-                <input
-                  aria-invalid={errors.userName ? "true" : "false"}
-                  className="input-bordered input w-full max-w-xs"
-                  id="name"
-                  placeholder="Please insert a user name..."
-                  type="text"
-                  {...register("userName", {
-                    required: {
-                      message: "This field is required!",
-                      value: true,
-                    },
-                    minLength: {
-                      message: "The name must heave at least 2 characters",
-                      value: 2,
-                    },
-                    maxLength: {
-                      message: "Max 16 characters",
-                      value: 16,
-                    },
-                  })}
-                />
-                <label htmlFor="name" className="label">
-                  {errors.userName && (
-                    <span className="label-text text-error">
-                      {errors.userName.message}
-                    </span>
-                  )}
-                </label>
-              </div>
-              <input className="btn mt-6" type="submit" />
-              <Button
-                action={() => {
-                  setIsFormOpen(false);
-                  setImageRef(undefined);
-                }}
-                color="ghost"
-              >
-                close
-              </Button>
-            </section>
-          </form>
-        </main>
-      ) : (
-        <SidebarLayout title="Profiles">
-          <div className="flex h-full">
-            <aside className="h-full w-64 overflow-y-auto bg-base-200">
-              <ul className="menu">
-                <li className="bg-primary font-semibold">
-                  <Link href="#">
-                    <span
-                      className="flex items-center"
-                      onClick={() => setIsFormOpen(true)}
-                    >
-                      <HiUserCircle className="h-8 w-8" />
-                      Create a new Profile
-                    </span>
-                  </Link>
-                </li>
-                {profiles.map(({ avatar_image, name, uuid }) => (
-                  <li
-                    className={`${
-                      currentProfile?.uuid === uuid
-                        ? "bg-base-100"
-                        : "bg-transparent"
-                    }`}
-                    key={uuid}
-                  >
-                    <Link href="#">
-                      <span
-                        className="flex min-w-0"
-                        onClick={() => openProfile(uuid)}
-                      >
-                        <Avatar imgSrc={avatar_image as string} name={name} />
-                        {name}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </aside>
-            {!currentProfile ? (
-              <EmptyState />
-            ) : (
-              <main className="flex-1">
-                <header className="bg-diagonal-lines flex items-center gap-x-16 rounded-lg p-4">
-                  <Avatar
-                    imgSrc={currentProfile.avatar_image}
-                    name={currentProfile.name}
-                    size="w-32"
-                  />
-                  <h1 className="font-bold">
-                    {currentProfile.name}
-                    <small className="mt-4 block text-base font-normal">
-                      Created at:{" "}
-                      {new Date(currentProfile.created_at).toLocaleDateString()}
-                    </small>
-                  </h1>
-                </header>
-                <ul className="navbar gap-x-4 bg-base-200 xl:justify-end">
-                  {actionButtons.map(({ action, color, icon, name }) => (
-                    <li key={name}>
-                      <Button
-                        action={action}
-                        color={color}
-                        size="sm"
-                        outline={true}
-                      >
-                        {icon} <span className="ml-2">{name}</span>
-                      </Button>
-                    </li>
-                  ))}
-                </ul>
-                <section className="p-2">
-                  <h2>Statistics</h2>
-                  <div className="stats">
-                    {Object.entries(currentProfile.stats).map(
-                      ([stat, value]) => (
-                        <div className="stat" key={stat}>
-                          <div className="stat-title capitalize">
-                            {stat.replace("_", " ")}
-                          </div>
-                          <div className="stat-value">{value}</div>
-                        </div>
-                      )
-                    )}
-                  </div>
-                </section>
-              </main>
-            )}
-          </div>
-        </SidebarLayout>
-      )}
-    </>
+    <SidebarLayout title="Profiles">
+      <ul>
+        {data?.map((profile) => (
+          <li key={profile.uuid}>{profile.name}</li>
+        ))}
+      </ul>
+    </SidebarLayout>
   );
 };
 
