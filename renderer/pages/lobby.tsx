@@ -96,23 +96,25 @@ const Lobby: NextPage = () => {
         <Button action={() => addPlayer()}>DEBUG_ADD_PLAYER</Button>
 
         <Table head={["name", ""]}>
-          {selectedProfiles.map((profile: ProfileFile) => (
-            <tr key={profile.uuid}>
-              <td className="flex items-center gap-4">
-                <Avatar name={profile.name} imgSrc={profile.avatar_image} />
-                {profile.name}
-              </td>
-              <td>
-                <Button
-                  action={() => removePlayer(profile.uuid)}
-                  color="ghost"
-                  size="sm"
-                >
-                  DEBUG_REMOVE_PROFILE
-                </Button>
-              </td>
-            </tr>
-          ))}
+          {selectedProfiles.map(
+            ({ avatar_image: img, name, uuid }: ProfileFile) => (
+              <tr key={uuid}>
+                <td className="flex items-center gap-4">
+                  <Avatar name={name} imgSrc={img} />
+                  {name}
+                </td>
+                <td>
+                  <Button
+                    action={() => removePlayer(uuid)}
+                    color="ghost"
+                    size="sm"
+                  >
+                    DEBUG_REMOVE_PROFILE
+                  </Button>
+                </td>
+              </tr>
+            )
+          )}
         </Table>
 
         <button
