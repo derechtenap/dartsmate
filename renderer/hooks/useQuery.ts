@@ -13,11 +13,9 @@ const loadProfiles = async () => {
 };
 
 export const getProfiles = () => {
-  const { isLoading, isError, data, error } = useQuery({
+  return useQuery({
     queryKey: ["profiles"],
     queryFn: loadProfiles,
     select: (data) => data as ProfileFile[],
   });
-
-  return { isLoading, isError, data, error };
 };

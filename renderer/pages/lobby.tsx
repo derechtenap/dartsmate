@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import SidebarLayout from "@/components/layouts/SidebarLayout";
 
 import { matchMaxPlayers as maxPlayers } from "utils/constants";
-import { getProfiles } from "hooks/useProfileData";
+import { getProfiles } from "hooks/useQuery";
 
 const Lobby: NextPage = () => {
   const { isLoading, isError, data, error } = getProfiles();
