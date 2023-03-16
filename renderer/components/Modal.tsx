@@ -20,7 +20,7 @@ const Modal = ({ children, state, title }: Props) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="bg-black fixed inset-0 bg-opacity-25" />
+          <div />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -34,11 +34,8 @@ const Modal = ({ children, state, title }: Props) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="bg-white w-full max-w-md transform overflow-hidden rounded-2xl p-6 text-left align-middle shadow-xl transition-all">
-                <Dialog.Title
-                  as="h3"
-                  className="text-gray-900 text-lg font-medium leading-6"
-                >
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Title as="h3" className="text-lg font-medium leading-6">
                   {title}
                 </Dialog.Title>
                 <div className="mt-2">{children}</div>
