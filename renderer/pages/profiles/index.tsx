@@ -15,6 +15,44 @@ const ProfilesPage: NextPage = () => {
   const [showModal, setShowModal] = useState(false);
   const { isLoading, data, refetch } = getProfiles();
 
+  const handleDeleteProfile = (profile: ProfileFile) => {
+    deleteProfile(profile.uuid).then(() => {
+      setCurrentUser(undefined);
+      refetch();
+    });
+  };
+
+  const DeleteModal = () => {
+    return (
+      <div className="absolute top-0 z-50 h-screen w-screen" role="alert">
+        <Modal
+          state={showModal}
+          title={`Do you really want to delete ${currentUser.name}'s profile?`}
+        >
+          <p>
+            This action cannot be undone and all of the data will be permanently
+            erased. Please note that this includes profile information,
+            preferences, and statistics.
+          </p>
+          <div className="mt-8 flex justify-between">
+            <button
+              className="btn-outline btn-error btn"
+              onClick={() => handleDeleteProfile(currentUser)}
+            >
+              Delete Profile
+            </button>
+            <button
+              className="btn-ghost btn"
+              onClick={() => setShowModal(false)}
+            >
+              Close
+            </button>
+          </div>
+        </Modal>
+      </div>
+    );
+  };
+
   if (isLoading) {
     return (
       <main className="flex h-full w-full items-center justify-center">
@@ -25,16 +63,10 @@ const ProfilesPage: NextPage = () => {
     );
   }
 
-  const handleDeleteProfile = (profile: ProfileFile) => {
-    deleteProfile(profile.uuid).then(() => {
-      setCurrentUser(undefined);
-      refetch();
-    });
-  };
-
   return (
     <SidebarLayout title="Profiles">
-      <div className="flex">
+      {showModal && <DeleteModal />}
+      <div className={`flex ${showModal ? "blur-sm" : ""}`}>
         <ul className="menu w-56 bg-base-100">
           {data?.map((profile) => (
             <li key={profile.uuid}>
@@ -50,30 +82,6 @@ const ProfilesPage: NextPage = () => {
         </ul>
         {currentUser ? (
           <>
-            <Modal
-              state={showModal}
-              title={`Do you really want to delete ${currentUser.name}'s profile?`}
-            >
-              <p>
-                This action cannot be undone and all of the data will be
-                permanently erased. Please note that this includes profile
-                information, preferences, and statistics.
-              </p>
-              <div className="mt-8 flex justify-between">
-                <button
-                  className="btn-outline btn btn-error"
-                  onClick={() => handleDeleteProfile(currentUser)}
-                >
-                  Delete Profile
-                </button>
-                <button
-                  className="btn btn-ghost"
-                  onClick={() => setShowModal(false)}
-                >
-                  Close
-                </button>
-              </div>
-            </Modal>
             <header className="bg-diagonal-lines flex flex-1 items-center justify-between p-8 font-bold">
               <main className="flex items-center gap-8">
                 <Avatar
@@ -84,15 +92,14 @@ const ProfilesPage: NextPage = () => {
                 <h1 className="mb-0">{currentUser.name}</h1>
               </main>
               <aside className="flex gap-4">
-                <button className="btn-outline btn btn-info btn-sm">
-                  <HiPencil className="mr-2" />
-                  Edit
+                <button className="btn-outline btn-info btn-sm btn">
+                  <HiPencil />
                 </button>
                 <button
-                  className="btn-outline btn btn-error btn-sm"
+                  className="btn-outline btn-error btn-sm btn"
                   onClick={() => setShowModal(true)}
                 >
-                  <HiTrash className="mr-2" /> Delete
+                  <HiTrash />
                 </button>
               </aside>
             </header>
