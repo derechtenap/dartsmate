@@ -103,12 +103,19 @@ const ProfilesPage: NextPage = () => {
                 <h1 className="mb-0">{currentUser.name}</h1>
               </main>
               <aside className="flex gap-4">
-                <button className="btn-outline btn-info btn-sm btn">
+                <button
+                  className="btn-outline btn-info btn-sm btn"
+                  onClick={() =>
+                    router.push(`/profiles/edit/${currentUser.uuid}`)
+                  }
+                  type="button"
+                >
                   <HiPencil />
                 </button>
                 <button
                   className="btn-outline btn-error btn-sm btn"
                   onClick={() => setShowModal(true)}
+                  type="button"
                 >
                   <HiTrash />
                 </button>
