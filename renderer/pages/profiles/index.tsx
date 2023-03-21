@@ -6,11 +6,14 @@ import { getProfiles } from "hooks/useQuery";
 
 import Avatar from "@/components/avatars/Avatar";
 import { useState } from "react";
-import { HiPencil, HiTrash } from "react-icons/hi";
+import { HiPencil, HiPlusCircle, HiTrash } from "react-icons/hi";
 import { deleteProfile } from "utils/profiles/delete";
 import Modal from "@/components/Modal";
+import { useRouter } from "next/router";
 
 const ProfilesPage: NextPage = () => {
+  const router = useRouter();
+
   const [currentUser, setCurrentUser] = useState<ProfileFile>(undefined);
   const [showModal, setShowModal] = useState(false);
   const { isLoading, data, refetch } = getProfiles();
@@ -68,6 +71,14 @@ const ProfilesPage: NextPage = () => {
       {showModal && <DeleteModal />}
       <div className={`flex ${showModal ? "blur-sm" : ""}`}>
         <ul className="menu w-56 bg-base-100">
+          <li>
+            <button
+              className="gap-2"
+              onClick={() => router.push("profiles/createProfile")}
+            >
+              <HiPlusCircle className="h-8 w-8" /> Create Profile
+            </button>
+          </li>
           {data?.map((profile) => (
             <li key={profile.uuid}>
               <button
@@ -105,7 +116,18 @@ const ProfilesPage: NextPage = () => {
             </header>
           </>
         ) : (
-          <>EMPTY</>
+          <div className="h-sc bg-diagonal-lines flex h-screen flex-1 flex-col items-center justify-center">
+            <p className="mb-8 max-w-lg text-center text-lg text-white">
+              To manage a profile, please select one from the side navigation or
+              create a new one.
+            </p>
+            <button
+              className="btn-outline btn gap-2"
+              onClick={() => router.push("profiles/createProfile")}
+            >
+              <HiPlusCircle className="h-8 w-8" /> Create Profile
+            </button>
+          </div>
         )}
       </div>
     </SidebarLayout>
