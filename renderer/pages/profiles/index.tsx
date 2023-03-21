@@ -21,6 +21,7 @@ const ProfilesPage: NextPage = () => {
   const handleDeleteProfile = (profile: ProfileFile) => {
     deleteProfile(profile.uuid).then(() => {
       setCurrentUser(undefined);
+      setShowModal(false);
       refetch();
     });
   };
