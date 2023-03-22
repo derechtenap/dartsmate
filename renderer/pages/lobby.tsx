@@ -1,74 +1,13 @@
 import { NextPage } from "next";
 
-import { useEffect, useState } from "react";
-
-import Avatar from "@/components/avatars/Avatar";
 import SidebarLayout from "@/components/layouts/SidebarLayout";
-import Table from "@/components/table/Table";
 
-import { matchMaxPlayers } from "utils/constants";
-
-import { HiMinusCircle, HiUserAdd } from "react-icons/hi";
-import { loadProfileList } from "utils/profiles/loadProfileList";
-import { loadProfile } from "utils/profiles/loadProfile";
-import { profileDir } from "utils/profiles/profileFolderHandling";
+import { matchMaxPlayers as maxPlayers } from "utils/constants";
+import { getProfiles } from "hooks/useQuery";
 
 const Lobby: NextPage = () => {
-  const [playerList, setPlayerList] = useState([]);
-  const [profiles, setProfiles] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setProfiles([]);
-    getProfiles();
-  }, []);
-
-  const getProfiles = async () => {
-    // Load profiles from fs
-    const profileList = loadProfileList();
-    console.info(profileList);
-
-    // Open each profile and write them into useState
-    profileList.forEach((profile) => {
-      loadProfile(profile).then((p) => setProfiles((state) => [...state, p]));
-    });
-
-    setIsLoading(false);
-  };
-
-  const removePlayer = (id: number) => {
-    setPlayerList(playerList.splice(id + 1, 1));
-  };
-
-  const EmptySate = () => {
-    return (
-      <div className="m-16 mx-auto max-w-4xl rounded-xl border-2 border-dotted bg-base-300 py-4 px-2 text-center">
-        <HiUserAdd className="mx-auto mb-4 text-8xl" />
-        <h1 className="text-white mb-6 text-2xl font-bold">
-          Oh snap! The Lobby is currently empty...
-        </h1>
-        {!isLoading && (
-          <p>
-            We found{" "}
-            <span className="font-bold">
-              {profiles.length === 1
-                ? "1 player profile"
-                : `${profiles.length} player profiles`}
-            </span>{" "}
-            on your device. Would you like to add existing profiles?
-          </p>
-        )}
-        <div className="mt-8 flex w-full items-center justify-center">
-          <button className="btn-primary btn m-8">Add Player</button>
-          <div className="divider divider-horizontal">OR</div>
-          <button className="btn-outline btn-ghost btn-sm btn ml-8 mr-4">
-            Create A New Player
-          </button>
-          <button className="bg- btn-ghost btn-sm btn">Add Guest</button>
-        </div>
-      </div>
-    );
-  };
+  const { isLoading, isError, data, error } = getProfiles();
+  console.info(isLoading, isError, data, error);
 
   if (isLoading) return <>Loading..</>;
 
@@ -80,9 +19,6 @@ const Lobby: NextPage = () => {
           Please select all players who want to participate in the game.
         </p>
       </header>
-      <section className="m-2">
-        {playerList.length === 0 ? <EmptySate /> : <></>}
-      </section>
     </SidebarLayout>
   );
 };

@@ -5,11 +5,6 @@ module.exports = {
     "./renderer/components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    // Overriding the default color palette, which disables the `tailwindcss` colors
-    colors: {
-      transparent: "transparent",
-      current: "currentColor",
-    },
     extend: {},
     // Removing the smaller breakpoints (<1024px), as the app requires
     // a screen resolution of at least 1024x768 pixels
