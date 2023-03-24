@@ -4,6 +4,7 @@ import SidebarLayout from "@/components/layouts/SidebarLayout";
 
 import { matchMaxPlayers as maxPlayers } from "utils/constants";
 import { getProfiles } from "hooks/useQuery";
+import Link from "next/link";
 
 const Lobby: NextPage = () => {
   const { isLoading, isError, data, error } = getProfiles();
@@ -19,6 +20,9 @@ const Lobby: NextPage = () => {
           Please select all players who want to participate in the game.
         </p>
       </header>
+        <div>
+          <Link href="/profiles/createProfile?from=lobby">Add new player</Link>
+        </div>
     </SidebarLayout>
   );
 };
