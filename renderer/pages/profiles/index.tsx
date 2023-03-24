@@ -71,7 +71,7 @@ const ProfilesPage: NextPage = () => {
     <SidebarLayout title="Profiles">
       {showModal && <DeleteModal />}
       <div className={`flex ${showModal ? "blur-sm" : ""}`}>
-        <ul className="menu w-56 bg-base-100">
+        <ul className="menu h-screen w-56 flex-row overflow-y-scroll bg-base-100">
           <li>
             <button
               className="gap-2"
@@ -81,7 +81,7 @@ const ProfilesPage: NextPage = () => {
             </button>
           </li>
           {data?.map((profile) => (
-            <li key={profile.uuid}>
+            <li className="w-full" key={profile.uuid}>
               <button
                 className="flex items-center gap-4"
                 onClick={() => setCurrentUser(profile)}
@@ -94,7 +94,7 @@ const ProfilesPage: NextPage = () => {
         </ul>
         {currentUser ? (
           <>
-            <header className="bg-diagonal-lines flex flex-1 items-center justify-between p-8 font-bold">
+            <header className="bg-diagonal-lines flex h-48 flex-1 items-center justify-between p-8 font-bold">
               <main className="flex items-center gap-8">
                 <Avatar
                   imgSrc={currentUser.avatar_image}

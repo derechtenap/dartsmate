@@ -6,7 +6,7 @@ const Sidebar = () => {
   const currentPath = router.asPath;
 
   return (
-    <aside className="h-full w-16 flex-none bg-base-300 text-white">
+    <aside className="h-full w-16 bg-base-300 text-white">
       <nav className="flex justify-center text-xl">
         <ul className="cursor-pointer text-primary-content">
           <Link href={home.href}>
