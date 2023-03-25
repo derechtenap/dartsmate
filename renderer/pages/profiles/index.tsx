@@ -71,7 +71,7 @@ const ProfilesPage: NextPage = () => {
     <SidebarLayout title="Profiles">
       {showModal && <DeleteModal />}
       <div className={`flex ${showModal ? "blur-sm" : ""}`}>
-        <ul className="menu max-h-screen w-56 flex-none overflow-x-hidden overflow-y-scroll bg-base-100">
+        <ul className="menu h-screen w-56 flex-nowrap overflow-x-hidden overflow-y-scroll bg-base-100">
           <li>
             <button
               className="gap-2"
