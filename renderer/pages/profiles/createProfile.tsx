@@ -30,6 +30,22 @@ const CreateProfile: NextPage = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
+  const closeProfileCreation = () => {
+    /*
+     * If the 'from' parameter is present in the query object,
+     * navigate to the route specified by that parameter.
+     * Eg. profiles/createProfile?from=lobby
+     *
+     * Otherwise, navigate to the '/profiles' route.
+     */
+    if (query?.from) {
+      router.push(`/${query.from}`);
+      return;
+    }
+
+    router.push("/profiles");
+  };
+
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const base64 = await getBase64(editor);
 
@@ -45,16 +61,7 @@ const CreateProfile: NextPage = () => {
       setImageRef(undefined);
       setValue("avatar", undefined);
       setValue("userName", undefined);
-
-      /*
-       * If the 'from' parameter is present in the query object,
-       * navigate to the route specified by that parameter.
-       * Eg. profiles/createProfile?from=lobby
-       *
-       * Otherwise, navigate to the '/profiles' route.
-       */
-      if (query?.from) router.push(`/${query.from}`);
-      router.push("/profiles");
+      closeProfileCreation();
     }
   };
 
@@ -70,7 +77,7 @@ const CreateProfile: NextPage = () => {
           </ul>
           <button
             className="btn-outline btn-ghost btn-sm btn"
-            onClick={() => router.push("/profiles")}
+            onClick={() => closeProfileCreation()}
             type="button"
           >
             <HiX />
