@@ -10,8 +10,6 @@ import {
   HiXCircle,
 } from "react-icons/hi";
 
-// TODO: Add optional onClick prop e.g. for the openSaveDir
-
 export const about = {
   href: "/about",
   icon: <HiOutlineInformationCircle />,

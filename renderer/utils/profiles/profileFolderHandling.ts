@@ -23,3 +23,4 @@ export const createProfileFolder = () => {
 };
 
 export const profileDir = appDir + "/profiles";
+export const profileFileExtension = ".profile";
