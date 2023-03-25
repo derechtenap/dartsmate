@@ -111,7 +111,7 @@ const Lobby: NextPage = () => {
                 </div>
               ))}
             </section>
-            <aside className="flex w-96 flex-col justify-between self-stretch bg-base-200">
+            <aside className="flex w-96 flex-col justify-between self-stretch overflow-hidden bg-base-200">
               <p className="flex items-center gap-4 p-4 text-xl font-bold">
                 <HiCog className="text-3xl hover:animate-spin" />
                 Settings
