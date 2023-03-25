@@ -8,10 +8,8 @@ export const handleBoardClick = (
     | React.MouseEvent<SVGUseElement, MouseEvent>
 ) => {
   const { score, zone } = e.currentTarget.dataset;
-  const settings: Settings = JSON.parse(sessionStorage.getItem("settings"));
-  const playerList: PlayerList = JSON.parse(
-    sessionStorage.getItem("playerList")
-  );
+  const settings = JSON.parse(sessionStorage.getItem("settings"));
+  const playerList = JSON.parse(sessionStorage.getItem("playerList"));
   const currentPlayer = sessionStorage.getItem("currentPlayer"); // uuid: string
 
   // TODO: Handle errors with a modal containing user-friendly
