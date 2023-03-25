@@ -6,6 +6,7 @@ import { matchMaxPlayers as maxPlayers } from "utils/constants";
 import { getProfiles } from "hooks/useQuery";
 import Avatar from "@/components/avatars/Avatar";
 import { useState } from "react";
+import { HiPlusCircle } from "react-icons/hi";
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
 
@@ -44,7 +45,7 @@ const Lobby: NextPage = () => {
           them the new game.
         </p>
         <p className="mt-4 font-bold">
-          Currently{" "}
+          We found {data.length} player profiles. Currently{" "}
           {selectedPlayers.length === 1
             ? "1 player"
             : `${selectedPlayers.length} players`}{" "}
