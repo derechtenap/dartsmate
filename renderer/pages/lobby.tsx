@@ -53,7 +53,7 @@ const Lobby: NextPage = () => {
         </p>
       </header>
       <section className="flex flex-wrap justify-center gap-4 py-4">
-        <div className="card flex h-32 w-32 items-center justify-center rounded-none border border-base-300 p-4 transition-all hover:bg-base-300 xl:h-64 xl:w-64 xl:font-bold">
+        <div className="bg-diagonal-lines card flex h-32 w-32 items-center justify-center rounded-none p-4 transition-all xl:h-64 xl:w-64 xl:font-bold">
           <Button
             action={() => router.push("/profiles/createProfile?from=lobby")}
             color="ghost"
