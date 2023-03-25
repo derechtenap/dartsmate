@@ -6,9 +6,11 @@ import { matchMaxPlayers as maxPlayers } from "utils/constants";
 import { getProfiles } from "hooks/useQuery";
 import Avatar from "@/components/avatars/Avatar";
 import { useState } from "react";
-import Link from "next/link";
+import Button from "@/components/Button";
+import { useRouter } from "next/router";
 
 const Lobby: NextPage = () => {
+  const router = useRouter();
   const { isLoading, isError, data, error } = getProfiles();
   console.info(data);
 
@@ -50,6 +52,15 @@ const Lobby: NextPage = () => {
         </p>
       </header>
       <section className="flex flex-wrap justify-center gap-4 py-4">
+        <div className="card flex h-32 w-32 items-center justify-center rounded-none border border-base-300 p-4 transition-all hover:bg-base-300 xl:h-64 xl:w-64 xl:font-bold">
+          <Button
+            action={() => router.push("/profiles/createProfile?from=lobby")}
+            color="ghost"
+            size="lg"
+          >
+            Create A New Player
+          </Button>
+        </div>
         {data.map((player) => (
           <div
             className={`card inline-flex h-32 w-32 items-center justify-center gap-y-4 rounded-none bg-base-300 p-4 text-center transition-all hover:cursor-pointer xl:h-64 xl:w-64 xl:text-xl xl:font-bold ${
@@ -73,9 +84,6 @@ const Lobby: NextPage = () => {
             {player.name}
           </div>
         ))}
-        <div>
-          <Link href="/profiles/createProfile?from=lobby">Add new player</Link>
-        </div>
       </section>
     </SidebarLayout>
   );
