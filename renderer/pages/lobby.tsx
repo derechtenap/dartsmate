@@ -1,14 +1,11 @@
 import { NextPage } from "next";
-
 import SidebarLayout from "@/components/layouts/SidebarLayout";
-
 import { Slide, toast } from "react-toastify";
 import { matchMaxPlayers as maxPlayers } from "utils/constants";
 import { getProfiles } from "hooks/useQuery";
 import Avatar from "@/components/avatars/Avatar";
 import { useState } from "react";
 import {
-  HiArrowCircleRight,
   HiCog,
   HiDotsHorizontal,
   HiUserAdd,
@@ -17,13 +14,42 @@ import {
 } from "react-icons/hi";
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
 
 const Lobby: NextPage = () => {
   const router = useRouter();
-  const { isLoading, isError, data, error } = getProfiles();
+  const { isLoading, data } = getProfiles();
+  const { register, handleSubmit, getValues } = useForm({
+    defaultValues: {
+      scoreMode: "501",
+      legs: "1",
+      sets: "3",
+      randomizePlayerOrder: undefined,
+    },
+  });
+
+  const onSubmit = (data) => {
+    return data;
+  };
 
   const [backgroundBlur, setBackgroundBlur] = useState(false);
   const [selectedPlayers, setSelectedPlayers] = useState([]);
+
+  const handleGameStart = () => {
+    const lobbySettings = {
+      scoreMode: getValues("scoreMode"),
+      legs: getValues("legs"),
+      sets: getValues("sets"),
+      randomizePlayerOrder: getValues("randomizePlayerOrder"),
+      players: selectedPlayers,
+      uuid: crypto.randomUUID(),
+      createdAt: Date.now(),
+      appVersion: "",
+      currentPlayer: 0,
+      matchHistory: [],
+    };
+    console.info(lobbySettings);
+  };
 
   const handlePlayerSelection = (player: ProfileFile) => {
     if (selectedPlayers.includes(player)) {
@@ -52,8 +78,6 @@ const Lobby: NextPage = () => {
     setSelectedPlayers((state) => [...state, player]);
   };
 
-  console.info(selectedPlayers);
-
   if (isLoading) return <>Loading..</>;
 
   return (
@@ -75,7 +99,6 @@ const Lobby: NextPage = () => {
           </header>
 
           <ul className="menu menu-horizontal w-full bg-base-300 text-white">
-            <li></li>
             <li>
               <label
                 htmlFor="my-drawer"
@@ -112,15 +135,69 @@ const Lobby: NextPage = () => {
               ))}
             </section>
             <aside className="flex w-96 flex-col justify-between self-stretch overflow-hidden bg-base-200">
-              <p className="flex items-center gap-4 p-4 text-xl font-bold">
-                <HiCog className="text-3xl hover:animate-spin" />
-                Settings
-              </p>
+              <main className="p-4">
+                <p className="flex items-center gap-4 text-xl font-bold">
+                  <HiCog className="text-3xl hover:animate-spin" />
+                  Settings
+                </p>
+                <form onChange={handleSubmit(onSubmit)}>
+                  <div className="form-control">
+                    <label className="label" htmlFor="score-mode">
+                      <span className="label-text">Score Mode</span>
+                    </label>
+                    <select
+                      className="select w-full max-w-xs px-4"
+                      id="score-mode"
+                      {...register("scoreMode")}
+                    >
+                      <option value={501}>501</option>
+                      <option value={301}>301</option>
+                      <option value={201}>201</option>
+                    </select>
+                  </div>
+                  <div className="form-control w-full max-w-xs">
+                    <label className="label">
+                      <span className="label-text">Sets</span>
+                    </label>
+                    <input
+                      type="number"
+                      className="input-bordered input w-full"
+                      {...register("sets")}
+                    />
+                  </div>
+                  <div className="form-control w-full max-w-xs">
+                    <label className="label">
+                      <span className="label-text">Legs</span>
+                    </label>
+                    <input
+                      type="number"
+                      className="input-bordered input w-full"
+                      {...register("legs")}
+                    />
+                  </div>
+                  <div className="form-control">
+                    <label className="label" htmlFor="randomizePlayerOrder">
+                      <span className="label-text">
+                        Randomize player order?
+                      </span>
+                    </label>
+                    <select
+                      className="select w-full max-w-xs px-4"
+                      id="randomizePlayerOrder"
+                      {...register("randomizePlayerOrder")}
+                    >
+                      <option value={"true"}>Yes</option>
+                      <option value={"false"}>No</option>
+                    </select>
+                  </div>
+                </form>
+              </main>
               <button
                 className={`btn-primary btn h-32 w-full self-end rounded-none text-3xl ${
                   selectedPlayers.length < 1 ? "btn-disabled" : "animate-pulse"
                 }`}
                 {...(selectedPlayers.length < 1 ? { disabled: true } : {})}
+                onClick={() => handleGameStart()}
               >
                 Start Game
               </button>
