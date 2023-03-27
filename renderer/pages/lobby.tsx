@@ -15,6 +15,7 @@ import {
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
+import { createGame } from "utils/games/create";
 
 const Lobby: NextPage = () => {
   const router = useRouter();
@@ -49,6 +50,8 @@ const Lobby: NextPage = () => {
       matchHistory: [],
     };
     console.info(lobbySettings);
+
+    createGame(lobbySettings);
   };
 
   const handlePlayerSelection = (player: ProfileFile) => {
