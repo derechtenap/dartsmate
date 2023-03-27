@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import SidebarLayout from "@/components/layouts/SidebarLayout";
 import { Slide, toast } from "react-toastify";
-import { matchMaxPlayers as maxPlayers } from "utils/constants";
+import { gameMaxPlayers as maxPlayers } from "utils/constants";
 import { getProfiles } from "hooks/useQuery";
 import Avatar from "@/components/avatars/Avatar";
 import { useState } from "react";
@@ -47,11 +47,12 @@ const Lobby: NextPage = () => {
       createdAt: Date.now(),
       appVersion: "",
       currentPlayer: 0,
-      matchHistory: [],
+      gameHistory: [],
     };
     console.info(lobbySettings);
 
     createGame(lobbySettings);
+    router.push(`game/${lobbySettings.uuid}`);
   };
 
   const handlePlayerSelection = (player: ProfileFile) => {

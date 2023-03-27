@@ -1,7 +1,7 @@
 import fs from "fs";
 import os from "os";
 
-export const appDir = os.homedir() + "/dartmate"; // TODO: Does this works on macOS or linux?
+const appDir = os.homedir() + "/dartmate"; // TODO: Does this works on macOS or linux?
 
 export const checkIfProfileFolderExists = async (
   folder: string = "profiles"
