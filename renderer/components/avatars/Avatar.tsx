@@ -4,7 +4,7 @@ type Props = {
   size?: string;
 };
 
-const Avatar = ({ imgSrc, name, size = "w-8" }: Props) => {
+const Avatar = ({ imgSrc, name = "", size = "w-8" }: Props) => {
   // Get the initiales to place them dynamically into a placeholder avatar
   // eg. Luke Skywalker => "LS" or C-3PO => "C"
   const nameInitial = name

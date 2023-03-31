@@ -1,16 +1,15 @@
 import fs from "fs";
-import {
-  gameDir as dir,
-  gameFileExtension as fileExtension,
-  checkIfProfileFolderExists,
-} from "utils/checkIfFolderExists";
+import { checkIfProfileFolderExists } from "utils/checkIfFolderExists";
+import { FILE_TYPE_EXTENSIONS, GAME_SAVE_DIRECTORY } from "utils/constants";
 
 export const createGame = async (lobbySettings) => {
   try {
     checkIfProfileFolderExists("games");
 
     fs.writeFileSync(
-      `${dir}/${lobbySettings.uuid + fileExtension}`,
+      `${GAME_SAVE_DIRECTORY}/${
+        lobbySettings.uuid + FILE_TYPE_EXTENSIONS.GAME
+      }`,
       JSON.stringify(lobbySettings)
     );
   } catch (e) {

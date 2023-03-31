@@ -5,14 +5,13 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { HiX } from "react-icons/hi";
 import { loadProfile } from "utils/profiles/load";
-import { profileFileExtension } from "utils/profiles/profileFolderHandling";
 import Button from "@/components/Button";
 import { useForm, SubmitHandler } from "react-hook-form";
-
 import AvatarEditor from "react-avatar-editor";
 import { getBase64 } from "utils/images";
 import Avatar from "@/components/avatars/Avatar";
 import { editProfile } from "utils/profiles/edit";
+import { FILE_TYPE_EXTENSIONS } from "utils/constants";
 
 type Inputs = {
   avatar: FileList;
@@ -53,12 +52,14 @@ const EditProfile: NextPage = () => {
   };
 
   useEffect(() => {
-    loadProfile(`${(uuid as string) + profileFileExtension}`).then((p) => {
-      setProfile(p);
-      setValue("avatar", p.avatar_image);
-      setValue("userName", p.name);
-      setImageRef(p.avatar_image);
-    });
+    loadProfile(`${(uuid as string) + FILE_TYPE_EXTENSIONS.PROFILE}`).then(
+      (p) => {
+        setProfile(p);
+        setValue("avatar", p.avatar_image);
+        setValue("userName", p.name);
+        setImageRef(p.avatar_image);
+      }
+    );
   }, []);
 
   if (!profile) return <>Loading...</>;

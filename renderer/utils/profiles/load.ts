@@ -1,10 +1,10 @@
 import { readdirSync, readFileSync } from "fs";
-import { profileDir } from "./profileFolderHandling";
+import { PROFILE_SAVE_DIRECTORY } from "utils/constants";
 
 // Loads the file content of a specific profile using the profile uuid
 export const loadProfile = async (file: string) => {
   try {
-    const profile = readFileSync(`${profileDir}/${file}`, {
+    const profile = readFileSync(`${PROFILE_SAVE_DIRECTORY}/${file}`, {
       encoding: "utf-8",
       flag: "r",
     });
@@ -17,7 +17,7 @@ export const loadProfile = async (file: string) => {
 
 // Returns a array with each file in the profile directory
 export const readProfileDir = async () => {
-  return readdirSync(profileDir, {
+  return readdirSync(PROFILE_SAVE_DIRECTORY, {
     encoding: "utf-8",
   });
 };

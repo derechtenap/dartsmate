@@ -1,8 +1,5 @@
 import fs from "fs";
-import {
-  profileDir as dir,
-  profileFileExtension as fileExtension,
-} from "./profileFolderHandling";
+import { PROFILE_SAVE_DIRECTORY, FILE_TYPE_EXTENSIONS } from "utils/constants";
 
 export const editProfile = async (
   profile: ProfileFile,
@@ -16,7 +13,7 @@ export const editProfile = async (
 
   // Write to fs
   fs.writeFileSync(
-    `${dir}/${profile.uuid + fileExtension}`,
+    `${PROFILE_SAVE_DIRECTORY}/${profile.uuid + FILE_TYPE_EXTENSIONS.PROFILE}`,
     JSON.stringify(profile),
     {
       encoding: "utf-8",
