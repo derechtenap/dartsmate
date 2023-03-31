@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { APP_DIRECTORY, FILE_TYPE_EXTENSIONS } from "./constants";
+import { APP_DIRECTORY } from "./constants";
 
 export const checkIfProfileFolderExists = async (
   folder: string = "profiles"
