@@ -16,4 +16,17 @@ declare global {
       missed_throws: number;
     };
   };
+
+  type GameFile = {
+    scoreMode: string;
+    legs: string;
+    sets: string;
+    randomizePlayerOrder: string;
+    players: Array<ProfileFile>;
+    uuid: string;
+    createdAt: number;
+    appVersion: string;
+    currentPlayer: number;
+    gameHistory: Array<unknown>;
+  };
 }
