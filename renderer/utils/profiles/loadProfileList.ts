@@ -1,9 +1,9 @@
 import fs from "fs";
-import { profileDir } from "./profileFolderHandling";
+import { PROFILE_SAVE_DIRECTORY } from "utils/constants";
 
 export const loadProfileList = () => {
   try {
-    return fs.readdirSync(profileDir);
+    return fs.readdirSync(PROFILE_SAVE_DIRECTORY);
   } catch (e) {
     console.error(e);
     return [];

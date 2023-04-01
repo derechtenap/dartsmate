@@ -1,10 +1,6 @@
 import fs from "fs";
 import { randomUUID } from "crypto";
-
-import {
-  profileDir as dir,
-  profileFileExtension as fileExtension,
-} from "./profileFolderHandling";
+import { FILE_TYPE_EXTENSIONS, PROFILE_SAVE_DIRECTORY } from "utils/constants";
 
 /**
  * Creates a new profile file with the given profile object.
@@ -31,7 +27,9 @@ export const createProfile = async (profile: ProfileFile) => {
 
     // Write profile to file system
     fs.writeFileSync(
-      `${dir}/${profile.uuid + fileExtension}`,
+      `${PROFILE_SAVE_DIRECTORY}/${
+        profile.uuid + FILE_TYPE_EXTENSIONS.PROFILE
+      }`,
       JSON.stringify(profile)
     );
   } catch (e) {

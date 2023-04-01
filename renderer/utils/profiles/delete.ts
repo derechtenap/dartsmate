@@ -1,9 +1,5 @@
 import { unlink } from "fs";
-
-import {
-  profileDir as dir,
-  profileFileExtension as fileExtension,
-} from "./profileFolderHandling";
+import { FILE_TYPE_EXTENSIONS, PROFILE_SAVE_DIRECTORY } from "utils/constants";
 
 /**
  *
@@ -19,9 +15,14 @@ import {
  *
  */
 export const deleteProfile = async (uuid: string): Promise<void> => {
-  unlink(`${dir}/${uuid + fileExtension}`, (err) => {
-    if (err) {
-      throw new Error(`Couldn't delete the profile with uuid ${uuid}: ${err}`);
+  unlink(
+    `${PROFILE_SAVE_DIRECTORY}/${uuid + FILE_TYPE_EXTENSIONS.PROFILE}`,
+    (err) => {
+      if (err) {
+        throw new Error(
+          `Couldn't delete the profile with uuid ${uuid}: ${err}`
+        );
+      }
     }
-  });
+  );
 };

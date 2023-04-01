@@ -1,13 +1,12 @@
 import fs from "fs";
-import os from "os";
-
-const appDir = os.homedir() + "/dartmate"; // TODO: Does this works on macOS or linux?
+import path from "path";
+import { APP_DIRECTORY } from "./constants";
 
 export const checkIfProfileFolderExists = async (
   folder: string = "profiles"
 ) => {
   try {
-    fs.opendirSync(`${appDir}/${folder}`);
+    fs.opendirSync(path.join(APP_DIRECTORY, folder));
   } catch {
     console.warn(
       `${folder.toLocaleUpperCase()} directory doesn't exits. Creating a new directory!`
@@ -18,16 +17,10 @@ export const checkIfProfileFolderExists = async (
 
 export const createProfileFolder = (folder: string = "profiles") => {
   try {
-    fs.mkdirSync(`${appDir}/${folder}`);
+    fs.mkdirSync(path.join(APP_DIRECTORY, folder));
     console.info(`Created a new ${folder} directory...`);
   } catch (e) {
     console.error(e);
     throw new Error(`UNABLE_TO_CREATE_DIR_${folder.toUpperCase()}`);
   }
 };
-
-export const profileDir = appDir + "/profiles";
-export const gameDir = appDir + "/games";
-
-export const profileFileExtension = ".profile";
-export const gameFileExtension = ".game";

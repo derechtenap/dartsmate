@@ -1,7 +1,6 @@
 import { NextPage } from "next";
 import SidebarLayout from "@/components/layouts/SidebarLayout";
 import { Slide, toast } from "react-toastify";
-import { gameMaxPlayers as maxPlayers } from "utils/constants";
 import { getProfiles } from "hooks/useQuery";
 import Avatar from "@/components/avatars/Avatar";
 import { useState } from "react";
@@ -16,6 +15,12 @@ import Button from "@/components/Button";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { createGame } from "utils/games/create";
+import {
+  GAME_MAX_LEGS,
+  GAME_MAX_PLAYERS,
+  GAME_MAX_SETS,
+  GAME_SCORE_MODES,
+} from "utils/constants";
 
 const Lobby: NextPage = () => {
   const router = useRouter();
@@ -64,9 +69,9 @@ const Lobby: NextPage = () => {
       return;
     }
 
-    if (selectedPlayers.length >= maxPlayers) {
+    if (selectedPlayers.length >= GAME_MAX_PLAYERS) {
       toast.error(
-        `The lobby is full! You reached the maximum player capacity of ${maxPlayers}. Please remove a player, before you can add ${player.name} as a player.`,
+        `The lobby is full! You reached the maximum player capacity of ${GAME_MAX_PLAYERS}. Please remove a player, before you can add ${player.name} as a player.`,
         {
           position: toast.POSITION.TOP_RIGHT,
           theme: "dark",
@@ -97,8 +102,8 @@ const Lobby: NextPage = () => {
             <h1 className="text-white">Lobby</h1>
             <p className="mb-0">
               Please select all players who want to participate in the game. You
-              can select up to {maxPlayers} players. Click on a player profile
-              to add them the new game.
+              can select up to {GAME_MAX_PLAYERS} players. Click on a player
+              profile to add them the new game.
             </p>
           </header>
 
@@ -113,7 +118,7 @@ const Lobby: NextPage = () => {
               </label>
             </li>
             <li className="mr-8 flex-1 items-center justify-end bg-base-200 font-mono text-xs uppercase">
-              Players: {selectedPlayers.length} / {maxPlayers}
+              Players: {selectedPlayers.length} / {GAME_MAX_PLAYERS}{" "}
             </li>
             <li className="ml-auto">
               <button className="btn-disabled btn" disabled>
@@ -154,9 +159,11 @@ const Lobby: NextPage = () => {
                       id="score-mode"
                       {...register("scoreMode")}
                     >
-                      <option value={501}>501</option>
-                      <option value={301}>301</option>
-                      <option value={201}>201</option>
+                      {GAME_SCORE_MODES.map((mode) => (
+                        <option key={mode} value={mode}>
+                          {mode}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div className="form-control w-full max-w-xs">
@@ -167,6 +174,7 @@ const Lobby: NextPage = () => {
                       type="number"
                       className="input-bordered input w-full"
                       {...register("sets")}
+                      max={GAME_MAX_SETS}
                     />
                   </div>
                   <div className="form-control w-full max-w-xs">
@@ -177,6 +185,7 @@ const Lobby: NextPage = () => {
                       type="number"
                       className="input-bordered input w-full"
                       {...register("legs")}
+                      max={GAME_MAX_LEGS}
                     />
                   </div>
                   <div className="form-control">
