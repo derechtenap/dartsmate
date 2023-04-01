@@ -15,7 +15,12 @@ import Button from "@/components/Button";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { createGame } from "utils/games/create";
-import { GAME_MAX_PLAYERS } from "utils/constants";
+import {
+  GAME_MAX_LEGS,
+  GAME_MAX_PLAYERS,
+  GAME_MAX_SETS,
+  GAME_SCORE_MODES,
+} from "utils/constants";
 
 const Lobby: NextPage = () => {
   const router = useRouter();
@@ -154,9 +159,11 @@ const Lobby: NextPage = () => {
                       id="score-mode"
                       {...register("scoreMode")}
                     >
-                      <option value={501}>501</option>
-                      <option value={301}>301</option>
-                      <option value={201}>201</option>
+                      {GAME_SCORE_MODES.map((mode) => (
+                        <option key={mode} value={mode}>
+                          {mode}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div className="form-control w-full max-w-xs">
@@ -167,6 +174,7 @@ const Lobby: NextPage = () => {
                       type="number"
                       className="input-bordered input w-full"
                       {...register("sets")}
+                      max={GAME_MAX_SETS}
                     />
                   </div>
                   <div className="form-control w-full max-w-xs">
@@ -177,6 +185,7 @@ const Lobby: NextPage = () => {
                       type="number"
                       className="input-bordered input w-full"
                       {...register("legs")}
+                      max={GAME_MAX_LEGS}
                     />
                   </div>
                   <div className="form-control">

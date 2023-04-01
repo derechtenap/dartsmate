@@ -14,3 +14,6 @@ export const FILE_TYPE_EXTENSIONS = {
 
 // The maximum amount of players a lobby and game can have
 export const GAME_MAX_PLAYERS = 8;
+export const GAME_MAX_LEGS = 99;
+export const GAME_MAX_SETS = 99;
+export const GAME_SCORE_MODES = [501, 301, 201];
