@@ -15,7 +15,7 @@ const GamePage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Match {game.uuid} - DartMate</title>
+        <title>Game - DartMate</title>
       </Head>
       <div className="flex h-screen w-screen">
         <main className="bg-yellow-505 w-1/2">PLAYERS</main>
