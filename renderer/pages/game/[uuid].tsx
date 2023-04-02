@@ -1,8 +1,9 @@
+import Button from "@/components/Button";
 import { getCurrentGame } from "hooks/getCurrentGame";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { GAME_SCORE_ZONES } from "utils/constants";
+import { GAME_SCORE_ZONES, GAME_THROWS_PER_ROUND } from "utils/constants";
 
 const GamePage: NextPage = () => {
   const router = useRouter();
@@ -27,6 +28,15 @@ const GamePage: NextPage = () => {
               </button>
             ))}
           </div>
+            <Button
+              action={() => console.info("NEXT_PLAYER_EVENT")}
+              styles="btn-primary btn mt-auto w-full overflow-hidden rounded-none"
+              {...(currentThrowHistory.length === GAME_THROWS_PER_ROUND
+                ? { disabled: false }
+                : { disabled: true })}
+            >
+              Next
+            </Button>
         </aside>
       </div>
     </>
