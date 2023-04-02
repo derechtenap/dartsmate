@@ -1,9 +1,18 @@
 type Props = {
   action: () => void;
   children: React.ReactNode;
-  color?: string;
+  color?:
+    | "primary"
+    | "secondary"
+    | "accent"
+    | "info"
+    | "success"
+    | "warning"
+    | "error"
+    | "ghost"
+    | "link";
   outline?: boolean;
-  size?: string;
+  size?: "lg" | "md" | "sm" | "xs";
   styles?: string;
 };
 
@@ -12,7 +21,7 @@ const Button = ({
   children,
   color,
   outline = false,
-  size,
+  size = "md",
   styles,
   ...attributes
 }: Props) => {
