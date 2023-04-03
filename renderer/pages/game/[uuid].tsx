@@ -88,9 +88,28 @@ const GamePage: NextPage = () => {
     }
   };
 
-  // TODO: Add better handling
-  if (!gameUUID) return <>GAME_UUID IS UNDEFINED!</>;
-  if (isLoading) return <>Loading...</>;
+  if (!gameUUID || !game) {
+    return (
+      <div className="alert rounded-none" role="alert">
+        <div className="flex-col items-start">
+          <h1 className="text-4xl font-bold">Oh snap, an error occurred!</h1>
+          <p className="mb-8 text-2xl">
+            The Game was aborted. Please try to create a new game via the lobby.
+          </p>
+
+          <Button action={() => router.push("/lobby")} color="primary">
+            Back to the Lobby
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  // TODO: Create Loading component
+  if (isLoading) {
+    return <>Loading...</>;
+  }
+
   return (
     <>
       <Head>
