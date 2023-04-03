@@ -21,16 +21,6 @@ const GamePage: NextPage = () => {
     updateInterval: 1,
   });
 
-  const ZONES_WITH_MULTIPLIER = [
-    ...GAME_SCORE_ZONES.map((value) => ({
-      value,
-      hasMultiplier: value !== 25 && value !== 50,
-    })),
-    {
-      value: 0,
-      hasMultiplier: false,
-    },
-  ];
 
   const handleMultiplier = (multiplier: "DOUBLE" | "TRIPLE") => {
     switch (multiplier) {
@@ -177,19 +167,13 @@ const GamePage: NextPage = () => {
 
           <aside className="mr-4 flex flex-col gap-16 overflow-x-hidden">
             <div className="grid grid-cols-4 items-center">
-              {ZONES_WITH_MULTIPLIER.map((zone) => (
+              {GAME_SCORE_ZONES.map((zone) => (
                 <button
                   className="btn-ghost btn h-full w-full rounded-none"
-                  onClick={() => handleAddThrow(zone.value)}
+                  onClick={() => handleAddThrow(zone)}
                   {...(throwHistory.length === 3 ? { disabled: true } : {})}
                 >
-                  {zone.hasMultiplier
-                    ? isDouble
-                      ? zone.value * 2
-                      : isTriple
-                      ? zone.value * 3
-                      : zone.value
-                    : zone.value}
+                  {zone}
                 </button>
               ))}
             </div>
