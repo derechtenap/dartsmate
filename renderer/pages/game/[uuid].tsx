@@ -74,9 +74,13 @@ const GamePage: NextPage = () => {
     setIsTriple(false);
   };
 
+  // Removes the last throw from the throw history
   const handleRemoveThrow = () => {
-    if (currentThrowHistory) {
-      setCurrentThrowHistory(currentThrowHistory.slice(0, -1));
+    if (currentThrowHistory.length > 0) {
+      const updatedHistory = [...currentThrowHistory];
+      updatedHistory.pop();
+
+      setCurrentThrowHistory(updatedHistory);
     }
   };
 
