@@ -45,15 +45,31 @@ const GamePage: NextPage = () => {
     }
   };
 
-  const handleAddThrow = (points: number) => {
-    if (currentThrowHistory.length >= 3) return;
+  const handleAddThrow = (selectedScore: number) => {
+    let throwScore = selectedScore;
 
-    // TODO: Fix bug when triple or double is selected and the player
-    // selected eg. bullseye and get a score of 150
-    setCurrentThrowHistory((prev) => [
-      ...prev,
-      isDouble ? points * 2 : isTriple ? points * 3 : points,
-    ]);
+    // Check if the player already have the maximum amount of throws
+    if (currentThrowHistory.length >= GAME_THROWS_PER_ROUND) return;
+
+    // If the selected score is 25 or 50 (bullseye or outer bull), add it to the
+    // current throw history without multiplying the score.
+    if (throwScore === 25 || throwScore === 50) {
+      setCurrentThrowHistory((prev) => [...prev, throwScore]);
+      return;
+    }
+
+    // Multiple the score when double or triple is selected
+    if (isTriple) {
+      throwScore *= 3;
+    }
+
+    if (isDouble) {
+      throwScore *= 2;
+    }
+
+    setCurrentThrowHistory((prev) => [...prev, throwScore]);
+
+    // Reset ui buttons
     setIsDouble(false);
     setIsTriple(false);
   };
