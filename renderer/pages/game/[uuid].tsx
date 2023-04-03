@@ -81,6 +81,10 @@ const GamePage: NextPage = () => {
       updatedHistory.pop();
 
       setThrowHistory(updatedHistory);
+
+      // Reset ui buttons
+      setIsDouble(false);
+      setIsTriple(false);
     }
   };
 
