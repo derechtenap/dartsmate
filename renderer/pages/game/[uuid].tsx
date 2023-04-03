@@ -14,7 +14,7 @@ const GamePage: NextPage = () => {
   const { isLoading, data: game } = getCurrentGame(gameUUID);
   const [isDouble, setIsDouble] = useState<boolean>(false);
   const [isTriple, setIsTriple] = useState<boolean>(false);
-  const [currentThrowHistory, setCurrentThrowHistory] = useState<number[]>([]);
+  const [throwHistory, setThrowHistory] = useState<number[]>([]);
 
   const { elapsedTime, reset } = useElapsedTime({
     isPlaying: true,
@@ -49,12 +49,12 @@ const GamePage: NextPage = () => {
     let throwScore = selectedScore;
 
     // Check if the player already have the maximum amount of throws
-    if (currentThrowHistory.length >= GAME_THROWS_PER_ROUND) return;
+    if (throwHistory.length >= GAME_THROWS_PER_ROUND) return;
 
     // If the selected score is 25 or 50 (bullseye or outer bull), add it to the
     // current throw history without multiplying the score.
     if (throwScore === 25 || throwScore === 50) {
-      setCurrentThrowHistory((prev) => [...prev, throwScore]);
+      setThrowHistory((prev) => [...prev, throwScore]);
       return;
     }
 
@@ -67,7 +67,7 @@ const GamePage: NextPage = () => {
       throwScore *= 2;
     }
 
-    setCurrentThrowHistory((prev) => [...prev, throwScore]);
+    setThrowHistory((prev) => [...prev, throwScore]);
 
     // Reset ui buttons
     setIsDouble(false);
@@ -76,11 +76,11 @@ const GamePage: NextPage = () => {
 
   // Removes the last throw from the throw history
   const handleRemoveThrow = () => {
-    if (currentThrowHistory.length > 0) {
-      const updatedHistory = [...currentThrowHistory];
+    if (throwHistory.length > 0) {
+      const updatedHistory = [...throwHistory];
       updatedHistory.pop();
 
-      setCurrentThrowHistory(updatedHistory);
+      setThrowHistory(updatedHistory);
     }
   };
 
@@ -110,9 +110,7 @@ const GamePage: NextPage = () => {
                 <button
                   className="btn-ghost btn h-full w-full rounded-none"
                   onClick={() => handleAddThrow(zone.value)}
-                  {...(currentThrowHistory.length === 3
-                    ? { disabled: true }
-                    : {})}
+                  {...(throwHistory.length === 3 ? { disabled: true } : {})}
                 >
                   {zone.hasMultiplier
                     ? isDouble
@@ -131,9 +129,7 @@ const GamePage: NextPage = () => {
                     isDouble ? "btn-primary" : ""
                   }`}
                   onClick={() => handleMultiplier("DOUBLE")}
-                  {...(currentThrowHistory.length === 3
-                    ? { disabled: true }
-                    : {})}
+                  {...(throwHistory.length === 3 ? { disabled: true } : {})}
                 >
                   Double
                 </button>
@@ -142,16 +138,14 @@ const GamePage: NextPage = () => {
                     isTriple ? "btn-primary" : ""
                   }`}
                   onClick={() => handleMultiplier("TRIPLE")}
-                  {...(currentThrowHistory.length === 3
-                    ? { disabled: true }
-                    : {})}
+                  {...(throwHistory.length === 3 ? { disabled: true } : {})}
                 >
                   Triple
                 </button>
                 <Button
                   action={() => handleRemoveThrow()}
                   styles="flex-1 rounded-none"
-                  {...(currentThrowHistory.length === 0
+                  {...(throwHistory.length === 0
                     ? { disabled: true }
                     : { disabled: false })}
                 >
@@ -160,13 +154,13 @@ const GamePage: NextPage = () => {
               </div>
               <div className="flex flex-col items-center gap-4 text-center">
                 <p className="text-7xl font-extrabold xl:mt-16 xl:text-9xl">
-                  {currentThrowHistory.reduce((sum, num) => sum + num, 0) || 0}
+                  {throwHistory.reduce((sum, num) => sum + num, 0) || 0}
                 </p>
                 <ul
                   className="menu menu-horizontal gap-x-16 text-lg font-normal xl:text-2xl"
                   role="list"
                 >
-                  {currentThrowHistory.map((throwResult, index) => (
+                  {throwHistory.map((throwResult, index) => (
                     <li key={index}>{throwResult}</li>
                   ))}
                 </ul>
@@ -174,7 +168,7 @@ const GamePage: NextPage = () => {
               <Button
                 action={() => console.info("NEXT_PLAYER_EVENT")}
                 styles="btn-primary btn mt-auto w-full overflow-hidden rounded-none"
-                {...(currentThrowHistory.length === GAME_THROWS_PER_ROUND
+                {...(throwHistory.length === GAME_THROWS_PER_ROUND
                   ? { disabled: false }
                   : { disabled: true })}
               >
