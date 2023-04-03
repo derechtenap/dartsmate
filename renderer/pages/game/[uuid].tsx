@@ -116,9 +116,46 @@ const GamePage: NextPage = () => {
         <title>Game - DartMate</title>
       </Head>
       <div className="flex w-full flex-col bg-base-300">
-        <ul className="menu menu-horizontal w-full bg-base-300 text-white">
-          <li>{game.uuid}</li>
-          <li className="ml-auto">...</li>
+        <ul className="menu menu-horizontal w-full items-center bg-base-100 pl-4 text-white">
+          <li>
+            Custom Game - Mode: {game.players.length} Player - {game.scoreMode}{" "}
+            Double Out
+          </li>
+          <li className="ml-auto">
+            <span className="btn-link btn cursor-default text-white decoration-transparent">
+              <HiClock />
+              Throwing Time: {elapsedTime}
+            </span>
+          </li>
+          <li>
+            <Button
+              action={() => console.info("")}
+              color="ghost"
+              styles="rounded-none"
+              {...{ disabled: true }}
+            >
+              <HiDocumentSearch /> Game Log
+            </Button>
+          </li>
+          <li>
+            <Button
+              action={() => console.info("")}
+              color="ghost"
+              styles="rounded-none"
+            >
+              <HiX /> Abort Game
+            </Button>
+          </li>
+          <li>
+            <Button
+              action={() => console.info("")}
+              color="ghost"
+              {...{ disabled: true }}
+              styles="rounded-none"
+            >
+              <HiDotsHorizontal />
+            </Button>
+          </li>
         </ul>
         <main className="grid flex-1 grid-cols-2 gap-4">
           <section className="bg-base-200 p-4">
