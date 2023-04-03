@@ -158,10 +158,21 @@ const GamePage: NextPage = () => {
           </li>
         </ul>
         <main className="grid flex-1 grid-cols-2 gap-4">
-          <section className="bg-base-200 p-4">
-            {game.players.map((player) => (
-              <div key={player.uuid}>{player.name}</div>
-            ))}
+          <section className="bg-base-200">
+            <Table head={["Player", "Score", "AVG"]}>
+              {game.players.map((player) => (
+                <tr key={player.uuid}>
+                  <td>
+                    <span className="flex items-center gap-4">
+                      <Avatar imgSrc={player.avatar_image} name={player.name} />{" "}
+                      {player.name}
+                    </span>
+                  </td>
+                  <td>{game.scoreMode}</td>
+                  <td>0.0</td>
+                </tr>
+              ))}
+            </Table>
           </section>
 
           <aside className="mr-4 flex flex-col gap-16 overflow-x-hidden">
