@@ -6,6 +6,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { GAME_SCORE_ZONES, GAME_THROWS_PER_ROUND } from "utils/constants";
+import { useElapsedTime } from "use-elapsed-time";
 
 const GamePage: NextPage = () => {
   const router = useRouter();
@@ -14,6 +15,11 @@ const GamePage: NextPage = () => {
   const [isDouble, setIsDouble] = useState<boolean>(false);
   const [isTriple, setIsTriple] = useState<boolean>(false);
   const [currentThrowHistory, setCurrentThrowHistory] = useState<number[]>([]);
+
+  const { elapsedTime, reset } = useElapsedTime({
+    isPlaying: true,
+    updateInterval: 1,
+  });
 
   const ZONES_WITH_MULTIPLIER = [
     ...GAME_SCORE_ZONES.map((value) => ({
