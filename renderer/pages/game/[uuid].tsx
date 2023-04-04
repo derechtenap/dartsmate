@@ -1,5 +1,6 @@
 import Avatar from "@/components/avatars/Avatar";
 import Button from "@/components/Button";
+import Table from "@/components/table/Table";
 import { getCurrentGame } from "hooks/getCurrentGame";
 import { NextPage } from "next";
 import Head from "next/head";
@@ -108,7 +109,7 @@ const GamePage: NextPage = () => {
       <div className="flex w-full flex-col bg-base-300">
         <ul className="menu menu-horizontal w-full items-center bg-base-100 pl-4 text-white">
           <li>
-            Custom Game - Mode: {game.players.length} Player - {game.scoreMode}{" "}
+            Custom Game - Mode: {game.players.length} Player - {game.score_mode}{" "}
             Double Out
           </li>
           <li className="ml-auto">
@@ -158,8 +159,8 @@ const GamePage: NextPage = () => {
                       {player.name}
                     </span>
                   </td>
-                  <td>{game.scoreMode}</td>
-                  <td>0.0</td>
+                  <td>{player.scoreLeft}</td>
+                  <td>{player.avg}</td>
                 </tr>
               ))}
             </Table>
