@@ -1,5 +1,9 @@
 import os from "os";
 import path from "path";
+import pkg from "../../package.json";
+
+export const APP_VERSION = pkg.version;
+export const APP_NAME = pkg.productName;
 
 // TODO: Verify if this works on macOS and Linux
 export const APP_DIRECTORY = path.join(os.homedir(), "dartmate");

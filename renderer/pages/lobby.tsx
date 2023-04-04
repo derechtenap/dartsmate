@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { createGame } from "utils/games/create";
 import {
+  APP_VERSION,
   GAME_MAX_LEGS,
   GAME_MAX_PLAYERS,
   GAME_MAX_SETS,
@@ -23,7 +24,6 @@ import {
 } from "utils/constants";
 
 const Lobby: NextPage = () => {
-  const appVersion = require("../../package.json").version as string;
   const router = useRouter();
   const { isLoading, data } = getProfiles();
   const { register, handleSubmit, getValues } = useForm({
@@ -57,8 +57,8 @@ const Lobby: NextPage = () => {
       })),
       uuid: crypto.randomUUID(),
       created_at: Date.now(),
-      app_version: appVersion,
       current_player: 0,
+      app_version: APP_VERSION,
       game_log: [
         {
           type: "INFO",
