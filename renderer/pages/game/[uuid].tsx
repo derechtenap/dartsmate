@@ -6,6 +6,12 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import {
+  HiClock,
+  HiDocumentSearch,
+  HiDotsHorizontal,
+  HiX,
+} from "react-icons/hi";
 import { GAME_SCORE_ZONES, GAME_THROWS_PER_ROUND } from "utils/constants";
 import { useElapsedTime } from "use-elapsed-time";
 
