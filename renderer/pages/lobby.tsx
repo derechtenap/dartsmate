@@ -23,6 +23,7 @@ import {
 } from "utils/constants";
 
 const Lobby: NextPage = () => {
+  const appVersion = require("../../package.json").version as string;
   const router = useRouter();
   const { isLoading, data } = getProfiles();
   const { register, handleSubmit, getValues } = useForm({
