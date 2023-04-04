@@ -28,7 +28,6 @@ const GamePage: NextPage = () => {
     updateInterval: 1,
   });
 
-
   const handleMultiplier = (multiplier: "DOUBLE" | "TRIPLE") => {
     switch (multiplier) {
       case "DOUBLE":
@@ -83,6 +82,11 @@ const GamePage: NextPage = () => {
       setIsDouble(false);
       setIsTriple(false);
     }
+  };
+
+  const handleGameUpdate = () => {
+    // Reset elapsed throwing time
+    reset();
   };
 
   if (!gameUUID || !game) {
@@ -228,7 +232,7 @@ const GamePage: NextPage = () => {
                 </ul>
               </div>
               <Button
-                action={() => console.info("NEXT_PLAYER_EVENT")}
+                action={() => handleGameUpdate()}
                 styles="btn-primary btn mt-auto w-full overflow-hidden rounded-none"
                 {...(throwHistory.length === GAME_THROWS_PER_ROUND
                   ? { disabled: false }
