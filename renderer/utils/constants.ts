@@ -16,7 +16,7 @@ export const FILE_TYPE_EXTENSIONS = {
 export const GAME_MAX_PLAYERS = 8;
 export const GAME_MAX_LEGS = 99;
 export const GAME_MAX_SETS = 99;
-export const GAME_SCORE_MODES = [501, 301, 201];
+export const GAME_SCORE_MODES = [701, 501, 301, 201];
 export const GAME_THROWS_PER_ROUND = 3;
 
 export const GAME_SCORE_ZONES = [
