@@ -27,10 +27,10 @@ const Lobby: NextPage = () => {
   const { isLoading, data } = getProfiles();
   const { register, handleSubmit, getValues } = useForm({
     defaultValues: {
-      scoreMode: "501",
-      legs: "1",
-      sets: "3",
-      randomizePlayerOrder: undefined,
+      scoreMode: 501,
+      legs: 1,
+      sets: 3,
+      randomizePlayerOrder: true,
     },
   });
 
@@ -39,20 +39,33 @@ const Lobby: NextPage = () => {
   };
 
   const [backgroundBlur, setBackgroundBlur] = useState(false);
-  const [selectedPlayers, setSelectedPlayers] = useState([]);
+  const [selectedPlayers, setSelectedPlayers] = useState<any[]>([]);
 
   const handleGameStart = () => {
-    const lobbySettings = {
-      scoreMode: getValues("scoreMode"),
+    const lobbySettings: GameFile = {
+      score_mode: getValues("scoreMode"),
       legs: getValues("legs"),
       sets: getValues("sets"),
-      randomizePlayerOrder: getValues("randomizePlayerOrder"),
-      players: selectedPlayers,
+      randomize_player_order: getValues("randomizePlayerOrder"),
+      players: selectedPlayers.map((player) => ({
+        ...player,
+        scoreLeft: getValues("scoreMode"),
+        avg: 0,
+        isThrowing: false,
+        elapsedThrowingTime: 0,
+      })),
       uuid: crypto.randomUUID(),
-      createdAt: Date.now(),
-      appVersion: "",
-      currentPlayer: 0,
-      gameHistory: [],
+      created_at: Date.now(),
+      app_version: appVersion,
+      current_player: 0,
+      game_log: [
+        {
+          type: "INFO",
+          message: `Game Started`,
+          timestamp: Date.now(),
+        },
+      ],
+      game_status: "STARTED",
     };
     console.info(lobbySettings);
 

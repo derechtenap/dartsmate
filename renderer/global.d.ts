@@ -1,6 +1,9 @@
 export {};
 
 declare global {
+  type LogType = "ERROR" | "INFO" | "WARN";
+  type GameStatus = "ABORTED" | "FINISHED" | "STARTED";
+
   type ProfileFile = {
     name: string;
     uuid: string;
@@ -18,15 +21,27 @@ declare global {
   };
 
   type GameFile = {
-    scoreMode: string;
-    legs: string;
-    sets: string;
-    randomizePlayerOrder: string;
-    players: Array<ProfileFile>;
+    score_mode: number;
+    legs: number;
+    sets: number;
+    randomize_player_order: boolean;
+    players: Array<
+      ProfileFile & {
+        scoreLeft: number;
+        avg: number;
+        isThrowing: boolean;
+        elapsedThrowingTime: number; // In seconds
+      }
+    >;
     uuid: string;
-    createdAt: number;
-    appVersion: string;
-    currentPlayer: number;
-    gameHistory: Array<unknown>;
+    created_at: number;
+    app_version: string;
+    current_player: number;
+    game_log: Array<{
+      type: LogType;
+      message: string;
+      timestamp: number;
+    }>;
+    game_status: GameStatus;
   };
 }
