@@ -5,7 +5,7 @@ import { getCurrentGame } from "hooks/getCurrentGame";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   HiClock,
   HiDocumentSearch,
@@ -25,6 +25,11 @@ const GamePage: NextPage = () => {
   const [isDouble, setIsDouble] = useState<boolean>(false);
   const [isTriple, setIsTriple] = useState<boolean>(false);
   const [throwHistory, setThrowHistory] = useState<number[]>([]);
+  const [currentPlayer, setCurrentPlayer] = useState<string>(undefined);
+
+  useEffect(() => {
+    setCurrentPlayer(game.current_player);
+  }, [game]);
 
   const { elapsedTime, reset } = useElapsedTime({
     isPlaying: true,
@@ -217,14 +222,36 @@ const GamePage: NextPage = () => {
             <Table head={["Player", "Score", "AVG"]}>
               {game.players.map((player) => (
                 <tr key={player.uuid}>
-                  <td>
+                  <td
+                    className={
+                      currentPlayer === player.uuid
+                        ? "bg-primary text-white"
+                        : ""
+                    }
+                  >
                     <span className="flex items-center gap-4">
                       <Avatar imgSrc={player.avatar_image} name={player.name} />{" "}
                       {player.name}
                     </span>
                   </td>
-                  <td>{player.scoreLeft}</td>
-                  <td>{player.avg}</td>
+                  <td
+                    className={
+                      currentPlayer === player.uuid
+                        ? "bg-primary text-white"
+                        : ""
+                    }
+                  >
+                    {player.scoreLeft}
+                  </td>
+                  <td
+                    className={
+                      currentPlayer === player.uuid
+                        ? "bg-primary text-white"
+                        : ""
+                    }
+                  >
+                    {player.avg}
+                  </td>
                 </tr>
               ))}
             </Table>
