@@ -36,7 +36,7 @@ declare global {
     uuid: string;
     created_at: number;
     app_version: string;
-    current_player: number;
+    current_player: string;
     game_log: Array<{
       type: LogType;
       message: string;

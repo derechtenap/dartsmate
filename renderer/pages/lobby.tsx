@@ -35,11 +35,11 @@ const Lobby: NextPage = () => {
     },
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     return data;
   };
 
-  const [backgroundBlur, setBackgroundBlur] = useState(false);
+  const [backgroundBlur, setBackgroundBlur] = useState<boolean>(false);
   const [selectedPlayers, setSelectedPlayers] = useState<any[]>([]);
 
   const handleGameStart = () => {
@@ -47,7 +47,7 @@ const Lobby: NextPage = () => {
       score_mode: getValues("scoreMode"),
       legs: getValues("legs"),
       sets: getValues("sets"),
-      randomize_player_order: getValues("randomizePlayerOrder"),
+      randomize_player_order: false,
       players: selectedPlayers.map((player) => ({
         ...player,
         scoreLeft: getValues("scoreMode"),
@@ -57,8 +57,8 @@ const Lobby: NextPage = () => {
       })),
       uuid: crypto.randomUUID(),
       created_at: Date.now(),
-      current_player: 0,
       app_version: APP_VERSION,
+      current_player: selectedPlayers[0].uuid,
       game_log: [
         {
           type: "INFO",
@@ -202,21 +202,30 @@ const Lobby: NextPage = () => {
                       max={GAME_MAX_LEGS}
                     />
                   </div>
+                  {/*
+
+                  TODO: Currently disabled. Logic wont work properly!
+                  The games will wont use a randomized order until this is
+                  fixed...
+
                   <div className="form-control">
                     <label className="label" htmlFor="randomizePlayerOrder">
                       <span className="label-text">
                         Randomize player order?
                       </span>
                     </label>
-                    <select
-                      className="select w-full max-w-xs px-4"
+                    <input
+                      type="checkbox"
                       id="randomizePlayerOrder"
+                      name="randomizePlayerOrder"
+                      onClick={() => handleCheckboxChange()}
+                      checked={getValues("randomizePlayerOrder")}
+                      value={getValues("randomizePlayerOrder")}
                       {...register("randomizePlayerOrder")}
-                    >
-                      <option value={"true"}>Yes</option>
-                      <option value={"false"}>No</option>
-                    </select>
+                    />
+
                   </div>
+                  */}
                 </form>
               </main>
               <button
