@@ -14,6 +14,9 @@ import {
 } from "react-icons/hi";
 import { GAME_SCORE_ZONES, GAME_THROWS_PER_ROUND } from "utils/constants";
 import { useElapsedTime } from "use-elapsed-time";
+import { toast } from "react-toastify";
+import { loadGame } from "utils/games/load";
+import { createGame } from "utils/games/create";
 
 const GamePage: NextPage = () => {
   const router = useRouter();
@@ -84,6 +87,54 @@ const GamePage: NextPage = () => {
     }
   };
 
+  const handleAbortGame = () => {
+    // Show Toast and then abort game
+    toast(
+      <>
+        <h1 className="text-2xl">Abort Game?</h1>
+        <p>Do you really want to abort the current game?</p>
+        <div className="flex gap-4">
+          <button
+            className="btn-outline btn-error btn"
+            onClick={abortCurrentGame}
+          >
+            Yes
+          </button>
+          <button className="btn" onClick={() => toast.dismiss()}>
+            No
+          </button>
+        </div>
+      </>,
+      {
+        autoClose: false,
+        hideProgressBar: true,
+        closeOnClick: false,
+        closeButton: false,
+      }
+    );
+  };
+
+  const abortCurrentGame = async () => {
+    // Close toast and update game file
+    toast.dismiss();
+    const newGameLog = game.game_log.concat({
+      type: "INFO",
+      message: "Game Aborted",
+      timestamp: Date.now(),
+    });
+
+    const oldFile: GameFile = await loadGame(gameUUID);
+    const updatedFile = {
+      ...oldFile,
+      game_status: "ABORTED",
+      game_log: newGameLog,
+    };
+
+    // Update the file and navigate to main menu
+    await createGame(updatedFile);
+    router.push("/");
+  };
+
   const handleGameUpdate = () => {
     // Reset elapsed throwing time
     reset();
@@ -140,7 +191,7 @@ const GamePage: NextPage = () => {
           </li>
           <li>
             <Button
-              action={() => console.info("")}
+              action={() => handleAbortGame()}
               color="ghost"
               styles="rounded-none"
             >
