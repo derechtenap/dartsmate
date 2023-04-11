@@ -31,6 +31,11 @@ const GamePage: NextPage = () => {
     updateInterval: 1,
   });
 
+  const resetButtons = () => {
+    setIsDouble(false);
+    setIsTriple(false);
+  };
+
   const handleMultiplier = (multiplier: "DOUBLE" | "TRIPLE") => {
     switch (multiplier) {
       case "DOUBLE":
@@ -67,10 +72,7 @@ const GamePage: NextPage = () => {
     }
 
     setThrowHistory((prev) => [...prev, throwScore]);
-
-    // Reset ui buttons
-    setIsDouble(false);
-    setIsTriple(false);
+    resetButtons();
   };
 
   // Removes the last throw from the throw history
@@ -80,10 +82,7 @@ const GamePage: NextPage = () => {
       updatedHistory.pop();
 
       setThrowHistory(updatedHistory);
-
-      // Reset ui buttons
-      setIsDouble(false);
-      setIsTriple(false);
+      resetButtons();
     }
   };
 
@@ -138,6 +137,10 @@ const GamePage: NextPage = () => {
   const handleGameUpdate = () => {
     // Reset elapsed throwing time
     reset();
+
+    // Rest inputs
+    setThrowHistory([]);
+    resetButtons();
   };
 
   if (!gameUUID || !game) {
