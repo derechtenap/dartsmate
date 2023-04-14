@@ -266,6 +266,7 @@ const GamePage: NextPage = () => {
               {GAME_SCORE_ZONES.map((zone) => (
                 <button
                   className="btn-ghost btn h-full w-full rounded-none"
+                  key={zone}
                   onClick={() => handleAddThrow(zone)}
                   {...(throwHistory.length === 3 ? { disabled: true } : {})}
                 >
