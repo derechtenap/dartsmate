@@ -7,11 +7,12 @@ declare global {
   type Round = {
     elapsed_throwing_time: number; // In seconds
     throws: Array<Throw>;
+    round_score: number;
   };
 
   type Throw = {
     zone: number;
-    points: number;
+    score: number;
     round_avg: number;
     is_double: boolean;
     is_triple: boolean;
@@ -24,8 +25,8 @@ declare global {
     name: string;
     uuid: string;
     avatar_image?: string; // Base64 string
-    created_at?: number; // Number of milliseconds since January 1, 1970
-    updated_at?: number;
+    created_at: number; // Number of milliseconds since January 1, 1970
+    updated_at: number;
     stats?: {
       games: number; // Played games
       wins: number;

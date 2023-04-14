@@ -21,7 +21,8 @@ import { createGame } from "utils/games/create";
 const GamePage: NextPage = () => {
   const router = useRouter();
   const gameUUID = (router.query?.uuid as string) || undefined;
-  const { isLoading, data: game } = getCurrentGame(gameUUID);
+  const { isLoading, data: game, refetch } = getCurrentGame(gameUUID);
+  const [roundScore, setRoundScore] = useState<number>(0);
   const [isDouble, setIsDouble] = useState<boolean>(false);
   const [isTriple, setIsTriple] = useState<boolean>(false);
   const [throwHistory, setThrowHistory] = useState<Throw[]>([]);
@@ -56,29 +57,62 @@ const GamePage: NextPage = () => {
     }
   };
 
-  const handleAddThrow = (selectedScore: number) => {
-    let throwScore = selectedScore;
-
-    // Check if the player already have the maximum amount of throws
+  const handleThrowInput = (dartboardPointsZone: number) => {
+    // Abort the function if the player already have the maximum
+    // amount of throws in this round
     if (throwHistory.length >= GAME_THROWS_PER_ROUND) return;
 
-    // If the selected score is 25 or 50 (bullseye or outer bull), add it to the
-    // current throw history without multiplying the score.
-    if (throwScore === 25 || throwScore === 50) {
-      setThrowHistory((prev) => [...prev, throwScore]);
-      return;
+    let newThrow: Throw = {
+      zone: dartboardPointsZone,
+      score: 0,
+      round_avg: 0,
+      is_double: false,
+      is_triple: false,
+      is_outer_bull: false,
+      is_bullseye: false,
+      is_missed: false,
+    };
+
+    newThrow.score = newThrow.zone;
+
+    // Update the throw object based on the value of the dartboardPointsZone:
+    // - If the value is 0, mark the throw as a missed throw.
+    // - If the value is 25, mark the throw as an outer bull.
+    // - If the value is 50, mark the throw as a bullseye.
+    // - If the value is any other number, update the throw points based on the value,
+    //   and mark it as a double or triple throw if applicable.
+    switch (newThrow.zone) {
+      case 0:
+        newThrow.is_missed = true;
+        break;
+      case 25:
+        newThrow.is_outer_bull = true;
+        break;
+      case 50:
+        newThrow.is_bullseye = true;
+        break;
+      default:
+        if (isDouble) {
+          newThrow.is_double = true;
+          newThrow.score = dartboardPointsZone * 2;
+        }
+        if (isTriple) {
+          newThrow.is_triple = true;
+          newThrow.score = dartboardPointsZone * 3;
+        }
+        break;
     }
 
-    // Multiple the score when double or triple is selected
-    if (isTriple) {
-      throwScore *= 3;
-    }
+    // Calculate the average score for the round
+    const updatedThrowHistory = [...throwHistory, newThrow];
+    const totalScore = updatedThrowHistory.reduce(
+      (sum, newThrow) => sum + newThrow.score,
+      0
+    );
 
-    if (isDouble) {
-      throwScore *= 2;
-    }
-
-    setThrowHistory((prev) => [...prev, throwScore]);
+    newThrow.round_avg = totalScore / updatedThrowHistory.length;
+    setRoundScore(totalScore);
+    setThrowHistory(updatedThrowHistory);
     resetButtons();
   };
 
@@ -141,15 +175,80 @@ const GamePage: NextPage = () => {
     router.push("/");
   };
 
-  const handleGameUpdate = () => {
-    // Update Game file
+  const handleGameUpdate = async () => {
+    const oldFile: GameFile = await loadGame(gameUUID);
 
-    // Reset elapsed throwing time
-    reset();
+    const currentPlayerIndex = oldFile.players.findIndex(
+      (player) => player.uuid === currentPlayer
+    );
 
-    // Rest inputs
-    setThrowHistory([]);
-    resetButtons();
+    const nextPlayerIndex = (currentPlayerIndex + 1) % oldFile.players.length;
+    const nextPlayer = oldFile.players[nextPlayerIndex].uuid;
+
+    const updatedPlayers = oldFile.players.map((player) => {
+      if (player.uuid === currentPlayer) {
+        const {
+          elapsed_throwing_time: prevElapsedTime,
+          round_history: prevRoundHistory,
+          score_left: prevScoreLeft,
+        } = player.current_game;
+
+        const newScoreLeft =
+          prevScoreLeft -
+            throwHistory.reduce((sum, throwObj) => sum + throwObj.score, 0) ||
+          0;
+
+        const newThrowingTime = prevElapsedTime + elapsedTime;
+
+        console.info(
+          prevRoundHistory.length + 1,
+          game.score_mode,
+          newScoreLeft,
+          game.score_mode - newScoreLeft,
+          (game.score_mode - newScoreLeft) / prevRoundHistory.length + 1
+        );
+
+        const newAvg =
+          prevRoundHistory.length === 0
+            ? game.score_mode - newScoreLeft
+            : (game.score_mode - newScoreLeft) / prevRoundHistory.length + 1;
+
+        return {
+          ...player,
+          current_game: {
+            score_left: newScoreLeft,
+            avg: newAvg,
+            elapsed_throwing_time: newThrowingTime,
+            round_history: [
+              ...prevRoundHistory,
+              {
+                elapsed_throwing_time: elapsedTime,
+                throws: throwHistory,
+                round_score: roundScore,
+              },
+            ],
+          },
+        };
+      } else {
+        return player;
+      }
+    });
+
+    const updatedFile = {
+      ...oldFile,
+      current_player: nextPlayer,
+      players: updatedPlayers,
+    };
+
+    // Update / recreate the game file on the filesystem and refetch the data.
+    // Then reset elapsed throwing time, throw history and button states
+    await createGame(updatedFile).then(() => {
+      refetch();
+      reset();
+      setThrowHistory([]);
+      setRoundScore(0);
+      resetButtons();
+    });
   };
 
   if (!gameUUID || !game) {
@@ -267,7 +366,7 @@ const GamePage: NextPage = () => {
                 <button
                   className="btn-ghost btn h-full w-full rounded-none"
                   key={zone}
-                  onClick={() => handleAddThrow(zone)}
+                  onClick={() => handleThrowInput(zone)}
                   {...(throwHistory.length === 3 ? { disabled: true } : {})}
                 >
                   {zone}
@@ -306,17 +405,14 @@ const GamePage: NextPage = () => {
               </div>
               <div className="flex flex-col items-center gap-4 text-center">
                 <p className="text-7xl font-extrabold xl:mt-16 xl:text-9xl">
-                  {throwHistory.reduce(
-                    (sum, throws) => sum + throws.points,
-                    0
-                  ) || 0}
+                  {throwHistory.reduce((sum, { score }) => sum + score, 0) || 0}
                 </p>
                 <ul
                   className="menu menu-horizontal gap-x-16 text-lg font-normal xl:text-2xl"
                   role="list"
                 >
-                  {throwHistory.map((thrw, _idx) => (
-                    <li key={_idx}>{thrw.points}</li>
+                  {throwHistory.map(({ score }, _idx) => (
+                    <li key={_idx}>{score}</li>
                   ))}
                 </ul>
               </div>
