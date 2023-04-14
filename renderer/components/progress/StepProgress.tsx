@@ -5,7 +5,7 @@ type Props = {
 
 const StepProgress = ({ activeSteps, steps }: Props) => {
   return (
-    <ul className="steps">
+    <ul className="steps w-full">
       {steps.map((step, _idx) => (
         <li
           className={`step ${
