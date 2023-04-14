@@ -50,10 +50,13 @@ const Lobby: NextPage = () => {
       randomize_player_order: false,
       players: selectedPlayers.map((player) => ({
         ...player,
-        scoreLeft: getValues("scoreMode"),
-        avg: 0,
-        isThrowing: false,
-        elapsedThrowingTime: 0,
+        current_game: {
+          score_left: getValues("scoreMode"),
+          avg: 0,
+          is_throwing: false,
+          elapsed_throwing_time: 0,
+          round_history: [],
+        },
       })),
       uuid: crypto.randomUUID(),
       created_at: Date.now(),

@@ -4,6 +4,20 @@ declare global {
   type LogType = "ERROR" | "INFO" | "WARN";
   type GameStatus = "ABORTED" | "FINISHED" | "STARTED";
 
+  type Round = {
+    elapsed_throwing_time: number; // In seconds
+    throws: Array<{
+      zone: number;
+      points: number;
+      round_avg: number;
+      is_double: boolean;
+      is_triple: boolean;
+      is_outer_bull: boolean;
+      is_bullseye: boolean;
+      is_missed: boolean;
+    }>;
+  };
+
   type ProfileFile = {
     name: string;
     uuid: string;
@@ -17,6 +31,7 @@ declare global {
       throws: number;
       total_score: number;
       missed_throws: number;
+      round_history: Array<Round>;
     };
   };
 
@@ -27,10 +42,13 @@ declare global {
     randomize_player_order: boolean;
     players: Array<
       ProfileFile & {
-        scoreLeft: number;
-        avg: number;
-        isThrowing: boolean;
-        elapsedThrowingTime: number; // In seconds
+        current_game: {
+          score_left: number;
+          avg: number;
+          is_throwing: boolean; // Currently unused
+          elapsed_throwing_time: number; // Total time in seconds
+          round_history: Array<Round>;
+        };
       }
     >;
     uuid: string;

@@ -28,7 +28,9 @@ const GamePage: NextPage = () => {
   const [currentPlayer, setCurrentPlayer] = useState<string>(undefined);
 
   useEffect(() => {
-    setCurrentPlayer(game.current_player);
+    if (game) {
+      setCurrentPlayer(game.current_player);
+    }
   }, [game]);
 
   const { elapsedTime, reset } = useElapsedTime({
@@ -140,6 +142,8 @@ const GamePage: NextPage = () => {
   };
 
   const handleGameUpdate = () => {
+    // Update Game file
+
     // Reset elapsed throwing time
     reset();
 
@@ -241,7 +245,7 @@ const GamePage: NextPage = () => {
                         : ""
                     }
                   >
-                    {player.scoreLeft}
+                    {player.current_game.score_left}
                   </td>
                   <td
                     className={
@@ -250,7 +254,7 @@ const GamePage: NextPage = () => {
                         : ""
                     }
                   >
-                    {player.avg}
+                    {player.current_game.avg}
                   </td>
                 </tr>
               ))}
