@@ -24,7 +24,7 @@ const GamePage: NextPage = () => {
   const { isLoading, data: game } = getCurrentGame(gameUUID);
   const [isDouble, setIsDouble] = useState<boolean>(false);
   const [isTriple, setIsTriple] = useState<boolean>(false);
-  const [throwHistory, setThrowHistory] = useState<number[]>([]);
+  const [throwHistory, setThrowHistory] = useState<Throw[]>([]);
   const [currentPlayer, setCurrentPlayer] = useState<string>(undefined);
 
   useEffect(() => {
@@ -306,14 +306,17 @@ const GamePage: NextPage = () => {
               </div>
               <div className="flex flex-col items-center gap-4 text-center">
                 <p className="text-7xl font-extrabold xl:mt-16 xl:text-9xl">
-                  {throwHistory.reduce((sum, num) => sum + num, 0) || 0}
+                  {throwHistory.reduce(
+                    (sum, throws) => sum + throws.points,
+                    0
+                  ) || 0}
                 </p>
                 <ul
                   className="menu menu-horizontal gap-x-16 text-lg font-normal xl:text-2xl"
                   role="list"
                 >
-                  {throwHistory.map((throwResult, index) => (
-                    <li key={index}>{throwResult}</li>
+                  {throwHistory.map((thrw, _idx) => (
+                    <li key={_idx}>{thrw.points}</li>
                   ))}
                 </ul>
               </div>
