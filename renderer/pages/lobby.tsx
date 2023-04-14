@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { createGame } from "utils/games/create";
 import {
+  APP_VERSION,
   GAME_MAX_LEGS,
   GAME_MAX_PLAYERS,
   GAME_MAX_SETS,
@@ -27,32 +28,48 @@ const Lobby: NextPage = () => {
   const { isLoading, data } = getProfiles();
   const { register, handleSubmit, getValues } = useForm({
     defaultValues: {
-      scoreMode: "501",
-      legs: "1",
-      sets: "3",
-      randomizePlayerOrder: undefined,
+      scoreMode: 501,
+      legs: 1,
+      sets: 3,
+      randomizePlayerOrder: true,
     },
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     return data;
   };
 
-  const [backgroundBlur, setBackgroundBlur] = useState(false);
-  const [selectedPlayers, setSelectedPlayers] = useState([]);
+  const [backgroundBlur, setBackgroundBlur] = useState<boolean>(false);
+  const [selectedPlayers, setSelectedPlayers] = useState<any[]>([]);
 
   const handleGameStart = () => {
-    const lobbySettings = {
-      scoreMode: getValues("scoreMode"),
+    const lobbySettings: GameFile = {
+      score_mode: getValues("scoreMode"),
       legs: getValues("legs"),
       sets: getValues("sets"),
-      randomizePlayerOrder: getValues("randomizePlayerOrder"),
-      players: selectedPlayers,
+      randomize_player_order: false,
+      players: selectedPlayers.map((player) => ({
+        ...player,
+        current_game: {
+          score_left: getValues("scoreMode"),
+          avg: 0,
+          is_throwing: false,
+          elapsed_throwing_time: 0,
+          round_history: [],
+        },
+      })),
       uuid: crypto.randomUUID(),
-      createdAt: Date.now(),
-      appVersion: "",
-      currentPlayer: 0,
-      gameHistory: [],
+      created_at: Date.now(),
+      app_version: APP_VERSION,
+      current_player: selectedPlayers[0].uuid,
+      game_log: [
+        {
+          type: "INFO",
+          message: `Game Started`,
+          timestamp: Date.now(),
+        },
+      ],
+      game_status: "UNFINISHED",
     };
     console.info(lobbySettings);
 
@@ -188,21 +205,30 @@ const Lobby: NextPage = () => {
                       max={GAME_MAX_LEGS}
                     />
                   </div>
+                  {/*
+
+                  TODO: Currently disabled. Logic wont work properly!
+                  The games will wont use a randomized order until this is
+                  fixed...
+
                   <div className="form-control">
                     <label className="label" htmlFor="randomizePlayerOrder">
                       <span className="label-text">
                         Randomize player order?
                       </span>
                     </label>
-                    <select
-                      className="select w-full max-w-xs px-4"
+                    <input
+                      type="checkbox"
                       id="randomizePlayerOrder"
+                      name="randomizePlayerOrder"
+                      onClick={() => handleCheckboxChange()}
+                      checked={getValues("randomizePlayerOrder")}
+                      value={getValues("randomizePlayerOrder")}
                       {...register("randomizePlayerOrder")}
-                    >
-                      <option value={"true"}>Yes</option>
-                      <option value={"false"}>No</option>
-                    </select>
+                    />
+
                   </div>
+                  */}
                 </form>
               </main>
               <button
@@ -231,7 +257,7 @@ const Lobby: NextPage = () => {
               >
                 Create A New Profile
               </Button>
-              <button disabled className="btn-disabled btn-ghost btn mt-2">
+              <button disabled className="btn-ghost btn-disabled btn mt-2">
                 Add Guest
               </button>
             </li>
