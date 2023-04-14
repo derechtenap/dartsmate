@@ -69,7 +69,7 @@ const Lobby: NextPage = () => {
           timestamp: Date.now(),
         },
       ],
-      game_status: "STARTED",
+      game_status: "UNFINISHED",
     };
     console.info(lobbySettings);
 
@@ -257,7 +257,7 @@ const Lobby: NextPage = () => {
               >
                 Create A New Profile
               </Button>
-              <button disabled className="btn-disabled btn-ghost btn mt-2">
+              <button disabled className="btn-ghost btn-disabled btn mt-2">
                 Add Guest
               </button>
             </li>
