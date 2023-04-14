@@ -323,40 +323,40 @@ const GamePage: NextPage = () => {
         <main className="grid flex-1 grid-cols-2 gap-4">
           <section className="bg-base-200">
             <Table head={["Player", "Score", "AVG"]}>
-              {game.players.map((player) => (
-                <tr key={player.uuid}>
-                  <td
-                    className={
-                      currentPlayer === player.uuid
-                        ? "bg-primary text-white"
-                        : ""
-                    }
-                  >
-                    <span className="flex items-center gap-4">
-                      <Avatar imgSrc={player.avatar_image} name={player.name} />{" "}
-                      {player.name}
-                    </span>
-                  </td>
-                  <td
-                    className={
-                      currentPlayer === player.uuid
-                        ? "bg-primary text-white"
-                        : ""
-                    }
-                  >
-                    {player.current_game.score_left}
-                  </td>
-                  <td
-                    className={
-                      currentPlayer === player.uuid
-                        ? "bg-primary text-white"
-                        : ""
-                    }
-                  >
-                    {player.current_game.avg}
-                  </td>
-                </tr>
-              ))}
+              {game.players.map(
+                ({
+                  avatar_image: avatar,
+                  current_game: { avg, score_left },
+                  name,
+                  uuid,
+                }) => (
+                  <tr key={uuid}>
+                    <td
+                      className={
+                        currentPlayer === uuid ? "bg-primary text-white" : ""
+                      }
+                    >
+                      <span className="flex items-center gap-4">
+                        <Avatar imgSrc={avatar} name={name} /> {name}
+                      </span>
+                    </td>
+                    <td
+                      className={
+                        currentPlayer === uuid ? "bg-primary text-white" : ""
+                      }
+                    >
+                      {score_left}
+                    </td>
+                    <td
+                      className={
+                        currentPlayer === uuid ? "bg-primary text-white" : ""
+                      }
+                    >
+                      {avg.toFixed(2)}
+                    </td>
+                  </tr>
+                )
+              )}
             </Table>
           </section>
 
