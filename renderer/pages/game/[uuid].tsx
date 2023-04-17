@@ -340,14 +340,14 @@ const GamePage: NextPage = () => {
                         currentPlayer === uuid ? "bg-primary text-white" : ""
                       }
                     >
-                      {score_left}
+                      {new Intl.NumberFormat().format(score_left)}
                     </td>
                     <td
                       className={
                         currentPlayer === uuid ? "bg-primary text-white" : ""
                       }
                     >
-                      {avg.toFixed(2)}
+                      {new Intl.NumberFormat().format(avg)}
                     </td>
                   </tr>
                 )
