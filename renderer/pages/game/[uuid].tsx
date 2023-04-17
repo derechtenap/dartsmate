@@ -188,6 +188,7 @@ const GamePage: NextPage = () => {
     const updatedPlayers = oldFile.players.map((player) => {
       if (player.uuid === currentPlayer) {
         const {
+          avg: prevAvg,
           elapsed_throwing_time: prevElapsedTime,
           round_history: prevRoundHistory,
           score_left: prevScoreLeft,
@@ -200,18 +201,12 @@ const GamePage: NextPage = () => {
 
         const newThrowingTime = prevElapsedTime + elapsedTime;
 
-        console.info(
-          prevRoundHistory.length + 1,
-          game.score_mode,
-          newScoreLeft,
-          game.score_mode - newScoreLeft,
-          (game.score_mode - newScoreLeft) / prevRoundHistory.length + 1
-        );
+        const avgThisRound = prevScoreLeft - newScoreLeft;
 
         const newAvg =
           prevRoundHistory.length === 0
-            ? game.score_mode - newScoreLeft
-            : (game.score_mode - newScoreLeft) / prevRoundHistory.length + 1;
+            ? avgThisRound
+            : (prevAvg + avgThisRound) / 2;
 
         return {
           ...player,
@@ -345,14 +340,14 @@ const GamePage: NextPage = () => {
                         currentPlayer === uuid ? "bg-primary text-white" : ""
                       }
                     >
-                      {score_left}
+                      {new Intl.NumberFormat().format(score_left)}
                     </td>
                     <td
                       className={
                         currentPlayer === uuid ? "bg-primary text-white" : ""
                       }
                     >
-                      {avg.toFixed(2)}
+                      {new Intl.NumberFormat().format(avg)}
                     </td>
                   </tr>
                 )
