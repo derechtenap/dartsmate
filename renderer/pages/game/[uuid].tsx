@@ -23,8 +23,10 @@ const GamePage: NextPage = () => {
   const gameUUID = (router.query?.uuid as string) || undefined;
   const { isLoading, data: game, refetch } = getCurrentGame(gameUUID);
   const [roundScore, setRoundScore] = useState<number>(0);
-  const [isDouble, setIsDouble] = useState<boolean>(false);
-  const [isTriple, setIsTriple] = useState<boolean>(false);
+  const [multipliers, setMultipliers] = useState({
+    isDouble: false,
+    isTriple: false,
+  });
   const [throwHistory, setThrowHistory] = useState<Throw[]>([]);
   const [currentPlayer, setCurrentPlayer] = useState<string>(undefined);
 
@@ -40,21 +42,23 @@ const GamePage: NextPage = () => {
   });
 
   const resetButtons = () => {
-    setIsDouble(false);
-    setIsTriple(false);
+    setMultipliers({ isDouble: false, isTriple: false });
   };
 
-  const handleMultiplier = (multiplier: "DOUBLE" | "TRIPLE") => {
-    switch (multiplier) {
-      case "DOUBLE":
-        setIsDouble(!isDouble);
-        setIsTriple(false);
-        break;
-      case "TRIPLE":
-        setIsDouble(false);
-        setIsTriple(!isTriple);
-        break;
-    }
+  const handleMultiplier = (multiplier: MultiplierType) => {
+    const multipliers = {
+      DOUBLE: {
+        isDouble: true,
+        isTriple: false,
+      },
+      TRIPLE: {
+        isDouble: false,
+        isTriple: true,
+      },
+    };
+
+    const { isDouble, isTriple } = multipliers[multiplier];
+    setMultipliers({ isDouble: isDouble, isTriple: isTriple });
   };
 
   const handleThrowInput = (dartboardPointsZone: number) => {
@@ -92,11 +96,11 @@ const GamePage: NextPage = () => {
         newThrow.is_bullseye = true;
         break;
       default:
-        if (isDouble) {
+        if (multipliers.isDouble) {
           newThrow.is_double = true;
           newThrow.score = dartboardPointsZone * 2;
         }
-        if (isTriple) {
+        if (multipliers.isTriple) {
           newThrow.is_triple = true;
           newThrow.score = dartboardPointsZone * 3;
         }
@@ -372,7 +376,7 @@ const GamePage: NextPage = () => {
               <div className="flex w-full" role="group">
                 <button
                   className={`btn flex-1 rounded-none border-none ${
-                    isDouble ? "btn-primary" : ""
+                    multipliers.isDouble ? "btn-primary" : ""
                   }`}
                   onClick={() => handleMultiplier("DOUBLE")}
                   {...(throwHistory.length === 3 ? { disabled: true } : {})}
@@ -381,7 +385,7 @@ const GamePage: NextPage = () => {
                 </button>
                 <button
                   className={`btn flex-1 rounded-none ${
-                    isTriple ? "btn-primary" : ""
+                    multipliers.isTriple ? "btn-primary" : ""
                   }`}
                   onClick={() => handleMultiplier("TRIPLE")}
                   {...(throwHistory.length === 3 ? { disabled: true } : {})}

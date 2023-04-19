@@ -3,6 +3,7 @@ export {};
 declare global {
   type LogType = "ERROR" | "INFO" | "WARN";
   type GameStatus = "ABORTED" | "FINISHED" | "STARTED" | "UNFINISHED";
+  type MultiplierType = "SINGLE" | "DOUBLE" | "TRIPLE";
 
   type Round = {
     elapsed_throwing_time: number; // In seconds
