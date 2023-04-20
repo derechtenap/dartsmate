@@ -74,7 +74,7 @@ const Lobby: NextPage = () => {
     console.info(lobbySettings);
 
     createGame(lobbySettings);
-    router.push(`game/${lobbySettings.uuid}`);
+    router.push(`game/${lobbySettings.uuid}/playing`);
   };
 
   const handlePlayerSelection = (player: ProfileFile) => {
