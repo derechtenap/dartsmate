@@ -404,7 +404,7 @@ const GamePage: NextPage = () => {
               </div>
               <div className="flex flex-col items-center gap-4 text-center">
                 <p className="text-7xl font-extrabold xl:mt-16 xl:text-9xl">
-                  {throwHistory.reduce((sum, { score }) => sum + score, 0) || 0}
+                  {throwHistory.reduce((sum, { score }) => sum + score, 0)}
                 </p>
                 <ul
                   className="menu menu-horizontal gap-x-16 text-lg font-normal xl:text-2xl"
