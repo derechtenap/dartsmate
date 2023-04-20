@@ -23,7 +23,10 @@ const GamePage: NextPage = () => {
   const gameUUID = (router.query?.uuid as string) || undefined;
   const { isLoading, data: game, refetch } = getCurrentGame(gameUUID);
   const [roundScore, setRoundScore] = useState<number>(0);
-  const [multipliers, setMultipliers] = useState({
+  const [multipliers, setMultipliers] = useState<{
+    isDouble: boolean;
+    isTriple: boolean;
+  }>({
     isDouble: false,
     isTriple: false,
   });
