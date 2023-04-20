@@ -362,36 +362,36 @@ const GamePage: NextPage = () => {
           <aside className="mr-4 flex flex-col gap-16 overflow-x-hidden">
             <div className="grid grid-cols-4 items-center">
               {GAME_SCORE_ZONES.map((zone) => (
-                <button
-                  className="btn-ghost btn h-full w-full rounded-none"
+                <Button
+                  action={() => handleThrowInput(zone)}
+                  styles="btn btn-ghost rounded-none"
                   key={zone}
-                  onClick={() => handleThrowInput(zone)}
                   {...(throwHistory.length === 3 ? { disabled: true } : {})}
                 >
                   {zone}
-                </button>
+                </Button>
               ))}
             </div>
             <div className="flex w-full flex-col gap-8">
               <div className="flex w-full" role="group">
-                <button
-                  className={`btn flex-1 rounded-none border-none ${
+                <Button
+                  action={() => handleMultiplier("DOUBLE")}
+                  styles={`btn flex-1 rounded-none border-none ${
                     multipliers.isDouble ? "btn-primary" : ""
                   }`}
-                  onClick={() => handleMultiplier("DOUBLE")}
                   {...(throwHistory.length === 3 ? { disabled: true } : {})}
                 >
                   Double
-                </button>
-                <button
-                  className={`btn flex-1 rounded-none ${
+                </Button>
+                <Button
+                  action={() => handleMultiplier("TRIPLE")}
+                  styles={`btn flex-1 rounded-none ${
                     multipliers.isTriple ? "btn-primary" : ""
                   }`}
-                  onClick={() => handleMultiplier("TRIPLE")}
                   {...(throwHistory.length === 3 ? { disabled: true } : {})}
                 >
                   Triple
-                </button>
+                </Button>
                 <Button
                   action={() => handleRemoveThrow()}
                   styles="flex-1 rounded-none"
