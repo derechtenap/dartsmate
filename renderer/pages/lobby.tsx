@@ -70,7 +70,6 @@ const Lobby: NextPage = () => {
       ],
       game_status: "UNFINISHED",
     };
-    console.info(lobbySettings);
 
     createGame(lobbySettings);
     router.push(`game/${lobbySettings.uuid}/playing`);
