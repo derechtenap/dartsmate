@@ -57,7 +57,7 @@ export const handleRoundUpdate = async (
 
   const updatedGameFileData = {
     ...oldGameFile,
-    currentPlayer: nextPlayer,
+    current_player: nextPlayer,
     players: updatedPlayerList,
   };
 
