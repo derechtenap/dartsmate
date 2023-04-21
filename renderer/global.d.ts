@@ -49,7 +49,6 @@ declare global {
         current_game: {
           score_left: number;
           avg: number;
-          is_throwing: boolean; // Currently unused
           elapsed_throwing_time: number; // Total time in seconds
           round_history: Array<Round>;
         };

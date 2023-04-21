@@ -53,7 +53,6 @@ const Lobby: NextPage = () => {
         current_game: {
           score_left: getValues("scoreMode"),
           avg: 0,
-          is_throwing: false,
           elapsed_throwing_time: 0,
           round_history: [],
         },
