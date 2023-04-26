@@ -9,6 +9,7 @@ declare global {
     elapsed_throwing_time: number; // In seconds
     throws: Array<Throw>;
     round_score: number;
+    is_bust: boolean; // Often called "no score"
   };
 
   type Throw = {

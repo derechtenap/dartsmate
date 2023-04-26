@@ -34,21 +34,25 @@ export const handleRoundUpdate = async (
         ? avgThisRound
         : (avg + avgThisRound) / 2;
 
+      const isBust = newScore <= 1;
+
+      const roundHistory = {
+        elapsed_throwing_time: elapsedTime,
+        throws: roundThrowLog,
+        round_score: roundScore,
+        is_bust: isBust,
+      };
+
+      const currentGame = {
+        score_left: isBust ? score_left : newScore,
+        avg: newAvg,
+        elapsed_throwing_time: newThrowingTime,
+        round_history: [...round_history, roundHistory],
+      };
+
       return {
         ...player,
-        current_game: {
-          score_left: newScore,
-          avg: newAvg,
-          elapsed_throwing_time: newThrowingTime,
-          round_history: [
-            ...round_history,
-            {
-              elapsed_throwing_time: elapsedTime,
-              throws: roundThrowLog,
-              round_score: roundScore,
-            },
-          ],
-        },
+        current_game: currentGame,
       };
     }
 
