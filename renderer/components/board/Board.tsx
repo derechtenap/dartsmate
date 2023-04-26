@@ -1,7 +1,3 @@
-import React from "react";
-
-import { handleBoardClick } from "../../utils/dartboard/handleBoardClick";
-
 const Board = () => {
   /*
    * ORIGINAL FILE: Dartboard_heatmap.svg <https://commons.wikimedia.org/wiki/Category:Dartboards_in_art#/media/File:Dartboard_heatmap.svg>
@@ -13,11 +9,11 @@ const Board = () => {
 
   // TODO: The values should be adjustable via the settings
   const colors = {
-    black: "var(--bs-black)",
-    green: "var(--bs-success)",
-    red: "var(--bs-danger)",
-    stroke: "var(--bs-white)",
-    white: "var(--bs-white)",
+    black: "black",
+    green: "green",
+    red: "red",
+    stroke: "white",
+    white: "white",
   };
 
   /*
@@ -92,8 +88,8 @@ const Board = () => {
         </defs>
         <g
           id="board"
-          fontFamily="var(--bs-font-sans-serif)"
-          fontSize="var(--bs-body-font-size)"
+          fontFamily="sans-serif"
+          fontSize="16px"
           strokeLinejoin="round"
           strokeWidth="0.5"
         >
@@ -106,7 +102,7 @@ const Board = () => {
                   key={idx}
                   fill={setFillColor(`#${path}`, idx)}
                   transform={`rotate(${idx * 18})`}
-                  onClick={(e) => handleBoardClick(e)}
+                  onClick={(e) => console.info(e)}
                   xlinkHref={`#${path}`}
                 />
               ))}
@@ -118,7 +114,7 @@ const Board = () => {
             fill={circles.outerBullseye.fill}
             stroke={circles.outerBullseye.stroke}
             r={circles.outerBullseye.radius}
-            onClick={(e) => handleBoardClick(e)}
+            onClick={(e) => console.info(e)}
           />
           <circle
             data-score={circles.bullseye.score}
@@ -126,7 +122,7 @@ const Board = () => {
             fill={circles.bullseye.fill}
             stroke={circles.bullseye.stroke}
             r={circles.bullseye.radius}
-            onClick={(e) => handleBoardClick(e)}
+            onClick={(e) => console.info(e)}
           />
         </g>
       </svg>
@@ -134,7 +130,7 @@ const Board = () => {
         className="mt-3 px-5"
         data-score={0}
         data-zone="x6-n1"
-        onClick={(e) => handleBoardClick(e)}
+        onClick={(e) => console.info(e)}
       >
         Missed
       </button>
