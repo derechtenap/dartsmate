@@ -3,7 +3,7 @@ import path from "path";
 import { APP_DIRECTORY } from "./constants";
 
 export const checkIfProfileFolderExists = async (
-  folder: string = "profiles"
+  folder = "profiles"
 ) => {
   try {
     fs.opendirSync(path.join(APP_DIRECTORY, folder));
@@ -15,7 +15,7 @@ export const checkIfProfileFolderExists = async (
   }
 };
 
-export const createProfileFolder = (folder: string = "profiles") => {
+export const createProfileFolder = (folder = "profiles") => {
   try {
     fs.mkdirSync(path.join(APP_DIRECTORY, folder));
     console.info(`Created a new ${folder} directory...`);

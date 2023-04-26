@@ -54,13 +54,13 @@ const Board = () => {
 
   const setFillColor = (path: string, idx: number) => {
     switch (path) {
-      case "#x1":
-        return idx % 2 == 0 ? colors.black : colors.white;
-      case "#x2":
-      case "#x3":
-        return idx % 2 == 0 ? colors.red : colors.green;
-      default:
-        throw new Error(`Color for path "${path}" cannot be set!`);
+    case "#x1":
+      return idx % 2 == 0 ? colors.black : colors.white;
+    case "#x2":
+    case "#x3":
+      return idx % 2 == 0 ? colors.red : colors.green;
+    default:
+      throw new Error(`Color for path "${path}" cannot be set!`);
     }
   };
 

@@ -27,7 +27,7 @@ const Button = ({
 }: Props) => {
   const c = color ? `btn-${color}` : "";
   const s = size ? `btn-${size}` : "";
-  const o = outline ? `btn-outline` : "";
+  const o = outline ? "btn-outline" : "";
 
   return (
     <button
