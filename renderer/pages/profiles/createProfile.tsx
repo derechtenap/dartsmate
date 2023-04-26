@@ -1,6 +1,7 @@
 import Avatar from "@/components/avatars/Avatar";
 import Button from "@/components/Button";
 import SidebarLayout from "@/components/layouts/SidebarLayout";
+import { randomUUID } from "crypto";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -50,8 +51,7 @@ const CreateProfile: NextPage = () => {
     const base64 = await getBase64(editor);
 
     try {
-      // Edit current profile
-      createProfile({ name: data.userName, avatar_image: base64, uuid: "" });
+      createProfile(data.userName, base64);
       // setImageRef(undefined);
     } catch (e) {
       // TODO: Add better error handling
