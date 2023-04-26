@@ -5,7 +5,7 @@ import { getCurrentGame } from "hooks/getCurrentGame";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   HiClock,
   HiDocumentSearch,
@@ -18,6 +18,8 @@ import { toast } from "react-toastify";
 import { handleAbortCurrentGame } from "utils/games/logic/abortCurrentGame";
 import { handlePlayerThrow } from "utils/games/logic/handlePlayerThrow";
 import { handleRoundUpdate } from "utils/games/logic/handleRoundUpdate";
+import { createGameLogEntry } from "utils/misc/createGameLogEntry";
+import { createGame } from "utils/games/create";
 
 const GamePage: NextPage = () => {
   const router = useRouter();
@@ -33,12 +35,40 @@ const GamePage: NextPage = () => {
   });
   const [roundThrowLog, setRoundThrowLog] = useState<Throw[]>([]);
   const [currentPlayer, setCurrentPlayer] = useState<string>(undefined);
+  const [winner, setWinner] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (game) {
       setCurrentPlayer(game.current_player);
+      setWinner(game?.winner || undefined);
     }
-  }, [game]);
+
+    // Handle finishing game
+    if (winner) {
+      console.info(game.winner);
+      const updatedGameFile: GameFile = {
+        ...game,
+        game_status: "FINISHED",
+        game_log: createGameLogEntry(
+          game.game_log,
+          "INFO",
+          `Player with uuid ${currentPlayer} won the game!`
+        ),
+      };
+
+      createGame(updatedGameFile).then(() => {
+        setWinner(undefined);
+        router.push(`/game/${gameUUID}/results`);
+      });
+    }
+  }, [game, winner]);
+
+  const playerScoreLeft = useMemo(() => {
+    return (
+      game?.players.find((player) => player.uuid === currentPlayer)
+        ?.current_game.score_left ?? 0
+    );
+  }, [currentPlayer, game]);
 
   const { elapsedTime, reset } = useElapsedTime({
     isPlaying: true,
@@ -118,8 +148,6 @@ const GamePage: NextPage = () => {
   };
 
   const handleNextPlayerTurn = async () => {
-    // TODO: Check the current player can win the game...
-
     await handleRoundUpdate(
       currentPlayer,
       elapsedTime,
@@ -302,7 +330,8 @@ const GamePage: NextPage = () => {
               <Button
                 action={() => handleNextPlayerTurn()}
                 styles="btn-primary btn mt-auto w-full overflow-hidden rounded-none"
-                {...(roundThrowLog.length === GAME_THROWS_PER_ROUND
+                {...(playerScoreLeft < 181 ||
+                roundThrowLog.length === GAME_THROWS_PER_ROUND
                   ? { disabled: false }
                   : { disabled: true })}
               >

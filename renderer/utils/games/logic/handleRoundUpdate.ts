@@ -1,5 +1,6 @@
 import { createGame as updateGameFile } from "../create";
 import { loadGame } from "../load";
+import { checkIfPlayerWonRound } from "./checkIfPlayerWonRound";
 
 export const handleRoundUpdate = async (
   currentPlayer: string,
@@ -11,6 +12,7 @@ export const handleRoundUpdate = async (
   const oldGameFile: GameFile = await loadGame(uuid);
   const currentPlayerIndex = getCurrentPlayerIndex(currentPlayer, oldGameFile);
   const nextPlayer = getNextPlayer(currentPlayerIndex, oldGameFile);
+  let isGameWon = false;
 
   // Update game file
   const updatedPlayerList = oldGameFile.players.map((player) => {
@@ -35,6 +37,8 @@ export const handleRoundUpdate = async (
         : (avg + avgThisRound) / 2;
 
       const isBust = newScore <= 1;
+      const didPlayerWon = checkIfPlayerWonRound(newScore, roundThrowLog);
+      if (didPlayerWon) isGameWon = true;
 
       const roundHistory = {
         elapsed_throwing_time: elapsedTime,
@@ -44,7 +48,7 @@ export const handleRoundUpdate = async (
       };
 
       const currentGame = {
-        score_left: isBust ? score_left : newScore,
+        score_left: didPlayerWon ? 0 : isBust ? score_left : newScore,
         avg: newAvg,
         elapsed_throwing_time: newThrowingTime,
         round_history: [...round_history, roundHistory],
@@ -63,6 +67,7 @@ export const handleRoundUpdate = async (
     ...oldGameFile,
     current_player: nextPlayer,
     players: updatedPlayerList,
+    winner: isGameWon ? currentPlayer : null,
   };
 
   // Overwrite the old game file on the os

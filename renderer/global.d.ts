@@ -65,5 +65,6 @@ declare global {
       timestamp: number;
     }>;
     game_status: GameStatus;
+    winner?: string | null;
   };
 }
