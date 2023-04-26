@@ -36,7 +36,6 @@ declare global {
       throws: number;
       total_score: number;
       missed_throws: number;
-      round_history: Array<Round>;
     };
   };
 
