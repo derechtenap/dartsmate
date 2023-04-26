@@ -1,3 +1,5 @@
+import React from "react";
+
 const Board = () => {
   /*
    * ORIGINAL FILE: Dartboard_heatmap.svg <https://commons.wikimedia.org/wiki/Category:Dartboards_in_art#/media/File:Dartboard_heatmap.svg>
