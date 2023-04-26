@@ -5,7 +5,7 @@ import { getCurrentGame } from "hooks/getCurrentGame";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   HiClock,
   HiDocumentSearch,
@@ -15,7 +15,10 @@ import {
 import { GAME_SCORE_ZONES, GAME_THROWS_PER_ROUND } from "utils/constants";
 import { useElapsedTime } from "use-elapsed-time";
 import { toast } from "react-toastify";
-import { loadGame } from "utils/games/load";
+import { handleAbortCurrentGame } from "utils/games/logic/abortCurrentGame";
+import { handlePlayerThrow } from "utils/games/logic/handlePlayerThrow";
+import { handleRoundUpdate } from "utils/games/logic/handleRoundUpdate";
+import { createGameLogEntry } from "utils/misc/createGameLogEntry";
 import { createGame } from "utils/games/create";
 
 const GamePage: NextPage = () => {
@@ -23,16 +26,48 @@ const GamePage: NextPage = () => {
   const gameUUID = (router.query?.uuid as string) || undefined;
   const { isLoading, data: game, refetch } = getCurrentGame(gameUUID);
   const [roundScore, setRoundScore] = useState<number>(0);
-  const [isDouble, setIsDouble] = useState<boolean>(false);
-  const [isTriple, setIsTriple] = useState<boolean>(false);
-  const [throwHistory, setThrowHistory] = useState<Throw[]>([]);
+  const [multipliers, setMultipliers] = useState<{
+    isDouble: boolean;
+    isTriple: boolean;
+  }>({
+    isDouble: false,
+    isTriple: false,
+  });
+  const [roundThrowLog, setRoundThrowLog] = useState<Throw[]>([]);
   const [currentPlayer, setCurrentPlayer] = useState<string>(undefined);
+  const [winner, setWinner] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (game) {
       setCurrentPlayer(game.current_player);
+      setWinner(game?.winner);
     }
-  }, [game]);
+
+    // Handle finishing game
+    if (winner) {
+      const updatedGameFile: GameFile = {
+        ...game,
+        game_status: "FINISHED",
+        game_log: createGameLogEntry(
+          game.game_log,
+          "INFO",
+          `Player with uuid ${currentPlayer} won the game!`
+        ),
+      };
+
+      createGame(updatedGameFile).then(() => {
+        setWinner(undefined);
+        router.push(`/game/${gameUUID}/results`);
+      });
+    }
+  }, [game, winner]);
+
+  const playerScoreLeft = useMemo(() => {
+    return (
+      game?.players.find((player) => player.uuid === currentPlayer)
+        ?.current_game.score_left ?? 0
+    );
+  }, [currentPlayer, game]);
 
   const { elapsedTime, reset } = useElapsedTime({
     isPlaying: true,
@@ -40,91 +75,43 @@ const GamePage: NextPage = () => {
   });
 
   const resetButtons = () => {
-    setIsDouble(false);
-    setIsTriple(false);
+    setMultipliers({ isDouble: false, isTriple: false });
   };
 
-  const handleMultiplier = (multiplier: "DOUBLE" | "TRIPLE") => {
-    switch (multiplier) {
-      case "DOUBLE":
-        setIsDouble(!isDouble);
-        setIsTriple(false);
-        break;
-      case "TRIPLE":
-        setIsDouble(false);
-        setIsTriple(!isTriple);
-        break;
-    }
+  const handleMultiplier = (multiplier: MultiplierType) => {
+    const multipliers = {
+      DOUBLE: {
+        isDouble: true,
+        isTriple: false,
+      },
+      TRIPLE: {
+        isDouble: false,
+        isTriple: true,
+      },
+    };
+
+    const { isDouble, isTriple } = multipliers[multiplier];
+    setMultipliers({ isDouble: isDouble, isTriple: isTriple });
   };
 
   const handleThrowInput = (dartboardPointsZone: number) => {
-    // Abort the function if the player already have the maximum
-    // amount of throws in this round
-    if (throwHistory.length >= GAME_THROWS_PER_ROUND) return;
-
-    let newThrow: Throw = {
-      zone: dartboardPointsZone,
-      score: 0,
-      round_avg: 0,
-      is_double: false,
-      is_triple: false,
-      is_outer_bull: false,
-      is_bullseye: false,
-      is_missed: false,
-    };
-
-    newThrow.score = newThrow.zone;
-
-    // Update the throw object based on the value of the dartboardPointsZone:
-    // - If the value is 0, mark the throw as a missed throw.
-    // - If the value is 25, mark the throw as an outer bull.
-    // - If the value is 50, mark the throw as a bullseye.
-    // - If the value is any other number, update the throw points based on the value,
-    //   and mark it as a double or triple throw if applicable.
-    switch (newThrow.zone) {
-      case 0:
-        newThrow.is_missed = true;
-        break;
-      case 25:
-        newThrow.is_outer_bull = true;
-        break;
-      case 50:
-        newThrow.is_bullseye = true;
-        break;
-      default:
-        if (isDouble) {
-          newThrow.is_double = true;
-          newThrow.score = dartboardPointsZone * 2;
-        }
-        if (isTriple) {
-          newThrow.is_triple = true;
-          newThrow.score = dartboardPointsZone * 3;
-        }
-        break;
-    }
-
-    // Calculate the average score for the round
-    const updatedThrowHistory = [...throwHistory, newThrow];
-    const totalScore = updatedThrowHistory.reduce(
-      (sum, newThrow) => sum + newThrow.score,
-      0
+    const { newThrow, updatedThrowLog } = handlePlayerThrow(
+      dartboardPointsZone,
+      roundThrowLog,
+      multipliers.isDouble,
+      multipliers.isTriple
     );
 
-    newThrow.round_avg = totalScore / updatedThrowHistory.length;
-    setRoundScore(totalScore);
-    setThrowHistory(updatedThrowHistory);
+    setRoundScore(newThrow.score);
+    setRoundThrowLog(updatedThrowLog);
     resetButtons();
   };
 
-  // Removes the last throw from the throw history
   const handleRemoveThrow = () => {
-    if (throwHistory.length > 0) {
-      const updatedHistory = [...throwHistory];
-      updatedHistory.pop();
+    if (!roundThrowLog.length) return;
 
-      setThrowHistory(updatedHistory);
-      resetButtons();
-    }
+    setRoundThrowLog((prevLog) => prevLog.slice(0, -1));
+    resetButtons();
   };
 
   const handleAbortGame = () => {
@@ -134,15 +121,20 @@ const GamePage: NextPage = () => {
         <h1 className="text-2xl">Abort Game?</h1>
         <p>Do you really want to abort the current game?</p>
         <div className="flex gap-4">
-          <button
-            className="btn-outline btn-error btn"
-            onClick={abortCurrentGame}
+          <Button
+            action={() =>
+              handleAbortCurrentGame(gameUUID).then(() => {
+                toast.dismiss();
+                router.push(`/game/${gameUUID}/results`);
+              })
+            }
+            styles="btn-error btn-outline btn"
           >
             Yes
-          </button>
-          <button className="btn" onClick={() => toast.dismiss()}>
+          </Button>
+          <Button action={() => toast.dismiss()} styles="btn">
             No
-          </button>
+          </Button>
         </div>
       </>,
       {
@@ -154,93 +146,17 @@ const GamePage: NextPage = () => {
     );
   };
 
-  const abortCurrentGame = async () => {
-    // Close toast and update game file
-    toast.dismiss();
-    const newGameLog = game.game_log.concat({
-      type: "INFO",
-      message: "Game Aborted",
-      timestamp: Date.now(),
-    });
-
-    const oldFile: GameFile = await loadGame(gameUUID);
-    const updatedFile = {
-      ...oldFile,
-      game_status: "ABORTED",
-      game_log: newGameLog,
-    };
-
-    // Update the file and navigate to main menu
-    await createGame(updatedFile);
-    router.push("/");
-  };
-
-  const handleGameUpdate = async () => {
-    const oldFile: GameFile = await loadGame(gameUUID);
-
-    const currentPlayerIndex = oldFile.players.findIndex(
-      (player) => player.uuid === currentPlayer
-    );
-
-    const nextPlayerIndex = (currentPlayerIndex + 1) % oldFile.players.length;
-    const nextPlayer = oldFile.players[nextPlayerIndex].uuid;
-
-    const updatedPlayers = oldFile.players.map((player) => {
-      if (player.uuid === currentPlayer) {
-        const {
-          avg: prevAvg,
-          elapsed_throwing_time: prevElapsedTime,
-          round_history: prevRoundHistory,
-          score_left: prevScoreLeft,
-        } = player.current_game;
-
-        const newScoreLeft =
-          prevScoreLeft -
-            throwHistory.reduce((sum, throwObj) => sum + throwObj.score, 0) ||
-          0;
-
-        const newThrowingTime = prevElapsedTime + elapsedTime;
-
-        const avgThisRound = prevScoreLeft - newScoreLeft;
-
-        const newAvg =
-          prevRoundHistory.length === 0
-            ? avgThisRound
-            : (prevAvg + avgThisRound) / 2;
-
-        return {
-          ...player,
-          current_game: {
-            score_left: newScoreLeft,
-            avg: newAvg,
-            elapsed_throwing_time: newThrowingTime,
-            round_history: [
-              ...prevRoundHistory,
-              {
-                elapsed_throwing_time: elapsedTime,
-                throws: throwHistory,
-                round_score: roundScore,
-              },
-            ],
-          },
-        };
-      } else {
-        return player;
-      }
-    });
-
-    const updatedFile = {
-      ...oldFile,
-      current_player: nextPlayer,
-      players: updatedPlayers,
-    };
-
-    // Update / recreate the game file on the filesystem and refetch the data.
-    // Then reset elapsed throwing time, throw history and button states
-    await createGame(updatedFile).then(() => {
+  const handleNextPlayerTurn = async () => {
+    await handleRoundUpdate(
+      currentPlayer,
+      elapsedTime,
+      roundScore,
+      roundThrowLog,
+      gameUUID
+    ).then(() => {
       refetch();
       reset();
-      setThrowHistory([]);
+      setRoundThrowLog([]);
       setRoundScore(0);
       resetButtons();
     });
@@ -354,44 +270,43 @@ const GamePage: NextPage = () => {
               )}
             </Table>
           </section>
-
           <aside className="mr-4 flex flex-col gap-16 overflow-x-hidden">
             <div className="grid grid-cols-4 items-center">
               {GAME_SCORE_ZONES.map((zone) => (
-                <button
-                  className="btn-ghost btn h-full w-full rounded-none"
+                <Button
+                  action={() => handleThrowInput(zone)}
+                  styles="btn btn-ghost rounded-none"
                   key={zone}
-                  onClick={() => handleThrowInput(zone)}
-                  {...(throwHistory.length === 3 ? { disabled: true } : {})}
+                  {...(roundThrowLog.length === 3 ? { disabled: true } : {})}
                 >
                   {zone}
-                </button>
+                </Button>
               ))}
             </div>
             <div className="flex w-full flex-col gap-8">
               <div className="flex w-full" role="group">
-                <button
-                  className={`btn flex-1 rounded-none border-none ${
-                    isDouble ? "btn-primary" : ""
+                <Button
+                  action={() => handleMultiplier("DOUBLE")}
+                  styles={`btn flex-1 rounded-none border-none ${
+                    multipliers.isDouble ? "btn-primary" : ""
                   }`}
-                  onClick={() => handleMultiplier("DOUBLE")}
-                  {...(throwHistory.length === 3 ? { disabled: true } : {})}
+                  {...(roundThrowLog.length === 3 ? { disabled: true } : {})}
                 >
                   Double
-                </button>
-                <button
-                  className={`btn flex-1 rounded-none ${
-                    isTriple ? "btn-primary" : ""
+                </Button>
+                <Button
+                  action={() => handleMultiplier("TRIPLE")}
+                  styles={`btn flex-1 rounded-none ${
+                    multipliers.isTriple ? "btn-primary" : ""
                   }`}
-                  onClick={() => handleMultiplier("TRIPLE")}
-                  {...(throwHistory.length === 3 ? { disabled: true } : {})}
+                  {...(roundThrowLog.length === 3 ? { disabled: true } : {})}
                 >
                   Triple
-                </button>
+                </Button>
                 <Button
                   action={() => handleRemoveThrow()}
                   styles="flex-1 rounded-none"
-                  {...(throwHistory.length === 0
+                  {...(roundThrowLog.length === 0
                     ? { disabled: true }
                     : { disabled: false })}
                 >
@@ -400,21 +315,22 @@ const GamePage: NextPage = () => {
               </div>
               <div className="flex flex-col items-center gap-4 text-center">
                 <p className="text-7xl font-extrabold xl:mt-16 xl:text-9xl">
-                  {throwHistory.reduce((sum, { score }) => sum + score, 0) || 0}
+                  {roundThrowLog.reduce((sum, { score }) => sum + score, 0)}
                 </p>
                 <ul
                   className="menu menu-horizontal gap-x-16 text-lg font-normal xl:text-2xl"
                   role="list"
                 >
-                  {throwHistory.map(({ score }, _idx) => (
+                  {roundThrowLog.map(({ score }, _idx) => (
                     <li key={_idx}>{score}</li>
                   ))}
                 </ul>
               </div>
               <Button
-                action={() => handleGameUpdate()}
+                action={() => handleNextPlayerTurn()}
                 styles="btn-primary btn mt-auto w-full overflow-hidden rounded-none"
-                {...(throwHistory.length === GAME_THROWS_PER_ROUND
+                {...(playerScoreLeft < 181 ||
+                roundThrowLog.length === GAME_THROWS_PER_ROUND
                   ? { disabled: false }
                   : { disabled: true })}
               >

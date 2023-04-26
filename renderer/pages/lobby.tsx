@@ -30,7 +30,7 @@ const Lobby: NextPage = () => {
     defaultValues: {
       scoreMode: 501,
       legs: 1,
-      sets: 3,
+      sets: 1,
       randomizePlayerOrder: true,
     },
   });
@@ -53,7 +53,6 @@ const Lobby: NextPage = () => {
         current_game: {
           score_left: getValues("scoreMode"),
           avg: 0,
-          is_throwing: false,
           elapsed_throwing_time: 0,
           round_history: [],
         },
@@ -71,10 +70,9 @@ const Lobby: NextPage = () => {
       ],
       game_status: "UNFINISHED",
     };
-    console.info(lobbySettings);
 
     createGame(lobbySettings);
-    router.push(`game/${lobbySettings.uuid}`);
+    router.push(`game/${lobbySettings.uuid}/playing`);
   };
 
   const handlePlayerSelection = (player: ProfileFile) => {
@@ -190,6 +188,7 @@ const Lobby: NextPage = () => {
                     <input
                       type="number"
                       className="input-bordered input w-full"
+                      disabled
                       {...register("sets")}
                       max={GAME_MAX_SETS}
                     />
@@ -201,6 +200,7 @@ const Lobby: NextPage = () => {
                     <input
                       type="number"
                       className="input-bordered input w-full"
+                      disabled
                       {...register("legs")}
                       max={GAME_MAX_LEGS}
                     />
@@ -257,7 +257,7 @@ const Lobby: NextPage = () => {
               >
                 Create A New Profile
               </Button>
-              <button disabled className="btn-ghost btn-disabled btn mt-2">
+              <button disabled className="btn-disabled btn-ghost btn mt-2">
                 Add Guest
               </button>
             </li>

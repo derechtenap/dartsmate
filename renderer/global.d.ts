@@ -3,11 +3,13 @@ export {};
 declare global {
   type LogType = "ERROR" | "INFO" | "WARN";
   type GameStatus = "ABORTED" | "FINISHED" | "STARTED" | "UNFINISHED";
+  type MultiplierType = "SINGLE" | "DOUBLE" | "TRIPLE";
 
   type Round = {
     elapsed_throwing_time: number; // In seconds
     throws: Array<Throw>;
     round_score: number;
+    is_bust: boolean; // Often called "no score"
   };
 
   type Throw = {
@@ -48,7 +50,6 @@ declare global {
         current_game: {
           score_left: number;
           avg: number;
-          is_throwing: boolean; // Currently unused
           elapsed_throwing_time: number; // Total time in seconds
           round_history: Array<Round>;
         };
@@ -64,5 +65,6 @@ declare global {
       timestamp: number;
     }>;
     game_status: GameStatus;
+    winner?: string | null;
   };
 }
