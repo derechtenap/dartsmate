@@ -40,12 +40,11 @@ const GamePage: NextPage = () => {
   useEffect(() => {
     if (game) {
       setCurrentPlayer(game.current_player);
-      setWinner(game?.winner || undefined);
+      setWinner(game?.winner);
     }
 
     // Handle finishing game
     if (winner) {
-      console.info(game.winner);
       const updatedGameFile: GameFile = {
         ...game,
         game_status: "FINISHED",
