@@ -1,7 +1,6 @@
 import Avatar from "@/components/avatars/Avatar";
 import Button from "@/components/Button";
 import SidebarLayout from "@/components/layouts/SidebarLayout";
-import { randomUUID } from "crypto";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";

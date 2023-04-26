@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "fs";
+import { readFileSync } from "fs";
 import { FILE_TYPE_EXTENSIONS, GAME_SAVE_DIRECTORY } from "utils/constants";
 
 export const loadGame = async (uuid: string) => {

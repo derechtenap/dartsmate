@@ -64,7 +64,7 @@ const Lobby: NextPage = () => {
       game_log: [
         {
           type: "INFO",
-          message: `Game Started`,
+          message: "Game Started",
           timestamp: Date.now(),
         },
       ],

@@ -1,6 +1,0 @@
-# For further reference: https://prettier.io/docs/en/ignore.html
-
-# Ignore dist and app folders from nextron
-app
-dist
-.next
