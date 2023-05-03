@@ -15,7 +15,9 @@
     "build:mac": "nextron build --mac --x64",
     "build:linux": "nextron build --linux",
     "postinstall": "electron-builder install-app-deps",
-    "lint": "eslint ."
+    "lint": "eslint . --report-unused-disable-directives",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "electron-serve": "^1.1.0",
@@ -35,9 +37,12 @@
     "electron": "^21.4.4",
     "electron-builder": "^23.6.0",
     "eslint": "^8.39.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "next": "^12.3.4",
     "nextron": "^8.5.0",
     "postcss": "^8.4.21",
+    "prettier": "2.8.8",
     "react": "^18.2.0",
     "react-avatar-editor": "^13.0.0",
     "react-dom": "^18.2.0",
