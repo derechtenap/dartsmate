@@ -3,7 +3,6 @@ import { NextPage } from "next";
 import Layout from "@/components/layouts/MainMenuLayout";
 import MainMenuNav from "@/components/navs/mainMenu/Nav";
 import NewGameCta from "@/components/slides/NewGameCta";
-// import UnfinishedGameCta from "@/components/slides/UnfinishedGameCta";
 
 import {
   Splide as Carousel,
@@ -23,11 +22,6 @@ const IndexPage: NextPage = () => {
         <Slide>
           <NewGameCta />
         </Slide>
-        {/*
-        <Slide>
-          <UnfinishedGameCta playerList={[]} savedAt={new Date()} />
-        </Slide>
-        */}
       </Carousel>
       <MainMenuNav />
     </Layout>
