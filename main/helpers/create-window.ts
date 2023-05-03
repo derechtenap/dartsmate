@@ -73,7 +73,7 @@ export default (
     store.set(key, state);
   };
 
-  state = ensureVisibleOnSomeDisplay(restore());
+  state = ensureVisibleOnSomeDisplay(restore() as Rectangle);
 
   const browserOptions: BrowserWindowConstructorOptions = {
     ...options,
