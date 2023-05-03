@@ -22,12 +22,6 @@ export const home = {
   name: "Home",
 };
 
-export const loadGame = {
-  href: "/loadGame",
-  icon: <HiInboxIn />,
-  name: "Load Game",
-};
-
 export const openSaveDir = {
   href: "#",
   icon: <HiOutlineFolderOpen />,
@@ -64,6 +58,6 @@ export const newGame = {
   name: "New Game",
 };
 
-export const mainNavLinks = [newGame, loadGame, profiles, ranking, quit];
-export const optionsNavLinks = [openSaveDir, about, settings];
+export const mainNavLinks = [newGame, profiles, quit];
+export const optionsNavLinks = [];
 export const sidebarLinks = [home, profiles, ranking];
