@@ -1,7 +1,6 @@
 import {
   HiCog,
   HiHome,
-  HiInboxIn,
   HiOutlineFolderOpen,
   HiOutlineInformationCircle,
   HiPlusCircle,
