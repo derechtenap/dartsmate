@@ -7,7 +7,7 @@ type Props = {
   label: string;
 };
 
-const FormElement = ({ children, error = null, errorLabel, label }: Props) => {
+const FormElement = ({ children, error, errorLabel, label }: Props) => {
   return (
     <div className="form-control">
       <label className="label">
