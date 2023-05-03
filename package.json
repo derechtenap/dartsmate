@@ -15,7 +15,7 @@
     "build:mac": "nextron build --mac --x64",
     "build:linux": "nextron build --linux",
     "postinstall": "electron-builder install-app-deps",
-    "lint": "eslint . --report-unused-disable-directives",
+    "lint": "eslint . --max-warnings 0 --report-unused-disable-directives",
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier --write ."
   },
