@@ -4,7 +4,7 @@ import { createWindow } from "./helpers";
 
 const isProd: boolean = process.env.NODE_ENV === "production";
 
-const window = {
+export const minWindowSize = {
   height: 768,
   width: 1024,
 };
@@ -19,10 +19,10 @@ if (isProd) {
   await app.whenReady();
 
   const mainWindow = createWindow("main", {
-    height: window.height,
-    width: window.width,
-    minHeight: window.height,
-    minWidth: window.width,
+    height: minWindowSize.height,
+    width: minWindowSize.width,
+    minHeight: minWindowSize.height,
+    minWidth: minWindowSize.width,
   });
 
   if (isProd) {
