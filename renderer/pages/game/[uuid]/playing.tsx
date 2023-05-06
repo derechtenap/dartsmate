@@ -44,7 +44,7 @@ const GamePage: NextPage = () => {
     }
 
     // Handle finishing game
-    if (winner) {
+    if (winner && game) {
       const updatedGameFile: GameFile = {
         ...game,
         game_status: "FINISHED",
