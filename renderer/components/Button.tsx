@@ -22,7 +22,7 @@ const Button = ({
   color,
   outline = false,
   size = "md",
-  styles,
+  styles = "",
   ...attributes
 }: Props) => {
   const c = color ? `btn-${color}` : "";
