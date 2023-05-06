@@ -17,7 +17,9 @@
     "project": ["./tsconfig.json"]
   },
   "plugins": ["@typescript-eslint"],
-  "rules": {},
+  "rules": {
+    "@next/next/no-html-link-for-pages": ["error", "renderer/pages/"]
+  },
   "root": true,
   "ignorePatterns": [
     "renderer/tailwind.config.js",
