@@ -40,7 +40,7 @@ const GamePage: NextPage = () => {
   useEffect(() => {
     if (game) {
       setCurrentPlayer(game.current_player);
-      setWinner(game?.winner);
+      setWinner(game.winner);
     }
 
     // Handle finishing game
