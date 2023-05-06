@@ -13,9 +13,14 @@
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module",
-    "project": true
+    "project": ["./tsconfig.json"]
   },
   "plugins": ["@typescript-eslint"],
   "rules": {},
-  "root": true
+  "root": true,
+  "ignorePatterns": [
+    "renderer/tailwind.config.js",
+    "renderer/postcss.config.js",
+    "renderer/next.config.js"
+  ]
 }
