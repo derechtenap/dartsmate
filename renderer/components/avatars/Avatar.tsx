@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { getInitials } from "utils/ui/getInitials";
 
 type Props = {
   dataImage?: string;
@@ -7,13 +8,7 @@ type Props = {
 };
 
 const Avatar = ({ dataImage, name, size = "w-8" }: Props) => {
-  // Get the initiales to place them dynamically into a placeholder avatar
-  // eg. Luke Skywalker => "LS" or C-3PO => "C"
-  const nameInitial = name
-    .split(" ")
-    .map((char) => char.charAt(0))
-    .slice(0, 3) // Return only the first 3 characters to avoid overflowing
-    .join("");
+  const nameInitials = getInitials(name);
 
   if (dataImage)
     return (
