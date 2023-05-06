@@ -12,9 +12,9 @@ const QuitPage: NextPage = () => {
     quitApp();
   };
 
-  const handleCancel = (): void => {
-    // Redirect back to the index page, cancelling the quitting process
-    router.push("/");
+  const handleCancel = () => {
+    // Redirect back to the latest page, cancelling the quitting process
+    router.back();
   };
 
   return (
