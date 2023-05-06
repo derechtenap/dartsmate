@@ -34,7 +34,7 @@ const GamePage: NextPage = () => {
     isTriple: false,
   });
   const [roundThrowLog, setRoundThrowLog] = useState<Throw[]>([]);
-  const [currentPlayer, setCurrentPlayer] = useState<string>(undefined);
+  const [currentPlayer, setCurrentPlayer] = useState<string>("");
   const [winner, setWinner] = useState<string | undefined>(undefined);
 
   useEffect(() => {
