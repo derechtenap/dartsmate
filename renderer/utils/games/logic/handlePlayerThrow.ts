@@ -1,15 +1,9 @@
-import { GAME_THROWS_PER_ROUND } from "utils/constants";
-
 export const handlePlayerThrow = (
   dartboardPointsZone: number,
   currentThrowLog: Throw[],
   isDouble: boolean,
   isTriple: boolean
-) => {
-  // Abort the function if the player already have the maximum
-  // amount of throws in this round
-  if (currentThrowLog.length >= GAME_THROWS_PER_ROUND) return;
-
+): { newThrow: Throw; updatedThrowLog: Throw[] } => {
   // Create a new throw object for the save game
   const newThrow = createNewThrow(dartboardPointsZone, isDouble, isTriple);
 
@@ -41,25 +35,25 @@ const createNewThrow = (zone: number, isDouble: boolean, isTriple: boolean) => {
   };
 
   switch (newThrow.zone) {
-  case 0:
-    newThrow.is_missed = true;
-    break;
-  case 25:
-    newThrow.is_outer_bull = true;
-    break;
-  case 50:
-    newThrow.is_bullseye = true;
-    break;
-  default:
-    if (isDouble) {
-      newThrow.is_double = true;
-      newThrow.score = zone * 2;
-    }
-    if (isTriple) {
-      newThrow.is_triple = true;
-      newThrow.score = zone * 3;
-    }
-    break;
+    case 0:
+      newThrow.is_missed = true;
+      break;
+    case 25:
+      newThrow.is_outer_bull = true;
+      break;
+    case 50:
+      newThrow.is_bullseye = true;
+      break;
+    default:
+      if (isDouble) {
+        newThrow.is_double = true;
+        newThrow.score = zone * 2;
+      }
+      if (isTriple) {
+        newThrow.is_triple = true;
+        newThrow.score = zone * 3;
+      }
+      break;
   }
 
   return newThrow;

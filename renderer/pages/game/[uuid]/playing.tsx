@@ -99,6 +99,9 @@ const GamePage: NextPage = () => {
   };
 
   const handleThrowInput = (dartboardPointsZone: number) => {
+    // Abort the function if the player already have the maximum
+    // amount of throws in this round
+    if (roundThrowLog.length >= GAME_THROWS_PER_ROUND) return;
     const { newThrow, updatedThrowLog } = handlePlayerThrow(
       dartboardPointsZone,
       roundThrowLog,
@@ -276,7 +279,7 @@ const GamePage: NextPage = () => {
           </section>
           <aside className="mr-4 flex flex-col gap-16 overflow-x-hidden">
             <div className="grid grid-cols-4 items-center">
-              {GAME_SCORE_ZONES.map((zone) => (
+              {GAME_SCORE_ZONES.map((zone: number) => (
                 <Button
                   action={() => handleThrowInput(zone)}
                   styles="btn btn-ghost rounded-none"
