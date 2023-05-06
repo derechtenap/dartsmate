@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { APP_NAME, APP_VERSION } from "utils/constants";
-import OptionsList from "../navs/optionsMenu/OptionsList";
 
 type Props = {
   children: React.ReactNode;
@@ -19,7 +18,6 @@ const DefaultLayout = ({ children, title }: Props) => {
           <p className="absolute bottom-16 w-16 -rotate-90 transform whitespace-nowrap opacity-80">
             {APP_NAME} &mdash; {APP_VERSION}
           </p>
-          <OptionsList />
         </aside>
         <section className="h-full w-full">{children}</section>
       </main>

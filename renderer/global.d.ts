@@ -66,4 +66,10 @@ declare global {
     game_status: GameStatus;
     winner?: string | null;
   };
+
+  type navLink = {
+    href: string;
+    name: string;
+    icon: ReactElement;
+  };
 }
