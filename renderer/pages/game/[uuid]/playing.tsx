@@ -80,6 +80,10 @@ const GamePage: NextPage = () => {
 
   const handleMultiplier = (multiplier: MultiplierType) => {
     const multipliers = {
+      SINGLE: {
+        isDouble: false,
+        isTriple: false,
+      },
       DOUBLE: {
         isDouble: true,
         isTriple: false,
