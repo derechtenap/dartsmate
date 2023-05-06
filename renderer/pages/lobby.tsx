@@ -155,7 +155,7 @@ const Lobby: NextPage = () => {
                     key={player.uuid}
                   >
                     <Avatar
-                      imgSrc={player.avatar_image}
+                      dataImage={player.avatar_image}
                       name={player.name}
                       size="w-16 xl:w-32"
                     />
@@ -278,7 +278,10 @@ const Lobby: NextPage = () => {
                     className="flex-1"
                     onClick={() => handlePlayerSelection(player)}
                   >
-                    <Avatar imgSrc={player.avatar_image} name={player.name} />
+                    <Avatar
+                      dataImage={player.avatar_image}
+                      name={player.name}
+                    />
                     {player.name}
                   </span>
                   <button

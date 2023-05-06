@@ -252,7 +252,7 @@ const GamePage: NextPage = () => {
                       }
                     >
                       <span className="flex items-center gap-4">
-                        <Avatar imgSrc={avatar} name={name} /> {name}
+                        <Avatar dataImage={avatar} name={name} /> {name}
                       </span>
                     </td>
                     <td

@@ -86,7 +86,7 @@ const ProfilesPage: NextPage = () => {
                 className="flex items-center gap-4"
                 onClick={() => setCurrentUser(profile)}
               >
-                <Avatar imgSrc={profile.avatar_image} name={profile.name} />
+                <Avatar dataImage={profile.avatar_image} name={profile.name} />
                 {profile.name}
               </button>
             </li>
@@ -97,7 +97,7 @@ const ProfilesPage: NextPage = () => {
             <header className="bg-diagonal-lines flex h-48 flex-1 items-center justify-between p-8 font-bold">
               <main className="flex items-center gap-8">
                 <Avatar
-                  imgSrc={currentUser.avatar_image}
+                  dataImage={currentUser.avatar_image}
                   name={currentUser.name}
                   size="w-24"
                 />

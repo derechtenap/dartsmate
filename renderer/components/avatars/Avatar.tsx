@@ -1,10 +1,12 @@
+import Image from "next/image";
+
 type Props = {
-  imgSrc?: string;
+  dataImage?: string;
   name: string;
   size?: string;
 };
 
-const Avatar = ({ imgSrc, name = "", size = "w-8" }: Props) => {
+const Avatar = ({ dataImage, name, size = "w-8" }: Props) => {
   // Get the initiales to place them dynamically into a placeholder avatar
   // eg. Luke Skywalker => "LS" or C-3PO => "C"
   const nameInitial = name
@@ -13,10 +15,16 @@ const Avatar = ({ imgSrc, name = "", size = "w-8" }: Props) => {
     .slice(0, 3) // Return only the first 3 characters to avoid overflowing
     .join("");
 
-  if (imgSrc)
+  if (dataImage)
     return (
       <div className={`avatar ${size} pointer-events-none`}>
-        <img alt={`${name}'s avatar`} className="rounded-full" src={imgSrc} />
+        <Image
+          alt={`${name}'s avatar`}
+          className="rounded-full"
+          src={dataImage}
+          width={64}
+          height={64}
+        />
       </div>
     );
 
