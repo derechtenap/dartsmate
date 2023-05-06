@@ -6,7 +6,7 @@ export const handleAbortCurrentGame = async (gameUUID: string) => {
   const file: GameFile = await loadGame(gameUUID);
 
   // Add game log entry
-  const updatedFile = {
+  const updatedFile: GameFile = {
     ...file,
     game_status: "ABORTED",
     game_log: createGameLogEntry(file.game_log, "INFO", "Game Aborted By User"),
