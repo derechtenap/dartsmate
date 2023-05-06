@@ -1,4 +1,4 @@
-import { MutableRefObject } from "react";
+import { RefObject } from "react";
 import AvatarEditor from "react-avatar-editor";
 
 /**
@@ -15,7 +15,7 @@ import AvatarEditor from "react-avatar-editor";
  *
  */
 export const getBase64 = async (
-  editor: MutableRefObject<AvatarEditor>
+  editor: RefObject<AvatarEditor>
 ): Promise<string | undefined> => {
   if (editor.current) {
     const dataURL = editor.current.getImageScaledToCanvas().toDataURL();
