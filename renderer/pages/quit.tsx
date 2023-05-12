@@ -3,13 +3,14 @@ import Modal from "@/components/Modal";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { quitApp } from "utils/ui/quitApp";
+import { ipcRenderer } from "electron";
 
 const QuitPage: NextPage = () => {
   const router = useRouter();
 
-  const handleQuit = (): void => {
-    quitApp();
+  // Sends a message to the main process to quit the Electron app
+  const handleQuit = () => {
+    ipcRenderer.send("quit-app");
   };
 
   const handleCancel = () => {
