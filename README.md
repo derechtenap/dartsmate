@@ -6,7 +6,9 @@
 
 ## :sparkles: Features
 
-:construction: Soon:tm:
+- **Create & Manage Profiles:** Easily create and manage player profiles for your games.
+
+- **Create A Game With Up to 8 Players:** Set up a game with up to 8 players and customize various game settings.
 
 ## :robot: Scripts
 
