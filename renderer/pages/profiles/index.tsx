@@ -14,16 +14,20 @@ import { useRouter } from "next/router";
 const ProfilesPage: NextPage = () => {
   const router = useRouter();
 
-  const [currentUser, setCurrentUser] = useState<ProfileFile>(undefined);
+  const [currentUser, setCurrentUser] = useState<ProfileFile>();
   const [showModal, setShowModal] = useState(false);
   const { isLoading, data, refetch } = getProfiles();
 
-  const handleDeleteProfile = (profile: ProfileFile) => {
-    deleteProfile(profile.uuid).then(() => {
-      setCurrentUser(undefined);
-      setShowModal(false);
-      refetch();
-    });
+  const handleDeleteProfile = (profile: ProfileFile | undefined) => {
+    if (profile) {
+      deleteProfile(profile.uuid).then(() => {
+        setCurrentUser(undefined);
+        setShowModal(false);
+        refetch();
+      });
+    } else {
+      throw new Error("Profile was undefined! Couldn't delete this profile");
+    }
   };
 
   const DeleteModal = () => {
@@ -31,7 +35,7 @@ const ProfilesPage: NextPage = () => {
       <div className="absolute top-0 z-50 h-screen w-screen" role="alert">
         <Modal
           state={showModal}
-          title={`Do you really want to delete ${currentUser.name}'s profile?`}
+          title={`Do you really want to delete this profile?`}
         >
           <p>
             This action cannot be undone and all of the data will be permanently
@@ -80,13 +84,13 @@ const ProfilesPage: NextPage = () => {
               <HiPlusCircle className="h-8 w-8" /> Create Profile
             </button>
           </li>
-          {data?.map((profile) => (
+          {data?.map((profile: ProfileFile) => (
             <li key={profile.uuid}>
               <button
                 className="flex items-center gap-4"
                 onClick={() => setCurrentUser(profile)}
               >
-                <Avatar imgSrc={profile.avatar_image} name={profile.name} />
+                <Avatar dataImage={profile.avatar_image} name={profile.name} />
                 {profile.name}
               </button>
             </li>
@@ -97,9 +101,8 @@ const ProfilesPage: NextPage = () => {
             <header className="bg-diagonal-lines flex h-48 flex-1 items-center justify-between p-8 font-bold">
               <main className="flex items-center gap-8">
                 <Avatar
-                  imgSrc={currentUser.avatar_image}
+                  dataImage={currentUser.avatar_image}
                   name={currentUser.name}
-                  size="w-24"
                 />
                 <h1 className="mb-0">{currentUser.name}</h1>
               </main>

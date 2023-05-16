@@ -64,6 +64,12 @@ declare global {
       timestamp: number;
     }>;
     game_status: GameStatus;
-    winner?: string | null;
+    winner?: string;
+  };
+
+  type navLink = {
+    href: string;
+    name: string;
+    icon: ReactElement;
   };
 }

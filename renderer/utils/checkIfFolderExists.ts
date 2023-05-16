@@ -2,9 +2,7 @@ import fs from "fs";
 import path from "path";
 import { APP_DIRECTORY } from "./constants";
 
-export const checkIfProfileFolderExists = async (
-  folder = "profiles"
-) => {
+export const checkIfProfileFolderExists = (folder = "profiles") => {
   try {
     fs.opendirSync(path.join(APP_DIRECTORY, folder));
   } catch {

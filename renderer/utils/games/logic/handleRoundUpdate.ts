@@ -9,7 +9,7 @@ export const handleRoundUpdate = async (
   roundThrowLog: Throw[],
   uuid: string
 ) => {
-  const oldGameFile: GameFile = await loadGame(uuid);
+  const oldGameFile = (await loadGame(uuid)) as GameFile;
   const currentPlayerIndex = getCurrentPlayerIndex(currentPlayer, oldGameFile);
   const nextPlayer = getNextPlayer(currentPlayerIndex, oldGameFile);
   let isGameWon = false;
@@ -67,7 +67,7 @@ export const handleRoundUpdate = async (
     ...oldGameFile,
     current_player: nextPlayer,
     players: updatedPlayerList,
-    winner: isGameWon ? currentPlayer : null,
+    winner: isGameWon ? currentPlayer : undefined,
   };
 
   // Overwrite the old game file on the os

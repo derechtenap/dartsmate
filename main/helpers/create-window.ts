@@ -2,19 +2,27 @@ import {
   screen,
   BrowserWindow,
   BrowserWindowConstructorOptions,
+  Rectangle,
 } from "electron";
 import Store from "electron-store";
 
-export default (windowName: string, options: BrowserWindowConstructorOptions): BrowserWindow => {
+import { minWindowSize } from "../background";
+
+export default (
+  windowName: string,
+  options: BrowserWindowConstructorOptions
+): BrowserWindow => {
   const key = "window-state";
   const name = `window-state-${windowName}`;
   const store = new Store({ name });
   const defaultSize = {
-    width: options.width,
-    height: options.height,
+    width: minWindowSize.width,
+    height: minWindowSize.height,
   };
   let state = {};
-  let win = new BrowserWindow;
+
+  // eslint-disable-next-line prefer-const
+  let win: BrowserWindow;
 
   const restore = () => store.get(key, defaultSize);
 
@@ -29,7 +37,7 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     };
   };
 
-  const windowWithinBounds = (windowState, bounds) => {
+  const windowWithinBounds = (windowState: Rectangle, bounds: Rectangle) => {
     return (
       windowState.x >= bounds.x &&
       windowState.y >= bounds.y &&
@@ -46,8 +54,8 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     });
   };
 
-  const ensureVisibleOnSomeDisplay = windowState => {
-    const visible = screen.getAllDisplays().some(display => {
+  const ensureVisibleOnSomeDisplay = (windowState: Rectangle) => {
+    const visible = screen.getAllDisplays().some((display) => {
       return windowWithinBounds(windowState, display.bounds);
     });
     if (!visible) {
@@ -65,7 +73,7 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     store.set(key, state);
   };
 
-  state = ensureVisibleOnSomeDisplay(restore());
+  state = ensureVisibleOnSomeDisplay(restore() as Rectangle);
 
   const browserOptions: BrowserWindowConstructorOptions = {
     ...options,

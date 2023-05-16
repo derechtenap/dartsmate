@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@headlessui/react": "^1.7.14",
+    "@next/eslint-plugin-next": "^13.4.1",
     "@splidejs/react-splide": "^0.7.12",
     "@tanstack/react-query": "^4.29.1",
     "@types/node": "^18.15.11",

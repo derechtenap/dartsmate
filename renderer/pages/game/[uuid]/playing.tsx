@@ -23,7 +23,7 @@ import { createGame } from "utils/games/create";
 
 const GamePage: NextPage = () => {
   const router = useRouter();
-  const gameUUID = (router.query?.uuid as string) || undefined;
+  const gameUUID = router.query.uuid as string;
   const { isLoading, data: game, refetch } = getCurrentGame(gameUUID);
   const [roundScore, setRoundScore] = useState<number>(0);
   const [multipliers, setMultipliers] = useState<{
@@ -34,17 +34,17 @@ const GamePage: NextPage = () => {
     isTriple: false,
   });
   const [roundThrowLog, setRoundThrowLog] = useState<Throw[]>([]);
-  const [currentPlayer, setCurrentPlayer] = useState<string>(undefined);
+  const [currentPlayer, setCurrentPlayer] = useState<string>("");
   const [winner, setWinner] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (game) {
       setCurrentPlayer(game.current_player);
-      setWinner(game?.winner);
+      setWinner(game.winner);
     }
 
     // Handle finishing game
-    if (winner) {
+    if (winner && game) {
       const updatedGameFile: GameFile = {
         ...game,
         game_status: "FINISHED",
@@ -80,6 +80,10 @@ const GamePage: NextPage = () => {
 
   const handleMultiplier = (multiplier: MultiplierType) => {
     const multipliers = {
+      SINGLE: {
+        isDouble: false,
+        isTriple: false,
+      },
       DOUBLE: {
         isDouble: true,
         isTriple: false,
@@ -95,6 +99,9 @@ const GamePage: NextPage = () => {
   };
 
   const handleThrowInput = (dartboardPointsZone: number) => {
+    // Abort the function if the player already have the maximum
+    // amount of throws in this round
+    if (roundThrowLog.length >= GAME_THROWS_PER_ROUND) return;
     const { newThrow, updatedThrowLog } = handlePlayerThrow(
       dartboardPointsZone,
       roundThrowLog,
@@ -248,7 +255,7 @@ const GamePage: NextPage = () => {
                       }
                     >
                       <span className="flex items-center gap-4">
-                        <Avatar imgSrc={avatar} name={name} /> {name}
+                        <Avatar dataImage={avatar} name={name} /> {name}
                       </span>
                     </td>
                     <td
@@ -272,7 +279,7 @@ const GamePage: NextPage = () => {
           </section>
           <aside className="mr-4 flex flex-col gap-16 overflow-x-hidden">
             <div className="grid grid-cols-4 items-center">
-              {GAME_SCORE_ZONES.map((zone) => (
+              {GAME_SCORE_ZONES.map((zone: number) => (
                 <Button
                   action={() => handleThrowInput(zone)}
                   styles="btn btn-ghost rounded-none"
