@@ -22,9 +22,5 @@
     "@next/next/no-html-link-for-pages": ["error", "renderer/pages/"]
   },
   "root": true,
-  "ignorePatterns": [
-    "renderer/tailwind.config.js",
-    "renderer/postcss.config.js",
-    "renderer/next.config.js"
-  ]
+  "ignorePatterns": ["renderer/next.config.js"]
 }
