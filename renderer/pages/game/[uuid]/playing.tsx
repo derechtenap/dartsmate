@@ -23,7 +23,7 @@ import { createGame } from "utils/games/create";
 
 const GamePage: NextPage = () => {
   const router = useRouter();
-  const gameUUID = router.query?.uuid as string;
+  const gameUUID = router.query.uuid as string;
   const { isLoading, data: game, refetch } = getCurrentGame(gameUUID);
   const [roundScore, setRoundScore] = useState<number>(0);
   const [multipliers, setMultipliers] = useState<{

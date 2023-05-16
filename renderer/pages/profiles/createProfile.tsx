@@ -12,7 +12,7 @@ import { getBase64 } from "utils/images";
 import { createProfile } from "utils/profiles/create";
 
 type Inputs = {
-  avatar: FileList;
+  avatar: FileList | undefined;
   userName: string;
 };
 
@@ -30,7 +30,7 @@ const CreateProfile: NextPage = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const closeProfileCreation = () => {
+  const closeProfileCreation = async () => {
     /*
      * If the 'from' parameter is present in the query object,
      * navigate to the route specified by that parameter.
@@ -39,11 +39,11 @@ const CreateProfile: NextPage = () => {
      * Otherwise, navigate to the '/profiles' route.
      */
     if (query?.from) {
-      router.push(`/${query.from}`);
+      await router.push(`/${query.from as string}`);
       return;
     }
 
-    router.push("/profiles");
+    await router.push("/profiles");
   };
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -59,8 +59,8 @@ const CreateProfile: NextPage = () => {
       // Reset all states and values to default
       setImageRef(undefined);
       setValue("avatar", undefined);
-      setValue("userName", undefined);
-      closeProfileCreation();
+      setValue("userName", "");
+      await closeProfileCreation();
     }
   };
 

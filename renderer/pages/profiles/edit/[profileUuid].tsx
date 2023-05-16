@@ -14,13 +14,13 @@ import { editProfile } from "utils/profiles/edit";
 import { FILE_TYPE_EXTENSIONS } from "utils/constants";
 
 type Inputs = {
-  avatar: FileList;
+  avatar: string | undefined;
   userName: string;
 };
 const EditProfile: NextPage = () => {
   const router = useRouter();
-  const [profile, setProfile] = useState<ProfileFile>(undefined);
-  const [imageRef, setImageRef] = useState<string>(undefined);
+  const [profile, setProfile] = useState<ProfileFile>();
+  const [imageRef, setImageRef] = useState<string>();
   const { profileUuid: uuid } = router.query;
 
   const editor = useRef<AvatarEditor>(null);
@@ -37,8 +37,9 @@ const EditProfile: NextPage = () => {
 
     try {
       // Edit current profile
-      editProfile(profile, data.userName, base64);
-      setImageRef(undefined);
+      if (profile && base64) {
+        editProfile(profile, data.userName, base64);
+      }
     } catch (e) {
       // TODO: Add better error handling
       console.error(e);
@@ -46,14 +47,14 @@ const EditProfile: NextPage = () => {
       // Reset all states and values to default
       setImageRef(undefined);
       setValue("avatar", undefined);
-      setValue("userName", undefined);
+      setValue("userName", "");
       router.push("/profiles");
     }
   };
 
   useEffect(() => {
     loadProfile(`${(uuid as string) + FILE_TYPE_EXTENSIONS.PROFILE}`).then(
-      (p) => {
+      (p: ProfileFile) => {
         setProfile(p);
         setValue("avatar", p.avatar_image);
         setValue("userName", p.name);
