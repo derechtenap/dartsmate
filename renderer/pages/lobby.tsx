@@ -13,7 +13,7 @@ import {
 } from "react-icons/hi";
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { createGame } from "utils/games/create";
 import {
   APP_VERSION,
@@ -35,7 +35,12 @@ const Lobby: NextPage = () => {
     },
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit: SubmitHandler<{
+    scoreMode: number;
+    legs: number;
+    sets: number;
+    randomizePlayerOrder: boolean;
+  }> = (data) => {
     return data;
   };
 
