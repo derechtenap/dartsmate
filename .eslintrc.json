@@ -6,8 +6,7 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    // TODO: Reenable type checking in further updates
-    // "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:@next/next/recommended"
   ],
   "overrides": [],
