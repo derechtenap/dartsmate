@@ -17,5 +17,12 @@
     "typescriptreact"
   ],
   "typescript.tsdk": "node_modules\\typescript\\lib",
-  "cSpell.words": ["dartmate"]
+  "cSpell.words": [
+    "dartmate",
+    "embla",
+    "mantine",
+    "nextron",
+    "tanstack",
+    "toastify"
+  ]
 }
