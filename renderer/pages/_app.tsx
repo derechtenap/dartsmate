@@ -17,7 +17,6 @@ import "../styles/scrollbar.css";
 import "react-toastify/dist/ReactToastify.css";
 
 const queryClient = new QueryClient();
-const appName = APP_NAME;
 
 const App = ({ Component, pageProps }: AppProps) => {
   // Will return `light` if the `window.matchMedia()` API is not available
@@ -40,7 +39,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <Head>
-        <title>{appName}</title>
+        <title>{APP_NAME}</title>
       </Head>
       <ColorSchemeProvider
         colorScheme={colorScheme}

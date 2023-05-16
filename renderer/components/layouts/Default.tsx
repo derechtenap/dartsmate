@@ -58,7 +58,7 @@ const DefaultLayout = ({ children }: Props) => {
                     Color Scheme
                   </Menu.Item>
                   <Menu.Item
-                    onClick={toggle}
+                    onClick={void toggle}
                     closeMenuOnClick={false}
                     icon={fullscreen ? <IconMaximizeOff /> : <IconMaximize />}
                   >
