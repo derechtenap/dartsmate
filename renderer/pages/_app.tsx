@@ -8,7 +8,7 @@ import {
   ColorSchemeProvider,
   MantineProvider,
 } from "@mantine/core";
-import { useHotkeys, useLocalStorage } from "@mantine/hooks";
+import { useColorScheme, useHotkeys, useLocalStorage } from "@mantine/hooks";
 
 import { APP_NAME } from "utils/constants";
 
@@ -21,10 +21,13 @@ const queryClient = new QueryClient();
 const appName = APP_NAME;
 
 const App = ({ Component, pageProps }: AppProps) => {
+  // Will return `light` if the `window.matchMedia()` API is not available
+  const preferredColorScheme = useColorScheme();
+
   // Store color scheme in the `localStorage`
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
-    key: "color-scheme",
-    defaultValue: "light",
+    key: "mantine-color-scheme",
+    defaultValue: preferredColorScheme,
     getInitialValueInEffect: true,
   });
 
