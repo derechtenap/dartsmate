@@ -157,7 +157,6 @@ const Lobby: NextPage = () => {
                     <Avatar
                       dataImage={player.avatar_image}
                       name={player.name}
-                      size="w-16 xl:w-32"
                     />
                     {player.name}
                   </div>

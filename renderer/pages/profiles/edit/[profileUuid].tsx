@@ -117,7 +117,7 @@ const EditProfile: NextPage = () => {
                   </Button>
                 </div>
               ) : (
-                <Avatar name="D M" size="w-32" />
+                <Avatar name="D M" />
               )}
             </span>
           </label>

@@ -99,7 +99,6 @@ const ProfilesPage: NextPage = () => {
                 <Avatar
                   dataImage={currentUser.avatar_image}
                   name={currentUser.name}
-                  size="w-24"
                 />
                 <h1 className="mb-0">{currentUser.name}</h1>
               </main>
