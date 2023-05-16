@@ -1,7 +1,9 @@
 import { AppShell, Center, Menu, Navbar, Text, ThemeIcon } from "@mantine/core";
-import { useLocalStorage } from "@mantine/hooks";
+import { useFullscreen, useLocalStorage } from "@mantine/hooks";
 import {
   IconLanguage,
+  IconMaximize,
+  IconMaximizeOff,
   IconMoon,
   IconSettings,
   IconSun,
@@ -15,6 +17,8 @@ const DefaultLayout = ({ children }: Props) => {
   const [colorScheme, setColorScheme] = useLocalStorage({
     key: "mantine-color-scheme",
   });
+
+  const { toggle, fullscreen } = useFullscreen();
 
   return (
     <AppShell
@@ -54,13 +58,15 @@ const DefaultLayout = ({ children }: Props) => {
                     Color Scheme
                   </Menu.Item>
                   <Menu.Item
+                    onClick={toggle}
+                    closeMenuOnClick={false}
+                    icon={fullscreen ? <IconMaximizeOff /> : <IconMaximize />}
+                  >
+                    {fullscreen ? "Windowed Mode" : "Fullscreen Mode"}
+                  </Menu.Item>
+                  <Menu.Item
                     closeMenuOnClick={false}
                     icon={<IconLanguage />}
-                    rightSection={
-                      <Text size="xs" color="dimmed" ml="xs">
-                        CTRL + L
-                      </Text>
-                    }
                     disabled
                   >
                     Language
