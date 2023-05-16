@@ -9,7 +9,7 @@ export const handleRoundUpdate = async (
   roundThrowLog: Throw[],
   uuid: string
 ) => {
-  const oldGameFile: GameFile = await loadGame(uuid);
+  const oldGameFile = (await loadGame(uuid)) as GameFile;
   const currentPlayerIndex = getCurrentPlayerIndex(currentPlayer, oldGameFile);
   const nextPlayer = getNextPlayer(currentPlayerIndex, oldGameFile);
   let isGameWon = false;
