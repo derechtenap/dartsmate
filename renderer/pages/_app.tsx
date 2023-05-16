@@ -14,7 +14,6 @@ import { APP_NAME } from "utils/constants";
 
 import "../styles/globals.css";
 import "../styles/scrollbar.css";
-import "@splidejs/react-splide/css";
 import "react-toastify/dist/ReactToastify.css";
 
 const queryClient = new QueryClient();
