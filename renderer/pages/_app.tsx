@@ -3,7 +3,12 @@ import Head from "next/head";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
-import { MantineProvider } from "@mantine/core";
+import {
+  ColorScheme,
+  ColorSchemeProvider,
+  MantineProvider,
+} from "@mantine/core";
+import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 
 import { APP_NAME } from "utils/constants";
 
@@ -16,23 +21,42 @@ const queryClient = new QueryClient();
 const appName = APP_NAME;
 
 const App = ({ Component, pageProps }: AppProps) => {
+  // Store color scheme in the `localStorage`
+  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+    key: "color-scheme",
+    defaultValue: "light",
+    getInitialValueInEffect: true,
+  });
+
+  const toggleColorScheme = (value?: ColorScheme) => {
+    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+  };
+
+  // Change color scheme by pressing `ctrl + t`
+  useHotkeys([["ctrl+t", () => toggleColorScheme()]]);
+
   return (
     <>
       <Head>
         <title>{appName}</title>
       </Head>
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{
-          colorScheme: "dark",
-        }}
+      <ColorSchemeProvider
+        colorScheme={colorScheme}
+        toggleColorScheme={toggleColorScheme}
       >
-        <QueryClientProvider client={queryClient}>
-          <ToastContainer />
-          <Component {...pageProps} />
-        </QueryClientProvider>
-      </MantineProvider>
+        <MantineProvider
+          withGlobalStyles
+          withNormalizeCSS
+          theme={{
+            colorScheme,
+          }}
+        >
+          <QueryClientProvider client={queryClient}>
+            <ToastContainer />
+            <Component {...pageProps} />
+          </QueryClientProvider>
+        </MantineProvider>
+      </ColorSchemeProvider>
     </>
   );
 };
