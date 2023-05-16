@@ -1,10 +1,6 @@
 import Link from "next/link";
 
-type Props = {
-  href: string;
-  icon: JSX.Element;
-  name: string;
-};
+type Props = navLink;
 
 const NavLink = ({ href, icon, name }: Props) => {
   return (

@@ -1,28 +1,32 @@
+import Image from "next/image";
+import { getInitials } from "utils/ui/getInitials";
+
 type Props = {
-  imgSrc?: string;
+  dataImage?: string;
   name: string;
 };
 
-const Avatar = ({ imgSrc, name }: Props) => {
-  // Get the initiales to place them dynamically into a placeholder avatar
-  // eg. Luke Skywalker => "LS" or C-3PO => "C"
-  const nameInitial = name
-    .split(" ")
-    .map((char) => char.charAt(0))
-    .slice(0, 3) // Return only the first 3 characters to avoid overflowing
-    .join("");
+const Avatar = ({ dataImage, name }: Props) => {
+  const nameInitials = getInitials(name);
 
-  if (imgSrc)
+  if (dataImage)
     return (
-      <div className="avatar w-12">
-        <img alt={`${name}'s avatar`} className="rounded-full" src={imgSrc} />
+      <div className={`avatar  pointer-events-none`}>
+        <Image
+          alt={`${name}'s avatar`}
+          className={`rounded-full `}
+          src={dataImage}
+          width={32}
+          height={32}
+        />
       </div>
     );
 
+  // If no image is provided, display a placeholder avatar with user's initials
   // TODO: Add randomized colors instead of `bg-primary`
   return (
     <div className="placeholder avatar">
-      <div className="w-12 rounded-full bg-primary">{nameInitial}</div>
+      <div className={`w-8 h-8 rounded-full bg-primary`}>{nameInitials}</div>
     </div>
   );
 };
