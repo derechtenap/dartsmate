@@ -1,4 +1,12 @@
-import { AppShell, Center, Menu, Navbar, Text, ThemeIcon } from "@mantine/core";
+import {
+  ActionIcon,
+  AppShell,
+  Center,
+  Menu,
+  Navbar,
+  NavLink,
+  Text,
+} from "@mantine/core";
 import { useFullscreen, useLocalStorage } from "@mantine/hooks";
 import {
   IconLanguage,
@@ -33,13 +41,9 @@ const DefaultLayout = ({ children }: Props) => {
             <Center>
               <Menu arrowPosition="center" position="right-end" withArrow>
                 <Menu.Target>
-                  <ThemeIcon
-                    variant="default"
-                    size="xl"
-                    className="cursor-pointer"
-                  >
+                  <ActionIcon size="xl">
                     <IconSettings />
-                  </ThemeIcon>
+                  </ActionIcon>
                 </Menu.Target>
                 <Menu.Dropdown>
                   <Menu.Label>Settings</Menu.Label>
