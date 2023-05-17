@@ -1,9 +1,9 @@
-import Button from "@/components/Button";
-import Modal from "@/components/Modal";
 import { NextPage } from "next";
-import Head from "next/head";
+
 import { useRouter } from "next/router";
 import { ipcRenderer } from "electron";
+
+import { Box, Button, Center, Flex, Title } from "@mantine/core";
 
 const QuitPage: NextPage = () => {
   const router = useRouter();
@@ -13,31 +13,23 @@ const QuitPage: NextPage = () => {
     ipcRenderer.send("quit-app");
   };
 
+  // Redirect back to the latest page, cancelling the quitting process
   const handleCancel = () => {
-    // Redirect back to the latest page, cancelling the quitting process
     router.back();
   };
 
   return (
-    <>
-      <Head>
-        <title>Quit App - DartMate</title>
-      </Head>
-      <Modal
-        state={true}
-        title="Are you sure you want to quit the application?"
-      >
-        Any unsaved changes will be lost.
-        <footer className="mt-12 flex gap-4">
-          <Button action={() => handleQuit()} color="error" outline={true}>
+    <Center h="100vh" w="100vw">
+      <Box>
+        <Title fz="lg">Are you sure you want to exit the App?</Title>
+        <Flex align="center" justify="center" gap="xl" mt="xl">
+          <Button onClick={() => handleQuit()} variant="outline">
             Quit
           </Button>
-          <Button action={() => handleCancel()} color="ghost">
-            Cancel
-          </Button>
-        </footer>
-      </Modal>
-    </>
+          <Button onClick={() => handleCancel()}>Cancel</Button>
+        </Flex>
+      </Box>
+    </Center>
   );
 };
 
