@@ -1,5 +1,17 @@
 @charset "utf-8";
 
+/* 
+ * Prevent the user from highlighting non-interactive elements, e.g., text. 
+ * The user can still click and interact with buttons or links using 
+ * this method.
+ */
+
+*,
+*::before,
+*::after {
+  user-select: none;
+}
+
 .cursor-pointer {
   cursor: pointer;
 }
