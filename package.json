@@ -37,6 +37,7 @@
     "@mantine/notifications": "^6.0.11",
     "@next/eslint-plugin-next": "^13.4.1",
     "@tabler/icons-react": "^2.18.0",
+    "@tanstack/eslint-plugin-query": "^4.29.8",
     "@tanstack/react-query": "^4.29.1",
     "@types/node": "^18.16.10",
     "@types/react": "^18.0.35",
