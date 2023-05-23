@@ -20,7 +20,16 @@ const QuitPage: NextPage = () => {
 
   return (
     <Center h="100vh" w="100vw">
-      <Box>
+      <Box
+        p="xl"
+        sx={(theme) => ({
+          backgroundColor:
+            theme.colorScheme === "dark"
+              ? theme.colors.dark[6]
+              : theme.colors.gray[1],
+          borderRadius: theme.radius.md,
+        })}
+      >
         <Title fz="lg">Are you sure you want to exit the App?</Title>
         <Flex align="center" justify="center" gap="xl" mt="xl">
           <Button onClick={() => handleQuit()} variant="outline">
