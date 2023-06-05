@@ -6,9 +6,11 @@
 
 ## :sparkles: Features
 
-- **Create & Manage Profiles:** Easily create and manage player profiles for your games.
+- :adult::memo: **Create & Manage Profiles:** Easily create and manage player profiles for your games.
 
-- **Create A Game With Up to 8 Players:** Set up a game with up to 8 players and customize various game settings.
+- :busts_in_silhouette: **Create A Game With Up to 8 Players:** Set up a game with up to 8 players and customize various game settings.
+
+- :gb::de: **Multilingual support:** DartMate is fully translated in English and German.
 
 ## :robot: Scripts
 
