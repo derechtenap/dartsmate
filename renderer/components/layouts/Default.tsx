@@ -106,7 +106,6 @@ const DefaultLayout = ({ children }: Props) => {
                   >
                     {fullscreen ? "Windowed Mode" : "Fullscreen Mode"}
                   </Menu.Item>
-                  <Menu.Label>App Settings</Menu.Label>
                   <Menu.Item
                     closeMenuOnClick={false}
                     icon={<IconAdjustments />}
