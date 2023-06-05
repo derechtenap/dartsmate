@@ -9,17 +9,24 @@ import {
 } from "@mantine/core";
 import { useFullscreen, useLocalStorage } from "@mantine/hooks";
 import {
+  IconCategory,
+  IconCirclePlus,
+  IconCircleX,
   IconLanguage,
   IconMaximize,
   IconMaximizeOff,
   IconMoon,
   IconSettings,
   IconSun,
+  IconUserCircle,
 } from "@tabler/icons-react";
+import Link from "next/link";
 
 type Props = {
   children: React.ReactNode;
 };
+
+export const navbarWidth = 160;
 
 const DefaultLayout = ({ children }: Props) => {
   const [colorScheme, setColorScheme] = useLocalStorage({
@@ -28,14 +35,43 @@ const DefaultLayout = ({ children }: Props) => {
 
   const { toggle, fullscreen } = useFullscreen();
 
+  const toggleFullscreen = () => {
+    return toggle();
+  };
+
+  const routes = [
+    {
+      icon: <IconCategory />,
+      label: "Hub",
+      link: "/",
+    },
+    {
+      icon: <IconCirclePlus />,
+      label: "New Game",
+      link: "/lobby",
+    },
+    {
+      icon: <IconUserCircle />,
+      link: "/profiles",
+      label: "Profiles",
+    },
+    {
+      icon: <IconCircleX />,
+      link: "/quit",
+      label: "Close App",
+    },
+  ];
+
   return (
     <AppShell
-      padding="md"
       navbar={
-        <Navbar height="100vh" p="xs" width={{ base: 100 }}>
-          <Navbar.Section>TOP</Navbar.Section>
-          <Navbar.Section grow mt="lg">
-            MID
+        <Navbar height="100vh" p="xs" width={{ base: navbarWidth }}>
+          <Navbar.Section grow>
+            {routes.map((route) => (
+              <Link href={route.link} key={route.label}>
+                <NavLink label={route.label} icon={route.icon} />
+              </Link>
+            ))}
           </Navbar.Section>
           <Navbar.Section>
             <Center>
@@ -62,7 +98,7 @@ const DefaultLayout = ({ children }: Props) => {
                     Color Scheme
                   </Menu.Item>
                   <Menu.Item
-                    onClick={void toggle}
+                    onClick={() => void toggleFullscreen()}
                     closeMenuOnClick={false}
                     icon={fullscreen ? <IconMaximizeOff /> : <IconMaximize />}
                   >
