@@ -10,6 +10,8 @@ import {
 } from "@mantine/core";
 import { useColorScheme, useHotkeys, useLocalStorage } from "@mantine/hooks";
 
+import { appWithTranslation } from "next-i18next";
+
 import { APP_NAME } from "utils/constants";
 
 import "../styles/globals.css";
@@ -60,4 +62,4 @@ const App = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-export default App;
+export default appWithTranslation(App);
