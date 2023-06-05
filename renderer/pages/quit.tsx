@@ -1,4 +1,7 @@
-import { NextPage } from "next";
+import { GetStaticProps, NextPage } from "next";
+
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 import { useRouter } from "next/router";
 import { ipcRenderer } from "electron";
@@ -7,6 +10,7 @@ import { Box, Button, Center, Flex, Title } from "@mantine/core";
 
 const QuitPage: NextPage = () => {
   const router = useRouter();
+  const { t } = useTranslation(["common", "quitPage"]);
 
   // Sends a message to the main process to quit the Electron app
   const handleQuit = () => {
@@ -30,16 +34,22 @@ const QuitPage: NextPage = () => {
           borderRadius: theme.radius.md,
         })}
       >
-        <Title fz="lg">Are you sure you want to exit the App?</Title>
+        <Title fz="lg">{t("quitPage:quitPrompt")}</Title>
         <Flex align="center" justify="center" gap="xl" mt="xl">
           <Button onClick={() => handleQuit()} variant="outline">
-            Quit
+            {t("dialogYes")}
           </Button>
-          <Button onClick={() => handleCancel()}>Cancel</Button>
+          <Button onClick={() => handleCancel()}>{t("dialogNo")}</Button>
         </Flex>
       </Box>
     </Center>
   );
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? "en", ["common", "quitPage"])),
+  },
+});
 
 export default QuitPage;
