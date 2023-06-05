@@ -52,14 +52,18 @@
     "eslint": "^8.39.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-standard-with-typescript": "^34.0.1",
+    "eslint-plugin-i18next": "^6.0.1",
     "eslint-plugin-prettier": "^4.2.1",
+    "i18next": "^22.5.0",
     "next": "^12.3.4",
+    "next-i18next": "^13.3.0",
     "nextron": "^8.5.0",
     "prettier": "2.8.8",
     "react": "^18.2.0",
     "react-avatar-editor": "^13.0.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.9",
+    "react-i18next": "^12.3.1",
     "typescript": "^4.9.5",
     "use-elapsed-time": "^3.0.4"
   }
