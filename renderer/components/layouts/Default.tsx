@@ -9,10 +9,10 @@ import {
 } from "@mantine/core";
 import { useFullscreen, useLocalStorage } from "@mantine/hooks";
 import {
+  IconAdjustments,
   IconCategory,
   IconCirclePlus,
   IconCircleX,
-  IconLanguage,
   IconMaximize,
   IconMaximizeOff,
   IconMoon,
@@ -21,6 +21,7 @@ import {
   IconUserCircle,
 } from "@tabler/icons-react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 type Props = {
   children: React.ReactNode;
@@ -29,6 +30,8 @@ type Props = {
 export const navbarWidth = 160;
 
 const DefaultLayout = ({ children }: Props) => {
+  const router = useRouter();
+
   const [colorScheme, setColorScheme] = useLocalStorage({
     key: "mantine-color-scheme",
   });
@@ -82,7 +85,6 @@ const DefaultLayout = ({ children }: Props) => {
                   </ActionIcon>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Menu.Label>Settings</Menu.Label>
                   <Menu.Item
                     onClick={() =>
                       setColorScheme(colorScheme === "dark" ? "light" : "dark")
@@ -104,12 +106,13 @@ const DefaultLayout = ({ children }: Props) => {
                   >
                     {fullscreen ? "Windowed Mode" : "Fullscreen Mode"}
                   </Menu.Item>
+                  <Menu.Label>App Settings</Menu.Label>
                   <Menu.Item
                     closeMenuOnClick={false}
-                    icon={<IconLanguage />}
-                    disabled
+                    icon={<IconAdjustments />}
+                    onClick={() => void router.push("/settings")}
                   >
-                    Language
+                    App Settings
                   </Menu.Item>
                 </Menu.Dropdown>
               </Menu>
