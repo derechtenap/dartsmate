@@ -21,7 +21,12 @@ export const loadProfile = async (file: string) => {
 
 // Returns a array with each file in the profile directory
 export const readProfileDir = () => {
-  return readdirSync(PROFILE_SAVE_DIRECTORY as string, {
-    encoding: "utf-8",
-  });
+  try {
+    return readdirSync(PROFILE_SAVE_DIRECTORY as string, {
+      encoding: "utf-8",
+    });
+  } catch (error) {
+    console.error("Error reading profile directory:", error);
+    return [];
+  }
 };
