@@ -7,5 +7,10 @@
     "menuItemColorSchemeLabelHotkey": "STRG + T",
     "menuItemToggleFullscreenModeWindowedLabel": "Fenstermodus",
     "menuItemToggleFullscreenModeFullscreenLabel": "Vollbildmodus"
-  }
+  },
+
+  "legs": "Legs",
+  "sets": "Sets",
+  "players": "Spieler",
+  "gameMode": "Spielmodus"
 }

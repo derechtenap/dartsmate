@@ -1,0 +1,14 @@
+{
+  "buttons": {
+    "savePresetLabel": "Save settings as preset",
+    "resetSettingsLabel": "Reset settings"
+  },
+  "currentPlayersLabel": "{{CURRENT_PLAYERS}} / {{MAX_PLAYERS}} Players",
+  "checkboxRandomizePlayerOrderLabel": "Randomize player order",
+  "checkboxDeactivateStatsLabel": "Disable statistics",
+  "pageTitle": "Lobby",
+  "tabs": {
+    "titlePlayers": "Players",
+    "titleLobbySettings": "Lobby Settings"
+  }
+}
