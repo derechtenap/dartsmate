@@ -8,7 +8,7 @@ import {
   ColorSchemeProvider,
   MantineProvider,
 } from "@mantine/core";
-import { useColorScheme, useHotkeys, useLocalStorage } from "@mantine/hooks";
+import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 
 import { appWithTranslation } from "next-i18next";
 
@@ -20,13 +20,10 @@ import "../styles/scrollbar.css";
 const queryClient = new QueryClient();
 
 const App = ({ Component, pageProps }: AppProps) => {
-  // Will return `light` if the `window.matchMedia()` API is not available
-  const preferredColorScheme = useColorScheme();
-
   // Store color scheme in the `localStorage`
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "mantine-color-scheme",
-    defaultValue: preferredColorScheme,
+    defaultValue: "dark",
     getInitialValueInEffect: true,
   });
 
