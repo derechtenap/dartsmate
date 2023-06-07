@@ -47,23 +47,23 @@ const DefaultLayout = ({ children }: Props) => {
   const routes = [
     {
       icon: <IconCategory />,
-      label: "Hub",
+      label: t("navbar.routes.routeHubLabel"),
       link: "/",
     },
     {
       icon: <IconCirclePlus />,
-      label: "New Game",
+      label: t("navbar.routes.routeNewGameLabel"),
       link: "/lobby",
     },
     {
       icon: <IconUserCircle />,
+      label: t("navbar.routes.routeProfilesLabel"),
       link: "/profiles",
-      label: "Profiles",
     },
     {
       icon: <IconCircleX />,
+      label: t("navbar.routes.routeCloseAppLabel"),
       link: "/quit",
-      label: "Close App",
     },
   ];
 

@@ -2,6 +2,12 @@
   "dialogYes": "Yes",
   "dialogNo": "No",
   "navbar": {
+    "routes": {
+      "routeHubLabel": "Hub",
+      "routeNewGameLabel": "New Game",
+      "routeProfilesLabel": "Profiles",
+      "routeCloseAppLabel": "Close App"
+    },
     "menuItemAppSettingsLabel": "App Settings",
     "menuItemColorSchemeLabel": "Color Scheme",
     "menuItemColorSchemeLabelHotkey": "CTRL + T",
