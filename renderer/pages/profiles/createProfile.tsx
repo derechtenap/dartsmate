@@ -1,9 +1,19 @@
-import type { NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 import DefaultLayout from "@/components/layouts/Default";
 
-const CreateProfile: NextPage = () => {
+const CreateProfilePage: NextPage = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { t } = useTranslation(["common"]);
   return <DefaultLayout>...</DefaultLayout>;
 };
 
-export default CreateProfile;
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? "en", ["common"])),
+  },
+});
+
+export default CreateProfilePage;

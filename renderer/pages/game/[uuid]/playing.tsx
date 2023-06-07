@@ -1,7 +1,19 @@
-import type { NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
-const GamePage: NextPage = () => {
-  return <></>;
+import DefaultLayout from "@/components/layouts/Default";
+
+const GamePlayingPage: NextPage = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { t } = useTranslation(["common"]);
+  return <DefaultLayout>...</DefaultLayout>;
 };
 
-export default GamePage;
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? "en", ["common"])),
+  },
+});
+
+export default GamePlayingPage;
