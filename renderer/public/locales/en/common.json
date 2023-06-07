@@ -1,4 +1,11 @@
 {
   "dialogYes": "Yes",
-  "dialogNo": "No"
+  "dialogNo": "No",
+  "navbar": {
+    "menuItemAppSettingsLabel": "App Settings",
+    "menuItemColorSchemeLabel": "Color Scheme",
+    "menuItemColorSchemeLabelHotkey": "CTRL + T",
+    "menuItemToggleFullscreenModeWindowedLabel": "Windowed Mode",
+    "menuItemToggleFullscreenModeFullscreenLabel": "Fullscreen Mode"
+  }
 }

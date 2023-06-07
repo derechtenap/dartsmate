@@ -53,7 +53,7 @@ const IndexPage: NextPage = () => {
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale ?? "en", ["indexPage"])),
+    ...(await serverSideTranslations(locale ?? "en", ["common", "indexPage"])),
   },
 });
 

@@ -1,4 +1,4 @@
-import { GetStaticProps, NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 
 import DefaultLayout from "@/components/layouts/Default";
 import { Select } from "@mantine/core";
@@ -34,7 +34,10 @@ const SettingsPage: NextPage = () => {
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale ?? "en", ["settingsPage"])),
+    ...(await serverSideTranslations(locale ?? "en", [
+      "common",
+      "settingsPage",
+    ])),
   },
 });
 

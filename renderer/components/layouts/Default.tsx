@@ -22,6 +22,7 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
 
 type Props = {
   children: React.ReactNode;
@@ -31,6 +32,7 @@ export const navbarWidth = 160;
 
 const DefaultLayout = ({ children }: Props) => {
   const router = useRouter();
+  const { t } = useTranslation(["common"]);
 
   const [colorScheme, setColorScheme] = useLocalStorage({
     key: "mantine-color-scheme",
@@ -93,25 +95,27 @@ const DefaultLayout = ({ children }: Props) => {
                     icon={colorScheme === "light" ? <IconSun /> : <IconMoon />}
                     rightSection={
                       <Text size="xs" color="dimmed" ml="xs">
-                        CTRL + T
+                        {t("navbar.menuItemColorSchemeLabelHotkey")}
                       </Text>
                     }
                   >
-                    Color Scheme
+                    {t("navbar.menuItemColorSchemeLabel")}
                   </Menu.Item>
                   <Menu.Item
                     onClick={() => void toggleFullscreen()}
                     closeMenuOnClick={false}
                     icon={fullscreen ? <IconMaximizeOff /> : <IconMaximize />}
                   >
-                    {fullscreen ? "Windowed Mode" : "Fullscreen Mode"}
+                    {fullscreen
+                      ? t("navbar.menuItemToggleFullscreenModeWindowedLabel")
+                      : t("navbar.menuItemToggleFullscreenModeFullscreenLabel")}
                   </Menu.Item>
                   <Menu.Item
                     closeMenuOnClick={false}
                     icon={<IconAdjustments />}
                     onClick={() => void router.push("/settings")}
                   >
-                    App Settings
+                    {t("navbar.menuItemAppSettingsLabel")}
                   </Menu.Item>
                 </Menu.Dropdown>
               </Menu>
