@@ -1,0 +1,21 @@
+{
+  "dialogYes": "Yes",
+  "dialogNo": "No",
+  "navbar": {
+    "routes": {
+      "routeHubLabel": "Hub",
+      "routeNewGameLabel": "New Game",
+      "routeProfilesLabel": "Profiles",
+      "routeCloseAppLabel": "Close App"
+    },
+    "menuItemAppSettingsLabel": "App Settings",
+    "menuItemColorSchemeLabel": "Color Scheme",
+    "menuItemColorSchemeLabelHotkey": "CTRL + T",
+    "menuItemToggleFullscreenModeWindowedLabel": "Windowed Mode",
+    "menuItemToggleFullscreenModeFullscreenLabel": "Fullscreen Mode"
+  },
+  "legs": "Legs",
+  "sets": "Sets",
+  "players": "Players",
+  "gameMode": "Game mode"
+}

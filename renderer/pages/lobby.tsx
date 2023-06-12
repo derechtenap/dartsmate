@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 
 import {
   Avatar,
@@ -21,32 +21,40 @@ import { IconSettings, IconUserCircle } from "@tabler/icons-react";
 
 import DefaultLayout from "@/components/layouts/Default";
 
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
 const Lobby: NextPage = () => {
+  const { t } = useTranslation(["common", "lobbyPage"]);
+
   return (
     <DefaultLayout>
       <Box>
-        <Title mb="sm">Lobby</Title>
+        <Title mb="sm">{t("lobbyPage:pageTitle")}</Title>
         <Tabs defaultValue="players">
           <Tabs.List position="center">
             <Tabs.Tab value="players" icon={<IconUserCircle />}>
-              Players
+              {t("lobbyPage:tabs.titlePlayers")}
             </Tabs.Tab>
             <Tabs.Tab value="settings" icon={<IconSettings />}>
-              Lobby Settings
+              {t("lobbyPage:tabs.titleLobbySettings")}
             </Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel mt="xl" value="players">
             <Text align="right" fz="sm" mb="xl">
-              3 / 8 Players
+              {t("lobbyPage:currentPlayersLabel", {
+                CURRENT_PLAYERS: 1,
+                MAX_PLAYERS: 8,
+              })}
             </Text>
             <SimpleGrid cols={4}>
               <Card>
                 <Stack align="center">
                   <Avatar color="blue" radius="xl" size="lg">
-                    n
+                    {"n"}
                   </Avatar>
 
-                  <Text align="center">nap</Text>
+                  <Text align="center">{"nap"}</Text>
                 </Stack>
               </Card>
             </SimpleGrid>
@@ -55,7 +63,7 @@ const Lobby: NextPage = () => {
             <Container>
               <SimpleGrid cols={3} mb="xl">
                 <Select
-                  label="Game Mode"
+                  label={t("gameMode")}
                   value="501"
                   defaultValue="501"
                   data={[
@@ -78,30 +86,36 @@ const Lobby: NextPage = () => {
                   min={1}
                   max={10}
                   value={1}
-                  label="Legs"
+                  label={t("legs")}
                 />
                 <NumberInput
                   defaultValue={1}
                   min={1}
                   max={10}
                   value={1}
-                  label="Sets"
+                  label={t("sets")}
                 />
                 <NumberInput
                   defaultValue={2}
                   min={1}
                   max={8}
                   value={2}
-                  label="Players"
+                  label={t("players")}
                 />
               </SimpleGrid>
               <SimpleGrid mb="xl">
-                <Checkbox label="Randomize Player Order" />
-                <Checkbox label="Deactivate Statistics" />
+                <Checkbox
+                  label={t("lobbyPage:checkboxRandomizePlayerOrderLabel")}
+                />
+                <Checkbox label={t("lobbyPage:checkboxDeactivateStatsLabel")} />
               </SimpleGrid>
               <Group>
-                <Button variant="light">Save Settings As Preset</Button>
-                <Button variant="default">Reset Settings</Button>
+                <Button variant="light">
+                  {t("lobbyPage:buttons.savePresetLabel")}
+                </Button>
+                <Button variant="default">
+                  {t("lobbyPage:buttons.resetSettingsLabel")}
+                </Button>
               </Group>
             </Container>
           </Tabs.Panel>
@@ -110,5 +124,11 @@ const Lobby: NextPage = () => {
     </DefaultLayout>
   );
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? "en", ["common", "lobbyPage"])),
+  },
+});
 
 export default Lobby;

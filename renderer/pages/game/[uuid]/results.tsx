@@ -1,11 +1,19 @@
-import { NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
-const GameResults: NextPage = () => {
-  return (
-    <>
-      <h1>Results</h1>
-    </>
-  );
+import DefaultLayout from "@/components/layouts/Default";
+
+const GameResultsPage: NextPage = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { t } = useTranslation(["common"]);
+  return <DefaultLayout>...</DefaultLayout>;
 };
 
-export default GameResults;
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? "en", ["common"])),
+  },
+});
+
+export default GameResultsPage;
