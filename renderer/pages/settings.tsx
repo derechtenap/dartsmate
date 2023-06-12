@@ -6,13 +6,20 @@ import { useRouter } from "next/router";
 
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import { useLocalStorage } from "@mantine/hooks";
 
 const SettingsPage: NextPage = () => {
   const { locale, locales, push } = useRouter();
   const { t } = useTranslation(["settingsPage"]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [language, setLanguage] = useLocalStorage<string>({
+    key: "app-language",
+  });
+
   const handleLocaleChange = (selectedLocale: string) => {
     if (selectedLocale !== locale) {
+      setLanguage(selectedLocale);
       void push("/settings", undefined, { locale: selectedLocale });
     }
   };
