@@ -1,18 +1,19 @@
-import { NextPage } from "next";
-import Button from "@/components/Button";
-import { useRouter } from "next/router";
+import type { GetStaticProps, NextPage } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
-const GameResults: NextPage = () => {
-  const router = useRouter();
+import DefaultLayout from "@/components/layouts/Default";
 
-  return (
-    <>
-      <h1>Results</h1>
-      <Button action={() => router.push("/")} styles="btn">
-        Back To Index Page
-      </Button>
-    </>
-  );
+const GameResultsPage: NextPage = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { t } = useTranslation(["common"]);
+  return <DefaultLayout>...</DefaultLayout>;
 };
 
-export default GameResults;
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? "en", ["common"])),
+  },
+});
+
+export default GameResultsPage;

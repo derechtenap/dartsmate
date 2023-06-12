@@ -1,2 +1,10 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Treat images as binary files, ensuring that they are not
+# modified or normalized when committed to the repository
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.bmp binary

@@ -1,14 +1,14 @@
 # :dart: DartMate
 
-**Analayze, compare and track your dart games with DartMate - Build with [nextron](https://github.com/saltyshiomix/nextron), [Next.js](https://github.com/vercel/next.js), [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss) and [daisyUI](https://github.com/saadeghi/daisyui)**
+**Analayze, compare and track your dart games with DartMate - Build with [nextron](https://github.com/saltyshiomix/nextron), [Next.js](https://github.com/vercel/next.js) & [Mantine](https://github.com/mantinedev/mantine)**
 
 :warning: The project is currently still a work in progress. Many functions and ideas are not implemented yet!
 
 ## :sparkles: Features
 
 - **Create & Manage Profiles:** Easily create and manage player profiles for your games.
-
 - **Create A Game With Up to 8 Players:** Set up a game with up to 8 players and customize various game settings.
+- **Multilingual support:** DartMate is fully translated in English and German.
 
 ## :robot: Scripts
 

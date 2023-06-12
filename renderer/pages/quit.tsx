@@ -1,44 +1,55 @@
-import Button from "@/components/Button";
-import Modal from "@/components/Modal";
-import { NextPage } from "next";
-import Head from "next/head";
+import type { GetStaticProps, NextPage } from "next";
+
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
 import { useRouter } from "next/router";
 import { ipcRenderer } from "electron";
 
+import { Box, Button, Center, Flex, Title } from "@mantine/core";
+
 const QuitPage: NextPage = () => {
   const router = useRouter();
+  const { t } = useTranslation(["common", "quitPage"]);
 
   // Sends a message to the main process to quit the Electron app
   const handleQuit = () => {
     ipcRenderer.send("quit-app");
   };
 
+  // Redirect back to the latest page, cancelling the quitting process
   const handleCancel = () => {
-    // Redirect back to the latest page, cancelling the quitting process
     router.back();
   };
 
   return (
-    <>
-      <Head>
-        <title>Quit App - DartMate</title>
-      </Head>
-      <Modal
-        state={true}
-        title="Are you sure you want to quit the application?"
+    <Center h="100vh" w="100vw">
+      <Box
+        p="xl"
+        sx={(theme) => ({
+          backgroundColor:
+            theme.colorScheme === "dark"
+              ? theme.colors.dark[6]
+              : theme.colors.gray[1],
+          borderRadius: theme.radius.md,
+        })}
       >
-        Any unsaved changes will be lost.
-        <footer className="mt-12 flex gap-4">
-          <Button action={() => handleQuit()} color="error" outline={true}>
-            Quit
+        <Title fz="lg">{t("quitPage:quitPrompt")}</Title>
+        <Flex align="center" justify="center" gap="xl" mt="xl">
+          <Button onClick={() => handleQuit()} variant="outline">
+            {t("dialogYes")}
           </Button>
-          <Button action={() => handleCancel()} color="ghost">
-            Cancel
-          </Button>
-        </footer>
-      </Modal>
-    </>
+          <Button onClick={() => handleCancel()}>{t("dialogNo")}</Button>
+        </Flex>
+      </Box>
+    </Center>
   );
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? "en", ["common", "quitPage"])),
+  },
+});
 
 export default QuitPage;

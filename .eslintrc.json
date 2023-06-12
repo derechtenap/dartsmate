@@ -6,9 +6,10 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    // TODO: Reenable type checking in further updates
-    // "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:@next/next/recommended"
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:@tanstack/eslint-plugin-query/recommended",
+    "plugin:@next/next/recommended",
+    "plugin:i18next/recommended"
   ],
   "overrides": [],
   "parser": "@typescript-eslint/parser",
@@ -17,14 +18,12 @@
     "sourceType": "module",
     "project": ["./tsconfig.json"]
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "@tanstack/query"],
   "rules": {
+    "@tanstack/query/exhaustive-deps": "error",
+    "@tanstack/query/prefer-query-object-syntax": "error",
     "@next/next/no-html-link-for-pages": ["error", "renderer/pages/"]
   },
   "root": true,
-  "ignorePatterns": [
-    "renderer/tailwind.config.js",
-    "renderer/postcss.config.js",
-    "renderer/next.config.js"
-  ]
+  "ignorePatterns": ["renderer/next.config.js"]
 }

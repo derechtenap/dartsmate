@@ -2,12 +2,14 @@
   width: 6px;
 }
 
-/* `hsl` values are defined in the daisyUI theme config --> tailwind.config.js */
+/* TODO: Update background-colors...
 
 *::-webkit-scrollbar-track {
-  background: hsl(var(--b2)); /* `--b2` = base-200 */
-}
+  background-color: ;
+}   
 
 *::-webkit-scrollbar-thumb {
-  background: hsl(var(--p)); /* `--p` = primary */
+  background-color: ;
 }
+
+*/
