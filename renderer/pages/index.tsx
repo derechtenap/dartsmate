@@ -10,7 +10,7 @@ import { Carousel } from "@mantine/carousel";
 import { Center, Text, Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 
-import { APP_NAME } from "utils/constants";
+import pkg from "../../package.json";
 
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
@@ -59,7 +59,7 @@ const IndexPage: NextPage = () => {
                 weight={900}
                 sx={{ textTransform: "uppercase" }}
               >
-                {t("welcomeSlideTitle", { APP_NAME: APP_NAME as string })}
+                {t("welcomeSlideTitle", { APP_NAME: pkg.productName })}
               </Title>
               <Text weight={600} fz="1.5rem">
                 {t("welcomeSlideParagraph")}

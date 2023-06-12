@@ -12,7 +12,7 @@ import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 
 import { appWithTranslation } from "next-i18next";
 
-import { APP_NAME } from "utils/constants";
+import pkg from "../../package.json";
 
 import "../styles/globals.css";
 import "../styles/scrollbar.css";
@@ -37,7 +37,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <Head>
-        <title>{APP_NAME}</title>
+        <title>{pkg.productName}</title>
       </Head>
       <ColorSchemeProvider
         colorScheme={colorScheme}
