@@ -1,8 +1,14 @@
+import { useEffect } from "react";
+
 import type { GetStaticProps, NextPage } from "next";
+
+import { useRouter } from "next/router";
+
 import DefaultLayout from "@/components/layouts/Default";
 
 import { Carousel } from "@mantine/carousel";
 import { Center, Text, Title } from "@mantine/core";
+import { useLocalStorage } from "@mantine/hooks";
 
 import { APP_NAME } from "utils/constants";
 
@@ -11,6 +17,21 @@ import { useTranslation } from "next-i18next";
 
 const IndexPage: NextPage = () => {
   const { t } = useTranslation(["indexPage"]);
+  const { push } = useRouter();
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [language, setLanguage] = useLocalStorage<string>({
+    key: "app-language",
+    getInitialValueInEffect: true,
+  });
+
+  useEffect(() => {
+    if (language) {
+      void push("/", undefined, { locale: language });
+    }
+  }, [language]);
+
+  if (!language) return <></>;
 
   return (
     <DefaultLayout>
