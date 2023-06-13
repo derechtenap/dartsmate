@@ -5,7 +5,7 @@ import { Select } from "@mantine/core";
 import { useRouter } from "next/router";
 
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useTranslation } from "next-i18next";
+import { i18n, useTranslation } from "next-i18next";
 import { useLocalStorage } from "@mantine/hooks";
 
 const SettingsPage: NextPage = () => {
@@ -39,13 +39,20 @@ const SettingsPage: NextPage = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale ?? "en", [
-      "common",
-      "settingsPage",
-    ])),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  // Refetch locales automatically when in dev mode
+  if (process.env.NODE_ENV === "development") {
+    await i18n?.reloadResources();
+  }
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", [
+        "common",
+        "settingsPage",
+      ])),
+    },
+  };
+};
 
 export default SettingsPage;

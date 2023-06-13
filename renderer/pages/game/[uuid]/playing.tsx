@@ -1,6 +1,6 @@
 import type { GetStaticProps, NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useTranslation } from "next-i18next";
+import { i18n, useTranslation } from "next-i18next";
 
 import DefaultLayout from "@/components/layouts/Default";
 
@@ -10,10 +10,17 @@ const GamePlayingPage: NextPage = () => {
   return <DefaultLayout>...</DefaultLayout>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale ?? "en", ["common"])),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  // Refetch locales automatically when in dev mode
+  if (process.env.NODE_ENV === "development") {
+    await i18n?.reloadResources();
+  }
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    },
+  };
+};
 
 export default GamePlayingPage;

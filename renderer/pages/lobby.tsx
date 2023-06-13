@@ -22,7 +22,7 @@ import { IconSettings, IconUserCircle } from "@tabler/icons-react";
 import DefaultLayout from "@/components/layouts/Default";
 
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useTranslation } from "next-i18next";
+import { i18n, useTranslation } from "next-i18next";
 
 const Lobby: NextPage = () => {
   const { t } = useTranslation(["common", "lobbyPage"]);
@@ -125,10 +125,19 @@ const Lobby: NextPage = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale ?? "en", ["common", "lobbyPage"])),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  // Refetch locales automatically when in dev mode
+  if (process.env.NODE_ENV === "development") {
+    await i18n?.reloadResources();
+  }
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", [
+        "common",
+        "lobbyPage",
+      ])),
+    },
+  };
+};
 
 export default Lobby;
