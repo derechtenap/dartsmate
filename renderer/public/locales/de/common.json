@@ -3,18 +3,16 @@
   "dialogNo": "Nein",
   "navbar": {
     "routes": {
-      "routeHubLabel": "Hub",
-      "routeNewGameLabel": "Neues Spiel",
-      "routeProfilesLabel": "Profile",
-      "routeCloseAppLabel": "App beenden"
-    },
-    "menuItemAppSettingsLabel": "App Einstellungen",
-    "menuItemColorSchemeLabel": "Farbschema",
-    "menuItemColorSchemeLabelHotkey": "STRG + T",
-    "menuItemToggleFullscreenModeWindowedLabel": "Fenstermodus",
-    "menuItemToggleFullscreenModeFullscreenLabel": "Vollbildmodus"
+      "homeLabel": "Startseite",
+      "newGameLabel": "Neues Spiel",
+      "profilesLabel": "Profile",
+      "quitAppLabel": "App beenden",
+      "rankingLabel": "Rangliste",
+      "settingsLabel": "Einstellungen",
+      "tournamentLabel": "Turnier",
+      "trainingLabel": "Training"
+    }
   },
-
   "legs": "Legs",
   "sets": "Sets",
   "players": "Spieler",
