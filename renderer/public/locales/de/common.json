@@ -16,5 +16,8 @@
   "legs": "Legs",
   "sets": "Sets",
   "players": "Spieler",
-  "gameMode": "Spielmodus"
+  "gameMode": "Spielmodus",
+  "quitPrompt": {
+    "titleLabel": "Möchten Sie die App wirklich verlassen?"
+  }
 }

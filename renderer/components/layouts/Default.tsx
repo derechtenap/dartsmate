@@ -1,9 +1,13 @@
 import {
   AppShell,
+  Button,
   createStyles,
+  Group,
+  Modal,
   Navbar,
   rem,
   Stack,
+  Title,
   Tooltip,
   UnstyledButton,
 } from "@mantine/core";
@@ -20,12 +24,15 @@ import {
 } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
+import { useDisclosure } from "@mantine/hooks";
+import { ipcRenderer } from "electron";
 
 type Props = {
   children: React.ReactNode;
 };
 
 type NavbarLinkProps = {
+  action?: () => void;
   active?: boolean;
   disabled?: boolean;
   icon: Icon;
@@ -36,6 +43,7 @@ type NavbarLinkProps = {
 export const navbarWidth = 70;
 
 const DefaultLayout = ({ children }: Props) => {
+  const [opened, { open, close }] = useDisclosure(false);
   const { route, push } = useRouter();
   const { t } = useTranslation(["common"]);
 
@@ -75,6 +83,7 @@ const DefaultLayout = ({ children }: Props) => {
     },
     {
       icon: IconSquareRoundedX,
+      action: () => open(),
       label: t("navbar.routes.quitAppLabel"),
       route: "#?quitApp",
     },
@@ -116,6 +125,7 @@ const DefaultLayout = ({ children }: Props) => {
   }));
 
   const NavbarLink = ({
+    action,
     icon: Icon,
     label,
     disabled,
@@ -126,7 +136,7 @@ const DefaultLayout = ({ children }: Props) => {
     return (
       <Tooltip label={label} position="right" offset={15} withArrow>
         <UnstyledButton
-          onClick={() => void push(route)}
+          onClick={action ? action : () => void push(route)}
           className={cx(classes.link, { [classes.active]: active })}
           disabled={disabled}
         >
@@ -159,6 +169,30 @@ const DefaultLayout = ({ children }: Props) => {
         </Navbar>
       }
     >
+      <Modal
+        opened={opened}
+        onClose={close}
+        centered
+        withCloseButton={false}
+        overlayProps={{
+          blur: 5,
+        }}
+      >
+        <Modal.Body>
+          <Title size="h3" ta="center" mb="xl">
+            {t("quitPrompt.titleLabel")}
+          </Title>
+          <Group position="center">
+            <Button
+              onClick={() => void ipcRenderer.send("quit-app")}
+              variant="default"
+            >
+              {t("dialogYes")}
+            </Button>
+            <Button onClick={() => void close()}>{t("dialogNo")}</Button>
+          </Group>
+        </Modal.Body>
+      </Modal>
       {children}
     </AppShell>
   );

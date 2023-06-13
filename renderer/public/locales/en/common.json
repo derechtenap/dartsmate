@@ -16,5 +16,8 @@
   "legs": "Legs",
   "sets": "Sets",
   "players": "Players",
-  "gameMode": "Game mode"
+  "gameMode": "Game mode",
+  "quitPrompt": {
+    "titleLabel": "Do you really want to quit the app?"
+  }
 }
