@@ -154,6 +154,7 @@ const DefaultLayout = ({ children }: Props) => {
 
   return (
     <AppShell
+      py={0}
       navbar={
         <Navbar height="100vh" p="xs" width={{ base: navbarWidth }}>
           <Navbar.Section grow>
