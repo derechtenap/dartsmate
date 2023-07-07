@@ -15,12 +15,19 @@ import {
   Text,
   Title,
   Tooltip,
+  UnstyledButton,
 } from "@mantine/core";
 import type { MantineColor } from "@mantine/core";
-import { IconEdit, IconTrash, IconUserPlus } from "@tabler/icons-react";
+import {
+  IconEdit,
+  IconSquareRoundedX,
+  IconUserPlus,
+} from "@tabler/icons-react";
 import Link from "next/link";
+import { useState } from "react";
 
 const ProfilesPage: NextPage = () => {
+  const [openedProfile, setOpenedProfile] = useState<number | null>(null);
   const { t } = useTranslation(["profiles"]);
 
   // TODO: Remove the dummy data later
@@ -62,38 +69,54 @@ const ProfilesPage: NextPage = () => {
                   </Button>
                 </Link>
               </Group>
-              {dummyPlayers.map((player) => (
-                <Group key={player.name}>
-                  <Avatar color={player.color} radius="md">
-                    {player.name.charAt(0)}
-                  </Avatar>
-                  <Text color="dimmed">{player.name}</Text>
-                </Group>
+              {dummyPlayers.map((player, _idx) => (
+                <UnstyledButton
+                  key={_idx + 1}
+                  onClick={() => setOpenedProfile(_idx + 1)}
+                >
+                  <Group>
+                    <Avatar color={player.color} radius="md">
+                      {player.name.charAt(0)}
+                    </Avatar>
+                    <Text color="dimmed">{player.name}</Text>
+                  </Group>
+                </UnstyledButton>
               ))}
             </Stack>
           </ScrollArea.Autosize>
         </Grid.Col>
-        <Grid.Col span="auto" bg={""}>
-          <Flex justify="space-between">
-            <Group>
-              <Avatar color="blue" size="xl" radius="md">
-                {"n"}
-              </Avatar>
-              <Title>{"nap"}</Title>
-            </Group>
-            <Group>
-              <Tooltip label={t("tooltipEditProfile")}>
-                <ActionIcon variant="light">
-                  <IconEdit />
-                </ActionIcon>
-              </Tooltip>
-              <Tooltip label={t("tooltipDeleteProfile")}>
-                <ActionIcon color="red" variant="light">
-                  <IconTrash />
-                </ActionIcon>
-              </Tooltip>
-            </Group>
-          </Flex>
+        <Grid.Col span="auto">
+          {openedProfile ? (
+            <Flex justify="space-between">
+              <Group>
+                <Avatar
+                  color={dummyPlayers[openedProfile - 1].color}
+                  size="xl"
+                  radius="md"
+                >
+                  {dummyPlayers[openedProfile - 1].name.charAt(0)}
+                </Avatar>
+                <Title>{dummyPlayers[openedProfile - 1].name}</Title>
+              </Group>
+              <Group>
+                <Tooltip label={t("tooltipEditProfile")}>
+                  <ActionIcon variant="transparent">
+                    <IconEdit />
+                  </ActionIcon>
+                </Tooltip>
+                <Tooltip label={t("tooltipCloseProfile")}>
+                  <ActionIcon
+                    variant="transparent"
+                    onClick={() => setOpenedProfile(null)}
+                  >
+                    <IconSquareRoundedX />
+                  </ActionIcon>
+                </Tooltip>
+              </Group>
+            </Flex>
+          ) : (
+            <>{"Open a profile"}</>
+          )}
         </Grid.Col>
       </Grid>
     </DefaultLayout>
