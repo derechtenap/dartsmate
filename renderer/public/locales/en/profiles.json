@@ -1,5 +1,7 @@
 {
   "ctaCreateNewProfile": "Create a new Profile",
+  "headingProfilesEmptyState": "Currently, there is nothing to see here. Please choose a profile...",
+  "textProfilesEmptyState": "Unleash your creativity by creating and editing the profiles.",
   "tooltipCloseProfile": "Close Profile",
   "tooltipDeleteProfile": "Delete Profile",
   "tooltipEditProfile": "Edit Profile"

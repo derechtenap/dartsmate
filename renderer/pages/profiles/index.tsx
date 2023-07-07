@@ -7,6 +7,7 @@ import {
   ActionIcon,
   Avatar,
   Button,
+  Center,
   Flex,
   Grid,
   Group,
@@ -22,6 +23,7 @@ import {
   IconEdit,
   IconSquareRoundedX,
   IconUserPlus,
+  IconUserQuestion,
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -115,7 +117,23 @@ const ProfilesPage: NextPage = () => {
               </Group>
             </Flex>
           ) : (
-            <>{"Open a profile"}</>
+            <Center h="calc(100vh - 2rem)">
+              <Flex
+                ta="center"
+                direction="column"
+                align="center"
+                justify="center"
+                gap="lg"
+              >
+                <IconUserQuestion size="4rem" />
+                <Title fz="h3" fw="bold">
+                  {t("headingProfilesEmptyState")}
+                </Title>
+                <Text color="dimmed" mb="lg">
+                  {t("textProfilesEmptyState")}
+                </Text>
+              </Flex>
+            </Center>
           )}
         </Grid.Col>
       </Grid>
