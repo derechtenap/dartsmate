@@ -6,6 +6,7 @@ import DefaultLayout from "@/components/layouts/Default";
 import {
   ActionIcon,
   Avatar,
+  Button,
   Flex,
   Grid,
   Group,
@@ -16,11 +17,13 @@ import {
   Tooltip,
 } from "@mantine/core";
 import type { MantineColor } from "@mantine/core";
-import { IconEdit, IconTrash } from "@tabler/icons-react";
+import { IconEdit, IconTrash, IconUserPlus } from "@tabler/icons-react";
+import Link from "next/link";
 
 const ProfilesPage: NextPage = () => {
   const { t } = useTranslation(["profiles"]);
 
+  // TODO: Remove the dummy data later
   const dummyPlayers: {
     color: MantineColor;
     name: string;
@@ -48,6 +51,17 @@ const ProfilesPage: NextPage = () => {
         <Grid.Col span={3}>
           <ScrollArea.Autosize mah="calc(100vh - 2rem)">
             <Stack my="xs">
+              <Group>
+                <Link href="/profiles/createProfile">
+                  <Button
+                    component="a"
+                    leftIcon={<IconUserPlus />}
+                    variant="gradient"
+                  >
+                    {t("ctaCreateNewProfile")}
+                  </Button>
+                </Link>
+              </Group>
               {dummyPlayers.map((player) => (
                 <Group key={player.name}>
                   <Avatar color={player.color} radius="md">
