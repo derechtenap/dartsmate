@@ -16,16 +16,26 @@ import DefaultLayout from "@/components/layouts/Default";
 const IndexPage: NextPage = () => {
   const { push } = useRouter();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [language, setLanguage] = useLocalStorage<string>({
     key: "app-language",
     getInitialValueInEffect: true,
   });
 
-  // TODO: Optimize the way the language is detected
   useEffect(() => {
     if (language) {
       void push("/", undefined, { locale: language });
+    }
+
+    // Set the app language to the client OS language only if no language is set in the app
+    if (!language && !window.localStorage.getItem("app-language")) {
+      const defaultLanguage = i18n?.language || "en";
+
+      // Check if the OS language is supported by the app, otherwise use the default language
+      if (i18n?.languages.includes(window.navigator.language)) {
+        setLanguage(window.navigator.language);
+      } else {
+        setLanguage(defaultLanguage);
+      }
     }
   }, [language]);
 
