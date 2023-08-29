@@ -1,4 +1,4 @@
-import type { GetStaticProps, NextPage } from "next";
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 
 import DefaultLayout from "@/components/layouts/Default";
 
@@ -22,6 +22,13 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
     props: {
       ...(await serverSideTranslations(locale ?? "en", ["common"])),
     },
+  };
+};
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return {
+    paths: [], // Indicates that no page needs be created at build time
+    fallback: "blocking",
   };
 };
 
