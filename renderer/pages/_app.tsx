@@ -1,17 +1,12 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
-
 import {
   ColorScheme,
   ColorSchemeProvider,
   MantineProvider,
 } from "@mantine/core";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
-
-import { appWithTranslation } from "next-i18next";
-
 import pkg from "../../package.json";
-
 import "../styles/globals.css";
 import "../styles/scrollbar.css";
 
@@ -53,4 +48,4 @@ const App = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-export default appWithTranslation(App);
+export default App;

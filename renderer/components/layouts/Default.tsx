@@ -23,7 +23,6 @@ import {
   IconUsersGroup,
 } from "@tabler/icons-react";
 import { useRouter } from "next/router";
-import { useTranslation } from "next-i18next";
 import { useDisclosure } from "@mantine/hooks";
 import { ipcRenderer } from "electron";
 
@@ -45,32 +44,31 @@ export const navbarWidth = 70;
 const DefaultLayout = ({ children }: Props) => {
   const [opened, { open, close }] = useDisclosure(false);
   const { route, push } = useRouter();
-  const { t } = useTranslation(["common"]);
 
   const mainRoutes: NavbarLinkProps[] = [
-    { icon: IconHome2, label: t("navbar.routes.homeLabel"), route: "/" },
-    { icon: IconDisc, label: t("navbar.routes.newGameLabel"), route: "/lobby" },
+    { icon: IconHome2, label: "Home", route: "/" },
+    { icon: IconDisc, label: "Lobby", route: "/lobby" },
     {
       icon: IconSchool,
       disabled: true,
-      label: t("navbar.routes.trainingLabel"),
+      label: "Training",
       route: "/training",
     },
     {
       icon: IconTournament,
       disabled: true,
-      label: t("navbar.routes.tournamentLabel"),
+      label: "Tournament",
       route: "/tournament",
     },
     {
       icon: IconUsersGroup,
-      label: t("navbar.routes.profilesLabel"),
+      label: "Profiles",
       route: "/profiles",
     },
     {
       icon: IconListNumbers,
       disabled: true,
-      label: t("navbar.routes.rankingLabel"),
+      label: "Ranking",
       route: "/ranking",
     },
   ];
@@ -78,13 +76,13 @@ const DefaultLayout = ({ children }: Props) => {
   const miscRoutes: NavbarLinkProps[] = [
     {
       icon: IconSettings,
-      label: t("navbar.routes.settingsLabel"),
+      label: "Settings",
       route: "/settings",
     },
     {
       icon: IconSquareRoundedX,
       action: () => open(),
-      label: t("navbar.routes.quitAppLabel"),
+      label: "Quit App",
       route: "#?quitApp",
     },
   ];
@@ -181,16 +179,16 @@ const DefaultLayout = ({ children }: Props) => {
       >
         <Modal.Body>
           <Title size="h3" ta="center" mb="xl">
-            {t("quitPrompt.titleLabel")}
+            Quit DartMate?
           </Title>
           <Group position="center">
             <Button
               onClick={() => void ipcRenderer.send("quit-app")}
               variant="default"
             >
-              {t("dialogYes")}
+              Yes
             </Button>
-            <Button onClick={() => void close()}>{t("dialogNo")}</Button>
+            <Button onClick={() => void close()}>No</Button>
           </Group>
         </Modal.Body>
       </Modal>

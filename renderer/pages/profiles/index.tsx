@@ -1,7 +1,4 @@
-import type { GetStaticProps, NextPage } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { i18n, useTranslation } from "next-i18next";
-
+import type { NextPage } from "next";
 import DefaultLayout from "@/components/layouts/Default";
 import {
   ActionIcon,
@@ -30,7 +27,6 @@ import { useState } from "react";
 
 const ProfilesPage: NextPage = () => {
   const [openedProfile, setOpenedProfile] = useState<number | null>(null);
-  const { t } = useTranslation(["profiles"]);
 
   // TODO: Remove the dummy data later
   const dummyPlayers: {
@@ -67,7 +63,7 @@ const ProfilesPage: NextPage = () => {
                     leftIcon={<IconUserPlus />}
                     variant="gradient"
                   >
-                    {t("ctaCreateNewProfile")}
+                    btn.createProfile
                   </Button>
                 </Link>
               </Group>
@@ -101,12 +97,12 @@ const ProfilesPage: NextPage = () => {
                 <Title>{dummyPlayers[openedProfile - 1].name}</Title>
               </Group>
               <Group>
-                <Tooltip label={t("tooltipEditProfile")}>
+                <Tooltip label="Edit Profile">
                   <ActionIcon variant="transparent">
                     <IconEdit />
                   </ActionIcon>
                 </Tooltip>
-                <Tooltip label={t("tooltipCloseProfile")}>
+                <Tooltip label="Close Profile">
                   <ActionIcon
                     variant="transparent"
                     onClick={() => setOpenedProfile(null)}
@@ -127,10 +123,10 @@ const ProfilesPage: NextPage = () => {
               >
                 <IconUserQuestion size="4rem" />
                 <Title fz="h3" fw="bold">
-                  {t("headingProfilesEmptyState")}
+                  emptyState
                 </Title>
                 <Text color="dimmed" mb="lg">
-                  {t("textProfilesEmptyState")}
+                  emptyState.text
                 </Text>
               </Flex>
             </Center>
@@ -139,19 +135,6 @@ const ProfilesPage: NextPage = () => {
       </Grid>
     </DefaultLayout>
   );
-};
-
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  // Refetch locales automatically when in dev mode
-  if (process.env.NODE_ENV === "development") {
-    await i18n?.reloadResources();
-  }
-
-  return {
-    props: {
-      ...(await serverSideTranslations(locale ?? "en", ["common", "profiles"])),
-    },
-  };
 };
 
 export default ProfilesPage;
