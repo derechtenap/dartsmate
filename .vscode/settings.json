@@ -19,7 +19,9 @@
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "cSpell.words": [
     "dartmate",
+    "dayjs",
     "embla",
+    "esnext",
     "mantine",
     "nextron",
     "tabler",
