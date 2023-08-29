@@ -1,23 +1,14 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
-
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
 import {
   ColorScheme,
   ColorSchemeProvider,
   MantineProvider,
 } from "@mantine/core";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
-
-import { appWithTranslation } from "next-i18next";
-
-import { APP_NAME } from "utils/constants";
-
+import pkg from "../../package.json";
 import "../styles/globals.css";
 import "../styles/scrollbar.css";
-
-const queryClient = new QueryClient();
 
 const App = ({ Component, pageProps }: AppProps) => {
   // Store color scheme in the `localStorage`
@@ -37,7 +28,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <Head>
-        <title>{APP_NAME}</title>
+        <title>{pkg.productName}</title>
       </Head>
       <ColorSchemeProvider
         colorScheme={colorScheme}
@@ -50,13 +41,11 @@ const App = ({ Component, pageProps }: AppProps) => {
             colorScheme,
           }}
         >
-          <QueryClientProvider client={queryClient}>
-            <Component {...pageProps} />
-          </QueryClientProvider>
+          <Component {...pageProps} />
         </MantineProvider>
       </ColorSchemeProvider>
     </>
   );
 };
 
-export default appWithTranslation(App);
+export default App;

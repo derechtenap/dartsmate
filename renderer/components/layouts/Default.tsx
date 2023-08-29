@@ -1,129 +1,197 @@
 import {
-  ActionIcon,
   AppShell,
-  Center,
-  Menu,
+  Button,
+  createStyles,
+  Group,
+  Modal,
   Navbar,
-  NavLink,
-  Text,
+  rem,
+  Stack,
+  Title,
+  Tooltip,
+  UnstyledButton,
 } from "@mantine/core";
-import { useFullscreen, useLocalStorage } from "@mantine/hooks";
 import {
-  IconAdjustments,
-  IconCategory,
-  IconCirclePlus,
-  IconCircleX,
-  IconMaximize,
-  IconMaximizeOff,
-  IconMoon,
+  Icon,
+  IconDisc,
+  IconHome2,
+  IconListNumbers,
+  IconSchool,
   IconSettings,
-  IconSun,
-  IconUserCircle,
+  IconSquareRoundedX,
+  IconTournament,
+  IconUsersGroup,
 } from "@tabler/icons-react";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { useTranslation } from "next-i18next";
+import { useDisclosure } from "@mantine/hooks";
+import { ipcRenderer } from "electron";
 
 type Props = {
   children: React.ReactNode;
 };
 
-export const navbarWidth = 160;
+type NavbarLinkProps = {
+  action?: () => void;
+  active?: boolean;
+  disabled?: boolean;
+  icon: Icon;
+  label: string;
+  route: string;
+};
+
+export const navbarWidth = 70;
 
 const DefaultLayout = ({ children }: Props) => {
-  const router = useRouter();
-  const { t } = useTranslation(["common"]);
+  const [opened, { open, close }] = useDisclosure(false);
+  const { route, push } = useRouter();
 
-  const [colorScheme, setColorScheme] = useLocalStorage({
-    key: "mantine-color-scheme",
-  });
-
-  const { toggle, fullscreen } = useFullscreen();
-
-  const toggleFullscreen = () => {
-    return toggle();
-  };
-
-  const routes = [
+  const mainRoutes: NavbarLinkProps[] = [
+    { icon: IconHome2, label: "Home", route: "/" },
+    { icon: IconDisc, label: "Lobby", route: "/lobby" },
     {
-      icon: <IconCategory />,
-      label: t("navbar.routes.routeHubLabel"),
-      link: "/",
+      icon: IconSchool,
+      disabled: true,
+      label: "Training",
+      route: "/training",
     },
     {
-      icon: <IconCirclePlus />,
-      label: t("navbar.routes.routeNewGameLabel"),
-      link: "/lobby",
+      icon: IconTournament,
+      disabled: true,
+      label: "Tournament",
+      route: "/tournament",
     },
     {
-      icon: <IconUserCircle />,
-      label: t("navbar.routes.routeProfilesLabel"),
-      link: "/profiles",
+      icon: IconUsersGroup,
+      label: "Profiles",
+      route: "/profiles",
     },
     {
-      icon: <IconCircleX />,
-      label: t("navbar.routes.routeCloseAppLabel"),
-      link: "/quit",
+      icon: IconListNumbers,
+      disabled: true,
+      label: "Ranking",
+      route: "/ranking",
     },
   ];
 
+  const miscRoutes: NavbarLinkProps[] = [
+    {
+      icon: IconSettings,
+      label: "Settings",
+      route: "/settings",
+    },
+    {
+      icon: IconSquareRoundedX,
+      action: () => open(),
+      label: "Quit App",
+      route: "#?quitApp",
+    },
+  ];
+
+  const useStyles = createStyles((theme) => ({
+    link: {
+      width: rem(50),
+      height: rem(50),
+      borderRadius: theme.radius.md,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      color:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[0]
+          : theme.colors.dark[5],
+
+      "&:hover": {
+        backgroundColor:
+          theme.colorScheme === "dark"
+            ? theme.colors.dark[5]
+            : theme.colors.gray[1],
+      },
+      "&:disabled": {
+        cursor: "not-allowed",
+      },
+    },
+    active: {
+      "&, &:hover": {
+        backgroundColor: theme.fn.variant({
+          variant: "light",
+          color: theme.primaryColor,
+        }).background,
+        color: theme.fn.variant({ variant: "light", color: theme.primaryColor })
+          .color,
+      },
+    },
+  }));
+
+  const NavbarLink = ({
+    action,
+    icon: Icon,
+    label,
+    disabled,
+    active,
+    route,
+  }: NavbarLinkProps) => {
+    const { classes, cx } = useStyles();
+    return (
+      <Tooltip label={label} position="right" offset={15} withArrow>
+        <UnstyledButton
+          onClick={action ? action : () => void push(route)}
+          className={cx(classes.link, { [classes.active]: active })}
+          disabled={disabled}
+        >
+          <Icon size="1.2rem" stroke={1.5} />
+        </UnstyledButton>
+      </Tooltip>
+    );
+  };
+
+  const appendNavbarRoutes = (links: NavbarLinkProps[]) => {
+    return links.map((link) => (
+      <NavbarLink {...link} active={route === link.route} key={link.label} />
+    ));
+  };
+
   return (
     <AppShell
+      py={0}
       navbar={
         <Navbar height="100vh" p="xs" width={{ base: navbarWidth }}>
           <Navbar.Section grow>
-            {routes.map((route) => (
-              <Link href={route.link} key={route.label}>
-                <NavLink label={route.label} icon={route.icon} />
-              </Link>
-            ))}
+            <Stack justify="center" spacing="xs">
+              {appendNavbarRoutes(mainRoutes)}
+            </Stack>
           </Navbar.Section>
           <Navbar.Section>
-            <Center>
-              <Menu arrowPosition="center" position="right-end" withArrow>
-                <Menu.Target>
-                  <ActionIcon size="xl">
-                    <IconSettings />
-                  </ActionIcon>
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item
-                    onClick={() =>
-                      setColorScheme(colorScheme === "dark" ? "light" : "dark")
-                    }
-                    closeMenuOnClick={false}
-                    icon={colorScheme === "light" ? <IconSun /> : <IconMoon />}
-                    rightSection={
-                      <Text size="xs" color="dimmed" ml="xs">
-                        {t("navbar.menuItemColorSchemeLabelHotkey")}
-                      </Text>
-                    }
-                  >
-                    {t("navbar.menuItemColorSchemeLabel")}
-                  </Menu.Item>
-                  <Menu.Item
-                    onClick={() => void toggleFullscreen()}
-                    closeMenuOnClick={false}
-                    icon={fullscreen ? <IconMaximizeOff /> : <IconMaximize />}
-                  >
-                    {fullscreen
-                      ? t("navbar.menuItemToggleFullscreenModeWindowedLabel")
-                      : t("navbar.menuItemToggleFullscreenModeFullscreenLabel")}
-                  </Menu.Item>
-                  <Menu.Item
-                    closeMenuOnClick={false}
-                    icon={<IconAdjustments />}
-                    onClick={() => void router.push("/settings")}
-                  >
-                    {t("navbar.menuItemAppSettingsLabel")}
-                  </Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-            </Center>
+            <Stack justify="center" spacing="xs">
+              {appendNavbarRoutes(miscRoutes)}
+            </Stack>
           </Navbar.Section>
         </Navbar>
       }
     >
+      <Modal
+        opened={opened}
+        onClose={close}
+        centered
+        withCloseButton={false}
+        overlayProps={{
+          blur: 5,
+        }}
+      >
+        <Modal.Body>
+          <Title size="h3" ta="center" mb="xl">
+            Quit DartMate?
+          </Title>
+          <Group position="center">
+            <Button
+              onClick={() => void ipcRenderer.send("quit-app")}
+              variant="default"
+            >
+              Yes
+            </Button>
+            <Button onClick={() => void close()}>No</Button>
+          </Group>
+        </Modal.Body>
+      </Modal>
       {children}
     </AppShell>
   );
