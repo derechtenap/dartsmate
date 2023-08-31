@@ -7,7 +7,7 @@ const IndexPage: NextPage = () => {
   // TODO: Currently only shows a logo... Show the user more useful content
   return (
     <DefaultLayout>
-      <Center h="100vh">
+      <Center h="100%">
         <Flex direction="column">
           <Title tt="uppercase" fs="italic" size={100} lh={0.6}>
             {pkg.productName}
