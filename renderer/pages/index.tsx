@@ -12,13 +12,7 @@ const IndexPage: NextPage = () => {
           <Title tt="uppercase" fs="italic" size={100} lh={0.6}>
             {pkg.productName}
           </Title>
-          <Divider
-            my="xs"
-            color="blue"
-            variant="dashed"
-            label={pkg.version}
-            labelPosition="right"
-          />
+          <Divider my="xs" label={pkg.version} labelPosition="right" />
         </Flex>
       </Center>
     </DefaultLayout>
