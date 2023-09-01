@@ -77,10 +77,7 @@ const ProfilesPage: NextPage = () => {
                     <Avatar color="grape" radius="md">
                       {player.name.charAt(0)}
                     </Avatar>
-                    <Text color="dimmed">
-                      {player.name}
-                      {_idx}
-                    </Text>
+                    <Text color="dimmed">{player.name}</Text>
                   </Group>
                 </UnstyledButton>
               ))}
@@ -123,10 +120,12 @@ const ProfilesPage: NextPage = () => {
               >
                 <IconUserQuestion size="4rem" />
                 <Title fz="h3" fw="bold">
-                  emptyState
+                  No Profile Selected
                 </Title>
                 <Text color="dimmed" mb="lg">
-                  emptyState.text
+                  It looks like you haven't selected a profile yet. To get
+                  started, choose a profile from the list on the left, or create
+                  a new one.
                 </Text>
               </Flex>
             </Center>
