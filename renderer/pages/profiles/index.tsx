@@ -1,28 +1,28 @@
 import type { NextPage } from "next";
 import DefaultLayout from "@/components/layouts/Default";
 import {
-  // ActionIcon,
+  ActionIcon,
   Avatar,
   Button,
-  // Center,
-  // Flex,
+  Center,
+  Flex,
   Grid,
   Group,
   ScrollArea,
   Stack,
   Text,
-  // Title,
-  // Tooltip,
+  Title,
+  Tooltip,
   UnstyledButton,
 } from "@mantine/core";
 import {
-  // IconEdit,
-  // IconSquareRoundedX,
+  IconEdit,
+  IconSquareRoundedX,
   IconUserPlus,
-  // IconUserQuestion,
+  IconUserQuestion,
 } from "@tabler/icons-react";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { readFolder } from "utils/fs/readFolder";
 import { PROFILES_DIR } from "utils/constants";
 import { readFileSync } from "fs";
@@ -34,7 +34,8 @@ type Profile = {
 };
 
 const ProfilesPage: NextPage = () => {
-  const [profileList, setProfileList] = useListState<Profile>();
+  const [openProfileId, setOpenProfileID] = useState<number | null>(null);
+  const [profileList, setProfileList] = useListState<Profile>([]);
 
   useEffect(() => {
     setProfileList.setState([]);
@@ -69,14 +70,17 @@ const ProfilesPage: NextPage = () => {
               </Group>
               {profileList.map((player, _idx) => (
                 <UnstyledButton
-                  key={_idx + 1}
-                  /*onClick={() => ...)}*/
+                  key={_idx}
+                  onClick={() => setOpenProfileID(_idx)}
                 >
                   <Group>
                     <Avatar color="grape" radius="md">
                       {player.name.charAt(0)}
                     </Avatar>
-                    <Text color="dimmed">{player.name}</Text>
+                    <Text color="dimmed">
+                      {player.name}
+                      {_idx}
+                    </Text>
                   </Group>
                 </UnstyledButton>
               ))}
@@ -84,18 +88,13 @@ const ProfilesPage: NextPage = () => {
           </ScrollArea.Autosize>
         </Grid.Col>
         <Grid.Col span="auto">
-          {/*
-          {openedProfile ? (
+          {openProfileId !== null ? (
             <Flex justify="space-between">
               <Group>
-                <Avatar
-                  color={dummyPlayers[openedProfile - 1].color}
-                  size="xl"
-                  radius="md"
-                >
-                  {dummyPlayers[openedProfile - 1].name.charAt(0)}
+                <Avatar color="grape" size="xl" radius="md">
+                  {profileList[openProfileId].name.charAt(0)}
                 </Avatar>
-                <Title>{dummyPlayers[openedProfile - 1].name}</Title>
+                <Title>{profileList[openProfileId].name}</Title>
               </Group>
               <Group>
                 <Tooltip label="Edit Profile">
@@ -106,7 +105,7 @@ const ProfilesPage: NextPage = () => {
                 <Tooltip label="Close Profile">
                   <ActionIcon
                     variant="transparent"
-                    onClick={() => setOpenedProfile(null)}
+                    onClick={() => setOpenProfileID(null)}
                   >
                     <IconSquareRoundedX />
                   </ActionIcon>
@@ -132,7 +131,6 @@ const ProfilesPage: NextPage = () => {
               </Flex>
             </Center>
           )}
-          */}
         </Grid.Col>
       </Grid>
     </DefaultLayout>
