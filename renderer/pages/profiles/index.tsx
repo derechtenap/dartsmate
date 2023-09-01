@@ -1,55 +1,55 @@
 import type { NextPage } from "next";
 import DefaultLayout from "@/components/layouts/Default";
 import {
-  ActionIcon,
+  // ActionIcon,
   Avatar,
   Button,
-  Center,
-  Flex,
+  // Center,
+  // Flex,
   Grid,
   Group,
   ScrollArea,
   Stack,
   Text,
-  Title,
-  Tooltip,
+  // Title,
+  // Tooltip,
   UnstyledButton,
 } from "@mantine/core";
-import type { MantineColor } from "@mantine/core";
 import {
-  IconEdit,
-  IconSquareRoundedX,
+  // IconEdit,
+  // IconSquareRoundedX,
   IconUserPlus,
-  IconUserQuestion,
+  // IconUserQuestion,
 } from "@tabler/icons-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect } from "react";
+import { readFolder } from "utils/fs/readFolder";
+import { PROFILES_DIR } from "utils/constants";
+import { readFileSync } from "fs";
+import path from "path";
+import { useListState } from "@mantine/hooks";
+
+type Profile = {
+  name: string;
+};
 
 const ProfilesPage: NextPage = () => {
-  const [openedProfile, setOpenedProfile] = useState<number | null>(null);
+  const [profileList, setProfileList] = useListState<Profile>();
 
-  // TODO: Remove the dummy data later
-  const dummyPlayers: {
-    color: MantineColor;
-    name: string;
-  }[] = [
-    {
-      color: "blue",
-      name: "nap",
-    },
-    {
-      color: "indigo",
-      name: "Feedback",
-    },
-    {
-      color: "grape",
-      name: "Luke Skywalker",
-    },
-    {
-      color: "pink",
-      name: "Darth Vader",
-    },
-  ];
+  useEffect(() => {
+    setProfileList.setState([]);
+    // Get a list of local profiles files
+    const profiles = readFolder(PROFILES_DIR);
+
+    // Read each profile file and append it to a state
+    profiles.forEach((profileFile: string) => {
+      const data = readFileSync(path.join(PROFILES_DIR, profileFile), "utf8");
+      const json = JSON.parse(data) as Profile;
+
+      setProfileList.append(json);
+    });
+  }, []);
+
   return (
     <DefaultLayout>
       <Grid>
@@ -63,17 +63,17 @@ const ProfilesPage: NextPage = () => {
                     leftIcon={<IconUserPlus />}
                     variant="gradient"
                   >
-                    btn.createProfile
+                    Create Profile
                   </Button>
                 </Link>
               </Group>
-              {dummyPlayers.map((player, _idx) => (
+              {profileList.map((player, _idx) => (
                 <UnstyledButton
                   key={_idx + 1}
-                  onClick={() => setOpenedProfile(_idx + 1)}
+                  /*onClick={() => ...)}*/
                 >
                   <Group>
-                    <Avatar color={player.color} radius="md">
+                    <Avatar color="grape" radius="md">
                       {player.name.charAt(0)}
                     </Avatar>
                     <Text color="dimmed">{player.name}</Text>
@@ -84,6 +84,7 @@ const ProfilesPage: NextPage = () => {
           </ScrollArea.Autosize>
         </Grid.Col>
         <Grid.Col span="auto">
+          {/*
           {openedProfile ? (
             <Flex justify="space-between">
               <Group>
@@ -131,6 +132,7 @@ const ProfilesPage: NextPage = () => {
               </Flex>
             </Center>
           )}
+          */}
         </Grid.Col>
       </Grid>
     </DefaultLayout>

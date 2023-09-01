@@ -1,9 +1,5 @@
-import { mkdir } from "fs";
+import { mkdirSync } from "fs";
 
 export const createFolder = (path: string) => {
-  mkdir(path, (err) => {
-    if (err) {
-      throw new Error(err.message);
-    }
-  });
+  mkdirSync(path);
 };
