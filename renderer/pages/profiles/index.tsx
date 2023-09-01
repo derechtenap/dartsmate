@@ -28,10 +28,7 @@ import { PROFILES_DIR } from "utils/constants";
 import { readFileSync } from "fs";
 import path from "path";
 import { useListState } from "@mantine/hooks";
-
-type Profile = {
-  name: string;
-};
+import { Profile } from "types/profile";
 
 const ProfilesPage: NextPage = () => {
   const [openProfileId, setOpenProfileID] = useState<number | null>(null);
