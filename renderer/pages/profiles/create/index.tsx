@@ -27,6 +27,7 @@ import { randomUUID } from "crypto";
 import { createFile } from "utils/fs/createFile";
 import { PROFILES_DIR } from "utils/constants";
 import path from "path";
+import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 
 const CreateProfilePage: NextPage = () => {
   const { back } = useRouter();
@@ -96,7 +97,7 @@ const CreateProfilePage: NextPage = () => {
         <Center style={{ flex: 1 }}>
           <Stack w="66%" maw={600}>
             <Avatar mx="auto" color={avatarColor} size="xl">
-              {form.values.username.charAt(0)}
+              {getUsernameInitials(form.values.username)}
             </Avatar>
             <Group p="lg">{swatches}</Group>
             <TextInput

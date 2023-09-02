@@ -29,6 +29,7 @@ import { readFileSync } from "fs";
 import path from "path";
 import { useListState } from "@mantine/hooks";
 import { Profile } from "types/profile";
+import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 
 const ProfilesPage: NextPage = () => {
   const [openProfileId, setOpenProfileID] = useState<number | null>(null);
@@ -72,7 +73,7 @@ const ProfilesPage: NextPage = () => {
                 >
                   <Group>
                     <Avatar color={player.color} radius="md">
-                      {player.username.charAt(0)}
+                      {getUsernameInitials(player.username)}
                     </Avatar>
                     <Text color="dimmed">{player.username}</Text>
                   </Group>
@@ -83,33 +84,44 @@ const ProfilesPage: NextPage = () => {
         </Grid.Col>
         <Grid.Col span="auto">
           {openProfileId !== null ? (
-            <Flex justify="space-between">
-              <Group>
-                <Avatar
-                  color={profileList[openProfileId].color}
-                  size="xl"
-                  radius="md"
-                >
-                  {profileList[openProfileId].username.charAt(0)}
-                </Avatar>
-                <Title>{profileList[openProfileId].username}</Title>
-              </Group>
-              <Group>
-                <Tooltip label="Edit Profile">
-                  <ActionIcon variant="transparent">
-                    <IconEdit />
-                  </ActionIcon>
-                </Tooltip>
-                <Tooltip label="Close Profile">
-                  <ActionIcon
-                    variant="transparent"
-                    onClick={() => setOpenProfileID(null)}
+            <>
+              <Flex justify="space-between">
+                <Group>
+                  <Avatar
+                    color={profileList[openProfileId].color}
+                    size="xl"
+                    radius="md"
                   >
-                    <IconSquareRoundedX />
-                  </ActionIcon>
-                </Tooltip>
-              </Group>
-            </Flex>
+                    {getUsernameInitials(profileList[openProfileId].username)}
+                  </Avatar>
+                  <Title>
+                    {profileList[openProfileId].username}{" "}
+                    <Text c="dimmed" fz="xs">
+                      DartMate Player Since:{" "}
+                      {profileList[openProfileId].createdAt}
+                    </Text>
+                  </Title>
+                </Group>
+                <Group>
+                  <Tooltip label="Edit Profile">
+                    <ActionIcon variant="transparent">
+                      <IconEdit />
+                    </ActionIcon>
+                  </Tooltip>
+                  <Tooltip label="Close Profile">
+                    <ActionIcon
+                      variant="transparent"
+                      onClick={() => setOpenProfileID(null)}
+                    >
+                      <IconSquareRoundedX />
+                    </ActionIcon>
+                  </Tooltip>
+                </Group>
+              </Flex>
+              <Text mt="lg" c="dimmed" style={{ wordBreak: "break-word" }}>
+                {profileList[openProfileId].bio}
+              </Text>
+            </>
           ) : (
             <Center h="calc(100vh - 2rem)">
               <Flex
