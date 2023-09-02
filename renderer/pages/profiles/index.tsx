@@ -31,8 +31,10 @@ import { useListState } from "@mantine/hooks";
 import { Profile } from "types/profile";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import { getLocaleDate } from "utils/misc/getLocalDate";
+import { useRouter } from "next/router";
 
 const ProfilesPage: NextPage = () => {
+  const { push } = useRouter();
   const [openProfileId, setOpenProfileID] = useState<number | null>(null);
   const [profileList, setProfileList] = useListState<Profile>([]);
 
@@ -105,7 +107,14 @@ const ProfilesPage: NextPage = () => {
                 </Group>
                 <Group>
                   <Tooltip label="Edit Profile">
-                    <ActionIcon variant="transparent">
+                    <ActionIcon
+                      variant="transparent"
+                      onClick={() =>
+                        void push(
+                          `/profiles/edit/${profileList[openProfileId].uuid}`
+                        )
+                      }
+                    >
                       <IconEdit />
                     </ActionIcon>
                   </Tooltip>
