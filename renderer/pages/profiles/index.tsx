@@ -30,6 +30,7 @@ import path from "path";
 import { useListState } from "@mantine/hooks";
 import { Profile } from "types/profile";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
+import { getLocaleDate } from "utils/misc/getLocalDate";
 
 const ProfilesPage: NextPage = () => {
   const [openProfileId, setOpenProfileID] = useState<number | null>(null);
@@ -95,10 +96,10 @@ const ProfilesPage: NextPage = () => {
                     {getUsernameInitials(profileList[openProfileId].username)}
                   </Avatar>
                   <Title>
-                    {profileList[openProfileId].username}{" "}
+                    {profileList[openProfileId].username}
                     <Text c="dimmed" fz="xs">
-                      DartMate Player Since:{" "}
-                      {profileList[openProfileId].createdAt}
+                      Player since:{" "}
+                      {getLocaleDate(profileList[openProfileId].createdAt)}
                     </Text>
                   </Title>
                 </Group>
