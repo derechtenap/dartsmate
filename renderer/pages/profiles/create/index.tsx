@@ -72,54 +72,63 @@ const CreateProfilePage: NextPage = () => {
 
   const createProfile = () => {
     // console.info("Creating profile...", form.values);
-    createFile(
-      `${path.join(PROFILES_DIR, form.values.uuid)}.json`,
-      JSON.stringify(form.values)
-    );
-    back();
+    if (form.isValid()) {
+      form.clearErrors();
+      createFile(
+        `${path.join(PROFILES_DIR, form.values.uuid)}.json`,
+        JSON.stringify(form.values)
+      );
+      back();
+    }
   };
 
   return (
-    <DefaultLayout>
-      <Flex direction="column" h="100%">
-        <Group position="apart">
-          <PageHeader title="Create Profile">
-            Your profile stores your games, statistics and achievements in
-            DartMate. You can update your profile at any time.
-          </PageHeader>
-          <Tooltip label="Back">
-            <ActionIcon variant="transparent" onClick={() => back()}>
-              <IconSquareRoundedX />
-            </ActionIcon>
-          </Tooltip>
-        </Group>
+    <form
+      onSubmit={form.onSubmit(() => {
+        createProfile();
+      })}
+    >
+      <DefaultLayout>
+        <Flex direction="column" h="100%">
+          <Group position="apart">
+            <PageHeader title="Create Profile">
+              Your profile stores your games, statistics and achievements in
+              DartMate. You can update your profile at any time.
+            </PageHeader>
+            <Tooltip label="Back">
+              <ActionIcon variant="transparent" onClick={() => back()}>
+                <IconSquareRoundedX />
+              </ActionIcon>
+            </Tooltip>
+          </Group>
 
-        <Center style={{ flex: 1 }}>
-          <Stack w="66%" maw={600}>
-            <Avatar mx="auto" color={avatarColor} size="xl">
-              {getUsernameInitials(form.values.username)}
-            </Avatar>
-            <Group p="lg">{swatches}</Group>
-            <TextInput
-              placeholder="John Marston"
-              label="Username"
-              {...form.getInputProps("username")}
-            />
-            <Textarea
-              placeholder="An optional small biography about your achievements in darts, you as a player or something else"
-              label="Bio"
-              {...form.getInputProps("bio")}
-            />
-            <Group>
-              <Button onClick={() => createProfile()}>Create Profile</Button>
-              <Button variant="subtle" onClick={() => back()}>
-                Cancel
-              </Button>
-            </Group>
-          </Stack>
-        </Center>
-      </Flex>
-    </DefaultLayout>
+          <Center style={{ flex: 1 }}>
+            <Stack w="66%" maw={600}>
+              <Avatar mx="auto" color={avatarColor} size="xl">
+                {getUsernameInitials(form.values.username)}
+              </Avatar>
+              <Group p="lg">{swatches}</Group>
+              <TextInput
+                placeholder="John Marston"
+                label="Username"
+                {...form.getInputProps("username")}
+              />
+              <Textarea
+                placeholder="An optional small biography about your achievements in darts, you as a player or something else"
+                label="Bio"
+                {...form.getInputProps("bio")}
+              />
+              <Group>
+                <Button type="submit">Create Profile</Button>
+                <Button variant="subtle" onClick={() => back()}>
+                  Cancel
+                </Button>
+              </Group>
+            </Stack>
+          </Center>
+        </Flex>
+      </DefaultLayout>
+    </form>
   );
 };
 
