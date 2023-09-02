@@ -98,7 +98,7 @@ const ProfilesPage: NextPage = () => {
                   <Title>
                     {profileList[openProfileId].username}
                     <Text c="dimmed" fz="xs">
-                      Player since:{" "}
+                      Member Since:{" "}
                       {getLocaleDate(profileList[openProfileId].createdAt)}
                     </Text>
                   </Title>
