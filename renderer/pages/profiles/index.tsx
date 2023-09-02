@@ -4,6 +4,7 @@ import {
   ActionIcon,
   Avatar,
   Button,
+  Card,
   Center,
   Flex,
   Grid,
@@ -35,8 +36,8 @@ import { useRouter } from "next/router";
 
 const ProfilesPage: NextPage = () => {
   const { push } = useRouter();
-  const [openProfileId, setOpenProfileID] = useState<number | null>(null);
   const [profileList, setProfileList] = useListState<Profile>([]);
+  const [openedProfile, setOpenedProfile] = useState<Profile>();
 
   useEffect(() => {
     setProfileList.setState([]);
@@ -72,7 +73,7 @@ const ProfilesPage: NextPage = () => {
               {profileList.map((player, _idx) => (
                 <UnstyledButton
                   key={_idx}
-                  onClick={() => setOpenProfileID(_idx)}
+                  onClick={() => setOpenedProfile(player)}
                 >
                   <Group>
                     <Avatar color={player.color} radius="md">
@@ -86,22 +87,17 @@ const ProfilesPage: NextPage = () => {
           </ScrollArea.Autosize>
         </Grid.Col>
         <Grid.Col span="auto">
-          {openProfileId !== null ? (
+          {openedProfile ? (
             <>
               <Flex justify="space-between">
                 <Group>
-                  <Avatar
-                    color={profileList[openProfileId].color}
-                    size="xl"
-                    radius="md"
-                  >
-                    {getUsernameInitials(profileList[openProfileId].username)}
+                  <Avatar color={openedProfile.color} size="xl" radius="md">
+                    {getUsernameInitials(openedProfile.username)}
                   </Avatar>
                   <Title>
-                    {profileList[openProfileId].username}
+                    {openedProfile.username}
                     <Text c="dimmed" fz="xs">
-                      Member Since:{" "}
-                      {getLocaleDate(profileList[openProfileId].createdAt)}
+                      Member Since: {getLocaleDate(openedProfile.createdAt)}
                     </Text>
                   </Title>
                 </Group>
@@ -110,9 +106,7 @@ const ProfilesPage: NextPage = () => {
                     <ActionIcon
                       variant="transparent"
                       onClick={() =>
-                        void push(
-                          `/profiles/edit/${profileList[openProfileId].uuid}`
-                        )
+                        void push(`/profiles/edit/${openedProfile.uuid}`)
                       }
                     >
                       <IconEdit />
@@ -121,16 +115,20 @@ const ProfilesPage: NextPage = () => {
                   <Tooltip label="Close Profile">
                     <ActionIcon
                       variant="transparent"
-                      onClick={() => setOpenProfileID(null)}
+                      onClick={() => setOpenedProfile(undefined)}
                     >
                       <IconSquareRoundedX />
                     </ActionIcon>
                   </Tooltip>
                 </Group>
               </Flex>
-              <Text mt="lg" c="dimmed" style={{ wordBreak: "break-word" }}>
-                {profileList[openProfileId].bio}
-              </Text>
+              {openedProfile.bio !== "" && (
+                <Card mt="lg">
+                  <Text c="dimmed" fz="sm" style={{ wordBreak: "break-word" }}>
+                    {openedProfile.bio}
+                  </Text>
+                </Card>
+              )}
             </>
           ) : (
             <Center h="calc(100vh - 2rem)">
