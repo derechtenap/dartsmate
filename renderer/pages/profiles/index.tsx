@@ -55,7 +55,7 @@ const ProfilesPage: NextPage = () => {
           <ScrollArea.Autosize mah="calc(100vh - 2rem)">
             <Stack my="xs">
               <Group>
-                <Link href="/profiles/createProfile">
+                <Link href="/profiles/create">
                   <Button
                     component="a"
                     leftIcon={<IconUserPlus />}
@@ -71,10 +71,10 @@ const ProfilesPage: NextPage = () => {
                   onClick={() => setOpenProfileID(_idx)}
                 >
                   <Group>
-                    <Avatar color="grape" radius="md">
-                      {player.name.charAt(0)}
+                    <Avatar color={player.color} radius="md">
+                      {player.username.charAt(0)}
                     </Avatar>
-                    <Text color="dimmed">{player.name}</Text>
+                    <Text color="dimmed">{player.username}</Text>
                   </Group>
                 </UnstyledButton>
               ))}
@@ -85,10 +85,14 @@ const ProfilesPage: NextPage = () => {
           {openProfileId !== null ? (
             <Flex justify="space-between">
               <Group>
-                <Avatar color="grape" size="xl" radius="md">
-                  {profileList[openProfileId].name.charAt(0)}
+                <Avatar
+                  color={profileList[openProfileId].color}
+                  size="xl"
+                  radius="md"
+                >
+                  {profileList[openProfileId].username.charAt(0)}
                 </Avatar>
-                <Title>{profileList[openProfileId].name}</Title>
+                <Title>{profileList[openProfileId].username}</Title>
               </Group>
               <Group>
                 <Tooltip label="Edit Profile">
