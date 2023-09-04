@@ -112,8 +112,7 @@ const EditProfilePage: NextPage = () => {
         <Flex direction="column" h="100%">
           <Group position="apart">
             <PageHeader title="Edit Profile">
-              Your profile stores your games, statistics and achievements in
-              DartMate. You can update your profile at any time.
+              Manage your profile by making edits below.
             </PageHeader>
             <Tooltip label="Back">
               <ActionIcon variant="transparent" onClick={() => back()}>
@@ -139,7 +138,7 @@ const EditProfilePage: NextPage = () => {
                 {...form.getInputProps("bio")}
               />
               <Group>
-                <Button type="submit">Create Profile</Button>
+                <Button type="submit">Update Profile</Button>
                 <Button variant="subtle" onClick={() => back()}>
                   Cancel
                 </Button>
