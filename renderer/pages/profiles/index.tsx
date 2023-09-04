@@ -9,6 +9,7 @@ import {
   Flex,
   Grid,
   Group,
+  Modal,
   ScrollArea,
   Stack,
   Text,
@@ -19,6 +20,7 @@ import {
 import {
   IconEdit,
   IconSquareRoundedX,
+  IconTrashX,
   IconUserPlus,
   IconUserQuestion,
 } from "@tabler/icons-react";
@@ -28,18 +30,29 @@ import { readFolder } from "utils/fs/readFolder";
 import { PROFILES_DIR } from "utils/constants";
 import { readFileSync } from "fs";
 import path from "path";
-import { useListState } from "@mantine/hooks";
+import { useDisclosure, useListState } from "@mantine/hooks";
 import { Profile } from "types/profile";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import { getLocaleDate } from "utils/misc/getLocalDate";
 import { useRouter } from "next/router";
+import { deleteFile } from "utils/fs/deleteFile";
 
 const ProfilesPage: NextPage = () => {
   const { push } = useRouter();
+  const [opened, { open, close }] = useDisclosure(false);
   const [profileList, setProfileList] = useListState<Profile>([]);
   const [openedProfile, setOpenedProfile] = useState<Profile>();
 
-  useEffect(() => {
+  const deleteProfile = () => {
+    if (!openedProfile || !openedProfile.uuid) return;
+    const profilePath = path.join(PROFILES_DIR, `${openedProfile.uuid}.json`);
+
+    setOpenedProfile(undefined);
+    close();
+    deleteFile(profilePath);
+  };
+
+  const createProfileList = () => {
     setProfileList.setState([]);
     // Get a list of local profiles files
     const profiles = readFolder(PROFILES_DIR);
@@ -51,10 +64,27 @@ const ProfilesPage: NextPage = () => {
 
       setProfileList.append(json);
     });
-  }, []);
+  };
+
+  useEffect(() => {
+    createProfileList();
+  }, [openedProfile]);
 
   return (
     <DefaultLayout>
+      <Modal opened={opened} onClose={close} title="Delete Profile?" centered>
+        <Text>
+          Do you really want to delete the Profile "{openedProfile?.username}"?
+        </Text>
+        <Group mt="lg">
+          <Button color="red" onClick={() => deleteProfile()}>
+            Delete Profile
+          </Button>
+          <Button variant="subtle" onClick={() => close()}>
+            Cancel
+          </Button>
+        </Group>
+      </Modal>
       <Grid>
         <Grid.Col span={3}>
           <ScrollArea.Autosize mah="calc(100vh - 2rem)">
@@ -102,6 +132,15 @@ const ProfilesPage: NextPage = () => {
                   </Title>
                 </Group>
                 <Group>
+                  <Tooltip label="Delete Profile">
+                    <ActionIcon
+                      color="red"
+                      variant="transparent"
+                      onClick={() => open()}
+                    >
+                      <IconTrashX />
+                    </ActionIcon>
+                  </Tooltip>
                   <Tooltip label="Edit Profile">
                     <ActionIcon
                       variant="transparent"
