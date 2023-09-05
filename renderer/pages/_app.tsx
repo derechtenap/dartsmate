@@ -12,9 +12,13 @@ import "../styles/scrollbar.css";
 import { useEffect } from "react";
 import { checkAppFolders } from "utils/fs/checkAppFolders";
 import { useRouter } from "next/router";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/query-core";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const App = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
+  const queryClient = new QueryClient();
 
   // Store color scheme in the `localStorage`
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -40,20 +44,23 @@ const App = ({ Component, pageProps }: AppProps) => {
       <Head>
         <title>{pkg.productName}</title>
       </Head>
-      <ColorSchemeProvider
-        colorScheme={colorScheme}
-        toggleColorScheme={toggleColorScheme}
-      >
-        <MantineProvider
-          withGlobalStyles
-          withNormalizeCSS
-          theme={{
-            colorScheme,
-          }}
+      <QueryClientProvider client={queryClient}>
+        <ColorSchemeProvider
+          colorScheme={colorScheme}
+          toggleColorScheme={toggleColorScheme}
         >
-          <Component {...pageProps} />
-        </MantineProvider>
-      </ColorSchemeProvider>
+          <MantineProvider
+            withGlobalStyles
+            withNormalizeCSS
+            theme={{
+              colorScheme,
+            }}
+          >
+            <Component {...pageProps} />
+          </MantineProvider>
+        </ColorSchemeProvider>
+        <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+      </QueryClientProvider>
     </>
   );
 };

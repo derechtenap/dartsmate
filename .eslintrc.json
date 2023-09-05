@@ -5,6 +5,7 @@
   },
   "extends": [
     "eslint:recommended",
+    "plugin:@tanstack/eslint-plugin-query/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:@next/next/recommended"
@@ -16,7 +17,7 @@
     "sourceType": "module",
     "project": ["./renderer/tsconfig.json"]
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "@tanstack/query"],
   "rules": {
     "@next/next/no-html-link-for-pages": ["error", "renderer/pages/"]
   },
