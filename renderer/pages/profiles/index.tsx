@@ -9,7 +9,6 @@ import {
   Flex,
   Grid,
   Group,
-  Loader,
   Modal,
   ScrollArea,
   Stack,
@@ -36,6 +35,7 @@ import { getLocaleDate } from "utils/misc/getLocalDate";
 import { useRouter } from "next/router";
 import { deleteFile } from "utils/fs/deleteFile";
 import { useProfiles } from "hooks/useProfiles";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 const ProfilesPage: NextPage = () => {
   const { push, reload } = useRouter();
@@ -56,11 +56,7 @@ const ProfilesPage: NextPage = () => {
   const { isLoading, isSuccess, data: profiles, refetch } = useProfiles();
 
   if (isLoading) {
-    return (
-      <Center h="100vh">
-        <Loader />
-      </Center>
-    );
+    return <LoadingOverlay />;
   }
 
   return (
