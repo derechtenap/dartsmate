@@ -9,6 +9,7 @@ import {
   Flex,
   Grid,
   Group,
+  Loader,
   Modal,
   ScrollArea,
   Stack,
@@ -25,50 +26,42 @@ import {
   IconUserQuestion,
 } from "@tabler/icons-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { readFolder } from "utils/fs/readFolder";
+import { useState } from "react";
 import { PROFILES_DIR } from "utils/constants";
-import { readFileSync } from "fs";
 import path from "path";
-import { useDisclosure, useListState } from "@mantine/hooks";
+import { useDisclosure } from "@mantine/hooks";
 import { Profile } from "types/profile";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import { getLocaleDate } from "utils/misc/getLocalDate";
 import { useRouter } from "next/router";
 import { deleteFile } from "utils/fs/deleteFile";
+import { useProfiles } from "hooks/useProfiles";
 
 const ProfilesPage: NextPage = () => {
-  const { push } = useRouter();
+  const { push, reload } = useRouter();
   const [opened, { open, close }] = useDisclosure(false);
-  const [profileList, setProfileList] = useListState<Profile>([]);
   const [openedProfile, setOpenedProfile] = useState<Profile>();
 
   const deleteProfile = () => {
     if (!openedProfile || !openedProfile.uuid) return;
     const profilePath = path.join(PROFILES_DIR, `${openedProfile.uuid}.json`);
 
+    // Delete file on os, refetch the query and reset the state
     setOpenedProfile(undefined);
     close();
     deleteFile(profilePath);
+    void refetch();
   };
 
-  const createProfileList = () => {
-    setProfileList.setState([]);
-    // Get a list of local profiles files
-    const profiles = readFolder(PROFILES_DIR);
+  const { isLoading, isSuccess, data: profiles, refetch } = useProfiles();
 
-    // Read each profile file and append it to a state
-    profiles.forEach((profileFile: string) => {
-      const data = readFileSync(path.join(PROFILES_DIR, profileFile), "utf8");
-      const json = JSON.parse(data) as Profile;
-
-      setProfileList.append(json);
-    });
-  };
-
-  useEffect(() => {
-    createProfileList();
-  }, [openedProfile]);
+  if (isLoading) {
+    return (
+      <Center h="100vh">
+        <Loader />
+      </Center>
+    );
+  }
 
   return (
     <DefaultLayout>
@@ -100,19 +93,26 @@ const ProfilesPage: NextPage = () => {
                   </Button>
                 </Link>
               </Group>
-              {profileList.map((player, _idx) => (
-                <UnstyledButton
-                  key={_idx}
-                  onClick={() => setOpenedProfile(player)}
-                >
-                  <Group>
-                    <Avatar color={player.color} radius="md">
-                      {getUsernameInitials(player.username)}
-                    </Avatar>
-                    <Text color="dimmed">{player.username}</Text>
-                  </Group>
-                </UnstyledButton>
-              ))}
+              {isSuccess ? (
+                profiles.map((profile) => (
+                  <UnstyledButton
+                    key={profile.uuid}
+                    onClick={() => setOpenedProfile(profile)}
+                  >
+                    <Group>
+                      <Avatar color={profile.color} radius="md">
+                        {getUsernameInitials(profile.username)}
+                      </Avatar>
+                      <Text color="dimmed">{profile.username}</Text>
+                    </Group>
+                  </UnstyledButton>
+                ))
+              ) : (
+                <Stack mt="xl">
+                  <Text ta="center">Unable to load the profiles...</Text>
+                  <Button onClick={() => reload()}>Reload Page</Button>
+                </Stack>
+              )}
             </Stack>
           </ScrollArea.Autosize>
         </Grid.Col>
