@@ -21,5 +21,7 @@ export const useProfiles = () => {
   return useQuery({
     queryKey: ["profiles"],
     queryFn: () => getProfiles(),
+    cacheTime: 10 * 60 * 1000, // 10 minutes
+    initialData: [],
   });
 };
