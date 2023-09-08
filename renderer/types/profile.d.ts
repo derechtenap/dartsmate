@@ -8,4 +8,10 @@ declare type Profile = {
   username: string;
   updatedAt: number;
   uuid: UUID;
+  // badges?: {
+  //  isDeveloper: boolean;
+  //  isAlphaUser: boolean;
+  //  isBetaUser: boolean;
+  //  isProUser: boolean;
+  // };
 };

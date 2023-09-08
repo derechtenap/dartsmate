@@ -6,6 +6,7 @@ import { useMatches } from "hooks/useMatches";
 import { useProfiles } from "hooks/useProfiles";
 
 const IndexPage: NextPage = () => {
+  // Prefetch the matches and profiles data on app start
   useMatches();
   useProfiles();
 
