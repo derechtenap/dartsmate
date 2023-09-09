@@ -13,9 +13,19 @@ import {
 import type { ColorScheme, SegmentedControlProps } from "@mantine/core";
 import pkg from "../../package.json";
 import { useLocalStorage, useOs } from "@mantine/hooks";
+import { getFolderSize } from "utils/fs/getFolderSize";
+import { MATCHES_DIR, PROFILES_DIR } from "utils/constants";
+import { readFolder } from "utils/fs/readFolder";
+import { deleteFile } from "utils/fs/deleteFile";
+import { notifications } from "@mantine/notifications";
+import path from "path";
+import { useEffect, useState } from "react";
 
 const SettingsPage: NextPage = () => {
+  const [folderSize, setFolderSize] = useState(0);
+
   const os = useOs();
+
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "mantine-color-scheme",
   });
@@ -24,6 +34,42 @@ const SettingsPage: NextPage = () => {
     { label: "Light", value: "light" },
     { label: "Dark", value: "dark" },
   ];
+
+  const getProfilesFolderSize = () => {
+    const profilesFolderSize = getFolderSize(PROFILES_DIR);
+    const matchesFolderSize = getFolderSize(MATCHES_DIR);
+
+    setFolderSize(profilesFolderSize + matchesFolderSize);
+  };
+
+  const deleteFolderContent = (folder: string) => {
+    try {
+      const folderContent = readFolder(folder);
+
+      folderContent.map((file) => {
+        deleteFile(path.join(folder, file));
+      });
+
+      notifications.show({
+        color: "blue",
+        title: `Deleted all files from the folder!`,
+        message: "",
+      });
+    } catch (err) {
+      notifications.show({
+        color: "red",
+        title: `Error! Something went wrong while deleting the folder!`,
+        message: `Please try again in a couple of seconds.(${err as string})`,
+      });
+    } finally {
+      console.info("CHECK");
+      getProfilesFolderSize();
+    }
+  };
+
+  useEffect(() => {
+    getProfilesFolderSize();
+  }, []);
 
   return (
     <DefaultLayout>
@@ -89,14 +135,22 @@ const SettingsPage: NextPage = () => {
             >
               <Text>
                 Deleting your saved profiles or matches cannot be undone!
-                Profiles and matches currently occupy STORAGE_SIZE kb on your
-                hard disk.
+                Profiles and matches currently occupy {folderSize}
+                kb on your hard disk.
               </Text>
               <Group mt="lg">
-                <Button variant="white" color="red" disabled>
+                <Button
+                  variant="white"
+                  color="red"
+                  onClick={() => deleteFolderContent(PROFILES_DIR)}
+                >
                   Delete Profiles
                 </Button>
-                <Button variant="white" color="red" disabled>
+                <Button
+                  variant="white"
+                  color="red"
+                  onClick={() => deleteFolderContent(MATCHES_DIR)}
+                >
                   Delete Matches
                 </Button>
               </Group>
