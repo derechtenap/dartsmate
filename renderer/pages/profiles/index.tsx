@@ -4,12 +4,12 @@ import {
   ActionIcon,
   Avatar,
   Button,
-  Card,
   Center,
   Flex,
   Grid,
   Group,
   Modal,
+  Paper,
   ScrollArea,
   Stack,
   Text,
@@ -157,13 +157,18 @@ const ProfilesPage: NextPage = () => {
                   </Tooltip>
                 </Group>
               </Flex>
-              {openedProfile.bio !== "" && (
-                <Card mt="lg">
-                  <Text c="dimmed" fz="sm" style={{ wordBreak: "break-word" }}>
-                    {openedProfile.bio}
-                  </Text>
-                </Card>
-              )}
+              <Paper p="xs" withBorder mt="lg">
+                <Text
+                  c="dimmed"
+                  fz="sm"
+                  fs={openedProfile.bio.length ? "" : "italic"}
+                  style={{ wordBreak: "break-word" }}
+                >
+                  {openedProfile.bio.length
+                    ? openedProfile.bio
+                    : "This user has not added a bio yet. You can edit the profile to add a bio."}
+                </Text>
+              </Paper>
             </>
           ) : (
             <Center h="calc(100vh - 2rem)">
