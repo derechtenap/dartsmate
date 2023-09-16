@@ -2,7 +2,6 @@ import type { NextPage } from "next";
 import DefaultLayout from "@/components/layouts/Default";
 import {
   ActionIcon,
-  Avatar,
   Button,
   Center,
   Flex,
@@ -30,12 +29,12 @@ import { PROFILES_DIR } from "utils/constants";
 import path from "path";
 import { useDisclosure } from "@mantine/hooks";
 import { Profile } from "types/profile";
-import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import { getLocaleDate } from "utils/misc/getLocalDate";
 import { useRouter } from "next/router";
 import { deleteFile } from "utils/fs/deleteFile";
 import { useProfiles } from "hooks/useProfiles";
 import LoadingOverlay from "@/components/LoadingOverlay";
+import ProfileAvatar from "@/components/content/ProfileAvatar";
 
 const ProfilesPage: NextPage = () => {
   const { push, reload } = useRouter();
@@ -96,9 +95,7 @@ const ProfilesPage: NextPage = () => {
                     onClick={() => setOpenedProfile(profile)}
                   >
                     <Group>
-                      <Avatar color={profile.color} radius="md">
-                        {getUsernameInitials(profile.username)}
-                      </Avatar>
+                      <ProfileAvatar profile={profile} />
                       <Text color="dimmed">{profile.username}</Text>
                     </Group>
                   </UnstyledButton>
@@ -117,9 +114,7 @@ const ProfilesPage: NextPage = () => {
             <>
               <Flex justify="space-between">
                 <Group>
-                  <Avatar color={openedProfile.color} size="xl" radius="md">
-                    {getUsernameInitials(openedProfile.username)}
-                  </Avatar>
+                  <ProfileAvatar profile={openedProfile} size="xl" />
                   <Title>
                     {openedProfile.username}
                     <Text c="dimmed" fz="xs">
