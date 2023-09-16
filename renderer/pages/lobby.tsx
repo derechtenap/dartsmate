@@ -28,8 +28,13 @@ import { notifications } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
 import { Match } from "types/match";
 import { randomUUID } from "crypto";
+import { createFile } from "utils/fs/createFile";
+import { MATCHES_DIR } from "utils/constants";
+import path from "path";
+import { useRouter } from "next/router";
 
 const LobbyPage: NextPage = () => {
+  const router = useRouter();
   const { isSuccess, data: profiles } = useProfiles();
   const [matchPlayerList, setMatchPlayerList] = useState<Profile[]>([]);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
@@ -81,6 +86,17 @@ const LobbyPage: NextPage = () => {
       form.setFieldValue("profiles", updatedList);
       return updatedList;
     });
+  };
+
+  const handleStartMatch = () => {
+    const matchData = form.values;
+
+    createFile(
+      path.join(MATCHES_DIR, `${matchData.uuid}.json`),
+      JSON.stringify(matchData)
+    );
+
+    void router.push(`/game/${matchData.uuid}/playing`);
   };
 
   const steps = [
@@ -165,9 +181,7 @@ const LobbyPage: NextPage = () => {
       label: "Start the Game",
       description: "Good Darts!",
       icon: <IconTargetArrow />,
-      content: (
-        <Button onClick={() => console.info(form.values)}>Start Match!</Button>
-      ),
+      content: <Button onClick={() => handleStartMatch()}>Start Match!</Button>,
     },
   ];
 
