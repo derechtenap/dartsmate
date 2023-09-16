@@ -1,111 +1,224 @@
 import type { NextPage } from "next";
+import DefaultLayout from "@/components/layouts/Default";
+import PageHeader from "@/components/content/PageHeader";
 import {
   Avatar,
-  Box,
   Button,
-  Card,
   Checkbox,
-  Container,
+  Grid,
   Group,
-  NumberInput,
-  Select,
-  SimpleGrid,
+  NativeSelect,
+  ScrollArea,
   Stack,
-  Tabs,
+  Stepper,
   Text,
-  Title,
+  UnstyledButton,
 } from "@mantine/core";
-import { IconSettings, IconUserCircle } from "@tabler/icons-react";
-import DefaultLayout from "@/components/layouts/Default";
+import { useState } from "react";
+import {
+  IconAdjustmentsHorizontal,
+  IconCheck,
+  IconTargetArrow,
+  IconUsersPlus,
+} from "@tabler/icons-react";
+import { useProfiles } from "hooks/useProfiles";
+import { Profile } from "types/profile";
+import { getUsernameInitials } from "utils/misc/getUsernameInitials";
+import { notifications } from "@mantine/notifications";
+import { useForm } from "@mantine/form";
+import { Match } from "types/match";
+import { randomUUID } from "crypto";
 
-const Lobby: NextPage = () => {
+const LobbyPage: NextPage = () => {
+  const { isSuccess, data: profiles } = useProfiles();
+  const [matchPlayerList, setMatchPlayerList] = useState<Profile[]>([]);
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
+
+  const form = useForm<Match>({
+    initialValues: {
+      createdAt: Date.now(),
+      profiles: matchPlayerList,
+      updatedAt: Date.now(),
+      uuid: randomUUID(),
+      gameType: 501,
+      checkout: "Double",
+      randomizePlayerOrder: false,
+      disabledStatistics: false,
+    },
+
+    validate: {},
+  });
+
+  const handlePlayerSelection = (profile: Profile) => {
+    if (matchPlayerList.includes(profile)) {
+      // If the profile is already in the list and user clicks again on the avatar
+      // remove the profile from the player list
+      setMatchPlayerList((prev) => prev.filter((item) => item !== profile));
+      notifications.show({
+        color: "red",
+        title: `${profile.username} was removed from the next game!`,
+        message: "Click on the profile picture again to add them again.",
+      });
+    } else {
+      notifications.show({
+        title: `${profile.username} will be in the next game!`,
+        message: "Click on the profile picture again to remove them.",
+      });
+      setMatchPlayerList((prev) => [...prev, profile]);
+
+      console.info("BEFORE_FIELDSET", matchPlayerList);
+      // TODO: BREAKING_BUG:
+      // Currently there seems to be a bug, that the last player
+      // wont be added to the match save file... This problem requires
+      // some research
+      form.setFieldValue("profiles", matchPlayerList);
+      console.info("AFTER_FIELDSET", matchPlayerList);
+      console.info("FORM_STATE:", form.values);
+    }
+  };
+
+  const steps = [
+    {
+      label: "Select Players",
+      description: "Choose the Players for the Match",
+      icon: <IconUsersPlus />,
+      content: (
+        <ScrollArea type="hover" h="420px">
+          <Grid mt="xl" mx="xs">
+            {isSuccess
+              ? profiles.map((profile) => (
+                  <Grid.Col span={2} key={profile.uuid}>
+                    <UnstyledButton
+                      display="block"
+                      mx="auto"
+                      p="md"
+                      onClick={() => handlePlayerSelection(profile)}
+                    >
+                      <Stack key={profile.uuid}>
+                        <Avatar mx="auto" size="lg" color={profile.color}>
+                          {matchPlayerList.includes(profile) ? (
+                            <IconCheck />
+                          ) : (
+                            getUsernameInitials(profile.username)
+                          )}
+                        </Avatar>
+                        <Text
+                          ta="center"
+                          tt="uppercase"
+                          fw="bold"
+                          color={
+                            matchPlayerList.includes(profile)
+                              ? "white"
+                              : "dimmed"
+                          }
+                          size="xs"
+                        >
+                          {profile.username}
+                        </Text>
+                      </Stack>
+                    </UnstyledButton>
+                  </Grid.Col>
+                ))
+              : null}
+          </Grid>
+        </ScrollArea>
+      ),
+    },
+    {
+      label: "Configure Settings",
+      description: "Review and Adjust Match Settings",
+      icon: <IconAdjustmentsHorizontal />,
+      content: (
+        <form>
+          <Stack>
+            <NativeSelect
+              {...form.getInputProps("gameType")}
+              data={["901", "701", "501", "301"]}
+              label="Game Type"
+              defaultValue="501"
+            />
+            <NativeSelect
+              data={["Triple", "Double", "Single", "Any"]}
+              label="Checkout"
+              defaultValue="Double"
+              {...form.getInputProps("checkout")}
+            />
+            <Checkbox
+              label="Randomize Player Order"
+              {...form.getInputProps("randomizePlayerOrder")}
+            />
+            <Checkbox
+              label="Disable Statistics"
+              {...form.getInputProps("disabledStatistics")}
+            />
+          </Stack>
+        </form>
+      ),
+    },
+    {
+      label: "Start the Game",
+      description: "Good Darts!",
+      icon: <IconTargetArrow />,
+      content: (
+        <Button onClick={() => console.info(form.values)}>Start Match!</Button>
+      ),
+    },
+  ];
+
+  const moveToNextStep = () => {
+    setActiveStepIndex((cur) => (cur < steps.length ? cur + 1 : cur));
+  };
+
+  const moveToPrevStep = () => {
+    setActiveStepIndex((cur) => (cur > 0 ? cur - 1 : cur));
+  };
+
   return (
     <DefaultLayout>
-      <Box>
-        <Title mb="sm">Lobby</Title>
-        <Tabs defaultValue="players">
-          <Tabs.List position="center">
-            <Tabs.Tab value="players" icon={<IconUserCircle />}>
-              Players
-            </Tabs.Tab>
-            <Tabs.Tab value="settings" icon={<IconSettings />}>
-              Settings
-            </Tabs.Tab>
-          </Tabs.List>
-          <Tabs.Panel mt="xl" value="players">
-            <Text align="right" fz="sm" mb="xl">
-              currentPlayers
-            </Text>
-            <SimpleGrid cols={4}>
-              <Card>
-                <Stack align="center">
-                  <Avatar color="blue" radius="xl" size="lg">
-                    {"n"}
-                  </Avatar>
+      <PageHeader title="Lobby">
+        <Text pb="xl">
+          You are just three steps away from starting your match. Let's get
+          started!
+        </Text>
+        <Stepper
+          active={activeStepIndex}
+          onStepClick={setActiveStepIndex}
+          breakpoint="sm"
+          mt="xl"
+          allowNextStepsSelect={false}
+        >
+          {steps.map((step) => (
+            <Stepper.Step
+              description={step.description}
+              icon={step.icon}
+              key={step.label}
+              label={step.label}
+            >
+              {step.content}
+            </Stepper.Step>
+          ))}
+        </Stepper>
 
-                  <Text align="center">{"nap"}</Text>
-                </Stack>
-              </Card>
-            </SimpleGrid>
-          </Tabs.Panel>
-          <Tabs.Panel mt="xl" value="settings">
-            <Container>
-              <SimpleGrid cols={3} mb="xl">
-                <Select
-                  label="Game Mode"
-                  value="501"
-                  defaultValue="501"
-                  data={[
-                    {
-                      value: "701",
-                      label: "701",
-                    },
-                    {
-                      value: "501",
-                      label: "501",
-                    },
-                    {
-                      value: "301",
-                      label: "301",
-                    },
-                  ]}
-                />
-                <NumberInput
-                  defaultValue={1}
-                  min={1}
-                  max={10}
-                  value={1}
-                  label="Legs"
-                />
-                <NumberInput
-                  defaultValue={1}
-                  min={1}
-                  max={10}
-                  value={1}
-                  label="Sets"
-                />
-                <NumberInput
-                  defaultValue={2}
-                  min={1}
-                  max={8}
-                  value={2}
-                  label="Players"
-                />
-              </SimpleGrid>
-              <SimpleGrid mb="xl">
-                <Checkbox label="checkbox.randomizePlayerOrder" />
-                <Checkbox label="checkbox.disableStats" />
-              </SimpleGrid>
-              <Group>
-                <Button variant="light">btn.savePreset</Button>
-                <Button variant="default">btn.resetSettings</Button>
-              </Group>
-            </Container>
-          </Tabs.Panel>
-        </Tabs>
-      </Box>
+        <Group mt="lg">
+          <Button
+            onClick={() => moveToPrevStep()}
+            disabled={activeStepIndex === 0}
+          >
+            Previous Step
+          </Button>
+          <Button
+            onClick={() => moveToNextStep()}
+            disabled={
+              activeStepIndex === steps.length - 1 ||
+              matchPlayerList.length === 0
+            }
+          >
+            Next Step
+          </Button>
+        </Group>
+      </PageHeader>
     </DefaultLayout>
   );
 };
 
-export default Lobby;
+export default LobbyPage;

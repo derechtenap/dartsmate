@@ -21,26 +21,25 @@ import {
 import { IconSquareRoundedX } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { hasLength, isNotEmpty, useForm } from "@mantine/form";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Profile } from "types/profile";
+import { randomUUID } from "crypto";
 import { createFile } from "utils/fs/createFile";
 import { PROFILES_DIR } from "utils/constants";
 import path from "path";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
-import { readFileSync } from "fs";
 
-const EditProfilePage: NextPage = () => {
-  const { back, query } = useRouter();
+const CreateProfilePage: NextPage = () => {
+  const { back } = useRouter();
   const [avatarColor, setAvatarColor] = useState<DefaultMantineColor>("blue");
-
   const form = useForm<Profile>({
     initialValues: {
-      createdAt: 0,
-      uuid: "------",
       bio: "",
-      color: "blue",
+      color: avatarColor,
+      createdAt: Date.now(),
       username: "",
       updatedAt: Date.now(),
+      uuid: randomUUID(),
     },
 
     validate: {
@@ -55,25 +54,6 @@ const EditProfilePage: NextPage = () => {
       ),
     },
   });
-
-  useEffect(() => {
-    const profile = readFileSync(
-      path.join(PROFILES_DIR, `${query.profileUuid as string}.json`),
-      "utf8"
-    );
-    const profileJSON = JSON.parse(profile) as Profile;
-
-    form.setValues({
-      bio: profileJSON.bio,
-      color: profileJSON.color,
-      username: profileJSON.username,
-      updatedAt: Date.now(),
-      createdAt: profileJSON.createdAt,
-      uuid: profileJSON.uuid,
-    });
-
-    setAvatarColor(profileJSON.color);
-  }, []);
 
   // Manually update the color, since the ...props method doesn't work on the color swatches
   const updateAvatarColor = (color: DefaultMantineColor) => {
@@ -95,7 +75,7 @@ const EditProfilePage: NextPage = () => {
     if (form.isValid()) {
       form.clearErrors();
       createFile(
-        `${path.join(PROFILES_DIR, query.profileUuid as string)}.json`,
+        `${path.join(PROFILES_DIR, form.values.uuid)}.json`,
         JSON.stringify(form.values)
       );
       back();
@@ -111,8 +91,9 @@ const EditProfilePage: NextPage = () => {
       <DefaultLayout>
         <Flex direction="column" h="100%">
           <Group position="apart">
-            <PageHeader title="Edit Profile">
-              Manage your profile by making edits below.
+            <PageHeader title="Create Profile">
+              Your profile stores your games, statistics and achievements in
+              DartMate. You can update your profile at any time.
             </PageHeader>
             <Tooltip label="Back">
               <ActionIcon variant="transparent" onClick={() => back()}>
@@ -138,7 +119,7 @@ const EditProfilePage: NextPage = () => {
                 {...form.getInputProps("bio")}
               />
               <Group>
-                <Button type="submit">Update Profile</Button>
+                <Button type="submit">Create Profile</Button>
                 <Button variant="subtle" onClick={() => back()}>
                   Cancel
                 </Button>
@@ -151,4 +132,4 @@ const EditProfilePage: NextPage = () => {
   );
 };
 
-export default EditProfilePage;
+export default CreateProfilePage;
