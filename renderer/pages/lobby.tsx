@@ -4,8 +4,10 @@ import PageHeader from "@/components/content/PageHeader";
 import {
   Avatar,
   Button,
+  Checkbox,
   Grid,
   Group,
+  NativeSelect,
   ScrollArea,
   Stack,
   Stepper,
@@ -23,10 +25,29 @@ import { useProfiles } from "hooks/useProfiles";
 import { Profile } from "types/profile";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import { notifications } from "@mantine/notifications";
+import { useForm } from "@mantine/form";
+import { Match } from "types/match";
+import { randomUUID } from "crypto";
 
 const LobbyPage: NextPage = () => {
-  const { isLoading, isSuccess, data: profiles, refetch } = useProfiles();
+  const { isSuccess, data: profiles } = useProfiles();
   const [matchPlayerList, setMatchPlayerList] = useState<Profile[]>([]);
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
+
+  const form = useForm<Match>({
+    initialValues: {
+      createdAt: Date.now(),
+      profiles: matchPlayerList,
+      updatedAt: Date.now(),
+      uuid: randomUUID(),
+      gameType: 501,
+      checkout: "Double",
+      randomizePlayerOrder: false,
+      disabledStatistics: false,
+    },
+
+    validate: {},
+  });
 
   const handlePlayerSelection = (profile: Profile) => {
     if (matchPlayerList.includes(profile)) {
@@ -44,6 +65,15 @@ const LobbyPage: NextPage = () => {
         message: "Click on the profile picture again to remove them.",
       });
       setMatchPlayerList((prev) => [...prev, profile]);
+
+      console.info("BEFORE_FIELDSET", matchPlayerList);
+      // TODO: BREAKING_BUG:
+      // Currently there seems to be a bug, that the last player
+      // wont be added to the match save file... This problem requires
+      // some research
+      form.setFieldValue("profiles", matchPlayerList);
+      console.info("AFTER_FIELDSET", matchPlayerList);
+      console.info("FORM_STATE:", form.values);
     }
   };
 
@@ -98,23 +128,50 @@ const LobbyPage: NextPage = () => {
       label: "Configure Settings",
       description: "Review and Adjust Match Settings",
       icon: <IconAdjustmentsHorizontal />,
-      content: <StepSettings />,
+      content: (
+        <form>
+          <Stack>
+            <NativeSelect
+              {...form.getInputProps("gameType")}
+              data={["901", "701", "501", "301"]}
+              label="Game Type"
+              defaultValue="501"
+            />
+            <NativeSelect
+              data={["Triple", "Double", "Single", "Any"]}
+              label="Checkout"
+              defaultValue="Double"
+              {...form.getInputProps("checkout")}
+            />
+            <Checkbox
+              label="Randomize Player Order"
+              {...form.getInputProps("randomizePlayerOrder")}
+            />
+            <Checkbox
+              label="Disable Statistics"
+              {...form.getInputProps("disabledStatistics")}
+            />
+          </Stack>
+        </form>
+      ),
     },
     {
       label: "Start the Game",
       description: "Good Darts!",
       icon: <IconTargetArrow />,
-      content: <StepPlay />,
+      content: (
+        <Button onClick={() => console.info(form.values)}>Start Match!</Button>
+      ),
     },
   ];
 
-  const [active, setActive] = useState(0);
-  const nextStep = () =>
-    setActive((current) => (current < 3 ? current + 1 : current));
-  const prevStep = () =>
-    setActive((current) => (current > 0 ? current - 1 : current));
+  const moveToNextStep = () => {
+    setActiveStepIndex((cur) => (cur < steps.length ? cur + 1 : cur));
+  };
 
-  console.info(matchPlayerList);
+  const moveToPrevStep = () => {
+    setActiveStepIndex((cur) => (cur > 0 ? cur - 1 : cur));
+  };
 
   return (
     <DefaultLayout>
@@ -124,8 +181,8 @@ const LobbyPage: NextPage = () => {
           started!
         </Text>
         <Stepper
-          active={active}
-          onStepClick={setActive}
+          active={activeStepIndex}
+          onStepClick={setActiveStepIndex}
           breakpoint="sm"
           mt="xl"
           allowNextStepsSelect={false}
@@ -143,12 +200,18 @@ const LobbyPage: NextPage = () => {
         </Stepper>
 
         <Group mt="lg">
-          <Button onClick={() => prevStep()} disabled={active === 0}>
+          <Button
+            onClick={() => moveToPrevStep()}
+            disabled={activeStepIndex === 0}
+          >
             Previous Step
           </Button>
           <Button
-            onClick={() => nextStep()}
-            disabled={active === steps.length || matchPlayerList.length === 0}
+            onClick={() => moveToNextStep()}
+            disabled={
+              activeStepIndex === steps.length - 1 ||
+              matchPlayerList.length === 0
+            }
           >
             Next Step
           </Button>
@@ -156,14 +219,6 @@ const LobbyPage: NextPage = () => {
       </PageHeader>
     </DefaultLayout>
   );
-};
-
-const StepSettings = () => {
-  return <>Settings!</>;
-};
-
-const StepPlay = () => {
-  return <>Play!</>;
 };
 
 export default LobbyPage;
