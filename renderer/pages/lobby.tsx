@@ -50,31 +50,37 @@ const LobbyPage: NextPage = () => {
   });
 
   const handlePlayerSelection = (profile: Profile) => {
-    if (matchPlayerList.includes(profile)) {
-      // If the profile is already in the list and user clicks again on the avatar
-      // remove the profile from the player list
-      setMatchPlayerList((prev) => prev.filter((item) => item !== profile));
-      notifications.show({
-        color: "red",
-        title: `${profile.username} was removed from the next game!`,
-        message: "Click on the profile picture again to add them again.",
-      });
-    } else {
-      notifications.show({
-        title: `${profile.username} will be in the next game!`,
-        message: "Click on the profile picture again to remove them.",
-      });
-      setMatchPlayerList((prev) => [...prev, profile]);
+    let updatedList: Profile[];
 
-      console.info("BEFORE_FIELDSET", matchPlayerList);
-      // TODO: BREAKING_BUG:
-      // Currently there seems to be a bug, that the last player
-      // wont be added to the match save file... This problem requires
-      // some research
-      form.setFieldValue("profiles", matchPlayerList);
-      console.info("AFTER_FIELDSET", matchPlayerList);
-      console.info("FORM_STATE:", form.values);
-    }
+    const NOTIFICATION_REMOVE_PLAYER = {
+      color: "red",
+      title: `${profile.username} was removed from the next game!`,
+      message: "Click on the profile picture again to add them again.",
+    };
+
+    const NOTIFICATION_ADD_PLAYER = {
+      title: `${profile.username} will be in the next game!`,
+      message: "Click on the profile picture again to remove them.",
+    };
+
+    setMatchPlayerList((prev) => {
+      if (prev.includes(profile)) {
+        // If the profile is already in the list and the user clicks again on the avatar,
+        // remove the profile from the player list
+        notifications.show(NOTIFICATION_REMOVE_PLAYER);
+        updatedList = prev.filter(
+          (removedProfile) => removedProfile !== profile
+        );
+      } else {
+        // Add player to the match
+        notifications.show(NOTIFICATION_ADD_PLAYER);
+        updatedList = [...prev, profile];
+      }
+
+      // Update states
+      form.setFieldValue("profiles", updatedList);
+      return updatedList;
+    });
   };
 
   const steps = [
