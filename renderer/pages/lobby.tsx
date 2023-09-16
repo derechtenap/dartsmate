@@ -157,12 +157,10 @@ const LobbyPage: NextPage = () => {
               {...form.getInputProps("gameType")}
               data={["901", "701", "501", "301"]}
               label="Game Type"
-              defaultValue="501"
             />
             <NativeSelect
               data={["Triple", "Double", "Single", "Any"]}
               label="Checkout"
-              defaultValue="Double"
               {...form.getInputProps("checkout")}
             />
             <Checkbox
