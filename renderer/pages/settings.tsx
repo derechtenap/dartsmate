@@ -62,7 +62,6 @@ const SettingsPage: NextPage = () => {
         message: `Please try again in a couple of seconds.(${err as string})`,
       });
     } finally {
-      console.info("CHECK");
       getProfilesFolderSize();
     }
   };
