@@ -1,5 +1,5 @@
-import { DefaultMantineColor } from "@mantine/core";
-import { UUID } from "crypto";
+import type { DefaultMantineColor } from "@mantine/core";
+import type { UUID } from "crypto";
 
 declare type Profile = {
   bio: string;

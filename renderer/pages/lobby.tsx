@@ -32,6 +32,7 @@ import { createFile } from "utils/fs/createFile";
 import { MATCHES_DIR } from "utils/constants";
 import path from "path";
 import { useRouter } from "next/router";
+import pkg from "../../package.json";
 
 const LobbyPage: NextPage = () => {
   const router = useRouter();
@@ -41,13 +42,16 @@ const LobbyPage: NextPage = () => {
 
   const form = useForm<Match>({
     initialValues: {
+      appVersion: pkg.version,
       createdAt: Date.now(),
       profiles: matchPlayerList,
       updatedAt: Date.now(),
-      uuid: randomUUID(),
-      gameType: 501,
+      matchUuid: randomUUID(),
+      matchRounds: [],
+      matchStatus: "STARTED",
+      matchType: 501,
       checkout: "Double",
-      randomizePlayerOrder: false,
+      // randomizePlayerOrder: false,
       disabledStatistics: false,
     },
 
@@ -92,11 +96,11 @@ const LobbyPage: NextPage = () => {
     const matchData = form.values;
 
     createFile(
-      path.join(MATCHES_DIR, `${matchData.uuid}.json`),
+      path.join(MATCHES_DIR, `${matchData.matchUuid}.json`),
       JSON.stringify(matchData)
     );
 
-    void router.push(`/game/${matchData.uuid}/playing`);
+    void router.push(`/game/${matchData.matchUuid}/playing`);
   };
 
   const steps = [
@@ -164,6 +168,7 @@ const LobbyPage: NextPage = () => {
               {...form.getInputProps("checkout")}
             />
             <Checkbox
+              disabled
               label="Randomize Player Order"
               {...form.getInputProps("randomizePlayerOrder")}
             />
