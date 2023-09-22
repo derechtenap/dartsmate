@@ -100,7 +100,7 @@ const LobbyPage: NextPage = () => {
       JSON.stringify(matchData)
     );
 
-    void router.push(`/game/${matchData.matchUuid}/playing`);
+    void router.push(`/match/${matchData.matchUuid}/playing`);
   };
 
   const steps = [
@@ -158,9 +158,9 @@ const LobbyPage: NextPage = () => {
         <form>
           <Stack>
             <NativeSelect
-              {...form.getInputProps("gameType")}
+              {...form.getInputProps("matchType")}
               data={["901", "701", "501", "301"]}
-              label="Game Type"
+              label="Match Type"
             />
             <NativeSelect
               data={["Triple", "Double", "Single", "Any"]}
