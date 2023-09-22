@@ -18,28 +18,51 @@ import { Match } from "types/match";
 import { getTotalRoundScore } from "utils/match/getTotalRoundScore";
 import { DARTBOARD_ZONES, THROWS_PER_ROUND } from "utils/constants";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
+import { useToggle } from "@mantine/hooks";
 
 const GamePlayingPage: NextPage = () => {
   const router = useRouter();
   const matchQueryUuid = router.query.uuid;
   const [matchData, setMatchData] = useState<Match>();
   const [roundThrows, setRoundThrows] = useState<number[]>([]);
-  const [isDouble, setIsDouble] = useState<boolean>(false);
-  const [isTriple, setIsTriple] = useState<boolean>(false);
+  const [isDouble, isDoubleToggle] = useToggle([false, true]);
+  const [isTriple, isTripleToggle] = useToggle([false, true]);
 
   useEffect(() => {
-    const data = readFileSync(
-      path.join(MATCHES_DIR, `${matchQueryUuid as string}.json`),
-      "utf8"
-    );
-
-    setMatchData(JSON.parse(data) as Match);
-  }, []);
+    if (matchQueryUuid) {
+      const data = readFileSync(
+        path.join(MATCHES_DIR, `${matchQueryUuid as string}.json`),
+        "utf8"
+      );
+      setMatchData(JSON.parse(data) as Match);
+    }
+  }, [matchQueryUuid]);
 
   const handleAddThrow = (score: number) => {
-    if (roundThrows.length > THROWS_PER_ROUND) return;
+    // Check if the maximum throws per round has been reached
+    if (roundThrows.length >= THROWS_PER_ROUND) return;
 
-    setRoundThrows((prevScores) => [...prevScores, score]);
+    let multipliedScore = score;
+
+    // If the player's throw hits the outer bull or bullseye,
+    // the score remains unchanged, regardless of the selected multiplier.
+    if (score !== 25 && score !== 50) {
+      // Apply the multiplier if selected
+      if (isDouble) {
+        multipliedScore = score * 2;
+      }
+
+      if (isTriple) {
+        multipliedScore = score * 3;
+      }
+    }
+
+    // Add the calculated (multiplied or unchanged) score
+    setRoundThrows((prevScores) => [...prevScores, multipliedScore]);
+
+    // Reset the double and triple multipliers
+    isDoubleToggle(false);
+    isTripleToggle(false);
   };
 
   const handleRemoveThrow = () => {
@@ -47,6 +70,19 @@ const GamePlayingPage: NextPage = () => {
     const updatedThrows = roundThrows.slice(0, roundThrows.length - 1);
 
     setRoundThrows(updatedThrows);
+  };
+
+  const handleScoreMultiplier = (multiplier: "double" | "triple"): void => {
+    const isDoubleMultiplier = multiplier === "double";
+
+    if (isDoubleMultiplier) {
+      isDoubleToggle(!isDouble);
+      isTripleToggle(false);
+      return;
+    }
+
+    isDoubleToggle(false);
+    isTripleToggle(!isTriple);
   };
 
   if (!matchQueryUuid) {
@@ -108,20 +144,22 @@ const GamePlayingPage: NextPage = () => {
           </Grid.Col>
           <Grid.Col span={4}>
             <Button
-              variant={isDouble ? "default" : "light"}
+              disabled={roundThrows.length === THROWS_PER_ROUND}
+              variant={isDouble ? "light" : ""}
               w="100%"
               radius={0}
-              onClick={() => setIsDouble(!isDouble)}
+              onClick={() => handleScoreMultiplier("double")}
             >
               Double
             </Button>
           </Grid.Col>
           <Grid.Col span={4}>
             <Button
-              variant={isTriple ? "default" : "light"}
+              disabled={roundThrows.length === THROWS_PER_ROUND}
+              variant={isTriple ? "light" : ""}
               w="100%"
               radius={0}
-              onClick={() => setIsTriple(!isTriple)}
+              onClick={() => handleScoreMultiplier("triple")}
             >
               Triple
             </Button>
