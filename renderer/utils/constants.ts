@@ -12,3 +12,12 @@ export const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
   month: "2-digit",
   day: "2-digit",
 };
+
+// The maximum number of throws allowed per round in the game.
+export const THROWS_PER_ROUND = 3;
+
+// An array containing the possible scoring zones on a dartboard.
+export const DARTBOARD_ZONES = [
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25,
+  50,
+];
