@@ -18,13 +18,13 @@ import { Match } from "types/match";
 import { getTotalRoundScore } from "utils/match/getTotalRoundScore";
 import { DARTBOARD_ZONES, THROWS_PER_ROUND } from "utils/constants";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
-import { useToggle } from "@mantine/hooks";
+import { useListState, useToggle } from "@mantine/hooks";
 
 const GamePlayingPage: NextPage = () => {
   const router = useRouter();
   const matchQueryUuid = router.query.uuid;
   const [matchData, setMatchData] = useState<Match>();
-  const [roundThrows, setRoundThrows] = useState<number[]>([]);
+  const [roundScore, updateRoundScore] = useListState<number>([]);
   const [isDouble, isDoubleToggle] = useToggle([false, true]);
   const [isTriple, isTripleToggle] = useToggle([false, true]);
 
@@ -38,9 +38,9 @@ const GamePlayingPage: NextPage = () => {
     }
   }, [matchQueryUuid]);
 
-  const handleAddThrow = (score: number) => {
+  const handleAddThrow = (score: number): void => {
     // Check if the maximum throws per round has been reached
-    if (roundThrows.length >= THROWS_PER_ROUND) return;
+    if (roundScore.length >= THROWS_PER_ROUND) return;
 
     let multipliedScore = score;
 
@@ -58,7 +58,7 @@ const GamePlayingPage: NextPage = () => {
     }
 
     // Add the calculated (multiplied or unchanged) score
-    setRoundThrows((prevScores) => [...prevScores, multipliedScore]);
+    updateRoundScore.append(multipliedScore);
 
     // Reset the double and triple multipliers
     isDoubleToggle(false);
@@ -67,9 +67,7 @@ const GamePlayingPage: NextPage = () => {
 
   const handleRemoveThrow = () => {
     // Remove the latest throw
-    const updatedThrows = roundThrows.slice(0, roundThrows.length - 1);
-
-    setRoundThrows(updatedThrows);
+    updateRoundScore.remove(roundScore.length - 1);
   };
 
   const handleScoreMultiplier = (multiplier: "double" | "triple"): void => {
@@ -133,7 +131,7 @@ const GamePlayingPage: NextPage = () => {
                 w="100%"
                 radius={0}
                 onClick={() => handleAddThrow(score)}
-                disabled={roundThrows.length >= THROWS_PER_ROUND}
+                disabled={roundScore.length >= THROWS_PER_ROUND}
               >
                 {score}
               </Button>
@@ -144,7 +142,7 @@ const GamePlayingPage: NextPage = () => {
           </Grid.Col>
           <Grid.Col span={4}>
             <Button
-              disabled={roundThrows.length === THROWS_PER_ROUND}
+              disabled={roundScore.length === THROWS_PER_ROUND}
               variant={isDouble ? "light" : ""}
               w="100%"
               radius={0}
@@ -155,7 +153,7 @@ const GamePlayingPage: NextPage = () => {
           </Grid.Col>
           <Grid.Col span={4}>
             <Button
-              disabled={roundThrows.length === THROWS_PER_ROUND}
+              disabled={roundScore.length === THROWS_PER_ROUND}
               variant={isTriple ? "light" : ""}
               w="100%"
               radius={0}
@@ -170,7 +168,7 @@ const GamePlayingPage: NextPage = () => {
               variant="filled"
               w="100%"
               radius={0}
-              disabled={roundThrows.length === 0}
+              disabled={roundScore.length === 0}
               onClick={() => handleRemoveThrow()}
             >
               Undo
@@ -178,11 +176,11 @@ const GamePlayingPage: NextPage = () => {
           </Grid.Col>
         </Grid>
         <Stack my="xl" ta="center">
-          <Title>{getTotalRoundScore(roundThrows)}</Title>
+          <Title>{getTotalRoundScore(roundScore)}</Title>
           <Group mx="auto">
             {Array.from({ length: THROWS_PER_ROUND }, (_, index) => (
               <Box key={index}>
-                {roundThrows[index] ? roundThrows[index] : `Dart ${index + 1}`}
+                {roundScore[index] ? roundScore[index] : `Dart ${index + 1}`}
               </Box>
             ))}
           </Group>
@@ -190,7 +188,7 @@ const GamePlayingPage: NextPage = () => {
         <Button
           w="100%"
           radius={0}
-          disabled={roundThrows.length !== THROWS_PER_ROUND}
+          disabled={roundScore.length !== THROWS_PER_ROUND}
         >
           Next Player
         </Button>
