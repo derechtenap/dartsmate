@@ -38,7 +38,7 @@ const GamePlayingPage: NextPage = () => {
     }
   }, [matchQueryUuid]);
 
-  const handleAddThrow = (score: number): void => {
+  const handleAddScore = (score: number): void => {
     // Check if the maximum throws per round has been reached
     if (roundScore.length >= THROWS_PER_ROUND) return;
 
@@ -65,7 +65,7 @@ const GamePlayingPage: NextPage = () => {
     isTripleToggle(false);
   };
 
-  const handleRemoveThrow = () => {
+  const handleRemoveLatestScore = (): void => {
     // Remove the latest throw
     updateRoundScore.remove(roundScore.length - 1);
   };
@@ -130,7 +130,7 @@ const GamePlayingPage: NextPage = () => {
                 variant="light"
                 w="100%"
                 radius={0}
-                onClick={() => handleAddThrow(score)}
+                onClick={() => handleAddScore(score)}
                 disabled={roundScore.length >= THROWS_PER_ROUND}
               >
                 {score}
@@ -169,7 +169,7 @@ const GamePlayingPage: NextPage = () => {
               w="100%"
               radius={0}
               disabled={roundScore.length === 0}
-              onClick={() => handleRemoveThrow()}
+              onClick={() => handleRemoveLatestScore()}
             >
               Undo
             </Button>
