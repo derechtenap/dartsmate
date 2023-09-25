@@ -36,19 +36,19 @@ const SettingsPage: NextPage = () => {
     { label: "Dark", value: "dark" },
   ];
 
-  const getProfilesFolderSize = () => {
+  const getAppFolderSize = () => {
     const profilesFolderSize = getFolderSize(PROFILES_DIR);
     const matchesFolderSize = getFolderSize(MATCHES_DIR);
 
     setFolderSize(profilesFolderSize + matchesFolderSize);
   };
 
-  const deleteFolderContent = (folder: string) => {
+  const deleteFolderContent = (folderPath: string) => {
     try {
-      const folderContent = readFolder(folder);
+      const folderContent = readFolder(folderPath);
 
-      folderContent.map((file) => {
-        deleteFile(path.join(folder, file));
+      folderContent.map((fileName) => {
+        deleteFile(path.join(folderPath, fileName));
       });
 
       notifications.show({
@@ -63,12 +63,12 @@ const SettingsPage: NextPage = () => {
         message: `Please try again in a couple of seconds.(${err as string})`,
       });
     } finally {
-      getProfilesFolderSize();
+      getAppFolderSize();
     }
   };
 
   useEffect(() => {
-    getProfilesFolderSize();
+    getAppFolderSize();
   }, []);
 
   return (
@@ -96,7 +96,6 @@ const SettingsPage: NextPage = () => {
               color="blue"
               data={colorSchemes}
             />
-
             {/*
             <Text mt="xl" fw="bold">
               Toggle Fullscreen
