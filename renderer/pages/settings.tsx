@@ -20,6 +20,7 @@ import { deleteFile } from "utils/fs/deleteFile";
 import { notifications } from "@mantine/notifications";
 import path from "path";
 import { useEffect, useState } from "react";
+import { filesize } from "filesize";
 
 const SettingsPage: NextPage = () => {
   const [folderSize, setFolderSize] = useState(0);
@@ -134,8 +135,8 @@ const SettingsPage: NextPage = () => {
             >
               <Text>
                 Deleting your saved profiles or matches cannot be undone!
-                Profiles and matches currently occupy {folderSize}
-                kb on your hard disk.
+                Profiles and matches currently occupy{" "}
+                {filesize(folderSize, { standard: "jedec" })} on your hard disk.
               </Text>
               <Group mt="lg">
                 <Button
