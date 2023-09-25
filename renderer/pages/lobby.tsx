@@ -29,7 +29,7 @@ import { useForm } from "@mantine/form";
 import { Match } from "types/match";
 import { randomUUID } from "crypto";
 import { createFile } from "utils/fs/createFile";
-import { MATCHES_DIR } from "utils/constants";
+import { MATCHES_DIR, MATCH_FILENAME_EXTENSION } from "utils/constants";
 import path from "path";
 import { useRouter } from "next/router";
 import pkg from "../../package.json";
@@ -93,14 +93,14 @@ const LobbyPage: NextPage = () => {
   };
 
   const handleStartMatch = () => {
-    const matchData = form.values;
+    const saveGameData = form.values;
 
     createFile(
-      path.join(MATCHES_DIR, `${matchData.matchUuid}.json`),
-      JSON.stringify(matchData)
+      path.join(MATCHES_DIR, saveGameData.matchUuid + MATCH_FILENAME_EXTENSION),
+      JSON.stringify(saveGameData)
     );
 
-    void router.push(`/match/${matchData.matchUuid}/playing`);
+    void router.push(`/match/${saveGameData.matchUuid}/playing`);
   };
 
   const steps = [

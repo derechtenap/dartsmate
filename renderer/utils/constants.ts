@@ -7,6 +7,10 @@ export const APP_DIR = join(homedir(), pkg.productName.toLowerCase());
 export const PROFILES_DIR = join(APP_DIR, "profiles");
 export const MATCHES_DIR = join(APP_DIR, "matches");
 
+// Filename extensions used by Dartmate
+export const PROFILE_FILENAME_EXTENSION = ".profile";
+export const MATCH_FILENAME_EXTENSION = ".match";
+
 export const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
   year: "numeric",
   month: "2-digit",

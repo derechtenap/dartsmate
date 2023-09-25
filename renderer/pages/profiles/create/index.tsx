@@ -25,7 +25,7 @@ import { useState } from "react";
 import { Profile } from "types/profile";
 import { randomUUID } from "crypto";
 import { createFile } from "utils/fs/createFile";
-import { PROFILES_DIR } from "utils/constants";
+import { PROFILES_DIR, PROFILE_FILENAME_EXTENSION } from "utils/constants";
 import path from "path";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 
@@ -75,7 +75,7 @@ const CreateProfilePage: NextPage = () => {
     if (form.isValid()) {
       form.clearErrors();
       createFile(
-        `${path.join(PROFILES_DIR, form.values.uuid)}.json`,
+        path.join(PROFILES_DIR, form.values.uuid + PROFILE_FILENAME_EXTENSION),
         JSON.stringify(form.values)
       );
       back();
