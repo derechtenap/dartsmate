@@ -33,10 +33,13 @@ import { MATCHES_DIR, MATCH_FILENAME_EXTENSION } from "utils/constants";
 import path from "path";
 import { useRouter } from "next/router";
 import pkg from "../../package.json";
+import { useAddCurrentMatch } from "hooks/useCurrentMatch";
 
 const LobbyPage: NextPage = () => {
   const router = useRouter();
   const { isSuccess, data: profiles } = useProfiles();
+  // const { refetch } = useCurrentMatch();
+  const { mutate } = useAddCurrentMatch();
   const [matchPlayerList, setMatchPlayerList] = useState<Profile[]>([]);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
 
@@ -100,6 +103,8 @@ const LobbyPage: NextPage = () => {
       JSON.stringify(saveGameData)
     );
 
+    // void refetch(saveGameData.matchUuid);
+    void mutate(saveGameData.matchUuid);
     void router.push(`/match/${saveGameData.matchUuid}/playing`);
   };
 

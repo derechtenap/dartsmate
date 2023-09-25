@@ -10,33 +10,34 @@ import {
   Table,
   Title,
 } from "@mantine/core";
-import { useEffect, useState } from "react";
-import { readFileSync } from "fs";
-import { MATCHES_DIR } from "utils/constants";
+// import { useState } from "react";
+import { writeFileSync } from "fs";
+import { MATCHES_DIR, MATCH_FILENAME_EXTENSION } from "utils/constants";
 import path from "path";
-import { Match } from "types/match";
+import type { Match } from "types/match";
 import { getTotalRoundScore } from "utils/match/getTotalRoundScore";
 import { DARTBOARD_ZONES, THROWS_PER_ROUND } from "utils/constants";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
 import { useListState, useToggle } from "@mantine/hooks";
+// import type { Profile } from "types/profile";
+import { useCurrentMatch } from "hooks/useCurrentMatch";
+import type { UUID } from "crypto";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 const GamePlayingPage: NextPage = () => {
   const router = useRouter();
-  const matchQueryUuid = router.query.uuid;
-  const [matchData, setMatchData] = useState<Match>();
+  const { uuid } = router.query;
+  //const [matchData, setMatchData] = useState<Match>();
+  // const [currentPlayer, setCurrentPlayer] = useState<Profile>();
   const [roundScore, updateRoundScore] = useListState<number>([]);
   const [isDouble, isDoubleToggle] = useToggle([false, true]);
   const [isTriple, isTripleToggle] = useToggle([false, true]);
 
-  useEffect(() => {
-    if (matchQueryUuid) {
-      const data = readFileSync(
-        path.join(MATCHES_DIR, `${matchQueryUuid as string}.json`),
-        "utf8"
-      );
-      setMatchData(JSON.parse(data) as Match);
-    }
-  }, [matchQueryUuid]);
+  const {
+    isLoading,
+    isSuccess,
+    data: matchData,
+  } = useCurrentMatch(uuid as UUID);
 
   const handleAddScore = (score: number): void => {
     // Check if the maximum throws per round has been reached
@@ -83,21 +84,58 @@ const GamePlayingPage: NextPage = () => {
     isTripleToggle(!isTriple);
   };
 
-  if (!matchQueryUuid) {
-    return <>Unable to Create the Match!</>;
+  const handleRoundUpdate = (): void => {
+    console.info("UPDATE_ROUND");
+  };
+
+  const handleAbortMatch = (): void => {
+    // Update match file and redirect to results page
+    if (matchData) {
+      const updatedMatchData: Match = {
+        ...matchData,
+        updatedAt: Date.now(),
+        matchStatus: "ABORTED",
+      };
+
+      writeFileSync(
+        path.join(
+          MATCHES_DIR,
+          `${matchData.matchUuid + MATCH_FILENAME_EXTENSION}`
+        ),
+        JSON.stringify(updatedMatchData),
+        "utf8"
+      );
+
+      void router.push(`/match/${matchData.matchUuid}/results`);
+      return;
+    }
+
+    console.error("Couldn't update match file! `matchData` was undefined!");
+  };
+
+  if (isLoading) {
+    return <LoadingOverlay />;
   }
 
-  if (!matchData) {
+  if (!isSuccess || !matchData) {
     return <>Unable to Load the Match!</>;
   }
 
   return (
     <Group grow h="100vh">
       <Box p="sm" h="100%">
-        <Title mb="lg">
+        <Title>
           {matchData.profiles.length} Player Match - {matchData.matchType}{" "}
           {matchData.checkout} Out
         </Title>
+        <Button
+          color="red"
+          variant="light"
+          my="xl"
+          onClick={() => handleAbortMatch()}
+        >
+          Abort Game
+        </Button>
         <Table highlightOnHover>
           <thead>
             <tr>
@@ -189,6 +227,7 @@ const GamePlayingPage: NextPage = () => {
           w="100%"
           radius={0}
           disabled={roundScore.length !== THROWS_PER_ROUND}
+          onClick={() => handleRoundUpdate()}
         >
           Next Player
         </Button>
