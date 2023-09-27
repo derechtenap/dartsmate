@@ -11,6 +11,7 @@ export const MATCHES_DIR = join(APP_DIR, "matches");
 export const PROFILE_FILENAME_EXTENSION = ".profile";
 export const MATCH_FILENAME_EXTENSION = ".match";
 
+// Date options used on all pages and components
 export const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
   year: "numeric",
   month: "2-digit",
@@ -25,3 +26,8 @@ export const DARTBOARD_ZONES = [
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25,
   50,
 ];
+
+// Values to identify the "special" dartboard zones
+export const SCORE_BULLSEYE = 50;
+export const SCORE_OUTER_BULL = 25;
+export const SCORE_MISSED = 0;
