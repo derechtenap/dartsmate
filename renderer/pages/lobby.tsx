@@ -26,7 +26,7 @@ import { Profile } from "types/profile";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import { notifications } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
-import { Match } from "types/match";
+import { Match, MatchType } from "types/match";
 import { randomUUID } from "crypto";
 import { createFile } from "utils/fs/createFile";
 import { MATCHES_DIR, MATCH_FILENAME_EXTENSION } from "utils/constants";
@@ -38,7 +38,6 @@ import { useAddCurrentMatch } from "hooks/useCurrentMatch";
 const LobbyPage: NextPage = () => {
   const router = useRouter();
   const { isSuccess, data: profiles } = useProfiles();
-  // const { refetch } = useCurrentMatch();
   const { mutate } = useAddCurrentMatch();
   const [matchPlayerList, setMatchPlayerList] = useState<Profile[]>([]);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
@@ -98,12 +97,15 @@ const LobbyPage: NextPage = () => {
   const handleStartMatch = () => {
     const saveGameData = form.values;
 
+    // Convert the matchType property from a string to a MatchType enum value
+    // since the select element only accepts strings
+    saveGameData.matchType = Number(saveGameData.matchType) as MatchType;
+
     createFile(
       path.join(MATCHES_DIR, saveGameData.matchUuid + MATCH_FILENAME_EXTENSION),
       JSON.stringify(saveGameData)
     );
 
-    // void refetch(saveGameData.matchUuid);
     void mutate(saveGameData.matchUuid);
     void router.push(`/match/${saveGameData.matchUuid}/playing`);
   };
