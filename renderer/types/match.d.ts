@@ -30,6 +30,7 @@ declare type Match = {
   matchUuid: UUID;
   profiles: Profile[];
   updatedAt: number;
+  winner?: UUID;
 };
 
 type Throw = {
