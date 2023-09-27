@@ -3,14 +3,17 @@ import type { Profile } from "./profile";
 
 declare type Checkout = "Any" | "Double" | "Single" | "Triple";
 
-declare type MatchRound = {
-  elapsedThrowingTime: number;
-  isBust: boolean;
-  profileUuid: Profile.uuid;
-  roundAvg: number;
-  roundScore: number;
-  throws: Throw[];
-};
+type MatchRound = Record<
+  UUID,
+  {
+    elapsedThrowingTime: number;
+    isBust: boolean;
+    roundAvg: number;
+    roundScore: number;
+    throws: Throw[];
+    scoreLeft: number;
+  }[]
+>;
 
 declare type MatchStatus = "ABORTED" | "FINISHED" | "STARTED" | "UNFINISHED";
 
