@@ -1,44 +1,42 @@
 import type { UUID } from "crypto";
 import type { Profile } from "./profile";
 
+interface Player extends Profile {
+  scoreLeft: number;
+  isWinner: boolean;
+  rounds: MatchRound[];
+}
+
 declare type Checkout = "Any" | "Double" | "Single" | "Triple";
-
-type MatchRound = Record<
-  UUID,
-  {
-    elapsedThrowingTime: number;
-    isBust: boolean;
-    roundAvg: number;
-    roundScore: number;
-    throws: Throw[];
-    scoreLeft: number;
-  }[]
->;
-
-declare type MatchStatus = "ABORTED" | "FINISHED" | "STARTED" | "UNFINISHED";
-
-declare type MatchType = 901 | 701 | 501 | 301;
+declare type MatchStatus = "aborted" | "finished" | "started";
 
 declare type Match = {
   appVersion: string;
-  checkout: Checkout;
   createdAt: number;
-  disabledStatistics: boolean;
-  matchRounds: MatchRound[];
+  initialScore: number;
+  players: Player[];
+  matchCheckout: Checkout;
   matchStatus: MatchStatus;
-  matchType: MatchType;
-  matchUuid: UUID;
-  profiles: Profile[];
+  matchUUID: UUID;
   updatedAt: number;
-  winner?: UUID;
 };
 
-type Throw = {
+declare type MatchRound = {
+  elapsedTime: number;
+  isBust: boolean;
+  roundAverage: number;
+  roundTotal: number;
+  throwDetails: DartThrow[];
+};
+
+declare type DartboardZone = "BULLSEYE" | "NUMBER" | "MISSED" | "OUTER_BULL";
+
+declare type DartThrow = {
   isBullseye: boolean;
   isDouble: boolean;
   isMissed: boolean;
   isOuterBull: boolean;
   isTriple: boolean;
   score: number;
-  zone: number;
+  dartboardZone: number; // The specific zone on the dartboard where the throw landed
 };

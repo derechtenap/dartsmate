@@ -13,7 +13,7 @@ const getCurrentMatch = (uuid?: UUID) => {
   const matchingFile = files.find((matchFile) => {
     const data = readFileSync(path.join(MATCHES_DIR, matchFile), "utf8");
     const match = JSON.parse(data) as Match;
-    return match.matchUuid === uuid;
+    return match.matchUUID === uuid;
   });
 
   const data = readFileSync(
@@ -29,7 +29,7 @@ const addCurrentMatch = (uuid: UUID) => {
   const matchingFile = files.find((matchFile) => {
     const data = readFileSync(path.join(MATCHES_DIR, matchFile), "utf8");
     const match = JSON.parse(data) as Match;
-    return match.matchUuid === uuid;
+    return match.matchUUID === uuid;
   });
 
   return matchingFile;
