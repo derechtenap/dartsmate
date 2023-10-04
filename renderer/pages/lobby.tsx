@@ -2,31 +2,23 @@ import type { NextPage } from "next";
 import DefaultLayout from "@/components/layouts/Default";
 import PageHeader from "@/components/content/PageHeader";
 import {
-  Avatar,
   Button,
-  Checkbox,
+  Card,
   Grid,
   Group,
+  Indicator,
   NativeSelect,
-  ScrollArea,
+  NumberInput,
   Stack,
-  Stepper,
+  Tabs,
   Text,
   UnstyledButton,
 } from "@mantine/core";
 import { useState } from "react";
-import {
-  IconAdjustmentsHorizontal,
-  IconCheck,
-  IconTargetArrow,
-  IconUsersPlus,
-} from "@tabler/icons-react";
 import { useProfiles } from "hooks/useProfiles";
 import { Profile } from "types/profile";
-import { getUsernameInitials } from "utils/misc/getUsernameInitials";
-import { notifications } from "@mantine/notifications";
-import { useForm } from "@mantine/form";
-import { Match, MatchType } from "types/match";
+import { isInRange, isNotEmpty, useForm } from "@mantine/form";
+import { Match, Player } from "types/match";
 import { randomUUID } from "crypto";
 import { createFile } from "utils/fs/createFile";
 import { MATCHES_DIR, MATCH_FILENAME_EXTENSION } from "utils/constants";
@@ -34,219 +26,181 @@ import path from "path";
 import { useRouter } from "next/router";
 import pkg from "../../package.json";
 import { useAddCurrentMatch } from "hooks/useCurrentMatch";
+import ProfileAvatar from "@/components/content/ProfileAvatar";
+import {
+  IconCheck,
+  IconSettings,
+  IconTarget,
+  IconUserCircle,
+} from "@tabler/icons-react";
 
 const LobbyPage: NextPage = () => {
   const router = useRouter();
   const { isSuccess, data: profiles } = useProfiles();
   const { mutate } = useAddCurrentMatch();
-  const [matchPlayerList, setMatchPlayerList] = useState<Profile[]>([]);
-  const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const [matchPlayerList, setMatchPlayerList] = useState<Player[]>([]);
 
   const form = useForm<Match>({
     initialValues: {
       appVersion: pkg.version,
       createdAt: Date.now(),
-      profiles: matchPlayerList,
+      initialScore: 501,
+      players: matchPlayerList,
+      matchCheckout: "Double",
+      matchStatus: "started",
+      matchUUID: randomUUID(),
       updatedAt: Date.now(),
-      matchUuid: randomUUID(),
-      matchRounds: [],
-      matchStatus: "STARTED",
-      matchType: 501,
-      checkout: "Double",
-      // randomizePlayerOrder: false,
-      disabledStatistics: false,
     },
 
-    validate: {},
+    validate: {
+      initialScore: isInRange(
+        { min: 3, max: 901 },
+        "Your Score must be between 3 and 901!"
+      ),
+      players: isNotEmpty("You need to selected at least one Player!"),
+    },
   });
 
-  const handlePlayerSelection = (profile: Profile) => {
-    let updatedList: Profile[];
-
-    const NOTIFICATION_REMOVE_PLAYER = {
-      color: "red",
-      title: `${profile.username} was removed from the next game!`,
-      message: "Click on the profile picture again to add them again.",
-    };
-
-    const NOTIFICATION_ADD_PLAYER = {
-      title: `${profile.username} will be in the next game!`,
-      message: "Click on the profile picture again to remove them.",
-    };
-
-    setMatchPlayerList((prev) => {
-      if (prev.includes(profile)) {
-        // If the profile is already in the list and the user clicks again on the avatar,
-        // remove the profile from the player list
-        notifications.show(NOTIFICATION_REMOVE_PLAYER);
-        updatedList = prev.filter(
-          (removedProfile) => removedProfile !== profile
-        );
-      } else {
-        // Add player to the match
-        notifications.show(NOTIFICATION_ADD_PLAYER);
-        updatedList = [...prev, profile];
-      }
-
-      // Update states
-      form.setFieldValue("profiles", updatedList);
-      return updatedList;
-    });
-  };
-
   const handleStartMatch = () => {
-    const saveGameData = form.values;
+    form.validate();
+    if (!form.isValid()) return;
 
-    // Convert the matchType property from a string to a MatchType enum value
-    // since the select element only accepts strings
-    saveGameData.matchType = Number(saveGameData.matchType) as MatchType;
+    try {
+      createFile(
+        path.join(
+          MATCHES_DIR,
+          form.values.matchUUID + MATCH_FILENAME_EXTENSION
+        ),
+        JSON.stringify(form.values)
+      );
 
-    createFile(
-      path.join(MATCHES_DIR, saveGameData.matchUuid + MATCH_FILENAME_EXTENSION),
-      JSON.stringify(saveGameData)
-    );
+      void mutate(form.values.matchUUID);
 
-    void mutate(saveGameData.matchUuid);
-    void router.push(`/match/${saveGameData.matchUuid}/playing`);
+      void router.push(`/match/${form.values.matchUUID}/playing`);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const steps = [
-    {
-      label: "Select Players",
-      description: "Choose the Players for the Match",
-      icon: <IconUsersPlus />,
-      content: (
-        <ScrollArea type="hover" h="420px">
-          <Grid mt="xl" mx="xs">
-            {isSuccess
-              ? profiles.map((profile) => (
-                  <Grid.Col span={2} key={profile.uuid}>
-                    <UnstyledButton
-                      display="block"
-                      mx="auto"
-                      p="md"
-                      onClick={() => handlePlayerSelection(profile)}
-                    >
-                      <Stack key={profile.uuid}>
-                        <Avatar mx="auto" size="lg" color={profile.color}>
-                          {matchPlayerList.includes(profile) ? (
-                            <IconCheck />
-                          ) : (
-                            getUsernameInitials(profile.username)
-                          )}
-                        </Avatar>
-                        <Text
-                          ta="center"
-                          tt="uppercase"
-                          fw="bold"
-                          color={
-                            matchPlayerList.includes(profile)
-                              ? "white"
-                              : "dimmed"
-                          }
-                          size="xs"
-                        >
-                          {profile.username}
-                        </Text>
-                      </Stack>
-                    </UnstyledButton>
-                  </Grid.Col>
-                ))
-              : null}
-          </Grid>
-        </ScrollArea>
-      ),
-    },
-    {
-      label: "Configure Settings",
-      description: "Review and Adjust Match Settings",
-      icon: <IconAdjustmentsHorizontal />,
-      content: (
-        <form>
-          <Stack>
-            <NativeSelect
-              {...form.getInputProps("matchType")}
-              data={["901", "701", "501", "301"]}
-              label="Match Type"
-            />
-            <NativeSelect
-              data={["Triple", "Double", "Single", "Any"]}
-              label="Checkout"
-              {...form.getInputProps("checkout")}
-            />
-            <Checkbox
-              disabled
-              label="Randomize Player Order"
-              {...form.getInputProps("randomizePlayerOrder")}
-            />
-            <Checkbox
-              label="Disable Statistics"
-              {...form.getInputProps("disabledStatistics")}
-            />
-          </Stack>
-        </form>
-      ),
-    },
-    {
-      label: "Start the Game",
-      description: "Good Darts!",
-      icon: <IconTargetArrow />,
-      content: <Button onClick={() => handleStartMatch()}>Start Match!</Button>,
-    },
-  ];
+  const handlePlayerListUpdate = (profile: Profile): void => {
+    // Add missing object keys, so the profile will be of type Player
+    const player: Player = {
+      ...profile,
+      scoreLeft: form.values.initialScore,
+      isWinner: false,
+      rounds: [],
+    };
 
-  const moveToNextStep = () => {
-    setActiveStepIndex((cur) => (cur < steps.length ? cur + 1 : cur));
-  };
+    setMatchPlayerList((prevPlayerList) => {
+      // Check if the player is already in matchPlayerList
+      const isPlayerInList = prevPlayerList.some(
+        (existingPlayer) => existingPlayer.uuid === player.uuid
+      );
 
-  const moveToPrevStep = () => {
-    setActiveStepIndex((cur) => (cur > 0 ? cur - 1 : cur));
+      if (isPlayerInList) {
+        // Remove the player from the matchPlayerList
+        const updatedPlayerList = prevPlayerList.filter(
+          (existingPlayer) => existingPlayer.uuid !== player.uuid
+        );
+        form.setFieldValue("players", updatedPlayerList);
+        return updatedPlayerList;
+      } else {
+        // Add the player to the matchPlayerList state
+        const updatedPlayerList = [...prevPlayerList, player];
+        form.setFieldValue("players", updatedPlayerList);
+        return updatedPlayerList;
+      }
+    });
   };
 
   return (
     <DefaultLayout>
       <PageHeader title="Lobby">
-        <Text pb="xl">
-          You are just three steps away from starting your match. Let's get
-          started!
+        <Text>
+          You are just a few clicks away from starting your match. Please select
+          the players and if needed, update the settings. Let's get started!
         </Text>
-        <Stepper
-          active={activeStepIndex}
-          onStepClick={setActiveStepIndex}
-          breakpoint="sm"
-          mt="xl"
-          allowNextStepsSelect={false}
-        >
-          {steps.map((step) => (
-            <Stepper.Step
-              description={step.description}
-              icon={step.icon}
-              key={step.label}
-              label={step.label}
-            >
-              {step.content}
-            </Stepper.Step>
-          ))}
-        </Stepper>
-
-        <Group mt="lg">
-          <Button
-            onClick={() => moveToPrevStep()}
-            disabled={activeStepIndex === 0}
-          >
-            Previous Step
-          </Button>
-          <Button
-            onClick={() => moveToNextStep()}
-            disabled={
-              activeStepIndex === steps.length - 1 ||
-              matchPlayerList.length === 0
-            }
-          >
-            Next Step
-          </Button>
-        </Group>
       </PageHeader>
+      <Tabs variant="outline" defaultValue="players">
+        <Tabs.List mb="lg">
+          <Tabs.Tab value="players" icon={<IconUserCircle size="0.8rem" />}>
+            Select Players
+          </Tabs.Tab>
+          <Tabs.Tab value="settings" icon={<IconSettings size="0.8rem" />}>
+            Settings
+          </Tabs.Tab>
+          <Button
+            tt="uppercase"
+            ml="auto"
+            style={{ borderEndEndRadius: 0, borderEndStartRadius: 0 }}
+            disabled={form.values.players.length === 0}
+          >
+            <Group>
+              <IconTarget /> Start Match
+            </Group>
+          </Button>
+        </Tabs.List>
+
+        <Tabs.Panel value="players" pt="xs">
+          {isSuccess ? (
+            <Grid gutter="lg">
+              {profiles.map((profile) => {
+                // Check if the profile is already in matchPlayerList
+                const isProfileInList = matchPlayerList.some(
+                  (player) => player.uuid === profile.uuid
+                );
+
+                return (
+                  <Grid.Col sm={3} xl={2} key={profile.uuid}>
+                    <UnstyledButton
+                      onClick={() => handlePlayerListUpdate(profile)}
+                      miw="100%"
+                    >
+                      <Card
+                        withBorder
+                        style={{
+                          borderColor: isProfileInList ? "revert" : undefined,
+                        }}
+                        ta="center"
+                      >
+                        <Stack>
+                          <Indicator
+                            label={<IconCheck size="12px" />}
+                            disabled={!isProfileInList}
+                            size={24}
+                          >
+                            <ProfileAvatar profile={profile} mx="auto" />{" "}
+                          </Indicator>
+                          <Text fz="xs" tt="uppercase">
+                            {profile.username}
+                          </Text>
+                        </Stack>
+                      </Card>
+                    </UnstyledButton>
+                  </Grid.Col>
+                );
+              })}
+            </Grid>
+          ) : (
+            <>UNABLE_TO_LOAD_PROFILES!</>
+          )}
+        </Tabs.Panel>
+        <Tabs.Panel value="settings" pt="xs">
+          <Stack>
+            <NumberInput
+              label="Score"
+              variant="filled"
+              {...form.getInputProps("initialScore")}
+            />
+            <NativeSelect
+              data={["Any", "Single", "Double", "Triple"]}
+              label="Checkout"
+              variant="filled"
+              {...form.getInputProps("matchCheckout")}
+            />
+          </Stack>
+        </Tabs.Panel>
+      </Tabs>
     </DefaultLayout>
   );
 };
