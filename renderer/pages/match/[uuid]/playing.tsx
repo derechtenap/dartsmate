@@ -74,7 +74,9 @@ const GamePlayingPage: NextPage = () => {
         ? zone
         : multipliers.double
         ? zone * 2
-        : zone * 3,
+        : multipliers.triple
+        ? zone * 3
+        : zone,
     };
 
     setRoundThrows((prevThrows) => [...prevThrows, newThrow]);
