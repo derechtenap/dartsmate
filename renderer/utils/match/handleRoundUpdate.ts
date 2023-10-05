@@ -61,6 +61,11 @@ export const handleRoundUpdate = (
     isWinner = true;
   }
 
+  // Wont updated score if the player fails the checkout
+  if (scoreLeft === 0 && !isWinner) {
+    scoreLeft = currentPlayer.scoreLeft;
+  }
+
   // Create the round data
   const roundData: MatchRound = {
     elapsedTime: 0, // TODO: Currently hardcoded to 0
