@@ -129,8 +129,6 @@ const GamePlayingPage: NextPage = () => {
 
     await refetch();
 
-    console.info(matchData.players[currentPlayerIndex].isWinner);
-
     setCurrentPlayerIndex((currentPlayerIndex + 1) % matchData.players.length);
   };
 
