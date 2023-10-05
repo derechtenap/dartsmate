@@ -19,7 +19,7 @@ export const handleAbortMatch = (currentMatchData: Match): void => {
   };
   const matchFilePath = path.join(
     MATCHES_DIR,
-    finalMatchData.matchUuid + MATCH_FILENAME_EXTENSION
+    finalMatchData.matchUUID + MATCH_FILENAME_EXTENSION
   );
 
   writeFileSync(matchFilePath, JSON.stringify(finalMatchData), "utf8");

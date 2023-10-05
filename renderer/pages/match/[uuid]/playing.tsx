@@ -1,238 +1,210 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import {
-  Box,
-  Button,
-  Divider,
-  Grid,
-  Group,
-  Stack,
-  Table,
-  Title,
-} from "@mantine/core";
-// import { useState } from "react";
-import { writeFileSync } from "fs";
-import { MATCHES_DIR, MATCH_FILENAME_EXTENSION } from "utils/constants";
-import path from "path";
-import type { Match } from "types/match";
-import { getTotalRoundScore } from "utils/match/getTotalRoundScore";
-import { DARTBOARD_ZONES, THROWS_PER_ROUND } from "utils/constants";
-import ProfileAvatar from "@/components/content/ProfileAvatar";
-import { useListState, useToggle } from "@mantine/hooks";
-// import type { Profile } from "types/profile";
 import { useCurrentMatch } from "hooks/useCurrentMatch";
 import type { UUID } from "crypto";
 import LoadingOverlay from "@/components/LoadingOverlay";
+import { useEffect, useState } from "react";
+import DefaultLayout from "@/components/layouts/Default";
+import { Button, Card, Grid, Group, Stack, Text } from "@mantine/core";
+import {
+  DARTBOARD_ZONES,
+  SCORE_BULLSEYE,
+  SCORE_MISSED,
+  SCORE_OUTER_BULL,
+  THROWS_PER_ROUND,
+} from "utils/constants";
+import { DartThrow } from "types/match";
+import { getTotalRoundScore } from "utils/match/getTotalRoundScore";
+import { handleRoundUpdate } from "utils/match/handleRoundUpdate";
 
 const GamePlayingPage: NextPage = () => {
   const router = useRouter();
   const { uuid } = router.query;
-  //const [matchData, setMatchData] = useState<Match>();
-  // const [currentPlayer, setCurrentPlayer] = useState<Profile>();
-  const [roundScore, updateRoundScore] = useListState<number>([]);
-  const [isDouble, isDoubleToggle] = useToggle([false, true]);
-  const [isTriple, isTripleToggle] = useToggle([false, true]);
+  const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0); // TODO: Add randomize player Start
+  const [multipliers, setMultipliers] = useState({
+    double: false,
+    triple: false,
+  });
+  const [roundThrows, setRoundThrows] = useState<DartThrow[]>([]);
 
   const {
     isLoading,
     isSuccess,
     data: matchData,
+    refetch,
   } = useCurrentMatch(uuid as UUID);
 
-  const handleAddScore = (score: number): void => {
-    // Check if the maximum throws per round has been reached
-    if (roundScore.length >= THROWS_PER_ROUND) return;
-
-    let multipliedScore = score;
-
-    // If the player's throw hits the outer bull or bullseye,
-    // the score remains unchanged, regardless of the selected multiplier.
-    if (score !== 25 && score !== 50) {
-      // Apply the multiplier if selected
-      if (isDouble) {
-        multipliedScore = score * 2;
-      }
-
-      if (isTriple) {
-        multipliedScore = score * 3;
-      }
-    }
-
-    // Add the calculated (multiplied or unchanged) score
-    updateRoundScore.append(multipliedScore);
-
-    // Reset the double and triple multipliers
-    isDoubleToggle(false);
-    isTripleToggle(false);
-  };
-
-  const handleRemoveLatestScore = (): void => {
-    // Remove the latest throw
-    updateRoundScore.remove(roundScore.length - 1);
-  };
-
-  const handleScoreMultiplier = (multiplier: "double" | "triple"): void => {
-    const isDoubleMultiplier = multiplier === "double";
-
-    if (isDoubleMultiplier) {
-      isDoubleToggle(!isDouble);
-      isTripleToggle(false);
-      return;
-    }
-
-    isDoubleToggle(false);
-    isTripleToggle(!isTriple);
-  };
-
-  const handleRoundUpdate = (): void => {
-    console.info("UPDATE_ROUND");
-  };
-
-  const handleAbortMatch = (): void => {
-    // Update match file and redirect to results page
-    if (matchData) {
-      const updatedMatchData: Match = {
-        ...matchData,
-        updatedAt: Date.now(),
-        matchStatus: "ABORTED",
-      };
-
-      writeFileSync(
-        path.join(
-          MATCHES_DIR,
-          `${matchData.matchUuid + MATCH_FILENAME_EXTENSION}`
-        ),
-        JSON.stringify(updatedMatchData),
-        "utf8"
-      );
-
-      void router.push(`/match/${matchData.matchUuid}/results`);
-      return;
-    }
-
-    console.error("Couldn't update match file! `matchData` was undefined!");
-  };
+  useEffect(() => {
+    console.info(matchData);
+  }, [matchData]);
 
   if (isLoading) {
     return <LoadingOverlay />;
   }
 
   if (!isSuccess || !matchData) {
-    return <>Unable to Load the Match!</>;
+    return <DefaultLayout>Unable to Load the Match!</DefaultLayout>;
   }
 
+  const handleMultipliers = (multiplier: "DOUBLE" | "TRIPLE") => {
+    if (multiplier === "DOUBLE") {
+      return setMultipliers({ double: !multipliers.double, triple: false });
+    }
+
+    return setMultipliers({ double: false, triple: !multipliers.triple });
+  };
+
+  const handleAddThrow = (zone: number) => {
+    if (roundThrows.length > THROWS_PER_ROUND) return;
+
+    // Disable multipliers when the zone is missed, outer bull or bullseye
+    const disableMultiplier =
+      zone === SCORE_MISSED ||
+      zone === SCORE_OUTER_BULL ||
+      zone === SCORE_BULLSEYE;
+
+    const newThrow: DartThrow = {
+      isBullseye: zone === 50,
+      isDouble: disableMultiplier ? false : multipliers.double,
+      isTriple: disableMultiplier ? false : multipliers.triple,
+      isMissed: zone === 0,
+      isOuterBull: zone === 25,
+      dartboardZone: zone,
+      score: disableMultiplier
+        ? zone
+        : multipliers.double
+        ? zone * 2
+        : zone * 3,
+    };
+
+    setRoundThrows((prevThrows) => [...prevThrows, newThrow]);
+
+    // Reset multipliers
+    setMultipliers({ double: false, triple: false });
+  };
+
+  const handleRemoveLastThrow = () => {
+    setRoundThrows((prevThrows) => prevThrows.slice(0, roundThrows.length - 1));
+  };
+
+  const handleNewRound = () => {
+    handleRoundUpdate(
+      matchData.players[currentPlayerIndex],
+      roundThrows,
+      matchData
+    );
+
+    // TODO: Update currentPlayerIndex
+    setCurrentPlayerIndex((currentPlayerIndex + 1) % matchData.players.length);
+    setRoundThrows([]);
+    void refetch();
+  };
+
+  console.info(roundThrows);
+
   return (
-    <Group grow h="100vh">
-      <Box p="sm" h="100%">
-        <Title>
-          {matchData.profiles.length} Player Match - {matchData.matchType}{" "}
-          {matchData.checkout} Out
-        </Title>
-        <Button
-          color="red"
-          variant="light"
-          my="xl"
-          onClick={() => handleAbortMatch()}
-        >
-          Abort Game
-        </Button>
-        <Table highlightOnHover>
-          <thead>
-            <tr>
-              <th>Player</th>
-              <th>Score Left</th>
-              <th>AVG</th>
-            </tr>
-          </thead>
-          <tbody>
-            {matchData.profiles.map((profile) => (
-              <tr key={profile.uuid}>
-                <td>
-                  <Group>
-                    <ProfileAvatar profile={profile} />
-                    {profile.username}
-                  </Group>
-                </td>
-                <td>{matchData.matchType}</td>
-                <td>0.0</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </Box>
-      <Box p="sm" h="100%">
+    <Grid gutter="xl" m="lg">
+      <Grid.Col md="auto">
+        <Grid>
+          {matchData?.players.map((player, _idx) => (
+            <Grid.Col sm={6} lg={3} key={player.uuid}>
+              <Card
+                withBorder
+                style={{
+                  borderColor:
+                    currentPlayerIndex === _idx ? "revert" : undefined,
+                }}
+              >
+                <Stack ta="center">
+                  <Text fz="xs" tt="uppercase">
+                    {player.username}
+                  </Text>
+                  <Text fz="1.75rem" fw="bold" color={player.color}>
+                    {player.scoreLeft === -1 // -1 indicates that the player hasn't thrown yet
+                      ? matchData.initialScore
+                      : player.scoreLeft}
+                  </Text>
+                  <Text fz="md">
+                    {player.rounds.length > 0 && (
+                      <>
+                        {(
+                          player.rounds.reduce(
+                            (total, round) => total + round.roundAverage,
+                            0
+                          ) / player.rounds.length
+                        ).toFixed(1)}
+                      </>
+                    )}
+                  </Text>
+                </Stack>
+              </Card>
+            </Grid.Col>
+          ))}
+        </Grid>
+      </Grid.Col>
+      <Grid.Col md={4} xl={3}>
         <Grid grow>
-          {DARTBOARD_ZONES.map((score) => (
-            <Grid.Col span={3} key={score}>
+          {DARTBOARD_ZONES.map((zone) => (
+            <Grid.Col md={3} key={zone}>
               <Button
                 variant="light"
                 w="100%"
-                radius={0}
-                onClick={() => handleAddScore(score)}
-                disabled={roundScore.length >= THROWS_PER_ROUND}
+                onClick={() => handleAddThrow(zone)}
+                disabled={roundThrows.length === THROWS_PER_ROUND}
               >
-                {score}
+                {zone}
               </Button>
             </Grid.Col>
           ))}
-          <Grid.Col span={12}>
-            <Divider />
-          </Grid.Col>
-          <Grid.Col span={4}>
+        </Grid>
+        <Stack ta="center" my="lg" mx={0}>
+          <Group my="lg" position="apart" grow>
             <Button
-              disabled={roundScore.length === THROWS_PER_ROUND}
-              variant={isDouble ? "light" : ""}
-              w="100%"
-              radius={0}
-              onClick={() => handleScoreMultiplier("double")}
+              onClick={() => handleMultipliers("DOUBLE")}
+              variant={multipliers.double ? "light" : "default"}
+              disabled={roundThrows.length === THROWS_PER_ROUND}
             >
               Double
             </Button>
-          </Grid.Col>
-          <Grid.Col span={4}>
             <Button
-              disabled={roundScore.length === THROWS_PER_ROUND}
-              variant={isTriple ? "light" : ""}
-              w="100%"
-              radius={0}
-              onClick={() => handleScoreMultiplier("triple")}
+              onClick={() => handleMultipliers("TRIPLE")}
+              variant={multipliers.triple ? "light" : "default"}
+              disabled={roundThrows.length === THROWS_PER_ROUND}
             >
               Triple
             </Button>
-          </Grid.Col>
-          <Grid.Col span={4}>
             <Button
-              color="red"
-              variant="filled"
-              w="100%"
-              radius={0}
-              disabled={roundScore.length === 0}
-              onClick={() => handleRemoveLatestScore()}
+              disabled={roundThrows.length === 0}
+              onClick={() => handleRemoveLastThrow()}
             >
               Undo
             </Button>
-          </Grid.Col>
-        </Grid>
-        <Stack my="xl" ta="center">
-          <Title>{getTotalRoundScore(roundScore)}</Title>
+          </Group>
+          <Text fz="3rem" fw="bold">
+            {getTotalRoundScore(roundThrows.map((throws) => throws.score))}
+          </Text>
           <Group mx="auto">
-            {Array.from({ length: THROWS_PER_ROUND }, (_, index) => (
-              <Box key={index}>
-                {roundScore[index] ? roundScore[index] : `Dart ${index + 1}`}
-              </Box>
+            {Array.from({ length: THROWS_PER_ROUND }, (_, _idx) => (
+              <Text fz="xl" key={_idx}>
+                {roundThrows[_idx]?.isDouble
+                  ? "D"
+                  : roundThrows[_idx]?.isTriple
+                  ? "T"
+                  : undefined}
+                {roundThrows[_idx]?.dartboardZone ?? "-"}
+              </Text>
             ))}
           </Group>
+          <Button
+            mt="xl"
+            disabled={roundThrows.length !== THROWS_PER_ROUND}
+            onClick={() => handleNewRound()}
+          >
+            Next Player
+          </Button>
         </Stack>
-        <Button
-          w="100%"
-          radius={0}
-          disabled={roundScore.length !== THROWS_PER_ROUND}
-          onClick={() => handleRoundUpdate()}
-        >
-          Next Player
-        </Button>
-      </Box>
-    </Group>
+      </Grid.Col>
+    </Grid>
   );
 };
 
