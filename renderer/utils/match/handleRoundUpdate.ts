@@ -94,6 +94,7 @@ export const handleRoundUpdate = (
   const updatedMatchData: Match = {
     ...matchData,
     players: updatedPlayers,
+    updatedAt: Date.now(),
   };
 
   // Write the updated match data to the file
