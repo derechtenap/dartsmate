@@ -34,7 +34,7 @@ export const handleRoundUpdate = (
   }
 
   // Check for bust
-  const isBust = isPlayerBusted(scoreLeft);
+  const isBust = isPlayerBusted(scoreLeft, matchData.matchCheckout);
 
   // Reset remaining score if the player busted
   if (isBust) {
