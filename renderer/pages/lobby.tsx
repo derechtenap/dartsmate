@@ -86,7 +86,7 @@ const LobbyPage: NextPage = () => {
     // Add missing object keys, so the profile will be of type Player
     const player: Player = {
       ...profile,
-      scoreLeft: form.values.initialScore,
+      scoreLeft: -1, // -1 means that the player has not thrown yet
       isWinner: false,
       rounds: [],
     };
@@ -134,6 +134,7 @@ const LobbyPage: NextPage = () => {
             ml="auto"
             style={{ borderEndEndRadius: 0, borderEndStartRadius: 0 }}
             disabled={form.values.players.length === 0}
+            onClick={() => handleStartMatch()}
           >
             <Group>
               <IconTarget /> Start Match
