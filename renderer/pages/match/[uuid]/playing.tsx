@@ -8,14 +8,18 @@ import DefaultLayout from "@/components/layouts/Default";
 import { Button, Card, Grid, Group, Stack, Text } from "@mantine/core";
 import {
   DARTBOARD_ZONES,
+  MATCHES_DIR,
+  MATCH_FILENAME_EXTENSION,
   SCORE_BULLSEYE,
   SCORE_MISSED,
   SCORE_OUTER_BULL,
   THROWS_PER_ROUND,
 } from "utils/constants";
-import { DartThrow } from "types/match";
+import { DartThrow, Match } from "types/match";
 import { getTotalRoundScore } from "utils/match/getTotalRoundScore";
 import { handleRoundUpdate } from "utils/match/handleRoundUpdate";
+import { createFile } from "utils/fs/createFile";
+import path from "path";
 
 const GamePlayingPage: NextPage = () => {
   const router = useRouter();
@@ -35,7 +39,31 @@ const GamePlayingPage: NextPage = () => {
   } = useCurrentMatch(uuid as UUID);
 
   useEffect(() => {
-    console.info(matchData);
+    if (matchData) {
+      const latestPlayerIndex =
+        matchData.players.length > 1
+          ? currentPlayerIndex - 1
+          : currentPlayerIndex;
+
+      // Redirect to results page if the current player won the match
+      if (matchData.players[latestPlayerIndex]?.isWinner) {
+        const updatedMatchData: Match = {
+          ...matchData,
+          matchStatus: "finished",
+          updatedAt: Date.now(),
+        };
+
+        createFile(
+          path.join(
+            MATCHES_DIR,
+            matchData.matchUUID + MATCH_FILENAME_EXTENSION
+          ),
+          JSON.stringify(updatedMatchData)
+        );
+
+        void router.push(`/match/${matchData.matchUUID}/results`);
+      }
+    }
   }, [matchData]);
 
   if (isLoading) {
@@ -89,20 +117,21 @@ const GamePlayingPage: NextPage = () => {
     setRoundThrows((prevThrows) => prevThrows.slice(0, roundThrows.length - 1));
   };
 
-  const handleNewRound = () => {
+  const handleNewRound = async () => {
     handleRoundUpdate(
       matchData.players[currentPlayerIndex],
       roundThrows,
       matchData
     );
 
-    // TODO: Update currentPlayerIndex
-    setCurrentPlayerIndex((currentPlayerIndex + 1) % matchData.players.length);
     setRoundThrows([]);
-    void refetch();
-  };
 
-  console.info(roundThrows);
+    await refetch();
+
+    console.info(matchData.players[currentPlayerIndex].isWinner);
+
+    setCurrentPlayerIndex((currentPlayerIndex + 1) % matchData.players.length);
+  };
 
   return (
     <Grid gutter="xl" m="lg">
@@ -127,16 +156,24 @@ const GamePlayingPage: NextPage = () => {
                       : player.scoreLeft}
                   </Text>
                   <Text fz="md">
-                    {player.rounds.length > 0 && (
-                      <>
-                        {(
-                          player.rounds.reduce(
-                            (total, round) => total + round.roundAverage,
-                            0
-                          ) / player.rounds.length
-                        ).toFixed(1)}
-                      </>
-                    )}
+                    <>
+                      AVG:{" "}
+                      {player.rounds.length > 0 ? (
+                        <>
+                          {(() => {
+                            const average =
+                              player.rounds.reduce(
+                                (total, round) => total + round.roundTotal,
+                                0
+                              ) / player.rounds.length;
+
+                            return average.toFixed(1);
+                          })()}
+                        </>
+                      ) : (
+                        "0.0"
+                      )}
+                    </>
                   </Text>
                 </Stack>
               </Card>
@@ -200,7 +237,7 @@ const GamePlayingPage: NextPage = () => {
           <Button
             mt="xl"
             disabled={roundThrows.length !== THROWS_PER_ROUND}
-            onClick={() => handleNewRound()}
+            onClick={() => void handleNewRound()}
           >
             Next Player
           </Button>
