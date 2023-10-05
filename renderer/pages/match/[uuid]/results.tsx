@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import DefaultLayout from "@/components/layouts/Default";
-import { Title } from "@mantine/core";
+import { Center, Title } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useCurrentMatch } from "hooks/useCurrentMatch";
 import LoadingOverlay from "@/components/LoadingOverlay";
@@ -22,12 +22,18 @@ const GameResultsPage: NextPage = () => {
   if (matchData && isSuccess) {
     return (
       <DefaultLayout>
-        <Title>Results for {matchData.matchUuid}</Title>
+        <Title>Results for {matchData.matchUUID}</Title>
       </DefaultLayout>
     );
   }
 
-  return <>UNABLE TO LOAD MATCH</>;
+  return (
+    <DefaultLayout>
+      <Center h="calc(100vh - 3rem)">
+        <Title>Unable to load the Match file!</Title>
+      </Center>
+    </DefaultLayout>
+  );
 };
 
 export default GameResultsPage;
