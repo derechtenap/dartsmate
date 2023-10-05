@@ -36,6 +36,11 @@ export const handleRoundUpdate = (
   // Check for bust
   const isBust = isPlayerBusted(scoreLeft);
 
+  // Reset remaining score if the player busted
+  if (isBust) {
+    scoreLeft = currentPlayer.scoreLeft;
+  }
+
   // Check for win
   let isWinner = false;
   const lastThrow = roundThrows[roundThrows.length - 1];
