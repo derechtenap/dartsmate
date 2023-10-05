@@ -20,6 +20,7 @@ import { getTotalRoundScore } from "utils/match/getTotalRoundScore";
 import { handleRoundUpdate } from "utils/match/handleRoundUpdate";
 import { createFile } from "utils/fs/createFile";
 import path from "path";
+import { getTotalMatchAvg } from "utils/match/getTotalMatchAvg";
 
 const GamePlayingPage: NextPage = () => {
   const router = useRouter();
@@ -155,26 +156,7 @@ const GamePlayingPage: NextPage = () => {
                       ? matchData.initialScore
                       : player.scoreLeft}
                   </Text>
-                  <Text fz="md">
-                    <>
-                      AVG:{" "}
-                      {player.rounds.length > 0 ? (
-                        <>
-                          {(() => {
-                            const average =
-                              player.rounds.reduce(
-                                (total, round) => total + round.roundTotal,
-                                0
-                              ) / player.rounds.length;
-
-                            return average.toFixed(1);
-                          })()}
-                        </>
-                      ) : (
-                        "0.0"
-                      )}
-                    </>
-                  </Text>
+                  <Text fz="md">{getTotalMatchAvg(player.rounds)}</Text>
                 </Stack>
               </Card>
             </Grid.Col>
