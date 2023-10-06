@@ -2,14 +2,8 @@ import type { NextPage } from "next";
 import { Center, Divider, Flex, Title } from "@mantine/core";
 import pkg from "../../package.json";
 import DefaultLayout from "@/components/layouts/Default";
-import { useMatches } from "hooks/useMatches";
-import { useProfiles } from "hooks/useProfiles";
 
 const IndexPage: NextPage = () => {
-  // Prefetch the matches and profiles data on app start
-  useMatches();
-  useProfiles();
-
   // TODO: Currently only shows a logo... Show the user more useful content
   return (
     <DefaultLayout>

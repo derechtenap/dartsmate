@@ -20,6 +20,7 @@ import { deleteFile } from "utils/fs/deleteFile";
 import { notifications } from "@mantine/notifications";
 import path from "path";
 import { useEffect, useState } from "react";
+import { filesize } from "filesize";
 
 const SettingsPage: NextPage = () => {
   const [folderSize, setFolderSize] = useState(0);
@@ -35,19 +36,19 @@ const SettingsPage: NextPage = () => {
     { label: "Dark", value: "dark" },
   ];
 
-  const getProfilesFolderSize = () => {
+  const getAppFolderSize = () => {
     const profilesFolderSize = getFolderSize(PROFILES_DIR);
     const matchesFolderSize = getFolderSize(MATCHES_DIR);
 
     setFolderSize(profilesFolderSize + matchesFolderSize);
   };
 
-  const deleteFolderContent = (folder: string) => {
+  const deleteFolderContent = (folderPath: string) => {
     try {
-      const folderContent = readFolder(folder);
+      const folderContent = readFolder(folderPath);
 
-      folderContent.map((file) => {
-        deleteFile(path.join(folder, file));
+      folderContent.map((fileName) => {
+        deleteFile(path.join(folderPath, fileName));
       });
 
       notifications.show({
@@ -62,12 +63,12 @@ const SettingsPage: NextPage = () => {
         message: `Please try again in a couple of seconds.(${err as string})`,
       });
     } finally {
-      getProfilesFolderSize();
+      getAppFolderSize();
     }
   };
 
   useEffect(() => {
-    getProfilesFolderSize();
+    getAppFolderSize();
   }, []);
 
   return (
@@ -95,7 +96,6 @@ const SettingsPage: NextPage = () => {
               color="blue"
               data={colorSchemes}
             />
-
             {/*
             <Text mt="xl" fw="bold">
               Toggle Fullscreen
@@ -134,8 +134,8 @@ const SettingsPage: NextPage = () => {
             >
               <Text>
                 Deleting your saved profiles or matches cannot be undone!
-                Profiles and matches currently occupy {folderSize}
-                kb on your hard disk.
+                Profiles and matches currently occupy{" "}
+                {filesize(folderSize, { standard: "jedec" })} on your hard disk.
               </Text>
               <Group mt="lg">
                 <Button

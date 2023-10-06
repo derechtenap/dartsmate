@@ -24,7 +24,7 @@ import { hasLength, isNotEmpty, useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { Profile } from "types/profile";
 import { createFile } from "utils/fs/createFile";
-import { PROFILES_DIR } from "utils/constants";
+import { PROFILES_DIR, PROFILE_FILENAME_EXTENSION } from "utils/constants";
 import path from "path";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import { readFileSync } from "fs";
@@ -58,7 +58,10 @@ const EditProfilePage: NextPage = () => {
 
   useEffect(() => {
     const profile = readFileSync(
-      path.join(PROFILES_DIR, `${query.profileUuid as string}.json`),
+      path.join(
+        PROFILES_DIR,
+        (query.profileUuid as string) + PROFILE_FILENAME_EXTENSION
+      ),
       "utf8"
     );
     const profileJSON = JSON.parse(profile) as Profile;

@@ -25,7 +25,7 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { useState } from "react";
-import { PROFILES_DIR } from "utils/constants";
+import { PROFILES_DIR, PROFILE_FILENAME_EXTENSION } from "utils/constants";
 import path from "path";
 import { useDisclosure } from "@mantine/hooks";
 import { Profile } from "types/profile";
@@ -40,10 +40,15 @@ const ProfilesPage: NextPage = () => {
   const { push, reload } = useRouter();
   const [opened, { open, close }] = useDisclosure(false);
   const [openedProfile, setOpenedProfile] = useState<Profile>();
+  const { isLoading, isSuccess, data: profiles, refetch } = useProfiles();
 
   const deleteProfile = () => {
     if (!openedProfile || !openedProfile.uuid) return;
-    const profilePath = path.join(PROFILES_DIR, `${openedProfile.uuid}.json`);
+
+    const profilePath = path.join(
+      PROFILES_DIR,
+      openedProfile.uuid + PROFILE_FILENAME_EXTENSION
+    );
 
     // Delete file on os, refetch the query and reset the state
     setOpenedProfile(undefined);
@@ -51,8 +56,6 @@ const ProfilesPage: NextPage = () => {
     deleteFile(profilePath);
     void refetch();
   };
-
-  const { isLoading, isSuccess, data: profiles, refetch } = useProfiles();
 
   if (isLoading) {
     return <LoadingOverlay />;
