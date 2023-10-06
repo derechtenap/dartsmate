@@ -21,6 +21,7 @@ import { handleRoundUpdate } from "utils/match/handleRoundUpdate";
 import { createFile } from "utils/fs/createFile";
 import path from "path";
 import { getTotalMatchAvg } from "utils/match/getTotalMatchAvg";
+import { useInterval } from "@mantine/hooks";
 
 const GamePlayingPage: NextPage = () => {
   const router = useRouter();
@@ -31,6 +32,11 @@ const GamePlayingPage: NextPage = () => {
     triple: false,
   });
   const [roundThrows, setRoundThrows] = useState<DartThrow[]>([]);
+  const [elapsedRoundTimeSeconds, setElapsedRoundTimeSeconds] = useState(0);
+  const roundTimer = useInterval(
+    () => setElapsedRoundTimeSeconds((s) => s + 1),
+    1000
+  );
 
   const {
     isLoading,
@@ -40,6 +46,7 @@ const GamePlayingPage: NextPage = () => {
   } = useCurrentMatch(uuid as UUID);
 
   useEffect(() => {
+    roundTimer.start();
     if (matchData) {
       const latestPlayerIndex =
         matchData.players.length > 1
@@ -122,8 +129,12 @@ const GamePlayingPage: NextPage = () => {
     handleRoundUpdate(
       matchData.players[currentPlayerIndex],
       roundThrows,
-      matchData
+      matchData,
+      elapsedRoundTimeSeconds
     );
+
+    // Reset timer
+    setElapsedRoundTimeSeconds(0);
 
     setRoundThrows([]);
 

@@ -12,7 +12,8 @@ import { isPlayerBusted } from "./isPlayerBusted";
 export const handleRoundUpdate = (
   currentPlayer: Player,
   roundThrows: DartThrow[],
-  matchData: Match
+  matchData: Match,
+  roundTimeSeconds: number
 ) => {
   if (roundThrows.length < THROWS_PER_ROUND) return;
 
@@ -68,7 +69,7 @@ export const handleRoundUpdate = (
 
   // Create the round data
   const roundData: MatchRound = {
-    elapsedTime: 0, // TODO: Currently hardcoded to 0
+    elapsedTime: roundTimeSeconds,
     isBust: isBust,
     roundAverage: roundAverage,
     roundTotal: roundTotal,
