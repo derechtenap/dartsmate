@@ -22,6 +22,7 @@ import { createFile } from "utils/fs/createFile";
 import path from "path";
 import { getTotalMatchAvg } from "utils/match/getTotalMatchAvg";
 import { useInterval } from "@mantine/hooks";
+import { handleAbortMatch } from "utils/match/handleAbortMatch";
 
 const GamePlayingPage: NextPage = () => {
   const router = useRouter();
@@ -143,6 +144,12 @@ const GamePlayingPage: NextPage = () => {
     setCurrentPlayerIndex((currentPlayerIndex + 1) % matchData.players.length);
   };
 
+  const handleAbort = () => {
+    // TODO: Add dialog prompt: "Do you really want to abort the match..."
+    handleAbortMatch(matchData);
+    void router.push(`/match/${matchData.matchUUID}/results/`);
+  };
+
   return (
     <Grid gutter="xl" m="lg">
       <Grid.Col md="auto">
@@ -225,13 +232,17 @@ const GamePlayingPage: NextPage = () => {
               </Text>
             ))}
           </Group>
-          <Button
-            mt="xl"
-            disabled={roundThrows.length !== THROWS_PER_ROUND}
-            onClick={() => void handleNewRound()}
-          >
-            Next Player
-          </Button>
+          <Group grow mt="xl">
+            <Button color="red" variant="light" onClick={() => handleAbort()}>
+              ABORT MATCH
+            </Button>
+            <Button
+              disabled={roundThrows.length !== THROWS_PER_ROUND}
+              onClick={() => void handleNewRound()}
+            >
+              Next Player
+            </Button>
+          </Group>
         </Stack>
       </Grid.Col>
     </Grid>
