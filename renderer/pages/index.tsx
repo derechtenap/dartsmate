@@ -6,7 +6,7 @@ import DefaultLayout from "@/components/layouts/Default";
 const IndexPage: NextPage = () => {
   // TODO: Currently only shows a logo... Show the user more useful content
   return (
-    <DefaultLayout>
+    <DefaultLayout isFetching={false} isLoading={false} isSuccess={true}>
       <Center h="100%">
         <Flex direction="column">
           <Title tt="uppercase" fs="italic" size={100} lh={0.6}>

@@ -33,14 +33,19 @@ import { getLocaleDate } from "utils/misc/getLocalDate";
 import { useRouter } from "next/router";
 import { deleteFile } from "utils/fs/deleteFile";
 import { useProfiles } from "hooks/useProfiles";
-import LoadingOverlay from "@/components/LoadingOverlay";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
 
 const ProfilesPage: NextPage = () => {
   const { push, reload } = useRouter();
   const [opened, { open, close }] = useDisclosure(false);
   const [openedProfile, setOpenedProfile] = useState<Profile>();
-  const { isLoading, isSuccess, data: profiles, refetch } = useProfiles();
+  const {
+    isFetching,
+    isLoading,
+    isSuccess,
+    data: profiles,
+    refetch,
+  } = useProfiles();
 
   const deleteProfile = () => {
     if (!openedProfile || !openedProfile.uuid) return;
@@ -57,12 +62,12 @@ const ProfilesPage: NextPage = () => {
     void refetch();
   };
 
-  if (isLoading) {
-    return <LoadingOverlay />;
-  }
-
   return (
-    <DefaultLayout>
+    <DefaultLayout
+      isFetching={isFetching}
+      isLoading={isLoading}
+      isSuccess={isSuccess}
+    >
       <Modal opened={opened} onClose={close} title="Delete Profile?" centered>
         <Text>
           Do you really want to delete the Profile "{openedProfile?.username}"?

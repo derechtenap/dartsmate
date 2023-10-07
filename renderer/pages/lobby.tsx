@@ -36,7 +36,7 @@ import {
 
 const LobbyPage: NextPage = () => {
   const router = useRouter();
-  const { isSuccess, data: profiles } = useProfiles();
+  const { isFetching, isLoading, isSuccess, data: profiles } = useProfiles();
   const { mutate } = useAddCurrentMatch();
   const [matchPlayerList, setMatchPlayerList] = useState<Player[]>([]);
 
@@ -114,7 +114,11 @@ const LobbyPage: NextPage = () => {
   };
 
   return (
-    <DefaultLayout>
+    <DefaultLayout
+      isFetching={isFetching}
+      isLoading={isLoading}
+      isSuccess={isSuccess}
+    >
       <PageHeader title="Lobby">
         <Text>
           You are just a few clicks away from starting your match. Please select
@@ -143,48 +147,44 @@ const LobbyPage: NextPage = () => {
         </Tabs.List>
 
         <Tabs.Panel value="players" pt="xs">
-          {isSuccess ? (
-            <Grid gutter="lg">
-              {profiles.map((profile) => {
-                // Check if the profile is already in matchPlayerList
-                const isProfileInList = matchPlayerList.some(
-                  (player) => player.uuid === profile.uuid
-                );
+          <Grid gutter="lg">
+            {profiles.map((profile) => {
+              // Check if the profile is already in matchPlayerList
+              const isProfileInList = matchPlayerList.some(
+                (player) => player.uuid === profile.uuid
+              );
 
-                return (
-                  <Grid.Col sm={3} xl={2} key={profile.uuid}>
-                    <UnstyledButton
-                      onClick={() => handlePlayerListUpdate(profile)}
-                      miw="100%"
+              return (
+                <Grid.Col sm={3} xl={2} key={profile.uuid}>
+                  <UnstyledButton
+                    onClick={() => handlePlayerListUpdate(profile)}
+                    miw="100%"
+                  >
+                    <Card
+                      withBorder
+                      style={{
+                        borderColor: isProfileInList ? "revert" : undefined,
+                      }}
+                      ta="center"
                     >
-                      <Card
-                        withBorder
-                        style={{
-                          borderColor: isProfileInList ? "revert" : undefined,
-                        }}
-                        ta="center"
-                      >
-                        <Stack>
-                          <Indicator
-                            label={<IconCheck size="12px" />}
-                            disabled={!isProfileInList}
-                            size={24}
-                          >
-                            <ProfileAvatar profile={profile} mx="auto" />{" "}
-                          </Indicator>
-                          <Text fz="xs" tt="uppercase">
-                            {profile.username}
-                          </Text>
-                        </Stack>
-                      </Card>
-                    </UnstyledButton>
-                  </Grid.Col>
-                );
-              })}
-            </Grid>
-          ) : (
-            <>UNABLE_TO_LOAD_PROFILES!</>
-          )}
+                      <Stack>
+                        <Indicator
+                          label={<IconCheck size="12px" />}
+                          disabled={!isProfileInList}
+                          size={24}
+                        >
+                          <ProfileAvatar profile={profile} mx="auto" />{" "}
+                        </Indicator>
+                        <Text fz="xs" tt="uppercase">
+                          {profile.username}
+                        </Text>
+                      </Stack>
+                    </Card>
+                  </UnstyledButton>
+                </Grid.Col>
+              );
+            })}
+          </Grid>
         </Tabs.Panel>
         <Tabs.Panel value="settings" pt="xs">
           <Stack>

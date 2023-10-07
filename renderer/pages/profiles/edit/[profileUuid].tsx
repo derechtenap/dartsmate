@@ -17,7 +17,6 @@ import {
   UnstyledButton,
   useMantineTheme,
 } from "@mantine/core";
-// import { Dropzone } from "@mantine/dropzone";
 import { IconSquareRoundedX } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { hasLength, isNotEmpty, useForm } from "@mantine/form";
@@ -94,7 +93,6 @@ const EditProfilePage: NextPage = () => {
   ));
 
   const createProfile = () => {
-    // console.info("Creating profile...", form.values);
     if (form.isValid()) {
       form.clearErrors();
       createFile(
@@ -111,7 +109,7 @@ const EditProfilePage: NextPage = () => {
         createProfile();
       })}
     >
-      <DefaultLayout>
+      <DefaultLayout isSuccess={true}>
         <Flex direction="column" h="100%">
           <Group position="apart">
             <PageHeader title="Edit Profile">
