@@ -13,7 +13,6 @@ import {
   IconRepeat,
   IconTable,
 } from "@tabler/icons-react";
-import LoadingOverlay from "@/components/LoadingOverlay";
 
 const GameResultsPage: NextPage = () => {
   const router = useRouter();
@@ -25,8 +24,6 @@ const GameResultsPage: NextPage = () => {
     data: matchData,
   } = useCurrentMatch(matchQueryUuid as UUID);
 
-  if (!matchData) return <LoadingOverlay />;
-
   return (
     <DefaultLayout
       isFetching={isFetching}
@@ -36,10 +33,12 @@ const GameResultsPage: NextPage = () => {
       <PageHeader title="Results">
         <Group position="apart">
           <Text>
-            {`${matchData.players.length} Players - ${matchData.initialScore} ${matchData.matchCheckout}-Out`}
+            {`${matchData?.players.length || 0} Players - ${
+              matchData?.initialScore || 0
+            } ${matchData?.matchCheckout || "Any"}-Out`}
           </Text>
-          <Badge color={matchData.matchStatus === "finished" ? "blue" : "red"}>
-            Status: {matchData.matchStatus}
+          <Badge color={matchData?.matchStatus === "finished" ? "blue" : "red"}>
+            Status: {matchData?.matchStatus}
           </Badge>
         </Group>
       </PageHeader>
@@ -69,7 +68,7 @@ const GameResultsPage: NextPage = () => {
               </tr>
             </thead>
             <tbody>
-              {matchData.players.map((player) => (
+              {matchData?.players.map((player) => (
                 <tr key={player.uuid}>
                   <td>
                     <Group>
@@ -102,9 +101,12 @@ const GameResultsPage: NextPage = () => {
         </Tabs.Panel>
 
         <Tabs.Panel value="details" pt="lg">
-          <Tabs orientation="vertical" defaultValue={matchData.players[0].uuid}>
+          <Tabs
+            orientation="vertical"
+            defaultValue={matchData?.players[0].uuid}
+          >
             <Tabs.List>
-              {matchData.players.map((player) => (
+              {matchData?.players.map((player) => (
                 <Tabs.Tab
                   key={player.uuid}
                   value={player.uuid}
@@ -115,7 +117,7 @@ const GameResultsPage: NextPage = () => {
               ))}
             </Tabs.List>
 
-            {matchData.players.map((player, _idx) => (
+            {matchData?.players.map((player, _idx) => (
               <Tabs.Panel key={player.uuid} value={player.uuid} pl="lg">
                 <Card>
                   <Table>
