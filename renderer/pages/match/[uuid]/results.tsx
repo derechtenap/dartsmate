@@ -13,6 +13,7 @@ import {
   IconRepeat,
   IconTable,
 } from "@tabler/icons-react";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 const GameResultsPage: NextPage = () => {
   const router = useRouter();
@@ -24,7 +25,7 @@ const GameResultsPage: NextPage = () => {
     data: matchData,
   } = useCurrentMatch(matchQueryUuid as UUID);
 
-  if (!matchData) throw new Error("UNABLE_TO_OPEN_MATCH_FILE");
+  if (!matchData) return <LoadingOverlay />;
 
   return (
     <DefaultLayout
