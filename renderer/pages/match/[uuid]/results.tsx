@@ -73,7 +73,7 @@ const GameResultsPage: NextPage = () => {
                 <tr key={player.uuid}>
                   <td>
                     <Group>
-                      <ProfileAvatar profile={player} />{" "}
+                      <ProfileAvatar profile={player} />
                       <Group>
                         {player.isWinner ? (
                           <Tooltip label={`${player.username} won the match!`}>
