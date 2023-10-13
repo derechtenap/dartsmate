@@ -76,13 +76,7 @@ const GameResultsPage: NextPage = () => {
                       <ProfileAvatar profile={player} />{" "}
                       <Group>
                         {player.isWinner ? (
-                          <Tooltip
-                            label={
-                              player.isWinner
-                                ? `${player.username} won the match!`
-                                : undefined
-                            }
-                          >
+                          <Tooltip label={`${player.username} won the match!`}>
                             <IconCrown
                               color="gold"
                               style={{ cursor: "help" }}
