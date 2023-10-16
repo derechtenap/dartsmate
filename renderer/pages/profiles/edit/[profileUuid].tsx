@@ -96,7 +96,10 @@ const EditProfilePage: NextPage = () => {
     if (form.isValid()) {
       form.clearErrors();
       createFile(
-        `${path.join(PROFILES_DIR, query.profileUuid as string)}.json`,
+        path.join(
+          PROFILES_DIR,
+          (query.profileUuid as string) + PROFILE_FILENAME_EXTENSION
+        ),
         JSON.stringify(form.values)
       );
       back();
