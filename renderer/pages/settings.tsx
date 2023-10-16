@@ -72,7 +72,7 @@ const SettingsPage: NextPage = () => {
   }, []);
 
   return (
-    <DefaultLayout>
+    <DefaultLayout isFetching={false} isLoading={false} isSuccess={true}>
       <PageHeader title="Settings">
         Here you can change your app settings. Some settings can be overridden
         on each page by pressing the corresponding hotkeys.
