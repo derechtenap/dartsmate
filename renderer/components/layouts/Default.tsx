@@ -1,12 +1,14 @@
 import {
   AppShell,
   Button,
+  Center,
   createStyles,
   Group,
   Modal,
   Navbar,
   rem,
   Stack,
+  Text,
   Title,
   Tooltip,
   UnstyledButton,
@@ -15,6 +17,7 @@ import {
   Icon,
   IconDisc,
   IconHome2,
+  IconList,
   IconListNumbers,
   IconSchool,
   IconSettings,
@@ -25,9 +28,13 @@ import {
 import { useRouter } from "next/router";
 import { useDisclosure } from "@mantine/hooks";
 import { ipcRenderer } from "electron";
+import LoadingOverlay from "../LoadingOverlay";
 
-type Props = {
+type DefaultLayoutProps = {
   children: React.ReactNode;
+  isFetching?: boolean;
+  isLoading?: boolean;
+  isSuccess?: boolean;
 };
 
 type NavbarLinkProps = {
@@ -41,13 +48,19 @@ type NavbarLinkProps = {
 
 export const navbarWidth = 70;
 
-const DefaultLayout = ({ children }: Props) => {
+const DefaultLayout = ({
+  children,
+  isFetching,
+  isLoading,
+  isSuccess,
+}: DefaultLayoutProps) => {
   const [opened, { open, close }] = useDisclosure(false);
   const { route, push } = useRouter();
 
   const mainRoutes: NavbarLinkProps[] = [
     { icon: IconHome2, label: "Home", route: "/" },
     { icon: IconDisc, label: "Lobby", route: "/lobby" },
+    { icon: IconList, label: "Previous Matches", route: "/previousMatches" },
     {
       icon: IconSchool,
       disabled: true,
@@ -150,6 +163,10 @@ const DefaultLayout = ({ children }: Props) => {
     ));
   };
 
+  if (isLoading || isFetching) {
+    return <LoadingOverlay />;
+  }
+
   return (
     <AppShell
       py={0}
@@ -192,7 +209,22 @@ const DefaultLayout = ({ children }: Props) => {
           </Group>
         </Modal.Body>
       </Modal>
-      {children}
+      {isSuccess ? (
+        children
+      ) : (
+        <Center w="50%" mx="auto" h="100vh">
+          <Stack>
+            <Title>Oh snap!</Title>
+            <Text>
+              An internal error has occurred, preventing the creation of the
+              page you requested. We apologize for the inconvenience. To resolve
+              this issue, we recommend restarting the application and attempting
+              the operation again. If the problem persists, please contact our
+              support team for further assistance.
+            </Text>
+          </Stack>
+        </Center>
+      )}
     </AppShell>
   );
 };
