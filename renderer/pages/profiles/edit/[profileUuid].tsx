@@ -26,7 +26,6 @@ import { createFile } from "utils/fs/createFile";
 import { PROFILES_DIR, PROFILE_FILENAME_EXTENSION } from "utils/constants";
 import path from "path";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
-import { readFileSync } from "fs";
 
 const EditProfilePage: NextPage = () => {
   const { back, query } = useRouter();
@@ -56,26 +55,21 @@ const EditProfilePage: NextPage = () => {
   });
 
   useEffect(() => {
-    const profile = readFileSync(
-      path.join(
-        PROFILES_DIR,
-        (query.profileUuid as string) + PROFILE_FILENAME_EXTENSION
-      ),
-      "utf8"
-    );
-    const profileJSON = JSON.parse(profile) as Profile;
+    if (query.profile) {
+      const profile = JSON.parse(query.profile as string) as Profile;
 
-    form.setValues({
-      bio: profileJSON.bio,
-      color: profileJSON.color,
-      username: profileJSON.username,
-      updatedAt: Date.now(),
-      createdAt: profileJSON.createdAt,
-      uuid: profileJSON.uuid,
-    });
+      form.setValues({
+        bio: profile.bio,
+        color: profile.color,
+        username: profile.username,
+        updatedAt: Date.now(),
+        createdAt: profile.createdAt,
+        uuid: profile.uuid,
+      });
 
-    setAvatarColor(profileJSON.color);
-  }, []);
+      setAvatarColor(profile.color);
+    }
+  }, [query]);
 
   // Manually update the color, since the ...props method doesn't work on the color swatches
   const updateAvatarColor = (color: DefaultMantineColor) => {

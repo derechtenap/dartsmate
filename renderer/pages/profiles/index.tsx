@@ -144,7 +144,12 @@ const ProfilesPage: NextPage = () => {
                     <ActionIcon
                       variant="transparent"
                       onClick={() =>
-                        void push(`/profiles/edit/${openedProfile.uuid}`)
+                        void push({
+                          pathname: `/profiles/edit/${openedProfile.uuid}`,
+                          query: {
+                            profile: JSON.stringify(openedProfile),
+                          },
+                        })
                       }
                     >
                       <IconEdit />
