@@ -5,7 +5,16 @@ import type { UUID } from "crypto";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import { useEffect, useState } from "react";
 import DefaultLayout from "@/components/layouts/Default";
-import { Button, Card, Grid, Group, Stack, Text } from "@mantine/core";
+import {
+  Button,
+  Card,
+  Grid,
+  Group,
+  Modal,
+  Stack,
+  Text,
+  useMantineTheme,
+} from "@mantine/core";
 import {
   DARTBOARD_ZONES,
   MATCHES_DIR,
@@ -21,11 +30,12 @@ import { handleRoundUpdate } from "utils/match/handleRoundUpdate";
 import { createFile } from "utils/fs/createFile";
 import path from "path";
 import { getTotalMatchAvg } from "utils/match/getTotalMatchAvg";
-import { useInterval } from "@mantine/hooks";
+import { useDisclosure, useInterval } from "@mantine/hooks";
 import { handleAbortMatch } from "utils/match/handleAbortMatch";
 
 const GamePlayingPage: NextPage = () => {
   const router = useRouter();
+  const theme = useMantineTheme();
   const { uuid } = router.query;
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0); // TODO: Add randomize player Start
   const [multipliers, setMultipliers] = useState({
@@ -34,6 +44,8 @@ const GamePlayingPage: NextPage = () => {
   });
   const [roundThrows, setRoundThrows] = useState<DartThrow[]>([]);
   const [elapsedRoundTimeSeconds, setElapsedRoundTimeSeconds] = useState(0);
+  const [openedModal, { open: openModal, close: closeModal }] =
+    useDisclosure(false);
   const roundTimer = useInterval(
     () => setElapsedRoundTimeSeconds((s) => s + 1),
     1000
@@ -145,107 +157,130 @@ const GamePlayingPage: NextPage = () => {
   };
 
   const handleAbort = () => {
-    // TODO: Add dialog prompt: "Do you really want to abort the match..."
     handleAbortMatch(matchData);
     void router.push(`/match/${matchData.matchUUID}/results/`);
   };
 
   return (
-    <Grid gutter="xl" m="lg">
-      <Grid.Col md="auto">
-        <Grid>
-          {matchData?.players.map((player, _idx) => (
-            <Grid.Col sm={6} lg={3} key={player.uuid}>
-              <Card
-                withBorder
-                style={{
-                  borderColor:
-                    currentPlayerIndex === _idx ? "revert" : undefined,
-                }}
-              >
-                <Stack ta="center">
-                  <Text fz="xs" tt="uppercase">
-                    {player.username}
-                  </Text>
-                  <Text fz="1.75rem" fw="bold" color={player.color}>
-                    {player.scoreLeft === -1 // -1 indicates that the player hasn't thrown yet
-                      ? matchData.initialScore
-                      : player.scoreLeft}
-                  </Text>
-                  <Text fz="md">{getTotalMatchAvg(player.rounds)}</Text>
-                </Stack>
-              </Card>
-            </Grid.Col>
-          ))}
-        </Grid>
-      </Grid.Col>
-      <Grid.Col md={4} xl={3}>
-        <Grid grow>
-          {DARTBOARD_ZONES.map((zone) => (
-            <Grid.Col md={3} key={zone}>
+    <>
+      <Modal
+        opened={openedModal}
+        onClose={closeModal}
+        title="Confirm Match Abortion"
+        centered
+        overlayProps={{
+          color:
+            theme.colorScheme === "dark"
+              ? theme.colors.dark[9]
+              : theme.colors.gray[2],
+          opacity: 0.55,
+          blur: 3,
+        }}
+      >
+        <Text fw="bold">Are you sure you want to abort the current match?</Text>
+        <Group mt="lg">
+          <Button onClick={() => closeModal()}>Resume Match</Button>
+          <Button color="red" variant="outline" onClick={() => handleAbort()}>
+            Abort Match
+          </Button>
+        </Group>
+      </Modal>
+      <Grid gutter="xl" m="lg">
+        <Grid.Col md="auto">
+          <Grid>
+            {matchData?.players.map((player, _idx) => (
+              <Grid.Col sm={6} lg={3} key={player.uuid}>
+                <Card
+                  withBorder
+                  style={{
+                    borderColor:
+                      currentPlayerIndex === _idx ? "revert" : undefined,
+                  }}
+                >
+                  <Stack ta="center">
+                    <Text fz="xs" tt="uppercase">
+                      {player.username}
+                    </Text>
+                    <Text fz="1.75rem" fw="bold" color={player.color}>
+                      {player.scoreLeft === -1 // -1 indicates that the player hasn't thrown yet
+                        ? matchData.initialScore
+                        : player.scoreLeft}
+                    </Text>
+                    <Text fz="md">{getTotalMatchAvg(player.rounds)}</Text>
+                  </Stack>
+                </Card>
+              </Grid.Col>
+            ))}
+          </Grid>
+        </Grid.Col>
+        <Grid.Col md={4} xl={3}>
+          <Grid grow>
+            {DARTBOARD_ZONES.map((zone) => (
+              <Grid.Col md={3} key={zone}>
+                <Button
+                  variant="light"
+                  w="100%"
+                  onClick={() => handleAddThrow(zone)}
+                  disabled={roundThrows.length === THROWS_PER_ROUND}
+                >
+                  {zone}
+                </Button>
+              </Grid.Col>
+            ))}
+          </Grid>
+          <Stack ta="center" my="lg" mx={0}>
+            <Group my="lg" position="apart" grow>
               <Button
-                variant="light"
-                w="100%"
-                onClick={() => handleAddThrow(zone)}
+                onClick={() => handleMultipliers("DOUBLE")}
+                variant={multipliers.double ? "light" : "default"}
                 disabled={roundThrows.length === THROWS_PER_ROUND}
               >
-                {zone}
+                Double
               </Button>
-            </Grid.Col>
-          ))}
-        </Grid>
-        <Stack ta="center" my="lg" mx={0}>
-          <Group my="lg" position="apart" grow>
-            <Button
-              onClick={() => handleMultipliers("DOUBLE")}
-              variant={multipliers.double ? "light" : "default"}
-              disabled={roundThrows.length === THROWS_PER_ROUND}
-            >
-              Double
-            </Button>
-            <Button
-              onClick={() => handleMultipliers("TRIPLE")}
-              variant={multipliers.triple ? "light" : "default"}
-              disabled={roundThrows.length === THROWS_PER_ROUND}
-            >
-              Triple
-            </Button>
-            <Button
-              disabled={roundThrows.length === 0}
-              onClick={() => handleRemoveLastThrow()}
-            >
-              Undo
-            </Button>
-          </Group>
-          <Text fz="3rem" fw="bold">
-            {getTotalRoundScore(roundThrows.map((throws) => throws.score))}
-          </Text>
-          <Group mx="auto">
-            {Array.from({ length: THROWS_PER_ROUND }, (_, _idx) => (
-              <Text fz="xl" key={_idx}>
-                {roundThrows[_idx]?.isDouble
-                  ? "D"
-                  : roundThrows[_idx]?.isTriple
-                  ? "T"
-                  : undefined}
-                {roundThrows[_idx]?.dartboardZone ?? "-"}
-              </Text>
-            ))}
-          </Group>
-          <Group grow mt="xl">
-            <Button color="red" variant="light" onClick={() => handleAbort()}>
-              ABORT MATCH
-            </Button>
-            <Button
-              disabled={roundThrows.length !== THROWS_PER_ROUND}
-              onClick={() => void handleNewRound()}
-            >
-              Next Player
-            </Button>
-          </Group>
-        </Stack>
-      </Grid.Col>
-    </Grid>
+              <Button
+                onClick={() => handleMultipliers("TRIPLE")}
+                variant={multipliers.triple ? "light" : "default"}
+                disabled={roundThrows.length === THROWS_PER_ROUND}
+              >
+                Triple
+              </Button>
+              <Button
+                disabled={roundThrows.length === 0}
+                onClick={() => handleRemoveLastThrow()}
+              >
+                Undo
+              </Button>
+            </Group>
+            <Text fz="3rem" fw="bold">
+              {getTotalRoundScore(roundThrows.map((throws) => throws.score))}
+            </Text>
+            <Group mx="auto">
+              {Array.from({ length: THROWS_PER_ROUND }, (_, _idx) => (
+                <Text fz="xl" key={_idx}>
+                  {roundThrows[_idx]?.isDouble
+                    ? "D"
+                    : roundThrows[_idx]?.isTriple
+                    ? "T"
+                    : undefined}
+                  {roundThrows[_idx]?.dartboardZone ?? "-"}
+                </Text>
+              ))}
+            </Group>
+            <Group grow mt="xl">
+              <Button color="red" variant="light" onClick={() => openModal()}>
+                ABORT MATCH
+              </Button>
+              <Button
+                disabled={roundThrows.length !== THROWS_PER_ROUND}
+                onClick={() => void handleNewRound()}
+              >
+                Next Player
+              </Button>
+            </Group>
+          </Stack>
+        </Grid.Col>
+      </Grid>
+    </>
   );
 };
 
