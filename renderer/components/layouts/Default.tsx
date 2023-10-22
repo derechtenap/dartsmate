@@ -1,36 +1,32 @@
 import {
+  ActionIcon,
   AppShell,
   Button,
   Center,
-  createStyles,
   Group,
   Header,
+  Menu,
   Modal,
-  Navbar,
-  rem,
   Stack,
   Text,
   Title,
-  Tooltip,
-  UnstyledButton,
 } from "@mantine/core";
 import {
-  Icon,
   IconDisc,
-  IconHome2,
+  IconDots,
   IconList,
-  IconListNumbers,
-  IconSchool,
+  // IconListNumbers,
+  // IconSchool,
   IconSettings,
-  IconSquareRoundedX,
-  IconTournament,
+  IconSquareLetterD,
+  // IconTournament,
   IconUsersGroup,
+  IconX,
 } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { useDisclosure } from "@mantine/hooks";
 import { ipcRenderer } from "electron";
 import LoadingOverlay from "../LoadingOverlay";
-import pkg from "../../../package.json";
 
 type DefaultLayoutProps = {
   children: React.ReactNode;
@@ -40,10 +36,7 @@ type DefaultLayoutProps = {
 };
 
 type NavbarLinkProps = {
-  action?: () => void;
-  active?: boolean;
-  disabled?: boolean;
-  icon: Icon;
+  icon: JSX.Element;
   label: string;
   route: string;
 };
@@ -60,110 +53,52 @@ const DefaultLayout = ({
   const [opened, { open, close }] = useDisclosure(false);
   const { route, push } = useRouter();
 
+  // TODO: Some route are currently and unfinished and disabled...
   const mainRoutes: NavbarLinkProps[] = [
-    { icon: IconHome2, label: "Home", route: "/" },
-    { icon: IconDisc, label: "Lobby", route: "/lobby" },
-    { icon: IconList, label: "Previous Matches", route: "/previousMatches" },
+    { icon: <IconDisc size={14} />, label: "Lobby", route: "/lobby" },
+    /*
     {
-      icon: IconSchool,
-      disabled: true,
+      icon: <IconSchool size={14} />,
       label: "Training",
       route: "/training",
     },
+
     {
-      icon: IconTournament,
-      disabled: true,
+      icon: <IconTournament size={14} />,
       label: "Tournament",
       route: "/tournament",
     },
+    */
     {
-      icon: IconUsersGroup,
+      icon: <IconUsersGroup size={14} />,
       label: "Profiles",
       route: "/profiles",
     },
     {
-      icon: IconListNumbers,
-      disabled: true,
+      icon: <IconList size={14} />,
+      label: "Replays",
+      route: "/previousMatches",
+    },
+    /*
+    {
+      icon: <IconListNumbers size={14} />,
       label: "Ranking",
       route: "/ranking",
     },
+    */
   ];
 
   const miscRoutes: NavbarLinkProps[] = [
     {
-      icon: IconSettings,
+      icon: <IconSettings size={14} />,
       label: "Settings",
       route: "/settings",
     },
-    {
-      icon: IconSquareRoundedX,
-      action: () => open(),
-      label: "Quit App",
-      route: "#?quitApp",
-    },
   ];
 
-  const useStyles = createStyles((theme) => ({
-    link: {
-      width: rem(50),
-      height: rem(50),
-      borderRadius: theme.radius.md,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      color:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[0]
-          : theme.colors.dark[5],
-
-      "&:hover": {
-        backgroundColor:
-          theme.colorScheme === "dark"
-            ? theme.colors.dark[5]
-            : theme.colors.gray[1],
-      },
-      "&:disabled": {
-        cursor: "not-allowed",
-      },
-    },
-    active: {
-      "&, &:hover": {
-        backgroundColor: theme.fn.variant({
-          variant: "light",
-          color: theme.primaryColor,
-        }).background,
-        color: theme.fn.variant({ variant: "light", color: theme.primaryColor })
-          .color,
-      },
-    },
-  }));
-
-  const NavbarLink = ({
-    action,
-    icon: Icon,
-    label,
-    disabled,
-    active,
-    route,
-  }: NavbarLinkProps) => {
-    const { classes, cx } = useStyles();
-    return (
-      <Tooltip label={label} position="right" offset={15} withArrow>
-        <UnstyledButton
-          onClick={action ? action : () => void push(route)}
-          className={cx(classes.link, { [classes.active]: active })}
-          disabled={disabled}
-        >
-          <Icon size="1.2rem" stroke={1.5} />
-        </UnstyledButton>
-      </Tooltip>
-    );
-  };
-
-  const appendNavbarRoutes = (links: NavbarLinkProps[]) => {
-    return links.map((link) => (
-      <NavbarLink {...link} active={route === link.route} key={link.label} />
-    ));
+  const isActiveRoute = (currentRoute: string) => {
+    console.info(currentRoute, route, currentRoute === route);
+    return currentRoute === route;
   };
 
   if (isLoading || isFetching) {
@@ -173,34 +108,60 @@ const DefaultLayout = ({
   return (
     <AppShell
       py={0}
-      navbar={
-        <Navbar
-          height={`calc(100vh-${headerHeight})`}
-          p="xs"
-          width={{ base: navbarWidth }}
-        >
-          <Navbar.Section grow>
-            <Stack justify="center" spacing="xs">
-              {appendNavbarRoutes(mainRoutes)}
-            </Stack>
-          </Navbar.Section>
-          <Navbar.Section>
-            <Stack justify="center" spacing="xs">
-              {appendNavbarRoutes(miscRoutes)}
-            </Stack>
-          </Navbar.Section>
-        </Navbar>
-      }
       header={
         <Header
           height={headerHeight}
           style={{ display: "flex", alignItems: "center" }}
           px="sm"
         >
-          <Group position="apart">
-            <Text tt="uppercase" fs="italic">
-              {pkg.productName}
-            </Text>
+          <Group position="apart" w="100%">
+            <ActionIcon
+              color="red"
+              radius="xs"
+              variant="filled"
+              onClick={() => void push("/")}
+            >
+              <IconSquareLetterD />
+            </ActionIcon>
+            <Button.Group>
+              {mainRoutes.map((route) => (
+                <Button
+                  color={isActiveRoute(route.route) ? "red" : "gray"}
+                  compact
+                  key={route.route}
+                  leftIcon={route.icon}
+                  radius="xs"
+                  onClick={() => void push(route.route)}
+                  uppercase
+                >
+                  {route.label}
+                </Button>
+              ))}
+            </Button.Group>
+            <Group>
+              <Menu shadow="md" radius={0} width={200}>
+                <Menu.Target>
+                  <ActionIcon>
+                    <IconDots />
+                  </ActionIcon>
+                </Menu.Target>
+
+                <Menu.Dropdown>
+                  {miscRoutes.map((route) => (
+                    <Menu.Item
+                      icon={route.icon}
+                      key={route.label}
+                      onClick={() => void push(route.route)}
+                    >
+                      {route.label}
+                    </Menu.Item>
+                  ))}
+                </Menu.Dropdown>
+              </Menu>
+              <ActionIcon onClick={() => open()}>
+                <IconX />
+              </ActionIcon>
+            </Group>
           </Group>
         </Header>
       }
