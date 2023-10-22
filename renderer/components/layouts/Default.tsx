@@ -53,7 +53,7 @@ const DefaultLayout = ({
   const [opened, { open, close }] = useDisclosure(false);
   const { route, push } = useRouter();
 
-  // TODO: Some route are currently and unfinished and disabled...
+  // TODO: Some routes are currently unfinished and disabled. Reactivate the routes when the pages are created
   const mainRoutes: NavbarLinkProps[] = [
     { icon: <IconDisc size={14} />, label: "Lobby", route: "/lobby" },
     /*
