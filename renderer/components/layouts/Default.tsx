@@ -97,7 +97,6 @@ const DefaultLayout = ({
   ];
 
   const isActiveRoute = (currentRoute: string) => {
-    console.info(currentRoute, route, currentRoute === route);
     return currentRoute === route;
   };
 
