@@ -176,17 +176,22 @@ const DefaultLayout = ({
         }}
       >
         <Modal.Body>
-          <Title size="h3" ta="center" mb="xl">
-            Quit DartMate?
-          </Title>
-          <Group position="center">
+          <Title mb="lg">Confirm Quit</Title>
+          <Text color="dimmed" mb="lg">
+            Any unsaved data will be lost. Are you sure you want to quit the
+            app?
+          </Text>
+          <Group>
             <Button
+              color="red"
               onClick={() => void ipcRenderer.send("quit-app")}
-              variant="default"
+              variant="outline"
             >
               Yes
             </Button>
-            <Button onClick={() => void close()}>No</Button>
+            <Button onClick={() => void close()} variant="default">
+              No
+            </Button>
           </Group>
         </Modal.Body>
       </Modal>
