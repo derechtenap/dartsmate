@@ -11,10 +11,9 @@ import {
   Text,
 } from "@mantine/core";
 import type { ColorScheme, SegmentedControlProps } from "@mantine/core";
-import pkg from "../../package.json";
 import { useLocalStorage, useOs } from "@mantine/hooks";
 import { getFolderSize } from "utils/fs/getFolderSize";
-import { MATCHES_DIR, PROFILES_DIR } from "utils/constants";
+import { APP_NAME, MATCHES_DIR, PROFILES_DIR } from "utils/constants";
 import { readFolder } from "utils/fs/readFolder";
 import { deleteFile } from "utils/fs/deleteFile";
 import { notifications } from "@mantine/notifications";
@@ -85,10 +84,10 @@ const SettingsPage: NextPage = () => {
           <Accordion.Panel>
             <Text fw="bold">Color Scheme</Text>
             <Text mb="lg">
-              You can set a preferred color scheme for {pkg.productName}. By
-              default {pkg.productName} uses your color scheme from the
-              operating system. You can change the color scheme at any time by
-              pressing <Kbd>{os !== "macos" ? "CTRL+T" : "⌘+T"}</Kbd>.
+              You can set a preferred color scheme for {APP_NAME}. By default{" "}
+              {APP_NAME} uses your color scheme from the operating system. You
+              can change the color scheme at any time by pressing{" "}
+              <Kbd>{os !== "macos" ? "CTRL+T" : "⌘+T"}</Kbd>.
             </Text>
             <SegmentedControl
               value={colorScheme}
@@ -122,9 +121,7 @@ const SettingsPage: NextPage = () => {
             <Text fw="bold">Data Management</Text>
           </Accordion.Control>
           <Accordion.Panel>
-            <Text>
-              Here you can manage the data created by {pkg.productName}.
-            </Text>
+            <Text>Here you can manage the data created by {APP_NAME}.</Text>
             <Alert
               my="lg"
               title="Danger Zone"
