@@ -4,6 +4,7 @@ import {
   Center,
   createStyles,
   Group,
+  Header,
   Modal,
   Navbar,
   rem,
@@ -29,6 +30,7 @@ import { useRouter } from "next/router";
 import { useDisclosure } from "@mantine/hooks";
 import { ipcRenderer } from "electron";
 import LoadingOverlay from "../LoadingOverlay";
+import pkg from "../../../package.json";
 
 type DefaultLayoutProps = {
   children: React.ReactNode;
@@ -47,6 +49,7 @@ type NavbarLinkProps = {
 };
 
 export const navbarWidth = 70;
+export const headerHeight = 45;
 
 const DefaultLayout = ({
   children,
@@ -171,7 +174,11 @@ const DefaultLayout = ({
     <AppShell
       py={0}
       navbar={
-        <Navbar height="100vh" p="xs" width={{ base: navbarWidth }}>
+        <Navbar
+          height={`calc(100vh-${headerHeight})`}
+          p="xs"
+          width={{ base: navbarWidth }}
+        >
           <Navbar.Section grow>
             <Stack justify="center" spacing="xs">
               {appendNavbarRoutes(mainRoutes)}
@@ -183,6 +190,19 @@ const DefaultLayout = ({
             </Stack>
           </Navbar.Section>
         </Navbar>
+      }
+      header={
+        <Header
+          height={headerHeight}
+          style={{ display: "flex", alignItems: "center" }}
+          px="sm"
+        >
+          <Group position="apart">
+            <Text tt="uppercase" fs="italic">
+              {pkg.productName}
+            </Text>
+          </Group>
+        </Header>
       }
     >
       <Modal
