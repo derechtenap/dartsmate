@@ -1,7 +1,6 @@
 import type { NextPage } from "next";
 import DefaultLayout from "@/components/layouts/Default";
 import {
-  ActionIcon,
   Button,
   Grid,
   Group,
@@ -10,7 +9,6 @@ import {
   Stack,
   Tabs,
   Text,
-  Tooltip,
   UnstyledButton,
 } from "@mantine/core";
 import {
@@ -22,17 +20,18 @@ import {
   IconUserPlus,
 } from "@tabler/icons-react";
 import { useState } from "react";
-import { PROFILES_DIR, PROFILE_FILENAME_EXTENSION } from "utils/constants";
-import path from "path";
-import { useDisclosure } from "@mantine/hooks";
+// import { PROFILES_DIR, PROFILE_FILENAME_EXTENSION } from "utils/constants";
+// import path from "path";
+// import { useDisclosure } from "@mantine/hooks";
 import { Profile } from "types/profile";
 import { getLocaleDate } from "utils/misc/getLocalDate";
 import { useRouter } from "next/router";
-import { deleteFile } from "utils/fs/deleteFile";
+// import { deleteFile } from "utils/fs/deleteFile";
 import { useProfiles } from "hooks/useProfiles";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
 import { getViewportHeight } from "utils/misc/getViewportHeight";
 import PageHeader from "@/components/content/PageHeader";
+import ActionButton from "@/components/content/ActionButton";
 
 const ProfilesPage: NextPage = () => {
   const {
@@ -40,12 +39,13 @@ const ProfilesPage: NextPage = () => {
     isLoading,
     isSuccess,
     data: profiles,
-    refetch,
+    // refetch,
   } = useProfiles();
-  const { push, reload } = useRouter();
-  const [opened, { open, close }] = useDisclosure(false);
+  const router = useRouter();
+  // const [opened, { open, close }] = useDisclosure(false);
   const [openedProfile, setOpenedProfile] = useState<Profile>(profiles[0]);
 
+  /*
   const deleteProfile = () => {
     if (!openedProfile || !openedProfile.uuid) return;
 
@@ -60,6 +60,7 @@ const ProfilesPage: NextPage = () => {
     deleteFile(profilePath);
     void refetch();
   };
+  */
 
   return (
     <DefaultLayout
@@ -78,7 +79,13 @@ const ProfilesPage: NextPage = () => {
               mx="auto"
             >
               <Stack>
-                <Button w="100%" color="red" variant="filled" tt="uppercase">
+                <Button
+                  w="100%"
+                  color="red"
+                  variant="filled"
+                  tt="uppercase"
+                  onClick={() => void router.push("/profiles/create/")}
+                >
                   <Group>
                     <IconUserPlus /> Create Profile
                   </Group>
@@ -99,60 +106,65 @@ const ProfilesPage: NextPage = () => {
           </Paper>
         </Grid.Col>
         <Grid.Col span="auto">
-          <Paper>
-            <Group align="flex-start">
-              <ProfileAvatar size="xl" profile={openedProfile} />
-              <PageHeader title={openedProfile.username}>
-                Member Since: {getLocaleDate(openedProfile.createdAt)}
-              </PageHeader>
-              <Group ml="auto">
-                <ActionIcon>
-                  <Tooltip label="Edit Profile">
-                    <IconEdit />
-                  </Tooltip>
-                </ActionIcon>
-                <ActionIcon>
-                  <Tooltip label="Delete Profile">
-                    <IconTrash />
-                  </Tooltip>
-                </ActionIcon>
+          {openedProfile ? (
+            <Paper>
+              <Group align="flex-start">
+                <ProfileAvatar size="xl" profile={openedProfile} />
+                <PageHeader title={openedProfile.username}>
+                  Member Since: {getLocaleDate(openedProfile.createdAt)}
+                </PageHeader>
+                <Group ml="auto">
+                  <ActionButton
+                    action={() => console.info("Edit")}
+                    icon={<IconEdit />}
+                    label="Edit Profile"
+                  />
+                  <ActionButton
+                    action={() => console.info("Delete")}
+                    icon={<IconTrash />}
+                    color="red"
+                    label="Delete Profile"
+                  />
+                </Group>
               </Group>
-            </Group>
-            <Tabs color="red" defaultValue="achievements" mt="lg">
-              <Tabs.List grow position="apart">
-                <Tabs.Tab
-                  value="achievements"
-                  icon={<IconTrophy size="0.8rem" />}
-                >
-                  Achievements
-                </Tabs.Tab>
-                <Tabs.Tab
-                  value="statistics"
-                  icon={<IconFileAnalytics size="0.8rem" />}
-                >
-                  Statistics
-                </Tabs.Tab>
-                <Tabs.Tab value="matches" icon={<IconList size="0.8rem" />}>
-                  Matches
-                </Tabs.Tab>
-              </Tabs.List>
-              <Tabs.Panel value="achievements" pt="xs">
-                <Text fs="italic">
-                  Achievements will be added in a later version.
-                </Text>
-              </Tabs.Panel>
-              <Tabs.Panel value="statistics" pt="xs">
-                <Text fs="italic">
-                  Profile statistics will be added in a later version.
-                </Text>
-              </Tabs.Panel>
-              <Tabs.Panel value="matches" pt="xs">
-                <Text fs="italic">
-                  Match statistics will be added in a later version.
-                </Text>
-              </Tabs.Panel>
-            </Tabs>
-          </Paper>
+              <Tabs color="red" defaultValue="achievements" mt="lg">
+                <Tabs.List grow position="apart">
+                  <Tabs.Tab
+                    value="achievements"
+                    icon={<IconTrophy size="0.8rem" />}
+                  >
+                    Achievements
+                  </Tabs.Tab>
+                  <Tabs.Tab
+                    value="statistics"
+                    icon={<IconFileAnalytics size="0.8rem" />}
+                  >
+                    Statistics
+                  </Tabs.Tab>
+                  <Tabs.Tab value="matches" icon={<IconList size="0.8rem" />}>
+                    Matches
+                  </Tabs.Tab>
+                </Tabs.List>
+                <Tabs.Panel value="achievements" pt="xs">
+                  <Text fs="italic">
+                    Achievements will be added in a later version.
+                  </Text>
+                </Tabs.Panel>
+                <Tabs.Panel value="statistics" pt="xs">
+                  <Text fs="italic">
+                    Profile statistics will be added in a later version.
+                  </Text>
+                </Tabs.Panel>
+                <Tabs.Panel value="matches" pt="xs">
+                  <Text fs="italic">
+                    Match statistics will be added in a later version.
+                  </Text>
+                </Tabs.Panel>
+              </Tabs>
+            </Paper>
+          ) : (
+            <>SELECT PROFILE</>
+          )}
         </Grid.Col>
       </Grid>
     </DefaultLayout>
