@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import DefaultLayout from "@/components/layouts/Default";
 import {
   Button,
+  Center,
   Grid,
   Group,
   Paper,
@@ -9,6 +10,7 @@ import {
   Stack,
   Tabs,
   Text,
+  Title,
   UnstyledButton,
 } from "@mantine/core";
 import {
@@ -18,6 +20,7 @@ import {
   IconTrash,
   IconTrophy,
   IconUserPlus,
+  IconUserQuestion,
 } from "@tabler/icons-react";
 import { useState } from "react";
 // import { PROFILES_DIR, PROFILE_FILENAME_EXTENSION } from "utils/constants";
@@ -43,7 +46,10 @@ const ProfilesPage: NextPage = () => {
   } = useProfiles();
   const router = useRouter();
   // const [opened, { open, close }] = useDisclosure(false);
-  const [openedProfile, setOpenedProfile] = useState<Profile>(profiles[0]);
+  const [openedProfile, setOpenedProfile] = useState<Profile | undefined>(
+    undefined
+  );
+  const contentHeight = getViewportHeight();
 
   /*
   const deleteProfile = () => {
@@ -69,11 +75,11 @@ const ProfilesPage: NextPage = () => {
       isSuccess={isSuccess}
     >
       <Grid align="flex-start">
-        <Grid.Col span={3} lg={2}>
+        <Grid.Col span={3} lg={2} mah={contentHeight}>
           <Paper withBorder>
             <ScrollArea.Autosize
-              mah={getViewportHeight()}
-              mih={getViewportHeight()}
+              mah={contentHeight - 5}
+              mih={contentHeight - 5}
               maw={400}
               p="xs"
               mx="auto"
@@ -105,7 +111,7 @@ const ProfilesPage: NextPage = () => {
             </ScrollArea.Autosize>
           </Paper>
         </Grid.Col>
-        <Grid.Col span="auto">
+        <Grid.Col span="auto" mx="auto" maw={1000}>
           {openedProfile ? (
             <Paper>
               <Group align="flex-start">
@@ -163,7 +169,29 @@ const ProfilesPage: NextPage = () => {
               </Tabs>
             </Paper>
           ) : (
-            <>SELECT PROFILE</>
+            <Center mih={contentHeight - 5} my="auto" maw={600} mx="auto">
+              <Stack align="center">
+                <IconUserQuestion size="5rem" />
+                <Title>Select or create a Profile...</Title>
+                <Text color="dimmed" ta="center">
+                  It seems that you have not selected a profile yet. To get
+                  started, click the "Create Profile" button or select an
+                  existing profile from the list on the left. profile from the
+                  list on the left.
+                </Text>
+                <Button
+                  color="red"
+                  variant="filled"
+                  tt="uppercase"
+                  mt="lg"
+                  onClick={() => void router.push("/profiles/create/")}
+                >
+                  <Group>
+                    <IconUserPlus /> Create Profile
+                  </Group>
+                </Button>
+              </Stack>
+            </Center>
           )}
         </Grid.Col>
       </Grid>
