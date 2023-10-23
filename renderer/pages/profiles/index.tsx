@@ -3,27 +3,24 @@ import DefaultLayout from "@/components/layouts/Default";
 import {
   ActionIcon,
   Button,
-  Center,
-  Flex,
   Grid,
   Group,
-  Modal,
   Paper,
   ScrollArea,
   Stack,
+  Tabs,
   Text,
-  Title,
   Tooltip,
   UnstyledButton,
 } from "@mantine/core";
 import {
   IconEdit,
-  IconSquareRoundedX,
-  IconTrashX,
+  IconFileAnalytics,
+  IconList,
+  IconTrash,
+  IconTrophy,
   IconUserPlus,
-  IconUserQuestion,
 } from "@tabler/icons-react";
-import Link from "next/link";
 import { useState } from "react";
 import { PROFILES_DIR, PROFILE_FILENAME_EXTENSION } from "utils/constants";
 import path from "path";
@@ -34,11 +31,10 @@ import { useRouter } from "next/router";
 import { deleteFile } from "utils/fs/deleteFile";
 import { useProfiles } from "hooks/useProfiles";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
+import { getViewportHeight } from "utils/misc/getViewportHeight";
+import PageHeader from "@/components/content/PageHeader";
 
 const ProfilesPage: NextPage = () => {
-  const { push, reload } = useRouter();
-  const [opened, { open, close }] = useDisclosure(false);
-  const [openedProfile, setOpenedProfile] = useState<Profile>();
   const {
     isFetching,
     isLoading,
@@ -46,6 +42,9 @@ const ProfilesPage: NextPage = () => {
     data: profiles,
     refetch,
   } = useProfiles();
+  const { push, reload } = useRouter();
+  const [opened, { open, close }] = useDisclosure(false);
+  const [openedProfile, setOpenedProfile] = useState<Profile>(profiles[0]);
 
   const deleteProfile = () => {
     if (!openedProfile || !openedProfile.uuid) return;
@@ -56,7 +55,7 @@ const ProfilesPage: NextPage = () => {
     );
 
     // Delete file on os, refetch the query and reset the state
-    setOpenedProfile(undefined);
+    setOpenedProfile(profiles[0]);
     close();
     deleteFile(profilePath);
     void refetch();
@@ -68,137 +67,92 @@ const ProfilesPage: NextPage = () => {
       isLoading={isLoading}
       isSuccess={isSuccess}
     >
-      <Modal opened={opened} onClose={close} title="Delete Profile?" centered>
-        <Text>
-          Do you really want to delete the Profile "{openedProfile?.username}"?
-        </Text>
-        <Group mt="lg">
-          <Button color="red" onClick={() => deleteProfile()}>
-            Delete Profile
-          </Button>
-          <Button variant="subtle" onClick={() => close()}>
-            Cancel
-          </Button>
-        </Group>
-      </Modal>
-      <Grid>
-        <Grid.Col span={3}>
-          <ScrollArea.Autosize mah="calc(100vh - 2rem)">
-            <Stack my="xs">
-              <Group>
-                <Link href="/profiles/create">
-                  <Button
-                    component="a"
-                    leftIcon={<IconUserPlus />}
-                    variant="gradient"
-                  >
-                    Create Profile
-                  </Button>
-                </Link>
-              </Group>
-              {isSuccess ? (
-                profiles.map((profile) => (
+      <Grid align="flex-start">
+        <Grid.Col span={3} lg={2}>
+          <Paper withBorder>
+            <ScrollArea.Autosize
+              mah={getViewportHeight()}
+              mih={getViewportHeight()}
+              maw={400}
+              p="xs"
+              mx="auto"
+            >
+              <Stack>
+                <Button w="100%" color="red" variant="filled" tt="uppercase">
+                  <Group>
+                    <IconUserPlus /> Create Profile
+                  </Group>
+                </Button>
+                {profiles.map((profile) => (
                   <UnstyledButton
                     key={profile.uuid}
                     onClick={() => setOpenedProfile(profile)}
                   >
-                    <Group>
-                      <ProfileAvatar profile={profile} />
-                      <Text color="dimmed">{profile.username}</Text>
+                    <Group fz="sm">
+                      <ProfileAvatar profile={profile} size="md" />
+                      <Text truncate>{profile.username}</Text>
                     </Group>
                   </UnstyledButton>
-                ))
-              ) : (
-                <Stack mt="xl">
-                  <Text ta="center">Unable to load the profiles...</Text>
-                  <Button onClick={() => reload()}>Reload Page</Button>
-                </Stack>
-              )}
-            </Stack>
-          </ScrollArea.Autosize>
+                ))}
+              </Stack>
+            </ScrollArea.Autosize>
+          </Paper>
         </Grid.Col>
         <Grid.Col span="auto">
-          {openedProfile ? (
-            <>
-              <Flex justify="space-between">
-                <Group>
-                  <ProfileAvatar profile={openedProfile} size="xl" />
-                  <Title>
-                    {openedProfile.username}
-                    <Text c="dimmed" fz="xs">
-                      Member Since: {getLocaleDate(openedProfile.createdAt)}
-                    </Text>
-                  </Title>
-                </Group>
-                <Group>
-                  <Tooltip label="Delete Profile">
-                    <ActionIcon
-                      color="red"
-                      variant="transparent"
-                      onClick={() => open()}
-                    >
-                      <IconTrashX />
-                    </ActionIcon>
-                  </Tooltip>
+          <Paper>
+            <Group align="flex-start">
+              <ProfileAvatar size="xl" profile={openedProfile} />
+              <PageHeader title={openedProfile.username}>
+                Member Since: {getLocaleDate(openedProfile.createdAt)}
+              </PageHeader>
+              <Group ml="auto">
+                <ActionIcon>
                   <Tooltip label="Edit Profile">
-                    <ActionIcon
-                      variant="transparent"
-                      onClick={() =>
-                        void push({
-                          pathname: `/profiles/edit/${openedProfile.uuid}`,
-                          query: {
-                            profile: JSON.stringify(openedProfile),
-                          },
-                        })
-                      }
-                    >
-                      <IconEdit />
-                    </ActionIcon>
+                    <IconEdit />
                   </Tooltip>
-                  <Tooltip label="Close Profile">
-                    <ActionIcon
-                      variant="transparent"
-                      onClick={() => setOpenedProfile(undefined)}
-                    >
-                      <IconSquareRoundedX />
-                    </ActionIcon>
+                </ActionIcon>
+                <ActionIcon>
+                  <Tooltip label="Delete Profile">
+                    <IconTrash />
                   </Tooltip>
-                </Group>
-              </Flex>
-              <Paper p="xs" withBorder mt="lg">
-                <Text
-                  c="dimmed"
-                  fz="sm"
-                  fs={openedProfile.bio.length ? "" : "italic"}
-                  style={{ wordBreak: "break-word" }}
+                </ActionIcon>
+              </Group>
+            </Group>
+            <Tabs color="red" defaultValue="achievements" mt="lg">
+              <Tabs.List grow position="apart">
+                <Tabs.Tab
+                  value="achievements"
+                  icon={<IconTrophy size="0.8rem" />}
                 >
-                  {openedProfile.bio.length
-                    ? openedProfile.bio
-                    : "This user has not added a bio yet. You can edit the profile to add a bio."}
+                  Achievements
+                </Tabs.Tab>
+                <Tabs.Tab
+                  value="statistics"
+                  icon={<IconFileAnalytics size="0.8rem" />}
+                >
+                  Statistics
+                </Tabs.Tab>
+                <Tabs.Tab value="matches" icon={<IconList size="0.8rem" />}>
+                  Matches
+                </Tabs.Tab>
+              </Tabs.List>
+              <Tabs.Panel value="achievements" pt="xs">
+                <Text fs="italic">
+                  Achievements will be added in a later version.
                 </Text>
-              </Paper>
-            </>
-          ) : (
-            <Center h="calc(100vh - 2rem)">
-              <Flex
-                ta="center"
-                direction="column"
-                align="center"
-                justify="center"
-                gap="lg"
-              >
-                <IconUserQuestion size="4rem" />
-                <Title fz="h3" fw="bold">
-                  No Profile Selected
-                </Title>
-                <Text color="dimmed" mb="lg">
-                  It looks like you haven't selected a profile yet. To get
-                  started, choose a profile from the list on the left, or create
-                  a new one.
+              </Tabs.Panel>
+              <Tabs.Panel value="statistics" pt="xs">
+                <Text fs="italic">
+                  Profile statistics will be added in a later version.
                 </Text>
-              </Flex>
-            </Center>
-          )}
+              </Tabs.Panel>
+              <Tabs.Panel value="matches" pt="xs">
+                <Text fs="italic">
+                  Match statistics will be added in a later version.
+                </Text>
+              </Tabs.Panel>
+            </Tabs>
+          </Paper>
         </Grid.Col>
       </Grid>
     </DefaultLayout>
