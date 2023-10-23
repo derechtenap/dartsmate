@@ -1,23 +1,22 @@
 import type { NextPage } from "next";
 import DefaultLayout from "@/components/layouts/Default";
-import PageHeader from "@/components/content/PageHeader";
 import {
-  ActionIcon,
   Avatar,
   Button,
-  Center,
+  CheckIcon,
   ColorSwatch,
   DefaultMantineColor,
-  Flex,
+  Divider,
+  Grid,
   Group,
+  Kbd,
   Stack,
+  Text,
   Textarea,
   TextInput,
-  Tooltip,
-  UnstyledButton,
+  Title,
   useMantineTheme,
 } from "@mantine/core";
-import { IconSquareRoundedX } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { hasLength, isNotEmpty, useForm } from "@mantine/form";
 import { useState } from "react";
@@ -27,10 +26,14 @@ import { createFile } from "utils/fs/createFile";
 import { PROFILES_DIR, PROFILE_FILENAME_EXTENSION } from "utils/constants";
 import path from "path";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
+import { getViewportHeight } from "utils/misc/getViewportHeight";
+import PageHeader from "@/components/content/PageHeader";
+import { IconInfoCircleFilled } from "@tabler/icons-react";
 
 const CreateProfilePage: NextPage = () => {
-  const { back } = useRouter();
-  const [avatarColor, setAvatarColor] = useState<DefaultMantineColor>("blue");
+  const router = useRouter();
+  const theme = useMantineTheme();
+  const [avatarColor, setAvatarColor] = useState<DefaultMantineColor>("red");
   const form = useForm<Profile>({
     initialValues: {
       bio: "",
@@ -62,11 +65,17 @@ const CreateProfilePage: NextPage = () => {
     });
   };
 
-  const theme = useMantineTheme();
   const swatches = Object.keys(theme.colors).map((color) => (
-    <UnstyledButton key={color} onClick={() => updateAvatarColor(color)}>
-      <ColorSwatch color={theme.colors[color][6]} />
-    </UnstyledButton>
+    <ColorSwatch
+      color={theme.colors[color][6]}
+      key={color}
+      style={{ cursor: "pointer" }}
+      onClick={() => updateAvatarColor(color)}
+    >
+      {color === avatarColor ? (
+        <CheckIcon width={15} style={{ color: "white" }} />
+      ) : null}
+    </ColorSwatch>
   ));
 
   const createProfile = () => {
@@ -76,7 +85,7 @@ const CreateProfilePage: NextPage = () => {
         path.join(PROFILES_DIR, form.values.uuid + PROFILE_FILENAME_EXTENSION),
         JSON.stringify(form.values)
       );
-      back();
+      router.back();
     }
   };
 
@@ -87,44 +96,69 @@ const CreateProfilePage: NextPage = () => {
       })}
     >
       <DefaultLayout isSuccess={true}>
-        <Flex direction="column" h="100%">
-          <Group position="apart">
-            <PageHeader title="Create Profile">
-              Your profile stores your games, statistics and achievements in
-              DartMate. You can update your profile at any time.
+        <Grid maw={1000} h={getViewportHeight() || "fit-content"} mx="auto">
+          <Grid.Col span={12}>
+            <PageHeader title="Create your new Profile">
+              Here, you can set up your personal profile.
+              <Divider />
             </PageHeader>
-            <Tooltip label="Back">
-              <ActionIcon variant="transparent" onClick={() => back()}>
-                <IconSquareRoundedX />
-              </ActionIcon>
-            </Tooltip>
-          </Group>
-
-          <Center style={{ flex: 1 }}>
-            <Stack w="66%" maw={600}>
-              <Avatar mx="auto" color={avatarColor} size="xl">
-                {getUsernameInitials(form.values.username)}
+          </Grid.Col>
+          <Grid.Col span={4} mr="xl">
+            <Stack>
+              <Avatar color={form.values.color} size={200}>
+                {getUsernameInitials(form.values.username || "John Marston")}
               </Avatar>
-              <Group p="lg">{swatches}</Group>
+              <Title size="h6">Color</Title>
+              <Group mb="lg">{swatches}</Group>
+              <Divider />
+              <Group align="flex-start">
+                <IconInfoCircleFilled />
+                <Text color="dimmed" fz="xs" w={256}>
+                  Click on the avatar to upload a profile picture. If you don't
+                  select a picture, the avatar will display your profile
+                  initials.
+                </Text>
+              </Group>
+            </Stack>
+          </Grid.Col>
+          <Grid.Col span="auto" ml="xl">
+            <Stack>
               <TextInput
+                description="Your Username will be shown in various places throughout the app. You can change it anytime."
                 placeholder="John Marston"
                 label="Username"
                 {...form.getInputProps("username")}
               />
               <Textarea
-                placeholder="An optional small biography about your achievements in darts, you as a player or something else"
+                placeholder="An optional small biography about your achievements in darts, you as a player or something else."
+                description={
+                  <>
+                    Tip: Press <Kbd size="xs">Windows Key</Kbd> +{" "}
+                    <Kbd size="xs">.</Kbd> on Windows devices to open the emoji
+                    keyboard.
+                  </>
+                }
                 label="Bio"
                 {...form.getInputProps("bio")}
               />
-              <Group>
-                <Button type="submit">Create Profile</Button>
-                <Button variant="subtle" onClick={() => back()}>
-                  Cancel
-                </Button>
-              </Group>
             </Stack>
-          </Center>
-        </Flex>
+          </Grid.Col>
+          <Grid.Col span={12}>
+            <Divider />
+            <Group mt="lg">
+              <Button color="red" type="submit">
+                Create Profile
+              </Button>
+              <Button
+                color="dark"
+                variant="subtle"
+                onClick={() => router.back()}
+              >
+                Cancel
+              </Button>
+            </Group>
+          </Grid.Col>
+        </Grid>
       </DefaultLayout>
     </form>
   );
