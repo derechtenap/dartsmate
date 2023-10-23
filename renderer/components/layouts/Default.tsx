@@ -77,7 +77,7 @@ const DefaultLayout = ({
     {
       icon: <IconList size={14} />,
       label: "Replays",
-      route: "/previousMatches",
+      route: "/replays",
     },
     /*
     {

@@ -13,6 +13,7 @@ import {
   IconRepeat,
   IconTable,
 } from "@tabler/icons-react";
+import BadgeMatchStatus from "@/components/content/BadgeMatchStatus";
 
 const GameResultsPage: NextPage = () => {
   const router = useRouter();
@@ -37,9 +38,9 @@ const GameResultsPage: NextPage = () => {
               matchData?.initialScore || 0
             } ${matchData?.matchCheckout || "Any"}-Out`}
           </Text>
-          <Badge color={matchData?.matchStatus === "finished" ? "blue" : "red"}>
-            Status: {matchData?.matchStatus}
-          </Badge>
+          <BadgeMatchStatus
+            matchStatus={matchData?.matchStatus || "undefined"}
+          />
         </Group>
       </PageHeader>
 

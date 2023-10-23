@@ -8,7 +8,7 @@ interface Player extends Profile {
 }
 
 declare type Checkout = "Any" | "Double" | "Single" | "Triple";
-declare type MatchStatus = "aborted" | "finished" | "started";
+declare type MatchStatus = "aborted" | "finished" | "started" | "undefined";
 
 declare type Match = {
   appVersion: string;
