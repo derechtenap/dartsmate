@@ -27,6 +27,7 @@ import { useRouter } from "next/router";
 import { useDisclosure } from "@mantine/hooks";
 import { ipcRenderer } from "electron";
 import LoadingOverlay from "../LoadingOverlay";
+import ActionButton from "../content/ActionButton";
 
 type DefaultLayoutProps = {
   children: React.ReactNode;
@@ -157,9 +158,11 @@ const DefaultLayout = ({
                   ))}
                 </Menu.Dropdown>
               </Menu>
-              <ActionIcon onClick={() => open()}>
-                <IconX />
-              </ActionIcon>
+              <ActionButton
+                action={() => open()}
+                icon={<IconX />}
+                label="Quit App"
+              />
             </Group>
           </Group>
         </Header>
