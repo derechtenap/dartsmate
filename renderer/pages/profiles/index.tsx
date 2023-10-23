@@ -23,18 +23,18 @@ import {
   IconUserQuestion,
 } from "@tabler/icons-react";
 import { useState } from "react";
-// import { PROFILES_DIR, PROFILE_FILENAME_EXTENSION } from "utils/constants";
-// import path from "path";
-// import { useDisclosure } from "@mantine/hooks";
+import { PROFILES_DIR, PROFILE_FILENAME_EXTENSION } from "utils/constants";
+import path from "path";
 import { Profile } from "types/profile";
 import { getLocaleDate } from "utils/misc/getLocalDate";
 import { useRouter } from "next/router";
-// import { deleteFile } from "utils/fs/deleteFile";
+import { deleteFile } from "utils/fs/deleteFile";
 import { useProfiles } from "hooks/useProfiles";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
 import { getViewportHeight } from "utils/misc/getViewportHeight";
 import PageHeader from "@/components/content/PageHeader";
 import ActionButton from "@/components/content/ActionButton";
+import { notifications } from "@mantine/notifications";
 
 const ProfilesPage: NextPage = () => {
   const {
@@ -42,17 +42,44 @@ const ProfilesPage: NextPage = () => {
     isLoading,
     isSuccess,
     data: profiles,
-    // refetch,
+    refetch,
   } = useProfiles();
   const router = useRouter();
-  // const [opened, { open, close }] = useDisclosure(false);
   const [openedProfile, setOpenedProfile] = useState<Profile | undefined>(
     undefined
   );
   const contentHeight = getViewportHeight();
 
-  /*
-  const deleteProfile = () => {
+  const handleShowDeleteNotification = () => {
+    if (!openedProfile) return;
+    notifications.show({
+      autoClose: false,
+      color: "gray",
+      title: `Are you sure you want to delete ${openedProfile.username}'s profile?`,
+      message: (
+        <>
+          <Text>This action cannot be undone!</Text>
+          <Group mt="md">
+            <Button compact color="red" onClick={() => handleDeleteProfile()}>
+              Delete Profile
+            </Button>
+            <Button
+              compact
+              color="dark"
+              variant="subtle"
+              onClick={() => notifications.clean()}
+            >
+              Cancel
+            </Button>
+          </Group>
+        </>
+      ),
+      withBorder: true,
+      withCloseButton: false,
+    });
+  };
+
+  const handleDeleteProfile = () => {
     if (!openedProfile || !openedProfile.uuid) return;
 
     const profilePath = path.join(
@@ -61,12 +88,11 @@ const ProfilesPage: NextPage = () => {
     );
 
     // Delete file on os, refetch the query and reset the state
-    setOpenedProfile(profiles[0]);
-    close();
+    setOpenedProfile(undefined);
     deleteFile(profilePath);
+    notifications.clean();
     void refetch();
   };
-  */
 
   return (
     <DefaultLayout
@@ -126,7 +152,7 @@ const ProfilesPage: NextPage = () => {
                     label="Edit Profile"
                   />
                   <ActionButton
-                    action={() => console.info("Delete")}
+                    action={() => handleShowDeleteNotification()}
                     icon={<IconTrash />}
                     color="red"
                     label="Delete Profile"
