@@ -6,7 +6,6 @@ import {
   MantineProvider,
 } from "@mantine/core";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
-import pkg from "../../package.json";
 import "../styles/globals.css";
 import "../styles/scrollbar.css";
 import { useEffect, useState } from "react";
@@ -17,6 +16,7 @@ import { QueryClient } from "@tanstack/query-core";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { DehydratedState } from "@tanstack/react-query";
 import { Notifications } from "@mantine/notifications";
+import { APP_NAME } from "utils/constants";
 
 const App = ({
   Component,
@@ -49,7 +49,7 @@ const App = ({
   return (
     <>
       <Head>
-        <title>{pkg.productName}</title>
+        <title>{APP_NAME}</title>
       </Head>
       <QueryClientProvider client={queryClient}>
         <ColorSchemeProvider

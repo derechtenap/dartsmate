@@ -1,171 +1,171 @@
 import {
+  ActionIcon,
   AppShell,
   Button,
-  createStyles,
+  Center,
   Group,
+  Header,
+  Menu,
   Modal,
-  Navbar,
-  rem,
   Stack,
+  Text,
   Title,
-  Tooltip,
-  UnstyledButton,
 } from "@mantine/core";
 import {
-  Icon,
   IconDisc,
-  IconHome2,
-  IconListNumbers,
-  IconSchool,
+  IconDots,
+  IconList,
+  // IconListNumbers,
+  // IconSchool,
   IconSettings,
-  IconSquareRoundedX,
-  IconTournament,
+  IconSquareLetterD,
+  // IconTournament,
   IconUsersGroup,
+  IconX,
 } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { useDisclosure } from "@mantine/hooks";
 import { ipcRenderer } from "electron";
+import LoadingOverlay from "../LoadingOverlay";
+import ActionButton from "../content/ActionButton";
 
-type Props = {
+type DefaultLayoutProps = {
   children: React.ReactNode;
+  isFetching?: boolean;
+  isLoading?: boolean;
+  isSuccess?: boolean;
 };
 
 type NavbarLinkProps = {
-  action?: () => void;
-  active?: boolean;
-  disabled?: boolean;
-  icon: Icon;
+  icon: JSX.Element;
   label: string;
   route: string;
 };
 
 export const navbarWidth = 70;
+export const headerHeight = 45;
 
-const DefaultLayout = ({ children }: Props) => {
+const DefaultLayout = ({
+  children,
+  isFetching,
+  isLoading,
+  isSuccess,
+}: DefaultLayoutProps) => {
   const [opened, { open, close }] = useDisclosure(false);
   const { route, push } = useRouter();
 
+  // TODO: Some routes are currently unfinished and disabled. Reactivate the routes when the pages are created
   const mainRoutes: NavbarLinkProps[] = [
-    { icon: IconHome2, label: "Home", route: "/" },
-    { icon: IconDisc, label: "Lobby", route: "/lobby" },
+    { icon: <IconDisc size={14} />, label: "Lobby", route: "/lobby" },
+    /*
     {
-      icon: IconSchool,
-      disabled: true,
+      icon: <IconSchool size={14} />,
       label: "Training",
       route: "/training",
     },
+
     {
-      icon: IconTournament,
-      disabled: true,
+      icon: <IconTournament size={14} />,
       label: "Tournament",
       route: "/tournament",
     },
+    */
     {
-      icon: IconUsersGroup,
+      icon: <IconUsersGroup size={14} />,
       label: "Profiles",
       route: "/profiles",
     },
     {
-      icon: IconListNumbers,
-      disabled: true,
+      icon: <IconList size={14} />,
+      label: "Replays",
+      route: "/replays",
+    },
+    /*
+    {
+      icon: <IconListNumbers size={14} />,
       label: "Ranking",
       route: "/ranking",
     },
+    */
   ];
 
   const miscRoutes: NavbarLinkProps[] = [
     {
-      icon: IconSettings,
+      icon: <IconSettings size={14} />,
       label: "Settings",
       route: "/settings",
     },
-    {
-      icon: IconSquareRoundedX,
-      action: () => open(),
-      label: "Quit App",
-      route: "#?quitApp",
-    },
   ];
 
-  const useStyles = createStyles((theme) => ({
-    link: {
-      width: rem(50),
-      height: rem(50),
-      borderRadius: theme.radius.md,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      color:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[0]
-          : theme.colors.dark[5],
-
-      "&:hover": {
-        backgroundColor:
-          theme.colorScheme === "dark"
-            ? theme.colors.dark[5]
-            : theme.colors.gray[1],
-      },
-      "&:disabled": {
-        cursor: "not-allowed",
-      },
-    },
-    active: {
-      "&, &:hover": {
-        backgroundColor: theme.fn.variant({
-          variant: "light",
-          color: theme.primaryColor,
-        }).background,
-        color: theme.fn.variant({ variant: "light", color: theme.primaryColor })
-          .color,
-      },
-    },
-  }));
-
-  const NavbarLink = ({
-    action,
-    icon: Icon,
-    label,
-    disabled,
-    active,
-    route,
-  }: NavbarLinkProps) => {
-    const { classes, cx } = useStyles();
-    return (
-      <Tooltip label={label} position="right" offset={15} withArrow>
-        <UnstyledButton
-          onClick={action ? action : () => void push(route)}
-          className={cx(classes.link, { [classes.active]: active })}
-          disabled={disabled}
-        >
-          <Icon size="1.2rem" stroke={1.5} />
-        </UnstyledButton>
-      </Tooltip>
-    );
+  const isActiveRoute = (currentRoute: string) => {
+    return currentRoute === route;
   };
 
-  const appendNavbarRoutes = (links: NavbarLinkProps[]) => {
-    return links.map((link) => (
-      <NavbarLink {...link} active={route === link.route} key={link.label} />
-    ));
-  };
+  if (isLoading || isFetching) {
+    return <LoadingOverlay />;
+  }
 
   return (
     <AppShell
       py={0}
-      navbar={
-        <Navbar height="100vh" p="xs" width={{ base: navbarWidth }}>
-          <Navbar.Section grow>
-            <Stack justify="center" spacing="xs">
-              {appendNavbarRoutes(mainRoutes)}
-            </Stack>
-          </Navbar.Section>
-          <Navbar.Section>
-            <Stack justify="center" spacing="xs">
-              {appendNavbarRoutes(miscRoutes)}
-            </Stack>
-          </Navbar.Section>
-        </Navbar>
+      header={
+        <Header
+          height={headerHeight}
+          style={{ display: "flex", alignItems: "center" }}
+          px="sm"
+        >
+          <Group position="apart" w="100%">
+            <ActionIcon
+              color="red"
+              radius="xs"
+              variant="filled"
+              onClick={() => void push("/")}
+            >
+              <IconSquareLetterD />
+            </ActionIcon>
+            <Button.Group>
+              {mainRoutes.map((route) => (
+                <Button
+                  color={isActiveRoute(route.route) ? "red" : "gray"}
+                  compact
+                  key={route.route}
+                  leftIcon={route.icon}
+                  radius="xs"
+                  onClick={() => void push(route.route)}
+                  uppercase
+                >
+                  {route.label}
+                </Button>
+              ))}
+            </Button.Group>
+            <Group>
+              <Menu shadow="md" radius={0} width={200}>
+                <Menu.Target>
+                  <ActionIcon>
+                    <IconDots />
+                  </ActionIcon>
+                </Menu.Target>
+
+                <Menu.Dropdown>
+                  {miscRoutes.map((route) => (
+                    <Menu.Item
+                      icon={route.icon}
+                      key={route.label}
+                      onClick={() => void push(route.route)}
+                    >
+                      {route.label}
+                    </Menu.Item>
+                  ))}
+                </Menu.Dropdown>
+              </Menu>
+              <ActionButton
+                action={() => open()}
+                icon={<IconX />}
+                label="Quit App"
+              />
+            </Group>
+          </Group>
+        </Header>
       }
     >
       <Modal
@@ -178,21 +178,41 @@ const DefaultLayout = ({ children }: Props) => {
         }}
       >
         <Modal.Body>
-          <Title size="h3" ta="center" mb="xl">
-            Quit DartMate?
-          </Title>
-          <Group position="center">
+          <Title mb="lg">Confirm Quit</Title>
+          <Text color="dimmed" mb="lg">
+            Any unsaved data will be lost. Are you sure you want to quit the
+            app?
+          </Text>
+          <Group>
             <Button
+              color="red"
               onClick={() => void ipcRenderer.send("quit-app")}
-              variant="default"
+              variant="outline"
             >
               Yes
             </Button>
-            <Button onClick={() => void close()}>No</Button>
+            <Button onClick={() => void close()} variant="default">
+              No
+            </Button>
           </Group>
         </Modal.Body>
       </Modal>
-      {children}
+      {isSuccess ? (
+        children
+      ) : (
+        <Center w="50%" mx="auto" h="100vh">
+          <Stack>
+            <Title>Oh snap!</Title>
+            <Text>
+              An internal error has occurred, preventing the creation of the
+              page you requested. We apologize for the inconvenience. To resolve
+              this issue, we recommend restarting the application and attempting
+              the operation again. If the problem persists, please contact our
+              support team for further assistance.
+            </Text>
+          </Stack>
+        </Center>
+      )}
     </AppShell>
   );
 };
