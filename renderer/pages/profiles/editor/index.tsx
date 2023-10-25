@@ -30,18 +30,25 @@ import { getViewportHeight } from "utils/misc/getViewportHeight";
 import PageHeader from "@/components/content/PageHeader";
 import { IconInfoCircleFilled } from "@tabler/icons-react";
 
-const CreateProfilePage: NextPage = () => {
+const ProfileEditorPage: NextPage = () => {
   const router = useRouter();
+  const query = router.query;
+  const profile = query.profile
+    ? (JSON.parse(query.profile as string) as Profile)
+    : undefined;
+
   const theme = useMantineTheme();
-  const [avatarColor, setAvatarColor] = useState<DefaultMantineColor>("red");
+  const [avatarColor, setAvatarColor] = useState<DefaultMantineColor>(
+    profile?.color || "red"
+  );
   const form = useForm<Profile>({
     initialValues: {
-      bio: "",
+      bio: profile?.bio || "",
       color: avatarColor,
-      createdAt: Date.now(),
-      username: "",
+      createdAt: profile?.createdAt || Date.now(),
+      username: profile?.username || "",
       updatedAt: Date.now(),
-      uuid: randomUUID(),
+      uuid: profile?.uuid || randomUUID(),
     },
 
     validate: {
@@ -89,6 +96,10 @@ const CreateProfilePage: NextPage = () => {
     }
   };
 
+  const EDITOR_MODE = query.mode || "create"; // Default to create mode when the query mode is undefined
+
+  console.info(EDITOR_MODE, query);
+
   return (
     <form
       onSubmit={form.onSubmit(() => {
@@ -98,8 +109,16 @@ const CreateProfilePage: NextPage = () => {
       <DefaultLayout isSuccess={true}>
         <Grid maw={1000} h={getViewportHeight() || "fit-content"} mx="auto">
           <Grid.Col span={12}>
-            <PageHeader title="Create your new Profile">
-              Here, you can set up your personal profile.
+            <PageHeader
+              title={
+                EDITOR_MODE === "create"
+                  ? "Create your Profile"
+                  : "Update your Profile"
+              }
+            >
+              {EDITOR_MODE === "create"
+                ? "Here, you can set up your personal profile."
+                : "Here you can update the profile."}
               <Divider />
             </PageHeader>
           </Grid.Col>
@@ -147,7 +166,7 @@ const CreateProfilePage: NextPage = () => {
             <Divider />
             <Group mt="lg">
               <Button color="red" type="submit">
-                Create Profile
+                {EDITOR_MODE === "create" ? "Create Profile" : "Update Profile"}
               </Button>
               <Button
                 color="dark"
@@ -164,4 +183,4 @@ const CreateProfilePage: NextPage = () => {
   );
 };
 
-export default CreateProfilePage;
+export default ProfileEditorPage;

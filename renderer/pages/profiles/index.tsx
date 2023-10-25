@@ -35,6 +35,7 @@ import { getViewportHeight } from "utils/misc/getViewportHeight";
 import PageHeader from "@/components/content/PageHeader";
 import ActionButton from "@/components/content/ActionButton";
 import { notifications } from "@mantine/notifications";
+import Link from "next/link";
 
 const ProfilesPage: NextPage = () => {
   const {
@@ -111,17 +112,20 @@ const ProfilesPage: NextPage = () => {
               mx="auto"
             >
               <Stack>
-                <Button
-                  w="100%"
-                  color="red"
-                  variant="filled"
-                  tt="uppercase"
-                  onClick={() => void router.push("/profiles/create/")}
+                <Link
+                  href={{
+                    pathname: "/profiles/editor/",
+                    query: {
+                      mode: "create",
+                    },
+                  }}
                 >
-                  <Group>
-                    <IconUserPlus /> Create Profile
-                  </Group>
-                </Button>
+                  <Button w="100%" color="red" variant="filled" tt="uppercase">
+                    <Group>
+                      <IconUserPlus /> Create Profile
+                    </Group>
+                  </Button>
+                </Link>
                 {profiles.map((profile) => (
                   <UnstyledButton
                     key={profile.uuid}
@@ -147,7 +151,15 @@ const ProfilesPage: NextPage = () => {
                 </PageHeader>
                 <Group ml="auto">
                   <ActionButton
-                    action={() => console.info("Edit")}
+                    action={() =>
+                      void router.push({
+                        pathname: "/profiles/editor/",
+                        query: {
+                          mode: "edit",
+                          profile: JSON.stringify(openedProfile),
+                        },
+                      })
+                    }
                     icon={<IconEdit />}
                     label="Edit Profile"
                   />
@@ -211,17 +223,20 @@ const ProfilesPage: NextPage = () => {
                   existing profile from the list on the left. profile from the
                   list on the left.
                 </Text>
-                <Button
-                  color="red"
-                  variant="filled"
-                  tt="uppercase"
-                  mt="lg"
-                  onClick={() => void router.push("/profiles/create/")}
+                <Link
+                  href={{
+                    pathname: "/profiles/editor/",
+                    query: {
+                      mode: "create",
+                    },
+                  }}
                 >
-                  <Group>
-                    <IconUserPlus /> Create Profile
-                  </Group>
-                </Button>
+                  <Button color="red" variant="filled" tt="uppercase" mt="lg">
+                    <Group>
+                      <IconUserPlus /> Create Profile
+                    </Group>
+                  </Button>
+                </Link>
               </Stack>
             </Center>
           )}
