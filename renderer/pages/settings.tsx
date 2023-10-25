@@ -92,7 +92,7 @@ const SettingsPage: NextPage = () => {
             <SegmentedControl
               value={colorScheme}
               onChange={(scheme) => setColorScheme(scheme as ColorScheme)}
-              color="blue"
+              color="red"
               data={colorSchemes}
             />
             {/*
