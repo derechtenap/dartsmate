@@ -158,6 +158,12 @@ const ProfilesPage: NextPage = () => {
                     label="Delete Profile"
                   />
                 </Group>
+                <Paper withBorder w="100%" p="xs">
+                  <Text fs="italic" fz="sm">
+                    {openedProfile.bio ||
+                      "This player has not created a bio yet."}
+                  </Text>
+                </Paper>
               </Group>
               <Tabs color="red" defaultValue="achievements" mt="lg">
                 <Tabs.List grow position="apart">
