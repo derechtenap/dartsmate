@@ -179,10 +179,10 @@ const GamePlayingPage: NextPage = () => {
       >
         <Text fw="bold">Are you sure you want to abort the current match?</Text>
         <Group mt="lg">
-          <Button onClick={() => closeModal()}>Resume Match</Button>
-          <Button color="red" variant="outline" onClick={() => handleAbort()}>
-            Abort Match
+          <Button variant="subtile" onClick={() => closeModal()}>
+            Resume Match
           </Button>
+          <Button onClick={() => handleAbort()}>Abort Match</Button>
         </Group>
       </Modal>
       <Grid gutter="xl" m="lg">
@@ -267,7 +267,7 @@ const GamePlayingPage: NextPage = () => {
               ))}
             </Group>
             <Group grow mt="xl">
-              <Button color="red" variant="light" onClick={() => openModal()}>
+              <Button variant="light" onClick={() => openModal()}>
                 ABORT MATCH
               </Button>
               <Button

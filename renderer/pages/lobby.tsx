@@ -134,7 +134,6 @@ const LobbyPage: NextPage = () => {
             Settings
           </Tabs.Tab>
           <Button
-            color="red"
             tt="uppercase"
             ml="auto"
             style={{ borderEndEndRadius: 0, borderEndStartRadius: 0 }}
@@ -170,7 +169,6 @@ const LobbyPage: NextPage = () => {
                     >
                       <Stack>
                         <Indicator
-                          color="red"
                           label={<IconCheck size="12px" />}
                           disabled={!isProfileInList}
                           size={24}

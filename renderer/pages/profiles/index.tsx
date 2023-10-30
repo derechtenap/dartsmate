@@ -61,7 +61,7 @@ const ProfilesPage: NextPage = () => {
         <>
           <Text>This action cannot be undone!</Text>
           <Group mt="md">
-            <Button compact color="red" onClick={() => handleDeleteProfile()}>
+            <Button compact onClick={() => handleDeleteProfile()}>
               Delete Profile
             </Button>
             <Button
@@ -120,7 +120,7 @@ const ProfilesPage: NextPage = () => {
                     },
                   }}
                 >
-                  <Button w="100%" color="red" variant="filled" tt="uppercase">
+                  <Button w="100%" variant="filled" tt="uppercase">
                     <Group>
                       <IconUserPlus /> Create Profile
                     </Group>
@@ -177,7 +177,7 @@ const ProfilesPage: NextPage = () => {
                   </Text>
                 </Paper>
               </Group>
-              <Tabs color="red" defaultValue="achievements" mt="lg">
+              <Tabs defaultValue="achievements" mt="lg">
                 <Tabs.List grow position="apart">
                   <Tabs.Tab
                     value="achievements"
@@ -231,7 +231,7 @@ const ProfilesPage: NextPage = () => {
                     },
                   }}
                 >
-                  <Button color="red" variant="filled" tt="uppercase" mt="lg">
+                  <Button variant="filled" tt="uppercase" mt="lg">
                     <Group>
                       <IconUserPlus /> Create Profile
                     </Group>
