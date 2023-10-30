@@ -5,6 +5,8 @@
 :warning: The project is currently still a work in progress. Many functions and ideas are not implemented yet!
 
 ## :sparkles: Features
+**Explore the Future:** Dive into our [project roadmap](https://github.com/derechtenap/dartmate/wiki/Roadmap) to discover exciting upcoming features!
+
 
 - **Create & Manage Profiles:** Easily create and manage player profiles for your matches.
 - **Create A Match:** Set up a game with and customize various game settings.
