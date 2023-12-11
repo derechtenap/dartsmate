@@ -20,7 +20,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "electron-serve": "^1.1.0",
+    "electron-serve": "^1.2.0",
     "electron-store": "^8.1.0"
   },
   "devDependencies": {
