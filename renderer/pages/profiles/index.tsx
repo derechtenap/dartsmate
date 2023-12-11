@@ -110,6 +110,7 @@ const ProfilesPage: NextPage = () => {
               maw={400}
               p="xs"
               mx="auto"
+              placeholder=""
             >
               <Stack>
                 <Link

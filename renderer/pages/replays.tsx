@@ -71,7 +71,7 @@ const ReplaysPage: NextPage = () => {
         </Card.Section>
       </Paper>
       */}
-      <ScrollArea.Autosize>
+      <ScrollArea.Autosize placeholder="">
         <Table highlightOnHover withBorder>
           <thead>
             <tr>
