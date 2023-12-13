@@ -165,7 +165,7 @@ const ProfileEditorPage: NextPage = () => {
           <Grid.Col span={12}>
             <Divider />
             <Group mt="lg">
-              <Button color="red" type="submit">
+              <Button type="submit">
                 {EDITOR_MODE === "create" ? "Create Profile" : "Update Profile"}
               </Button>
               <Button

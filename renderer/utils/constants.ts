@@ -1,6 +1,7 @@
 import { join } from "path";
 import { homedir } from "os";
 import pkg from "../../package.json";
+import { Checkout, MatchStatus } from "types/match";
 
 export const APP_NAME = pkg.productName;
 
@@ -33,3 +34,20 @@ export const DARTBOARD_ZONES = [
 export const SCORE_BULLSEYE = 50;
 export const SCORE_OUTER_BULL = 25;
 export const SCORE_MISSED = 0;
+
+// Define default values for match setup
+export const DEFAULT_MATCH_SETTINGS: {
+  CHECKOUT: Checkout;
+  SCORE: number;
+  STATUS: MatchStatus;
+} = {
+  CHECKOUT: "Double",
+  SCORE: 501,
+  STATUS: "started",
+};
+
+// Define the range of valid scores for a match
+export const MATCH_SCORE = {
+  MIN: 3,
+  MAX: 901,
+};
