@@ -124,6 +124,8 @@ const LobbyPage: NextPage = () => {
     });
   };
 
+  const isPlayerListEmpty = matchPlayerList.length === 0;
+
   return (
     <DefaultLayout
       isFetching={isFetching}
@@ -181,7 +183,7 @@ const LobbyPage: NextPage = () => {
       </Drawer>
       <Grid h="100%" m={0}>
         <Grid.Col span={9} py={0}>
-          {matchPlayerList.length === 0 ? (
+          {isPlayerListEmpty ? (
             <Group
               position="center"
               h="100%"
@@ -272,7 +274,7 @@ const LobbyPage: NextPage = () => {
             </Stack>
             <Button
               tt="uppercase"
-              disabled={form.values.players.length === 0}
+              disabled={isPlayerListEmpty}
               onClick={() => handleStartMatch()}
             >
               <Group>
