@@ -12,6 +12,7 @@ import {
   NativeSelect,
   NumberInput,
   Stack,
+  Table,
   Text,
   Title,
 } from "@mantine/core";
@@ -191,32 +192,54 @@ const LobbyPage: NextPage = () => {
           ) : (
             <Stack mr="xl">
               <Title fz="lg">Players</Title>
-              <Flex align="center" gap="lg" justify="space-between">
-                <Text fz="xs" tt="uppercase" mr="auto">
-                  {matchPlayerList.length} Players
-                </Text>
-                <ActionButton
-                  action={open}
-                  icon={<IconUsersPlus />}
-                  label="Add Players"
-                />
-                <ActionButton
-                  action={() => setMatchPlayerList([])}
-                  icon={<IconUserOff />}
-                  label="Remove all Players"
-                />
-              </Flex>
-              {matchPlayerList.map((player) => (
-                <Group fz="sm" key={player.uuid}>
-                  <ProfileAvatar profile={player} size="md" />
-                  <Text truncate>{player.username}</Text>
-                  <ActionButton
-                    action={() => handlePlayerListUpdate(player)}
-                    icon={<IconUserMinus />}
-                    label={`Remove ${player.username}`}
-                  />
-                </Group>
-              ))}
+
+              <Table striped>
+                <thead>
+                  <tr>
+                    <th>
+                      <Text fz="xs" tt="uppercase" mr="auto">
+                        {matchPlayerList.length} Players
+                      </Text>
+                    </th>
+                    <th>
+                      <Flex align="center" gap="lg" justify="end">
+                        <ActionButton
+                          action={open}
+                          icon={<IconUsersPlus />}
+                          label="Add Players"
+                          size="1.25rem"
+                        />
+                        <ActionButton
+                          action={() => setMatchPlayerList([])}
+                          icon={<IconUserOff />}
+                          label="Remove all Players"
+                          size="1.25rem"
+                        />
+                      </Flex>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {matchPlayerList.map((player) => (
+                    <tr key={player.uuid}>
+                      <td>
+                        <Group>
+                          <ProfileAvatar profile={player} size="md" />
+                          <Text truncate>{player.username}</Text>
+                        </Group>
+                      </td>
+                      <td>
+                        <ActionButton
+                          action={() => handlePlayerListUpdate(player)}
+                          icon={<IconUserMinus />}
+                          label={`Remove ${player.username}`}
+                          ml="auto"
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
             </Stack>
           )}
         </Grid.Col>
