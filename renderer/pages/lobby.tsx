@@ -11,6 +11,7 @@ import {
   Input,
   NativeSelect,
   NumberInput,
+  ScrollArea,
   Stack,
   Table,
   Text,
@@ -39,9 +40,11 @@ import {
 } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import ActionButton from "@/components/content/ActionButton";
+import { getViewportHeight } from "utils/misc/getViewportHeight";
 
 const LobbyPage: NextPage = () => {
   const router = useRouter();
+  const contentHeight = getViewportHeight();
   const { isFetching, isLoading, isSuccess, data: profiles } = useProfiles();
   const { mutate } = useAddCurrentMatch();
   const [matchPlayerList, setMatchPlayerList] = useState<Player[]>([]);
@@ -190,57 +193,62 @@ const LobbyPage: NextPage = () => {
               <Button onClick={open}>Add Players</Button>
             </Group>
           ) : (
-            <Stack mr="xl">
-              <Title fz="lg">Players</Title>
-
-              <Table highlightOnHover>
-                <thead>
-                  <tr>
-                    <th>
-                      <Text fz="xs" tt="uppercase" mr="auto">
-                        {matchPlayerList.length} Players
-                      </Text>
-                    </th>
-                    <th>
-                      <Flex align="center" gap="lg" justify="end">
-                        <ActionButton
-                          action={open}
-                          icon={<IconUsersPlus />}
-                          label="Add Players"
-                          size="1.25rem"
-                        />
-                        <ActionButton
-                          action={() => setMatchPlayerList([])}
-                          icon={<IconUserOff />}
-                          label="Remove all Players"
-                          size="1.25rem"
-                        />
-                      </Flex>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {matchPlayerList.map((player) => (
-                    <tr key={player.uuid}>
-                      <td>
-                        <Group>
-                          <ProfileAvatar profile={player} size="md" />
-                          <Text truncate>{player.username}</Text>
-                        </Group>
-                      </td>
-                      <td>
-                        <ActionButton
-                          action={() => handlePlayerListUpdate(player)}
-                          icon={<IconUserMinus />}
-                          label={`Remove ${player.username}`}
-                          ml="auto"
-                        />
-                      </td>
+            <ScrollArea.Autosize
+              mah={contentHeight - 5}
+              mih={contentHeight - 5}
+              placeholder=""
+            >
+              <Stack mr="xl">
+                <Title fz="lg">Players</Title>
+                <Table highlightOnHover>
+                  <thead>
+                    <tr>
+                      <th>
+                        <Text fz="xs" tt="uppercase" mr="auto">
+                          {matchPlayerList.length} Players
+                        </Text>
+                      </th>
+                      <th>
+                        <Flex align="center" gap="lg" justify="end">
+                          <ActionButton
+                            action={open}
+                            icon={<IconUsersPlus />}
+                            label="Add Players"
+                            size="1.25rem"
+                          />
+                          <ActionButton
+                            action={() => setMatchPlayerList([])}
+                            icon={<IconUserOff />}
+                            label="Remove all Players"
+                            size="1.25rem"
+                          />
+                        </Flex>
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </Stack>
+                  </thead>
+                  <tbody>
+                    {matchPlayerList.map((player) => (
+                      <tr key={player.uuid}>
+                        <td>
+                          <Group>
+                            <ProfileAvatar profile={player} size="md" />
+                            <Text truncate>{player.username}</Text>
+                          </Group>
+                        </td>
+                        <td>
+                          <ActionButton
+                            action={() => handlePlayerListUpdate(player)}
+                            icon={<IconUserMinus />}
+                            label={`Remove ${player.username}`}
+                            ml="auto"
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </Stack>
+            </ScrollArea.Autosize>
           )}
         </Grid.Col>
         <Grid.Col span="auto" p={0}>
