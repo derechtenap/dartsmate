@@ -24,7 +24,12 @@ import { isInRange, isNotEmpty, useForm } from "@mantine/form";
 import { Match, Player } from "types/match";
 import { randomUUID } from "crypto";
 import { createFile } from "utils/fs/createFile";
-import { MATCHES_DIR, MATCH_FILENAME_EXTENSION } from "utils/constants";
+import {
+  DEFAULT_MATCH_SETTINGS,
+  MATCHES_DIR,
+  MATCH_FILENAME_EXTENSION,
+  MATCH_SCORE,
+} from "utils/constants";
 import path from "path";
 import { useRouter } from "next/router";
 import pkg from "../../package.json";
@@ -55,18 +60,18 @@ const LobbyPage: NextPage = () => {
     initialValues: {
       appVersion: pkg.version,
       createdAt: Date.now(),
-      initialScore: 501,
+      initialScore: DEFAULT_MATCH_SETTINGS.SCORE,
       players: matchPlayerList,
-      matchCheckout: "Double",
-      matchStatus: "started",
+      matchCheckout: DEFAULT_MATCH_SETTINGS.CHECKOUT,
+      matchStatus: DEFAULT_MATCH_SETTINGS.STATUS,
       matchUUID: randomUUID(),
       updatedAt: Date.now(),
     },
 
     validate: {
       initialScore: isInRange(
-        { min: 3, max: 901 },
-        "Your Score must be between 3 and 901!"
+        { min: MATCH_SCORE.MIN, max: MATCH_SCORE.MAX },
+        `Your Score must be between ${MATCH_SCORE.MIN} and ${MATCH_SCORE.MAX}!`
       ),
       players: isNotEmpty("You need to selected at least one Player!"),
     },
