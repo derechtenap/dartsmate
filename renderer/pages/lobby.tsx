@@ -193,7 +193,7 @@ const LobbyPage: NextPage = () => {
             <Stack mr="xl">
               <Title fz="lg">Players</Title>
 
-              <Table striped>
+              <Table highlightOnHover>
                 <thead>
                   <tr>
                     <th>
