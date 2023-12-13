@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   Drawer,
+  Flex,
   Grid,
   Group,
   Input,
@@ -28,16 +29,16 @@ import pkg from "../../package.json";
 import { useAddCurrentMatch } from "hooks/useCurrentMatch";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
 import {
-  IconCheck,
   IconMinus,
   IconPlus,
   IconSearch,
-  IconSettings,
   IconTarget,
-  IconUserCircle,
+  IconUserOff,
   IconUserPlus,
+  IconUsersPlus,
 } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
+import ActionButton from "@/components/content/ActionButton";
 
 const LobbyPage: NextPage = () => {
   const router = useRouter();
@@ -176,7 +177,7 @@ const LobbyPage: NextPage = () => {
         </Stack>
       </Drawer>
       <Grid h="100%" m={0}>
-        <Grid.Col span={9} p={0}>
+        <Grid.Col span={9} py={0}>
           {matchPlayerList.length === 0 ? (
             <Group
               position="center"
@@ -189,24 +190,32 @@ const LobbyPage: NextPage = () => {
               <Button onClick={open}>Add Players</Button>
             </Group>
           ) : (
-            <Stack>
+            <Stack mr="xl">
               <Title fz="lg">Players</Title>
-              <Text fz="xs">
-                Currently {matchPlayerList.length} Players are participating.
-                You can remove Players by clicking on them.
-              </Text>
-              <Button
-                onClick={open}
-                w="fit-content"
-                variant="outline"
-                size="xs"
-              >
-                Add more Players
-              </Button>
+              <Flex align="center" gap="lg" justify="space-between">
+                <Text fz="xs" tt="uppercase" mr="auto">
+                  {matchPlayerList.length} Players
+                </Text>
+                <ActionButton
+                  action={open}
+                  icon={<IconUsersPlus />}
+                  label="Add Players"
+                />
+                <ActionButton
+                  action={() => setMatchPlayerList([])}
+                  icon={<IconUserOff />}
+                  label="Remove all Players"
+                />
+              </Flex>
               {matchPlayerList.map((player) => (
                 <Group fz="sm" key={player.uuid}>
                   <ProfileAvatar profile={player} size="md" />
                   <Text truncate>{player.username}</Text>
+                  <ActionButton
+                    action={() => handlePlayerListUpdate(player)}
+                    icon={<IconMinus />}
+                    label={`Remove ${player.username}`}
+                  />
                 </Group>
               ))}
             </Stack>
