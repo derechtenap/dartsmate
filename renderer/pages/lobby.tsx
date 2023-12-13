@@ -1,18 +1,18 @@
 import type { NextPage } from "next";
 import DefaultLayout from "@/components/layouts/Default";
-import PageHeader from "@/components/content/PageHeader";
 import {
+  ActionIcon,
+  Box,
   Button,
-  Card,
+  Drawer,
   Grid,
   Group,
-  Indicator,
+  Input,
   NativeSelect,
   NumberInput,
   Stack,
-  Tabs,
   Text,
-  UnstyledButton,
+  Title,
 } from "@mantine/core";
 import { useState } from "react";
 import { useProfiles } from "hooks/useProfiles";
@@ -29,17 +29,24 @@ import { useAddCurrentMatch } from "hooks/useCurrentMatch";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
 import {
   IconCheck,
+  IconMinus,
+  IconPlus,
+  IconSearch,
   IconSettings,
   IconTarget,
   IconUserCircle,
+  IconUserPlus,
 } from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
 
 const LobbyPage: NextPage = () => {
   const router = useRouter();
   const { isFetching, isLoading, isSuccess, data: profiles } = useProfiles();
   const { mutate } = useAddCurrentMatch();
   const [matchPlayerList, setMatchPlayerList] = useState<Player[]>([]);
+  const [opened, { open, close }] = useDisclosure(false);
 
+  // TODO: Automatically load match settings from previous match or let the user load them via preset
   const form = useForm<Match>({
     initialValues: {
       appVersion: pkg.version,
@@ -119,89 +126,123 @@ const LobbyPage: NextPage = () => {
       isLoading={isLoading}
       isSuccess={isSuccess}
     >
-      <PageHeader title="Lobby">
-        <Text>
-          You are just a few clicks away from starting your match. Please select
-          the players and if needed, update the settings. Let's get started!
-        </Text>
-      </PageHeader>
-      <Tabs variant="outline" defaultValue="players">
-        <Tabs.List mb="lg">
-          <Tabs.Tab value="players" icon={<IconUserCircle size="0.8rem" />}>
-            Select Players
-          </Tabs.Tab>
-          <Tabs.Tab value="settings" icon={<IconSettings size="0.8rem" />}>
-            Settings
-          </Tabs.Tab>
-          <Button
-            tt="uppercase"
-            ml="auto"
-            style={{ borderEndEndRadius: 0, borderEndStartRadius: 0 }}
-            disabled={form.values.players.length === 0}
-            onClick={() => handleStartMatch()}
-          >
-            <Group>
-              <IconTarget /> Start Match
+      <Drawer
+        opened={opened}
+        onClose={close}
+        size="100%"
+        title="Choose Your Players"
+      >
+        <Stack>
+          <Input icon={<IconSearch />} placeholder="Search..." disabled />
+          {profiles.map((profile) => {
+            // Check if the profile is already in matchPlayerList
+            const isProfileInList = matchPlayerList.some(
+              (player) => player.uuid === profile.uuid
+            );
+            return (
+              <Box
+                sx={(theme) => ({
+                  backgroundColor:
+                    theme.colorScheme === "dark"
+                      ? theme.colors.dark[6]
+                      : theme.colors.gray[0],
+                  textAlign: "center",
+                  display: "flex",
+                  gap: theme.spacing.lg,
+                  alignItems: "center",
+                  padding: theme.spacing.sm,
+                  borderRadius: theme.radius.md,
+                  cursor: "pointer",
+                  "&:hover": {
+                    backgroundColor:
+                      theme.colorScheme === "dark"
+                        ? theme.colors.dark[5]
+                        : theme.colors.gray[1],
+                  },
+                })}
+                key={profile.uuid}
+                onClick={() => handlePlayerListUpdate(profile)}
+              >
+                <ProfileAvatar profile={profile} />
+                <Text color={isProfileInList ? "revert" : "dimmed"}>
+                  {profile.username}
+                </Text>
+                <ActionIcon ml="auto" variant="default">
+                  {isProfileInList ? <IconMinus /> : <IconPlus />}
+                </ActionIcon>
+              </Box>
+            );
+          })}
+        </Stack>
+      </Drawer>
+      <Grid h="100%" m={0}>
+        <Grid.Col span={9} p={0}>
+          {matchPlayerList.length === 0 ? (
+            <Group
+              position="center"
+              h="100%"
+              display="flex"
+              style={{ flexDirection: "column" }}
+            >
+              <IconUserPlus size="5rem" />
+              <Title fz="xl">No players added yet. Ready to play?</Title>
+              <Button onClick={open}>Add Players</Button>
             </Group>
-          </Button>
-        </Tabs.List>
-
-        <Tabs.Panel value="players" pt="xs">
-          <Grid gutter="lg">
-            {profiles.map((profile) => {
-              // Check if the profile is already in matchPlayerList
-              const isProfileInList = matchPlayerList.some(
-                (player) => player.uuid === profile.uuid
-              );
-
-              return (
-                <Grid.Col sm={3} xl={2} key={profile.uuid}>
-                  <UnstyledButton
-                    onClick={() => handlePlayerListUpdate(profile)}
-                    miw="100%"
-                  >
-                    <Card
-                      withBorder
-                      style={{
-                        borderColor: isProfileInList ? "revert" : undefined,
-                      }}
-                      ta="center"
-                    >
-                      <Stack>
-                        <Indicator
-                          label={<IconCheck size="12px" />}
-                          disabled={!isProfileInList}
-                          size={24}
-                        >
-                          <ProfileAvatar profile={profile} mx="auto" />{" "}
-                        </Indicator>
-                        <Text fz="xs" tt="uppercase">
-                          {profile.username}
-                        </Text>
-                      </Stack>
-                    </Card>
-                  </UnstyledButton>
-                </Grid.Col>
-              );
-            })}
-          </Grid>
-        </Tabs.Panel>
-        <Tabs.Panel value="settings" pt="xs">
-          <Stack>
-            <NumberInput
-              label="Score"
-              variant="filled"
-              {...form.getInputProps("initialScore")}
-            />
-            <NativeSelect
-              data={["Any", "Single", "Double", "Triple"]}
-              label="Checkout"
-              variant="filled"
-              {...form.getInputProps("matchCheckout")}
-            />
-          </Stack>
-        </Tabs.Panel>
-      </Tabs>
+          ) : (
+            <Stack>
+              <Title fz="lg">Players</Title>
+              <Text fz="xs">
+                Currently {matchPlayerList.length} Players are participating.
+                You can remove Players by clicking on them.
+              </Text>
+              <Button
+                onClick={open}
+                w="fit-content"
+                variant="outline"
+                size="xs"
+              >
+                Add more Players
+              </Button>
+              {matchPlayerList.map((player) => (
+                <Group fz="sm" key={player.uuid}>
+                  <ProfileAvatar profile={player} size="md" />
+                  <Text truncate>{player.username}</Text>
+                </Group>
+              ))}
+            </Stack>
+          )}
+        </Grid.Col>
+        <Grid.Col span="auto" p={0}>
+          <Box
+            h="100%"
+            style={{ display: "grid", alignContent: "space-between" }}
+          >
+            <Stack>
+              <Title fz="xl">Match Settings</Title>
+              <NumberInput
+                label="Score"
+                variant="filled"
+                {...form.getInputProps("initialScore")}
+              />
+              <NativeSelect
+                data={["Any", "Single", "Double", "Triple"]}
+                label="Checkout"
+                variant="filled"
+                {...form.getInputProps("matchCheckout")}
+              />
+            </Stack>
+            <Button
+              tt="uppercase"
+              disabled={form.values.players.length === 0}
+              onClick={() => handleStartMatch()}
+            >
+              <Group>
+                <IconTarget /> Start Match
+              </Group>
+            </Button>
+          </Box>
+        </Grid.Col>
+      </Grid>
     </DefaultLayout>
   );
 };
