@@ -29,10 +29,9 @@ import pkg from "../../package.json";
 import { useAddCurrentMatch } from "hooks/useCurrentMatch";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
 import {
-  IconMinus,
-  IconPlus,
   IconSearch,
   IconTarget,
+  IconUserMinus,
   IconUserOff,
   IconUserPlus,
   IconUsersPlus,
@@ -169,7 +168,7 @@ const LobbyPage: NextPage = () => {
                   {profile.username}
                 </Text>
                 <ActionIcon ml="auto" variant="default">
-                  {isProfileInList ? <IconMinus /> : <IconPlus />}
+                  {isProfileInList ? <IconUserMinus /> : <IconUserPlus />}
                 </ActionIcon>
               </Box>
             );
@@ -213,7 +212,7 @@ const LobbyPage: NextPage = () => {
                   <Text truncate>{player.username}</Text>
                   <ActionButton
                     action={() => handlePlayerListUpdate(player)}
-                    icon={<IconMinus />}
+                    icon={<IconUserMinus />}
                     label={`Remove ${player.username}`}
                   />
                 </Group>
