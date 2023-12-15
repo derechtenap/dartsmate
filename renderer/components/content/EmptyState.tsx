@@ -2,6 +2,7 @@ import { Group, Paper, Title, Text } from "@mantine/core";
 import { IconAlertHexagonFilled } from "@tabler/icons-react";
 
 type EmptyStateProps = {
+  children?: React.ReactNode;
   title?: string;
   text?: string;
 };
@@ -24,14 +25,19 @@ type EmptyStateProps = {
  * Defaults to a generic message.
  * @param {string} [props.text] - The description text to be displayed in the empty state dialog.
  * Defaults to a generic message.
+ * @param {JSX.Element} [props.children] - Optional JSX.Elements
  *
  * @returns {JSX.Element} JSX.Element with an empty state dialog.
  *
  */
-const EmptyState = ({ title, text }: EmptyStateProps): JSX.Element => {
+const EmptyState = ({
+  children,
+  title,
+  text,
+}: EmptyStateProps): JSX.Element => {
   return (
     <Group h="100%" position="center">
-      <Paper withBorder p="lg" maw={650}>
+      <Paper withBorder p="lg" w="80%" maw={650}>
         <IconAlertHexagonFilled
           size="4rem"
           style={{
@@ -46,6 +52,7 @@ const EmptyState = ({ title, text }: EmptyStateProps): JSX.Element => {
           {text ||
             "Feel free to check back later. If the issue persists, please contact support for assistance."}
         </Text>
+        {children}
       </Paper>
     </Group>
   );
