@@ -7,7 +7,12 @@ import { APP_NAME } from "utils/constants";
 const IndexPage: NextPage = () => {
   const APP_VERSION = pkg.version;
 
-  // TODO: Currently only shows a logo... Show the user more useful content
+  /*
+   *
+   * TODO: Enhance user experience by expanding content beyond just the
+   * logo display.
+   *
+   */
   return (
     <DefaultLayout isFetching={false} isLoading={false} isSuccess={true}>
       <Center h="100%">
