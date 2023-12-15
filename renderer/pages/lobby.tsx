@@ -191,7 +191,7 @@ const LobbyPage: NextPage = () => {
         <Grid.Col span={9} py={0}>
           {isPlayerListEmpty ? (
             <EmptyState
-              title="No players added yet."
+              title="Where is everyone again?"
               text="Add players by clicking the button below."
             >
               <Button mt="lg" onClick={open}>
