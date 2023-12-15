@@ -47,6 +47,7 @@ import { useDisclosure } from "@mantine/hooks";
 import ActionButton from "@/components/content/ActionButton";
 import { getViewportHeight } from "utils/misc/getViewportHeight";
 import EmptyState from "@/components/content/EmptyState";
+import Link from "next/link";
 
 const LobbyPage: NextPage = () => {
   const router = useRouter();
@@ -132,6 +133,8 @@ const LobbyPage: NextPage = () => {
 
   const isPlayerListEmpty = matchPlayerList.length === 0;
 
+  console.info(profiles.length === 0);
+
   return (
     <DefaultLayout
       isFetching={isFetching}
@@ -145,46 +148,59 @@ const LobbyPage: NextPage = () => {
         title="Choose Your Players"
       >
         <Stack>
-          <Input icon={<IconSearch />} placeholder="Search..." disabled />
-          {profiles.map((profile) => {
-            // Check if the profile is already in matchPlayerList
-            const isProfileInList = matchPlayerList.some(
-              (player) => player.uuid === profile.uuid
-            );
-            return (
-              <Box
-                sx={(theme) => ({
-                  backgroundColor:
-                    theme.colorScheme === "dark"
-                      ? theme.colors.dark[6]
-                      : theme.colors.gray[0],
-                  textAlign: "center",
-                  display: "flex",
-                  gap: theme.spacing.lg,
-                  alignItems: "center",
-                  padding: theme.spacing.sm,
-                  borderRadius: theme.radius.md,
-                  cursor: "pointer",
-                  "&:hover": {
-                    backgroundColor:
-                      theme.colorScheme === "dark"
-                        ? theme.colors.dark[5]
-                        : theme.colors.gray[1],
-                  },
-                })}
-                key={profile.uuid}
-                onClick={() => handlePlayerListUpdate(profile)}
-              >
-                <ProfileAvatar profile={profile} />
-                <Text color={isProfileInList ? "revert" : "dimmed"}>
-                  {profile.username}
-                </Text>
-                <ActionIcon ml="auto" variant="default">
-                  {isProfileInList ? <IconUserMinus /> : <IconUserPlus />}
-                </ActionIcon>
-              </Box>
-            );
-          })}
+          {profiles.length === 0 ? (
+            <EmptyState
+              title="Where is everybody?"
+              text="We couldn't find any profiles!"
+            >
+              <Link href="/profiles">
+                <Button mt="lg">Create Profiles</Button>
+              </Link>
+            </EmptyState>
+          ) : (
+            <>
+              <Input icon={<IconSearch />} placeholder="Search..." disabled />
+              {profiles.map((profile) => {
+                // Check if the profile is already in matchPlayerList
+                const isProfileInList = matchPlayerList.some(
+                  (player) => player.uuid === profile.uuid
+                );
+                return (
+                  <Box
+                    sx={(theme) => ({
+                      backgroundColor:
+                        theme.colorScheme === "dark"
+                          ? theme.colors.dark[6]
+                          : theme.colors.gray[0],
+                      textAlign: "center",
+                      display: "flex",
+                      gap: theme.spacing.lg,
+                      alignItems: "center",
+                      padding: theme.spacing.sm,
+                      borderRadius: theme.radius.md,
+                      cursor: "pointer",
+                      "&:hover": {
+                        backgroundColor:
+                          theme.colorScheme === "dark"
+                            ? theme.colors.dark[5]
+                            : theme.colors.gray[1],
+                      },
+                    })}
+                    key={profile.uuid}
+                    onClick={() => handlePlayerListUpdate(profile)}
+                  >
+                    <ProfileAvatar profile={profile} />
+                    <Text color={isProfileInList ? "revert" : "dimmed"}>
+                      {profile.username}
+                    </Text>
+                    <ActionIcon ml="auto" variant="default">
+                      {isProfileInList ? <IconUserMinus /> : <IconUserPlus />}
+                    </ActionIcon>
+                  </Box>
+                );
+              })}
+            </>
+          )}
         </Stack>
       </Drawer>
       <Grid h="100%" m={0}>
