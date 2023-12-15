@@ -215,7 +215,7 @@ const ProfilesPage: NextPage = () => {
           ) : (
             <Center mih={contentHeight - 5} my="auto" maw={600} mx="auto">
               <EmptyState
-                title="Were are profiles again?"
+                title="Were are the profiles again?"
                 text={`
                   It seems that you have not selected a profile yet. To get started, 
                   click the "Create Profile" button or select an existing profile 
