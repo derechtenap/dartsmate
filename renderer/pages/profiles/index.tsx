@@ -10,7 +10,6 @@ import {
   Stack,
   Tabs,
   Text,
-  Title,
   UnstyledButton,
 } from "@mantine/core";
 import {
@@ -20,7 +19,6 @@ import {
   IconTrash,
   IconTrophy,
   IconUserPlus,
-  IconUserQuestion,
 } from "@tabler/icons-react";
 import { useState } from "react";
 import { PROFILES_DIR, PROFILE_FILENAME_EXTENSION } from "utils/constants";
@@ -36,6 +34,7 @@ import PageHeader from "@/components/content/PageHeader";
 import ActionButton from "@/components/content/ActionButton";
 import { notifications } from "@mantine/notifications";
 import Link from "next/link";
+import EmptyState from "@/components/content/EmptyState";
 
 const ProfilesPage: NextPage = () => {
   const {
@@ -215,30 +214,14 @@ const ProfilesPage: NextPage = () => {
             </Paper>
           ) : (
             <Center mih={contentHeight - 5} my="auto" maw={600} mx="auto">
-              <Stack align="center">
-                <IconUserQuestion size="5rem" />
-                <Title>Select or create a Profile...</Title>
-                <Text color="dimmed" ta="center">
-                  It seems that you have not selected a profile yet. To get
-                  started, click the "Create Profile" button or select an
-                  existing profile from the list on the left. profile from the
-                  list on the left.
-                </Text>
-                <Link
-                  href={{
-                    pathname: "/profiles/editor/",
-                    query: {
-                      mode: "create",
-                    },
-                  }}
-                >
-                  <Button variant="filled" tt="uppercase" mt="lg">
-                    <Group>
-                      <IconUserPlus /> Create Profile
-                    </Group>
-                  </Button>
-                </Link>
-              </Stack>
+              <EmptyState
+                title="Were are profiles again?"
+                text={`
+                  It seems that you have not selected a profile yet. To get started, 
+                  click the "Create Profile" button or select an existing profile 
+                  from the list on the left side.
+                  `}
+              />
             </Center>
           )}
         </Grid.Col>
