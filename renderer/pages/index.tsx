@@ -4,7 +4,20 @@ import pkg from "../../package.json";
 import DefaultLayout from "@/components/layouts/Default";
 import { APP_NAME } from "utils/constants";
 
-const IndexPage: NextPage = () => {
+/**
+ *
+ * The main page displaying essential information about the application and providing
+ * routes to the user.
+ *
+ * Currently only displaying a logo with a version string.
+ *
+ * @author Tim Deres <derechtenap>
+ * @todo Enhance user experience by expanding content beyond just the logo display.
+ *
+ * @returns {JSX.Element} JSX element representing the main page content.
+ *
+ */
+const IndexPage: NextPage = (): JSX.Element => {
   const APP_VERSION = pkg.version;
 
   /*
