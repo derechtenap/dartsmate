@@ -133,8 +133,6 @@ const LobbyPage: NextPage = () => {
 
   const isPlayerListEmpty = matchPlayerList.length === 0;
 
-  console.info(profiles.length === 0);
-
   return (
     <DefaultLayout
       isFetching={isFetching}
