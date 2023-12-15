@@ -37,7 +37,7 @@ const EmptyState = ({
 }: EmptyStateProps): JSX.Element => {
   return (
     <Group h="100%" position="center">
-      <Paper withBorder p="lg" w="80%" maw={650}>
+      <Paper p="lg" w="80%" maw={650}>
         <IconAlertHexagonFilled
           size="4rem"
           style={{
