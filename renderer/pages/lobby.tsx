@@ -46,6 +46,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import ActionButton from "@/components/content/ActionButton";
 import { getViewportHeight } from "utils/misc/getViewportHeight";
+import EmptyState from "@/components/content/EmptyState";
 
 const LobbyPage: NextPage = () => {
   const router = useRouter();
@@ -189,16 +190,14 @@ const LobbyPage: NextPage = () => {
       <Grid h="100%" m={0}>
         <Grid.Col span={9} py={0}>
           {isPlayerListEmpty ? (
-            <Group
-              position="center"
-              h="100%"
-              display="flex"
-              style={{ flexDirection: "column" }}
+            <EmptyState
+              title="No players added yet."
+              text="Add players by clicking the button below."
             >
-              <IconUserPlus size="5rem" />
-              <Title fz="xl">No players added yet. Ready to play?</Title>
-              <Button onClick={open}>Add Players</Button>
-            </Group>
+              <Button mt="lg" onClick={open}>
+                Add Players
+              </Button>
+            </EmptyState>
           ) : (
             <ScrollArea.Autosize
               mah={contentHeight - 5}
