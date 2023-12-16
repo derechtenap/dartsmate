@@ -6,6 +6,7 @@
   "version": "0.1.1",
   "author": "DartMate Contributors",
   "main": "app/background.js",
+  "repository": "https://github.com/derechtenap/dartmate",
   "scripts": {
     "dev": "nextron",
     "build": "nextron build",
