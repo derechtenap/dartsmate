@@ -1,12 +1,8 @@
 import { app, ipcMain } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
-import { autoUpdater, AppUpdater } from "electron-updater";
 
 const isProd: boolean = process.env.NODE_ENV === "production";
-
-autoUpdater.autoDownload = false;
-autoUpdater.autoInstallOnAppQuit = true;
 
 export const minWindowSize = {
   height: 768,
@@ -21,8 +17,6 @@ if (isProd) {
 
 void (async () => {
   await app.whenReady();
-
-  await autoUpdater.checkForUpdates();
 
   const mainWindow = createWindow("main", {
     height: minWindowSize.height,
