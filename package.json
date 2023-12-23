@@ -6,6 +6,7 @@
   "version": "0.1.1",
   "author": "DartMate Contributors",
   "main": "app/background.js",
+  "repository": "https://github.com/derechtenap/dartmate",
   "scripts": {
     "dev": "nextron",
     "build": "nextron build",
@@ -21,7 +22,8 @@
   },
   "dependencies": {
     "electron-serve": "^1.2.0",
-    "electron-store": "^8.1.0"
+    "electron-store": "^8.1.0",
+    "update-electron-app": "^3.0.0"
   },
   "devDependencies": {
     "@emotion/react": "^11.11.1",
