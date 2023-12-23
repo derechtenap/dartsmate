@@ -3,7 +3,7 @@
   "name": "dartmate",
   "productName": "DartMate",
   "description": "Analyze, track and compare your dart games.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "DartMate Contributors",
   "main": "app/background.js",
   "repository": "https://github.com/derechtenap/dartmate",
