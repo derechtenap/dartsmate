@@ -1,6 +1,7 @@
 import { app, ipcMain } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
+import { updateElectronApp } from "update-electron-app";
 
 const isProd: boolean = process.env.NODE_ENV === "production";
 
@@ -17,6 +18,7 @@ if (isProd) {
 
 void (async () => {
   await app.whenReady();
+  updateElectronApp();
 
   const mainWindow = createWindow("main", {
     height: minWindowSize.height,

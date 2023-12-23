@@ -145,7 +145,6 @@ const GameResultsPage: NextPage = () => {
                                   label={`Score ${roundThrow.score}`}
                                 >
                                   <Badge
-                                    color="blue"
                                     variant="filled"
                                     style={{ cursor: "help" }}
                                   >

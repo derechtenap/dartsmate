@@ -10,7 +10,6 @@ import {
   Stack,
   Tabs,
   Text,
-  Title,
   UnstyledButton,
 } from "@mantine/core";
 import {
@@ -20,7 +19,6 @@ import {
   IconTrash,
   IconTrophy,
   IconUserPlus,
-  IconUserQuestion,
 } from "@tabler/icons-react";
 import { useState } from "react";
 import { PROFILES_DIR, PROFILE_FILENAME_EXTENSION } from "utils/constants";
@@ -36,6 +34,7 @@ import PageHeader from "@/components/content/PageHeader";
 import ActionButton from "@/components/content/ActionButton";
 import { notifications } from "@mantine/notifications";
 import Link from "next/link";
+import EmptyState from "@/components/content/EmptyState";
 
 const ProfilesPage: NextPage = () => {
   const {
@@ -61,7 +60,7 @@ const ProfilesPage: NextPage = () => {
         <>
           <Text>This action cannot be undone!</Text>
           <Group mt="md">
-            <Button compact color="red" onClick={() => handleDeleteProfile()}>
+            <Button compact onClick={() => handleDeleteProfile()}>
               Delete Profile
             </Button>
             <Button
@@ -110,6 +109,7 @@ const ProfilesPage: NextPage = () => {
               maw={400}
               p="xs"
               mx="auto"
+              placeholder=""
             >
               <Stack>
                 <Link
@@ -120,7 +120,7 @@ const ProfilesPage: NextPage = () => {
                     },
                   }}
                 >
-                  <Button w="100%" color="red" variant="filled" tt="uppercase">
+                  <Button w="100%" variant="filled" tt="uppercase">
                     <Group>
                       <IconUserPlus /> Create Profile
                     </Group>
@@ -177,7 +177,7 @@ const ProfilesPage: NextPage = () => {
                   </Text>
                 </Paper>
               </Group>
-              <Tabs color="red" defaultValue="achievements" mt="lg">
+              <Tabs defaultValue="achievements" mt="lg">
                 <Tabs.List grow position="apart">
                   <Tabs.Tab
                     value="achievements"
@@ -214,30 +214,14 @@ const ProfilesPage: NextPage = () => {
             </Paper>
           ) : (
             <Center mih={contentHeight - 5} my="auto" maw={600} mx="auto">
-              <Stack align="center">
-                <IconUserQuestion size="5rem" />
-                <Title>Select or create a Profile...</Title>
-                <Text color="dimmed" ta="center">
-                  It seems that you have not selected a profile yet. To get
-                  started, click the "Create Profile" button or select an
-                  existing profile from the list on the left. profile from the
-                  list on the left.
-                </Text>
-                <Link
-                  href={{
-                    pathname: "/profiles/editor/",
-                    query: {
-                      mode: "create",
-                    },
-                  }}
-                >
-                  <Button color="red" variant="filled" tt="uppercase" mt="lg">
-                    <Group>
-                      <IconUserPlus /> Create Profile
-                    </Group>
-                  </Button>
-                </Link>
-              </Stack>
+              <EmptyState
+                title="Were are the profiles again?"
+                text={`
+                  It seems that you have not selected a profile yet. To get started, 
+                  click the "Create Profile" button or select an existing profile 
+                  from the list on the left side.
+                  `}
+              />
             </Center>
           )}
         </Grid.Col>

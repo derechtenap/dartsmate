@@ -3,7 +3,7 @@
   "bracketSameLine": false,
   "bracketSpacing": true,
   "cursorOffset": -1,
-  "endOfLine": "lf",
+  "endOfLine": "auto",
   "printWidth": 80,
   "semi": true,
   "tabWidth": 2,

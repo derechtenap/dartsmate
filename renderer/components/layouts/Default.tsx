@@ -185,7 +185,6 @@ const DefaultLayout = ({
           </Text>
           <Group>
             <Button
-              color="red"
               onClick={() => void ipcRenderer.send("quit-app")}
               variant="outline"
             >

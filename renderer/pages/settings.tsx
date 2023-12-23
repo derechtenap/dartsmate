@@ -51,13 +51,11 @@ const SettingsPage: NextPage = () => {
       });
 
       notifications.show({
-        color: "blue",
         title: `Deleted all files from the folder!`,
         message: "",
       });
     } catch (err) {
       notifications.show({
-        color: "red",
         title: `Error! Something went wrong while deleting the folder!`,
         message: `Please try again in a couple of seconds.(${err as string})`,
       });
@@ -92,7 +90,6 @@ const SettingsPage: NextPage = () => {
             <SegmentedControl
               value={colorScheme}
               onChange={(scheme) => setColorScheme(scheme as ColorScheme)}
-              color="blue"
               data={colorSchemes}
             />
             {/*
@@ -137,14 +134,12 @@ const SettingsPage: NextPage = () => {
               <Group mt="lg">
                 <Button
                   variant="white"
-                  color="red"
                   onClick={() => deleteFolderContent(PROFILES_DIR)}
                 >
                   Delete Profiles
                 </Button>
                 <Button
                   variant="white"
-                  color="red"
                   onClick={() => deleteFolderContent(MATCHES_DIR)}
                 >
                   Delete Matches

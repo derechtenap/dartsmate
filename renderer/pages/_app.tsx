@@ -61,6 +61,7 @@ const App = ({
             withNormalizeCSS
             theme={{
               colorScheme,
+              primaryColor: "red",
             }}
           >
             <Notifications limit={5} position="top-right" />

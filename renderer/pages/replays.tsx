@@ -1,4 +1,5 @@
 import BadgeMatchStatus from "@/components/content/BadgeMatchStatus";
+import EmptyState from "@/components/content/EmptyState";
 import PageHeader from "@/components/content/PageHeader";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
 import DefaultLayout from "@/components/layouts/Default";
@@ -41,6 +42,18 @@ const ReplaysPage: NextPage = () => {
     (a, b) => b.createdAt - a.createdAt
   ); // Sort by newest
 
+  if (matches.length === 0) {
+    return (
+      <DefaultLayout
+        isFetching={isFetching}
+        isLoading={isLoading}
+        isSuccess={isSuccess}
+      >
+        <EmptyState text="We were unable to load matches. Have you already played a match?" />
+      </DefaultLayout>
+    );
+  }
+
   return (
     <DefaultLayout
       isFetching={isFetching}
@@ -71,7 +84,7 @@ const ReplaysPage: NextPage = () => {
         </Card.Section>
       </Paper>
       */}
-      <ScrollArea.Autosize>
+      <ScrollArea.Autosize placeholder="">
         <Table highlightOnHover withBorder>
           <thead>
             <tr>

@@ -1,20 +1,40 @@
 import type { NextPage } from "next";
-import { Center, Divider, Flex, Title } from "@mantine/core";
+import { Center, Divider, Stack, Title } from "@mantine/core";
 import pkg from "../../package.json";
 import DefaultLayout from "@/components/layouts/Default";
 import { APP_NAME } from "utils/constants";
 
-const IndexPage: NextPage = () => {
-  // TODO: Currently only shows a logo... Show the user more useful content
+/**
+ *
+ * The main page displaying essential information about the application and providing
+ * routes to the user.
+ *
+ * Currently only displaying a logo with a version string.
+ *
+ * @author Tim Deres <derechtenap>
+ * @todo Enhance user experience by expanding content beyond just the logo display.
+ *
+ * @returns {JSX.Element} JSX element representing the main page content.
+ *
+ */
+const IndexPage: NextPage = (): JSX.Element => {
+  const APP_VERSION = pkg.version;
+
+  /*
+   *
+   * TODO: Enhance user experience by expanding content beyond just the
+   * logo display.
+   *
+   */
   return (
     <DefaultLayout isFetching={false} isLoading={false} isSuccess={true}>
       <Center h="100%">
-        <Flex direction="column">
-          <Title tt="uppercase" fs="italic" size={100} lh={0.6}>
+        <Stack spacing="xs">
+          <Title tt="uppercase" fs="italic" size={100} lh={0.8}>
             {APP_NAME}
           </Title>
-          <Divider my="xs" label={pkg.version} labelPosition="right" />
-        </Flex>
+          <Divider label={APP_VERSION} labelPosition="right" />
+        </Stack>
       </Center>
     </DefaultLayout>
   );
