@@ -18,7 +18,8 @@
     "postinstall": "electron-builder install-app-deps",
     "lint": "eslint . --max-warnings 0 --report-unused-disable-directives",
     "lint:fix": "npm run lint -- --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "release": "electron-builder --publish always"
   },
   "dependencies": {
     "electron-log": "^5.0.1",

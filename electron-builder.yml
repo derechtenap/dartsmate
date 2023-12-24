@@ -1,0 +1,16 @@
+appId: com.app.dartmate
+productName: DartMate
+copyright: Copyright © 2022-2023 DartMate Contributors
+directories:
+  output: dist
+  buildResources: resources
+files:
+  - from: .
+    filter:
+      - package.json
+      - app
+publish:
+  - provider: github
+    protocol: https
+win:
+  target: nsis
