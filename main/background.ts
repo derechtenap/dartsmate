@@ -18,7 +18,6 @@ if (isProd) {
 
 void (async () => {
   await app.whenReady();
-  updateElectronApp();
 
   const mainWindow = createWindow("main", {
     height: minWindowSize.height,
@@ -35,6 +34,12 @@ void (async () => {
     mainWindow.webContents.openDevTools();
   }
 })();
+
+// No need to wait for your app's ready event...
+updateElectronApp({
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  logger: require("electron-log"),
+});
 
 app.on("window-all-closed", () => {
   app.quit();
