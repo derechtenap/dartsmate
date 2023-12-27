@@ -110,6 +110,7 @@ const DefaultLayout = ({
       py={0}
       header={
         <Header
+          className="draggable"
           height={headerHeight}
           style={{ display: "flex", alignItems: "center" }}
           px="sm"
