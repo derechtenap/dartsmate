@@ -54,7 +54,7 @@ const DefaultLayout = ({
   isSuccess,
 }: DefaultLayoutProps) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const { route, push } = useRouter();
+  const { push } = useRouter();
   const { toggle, fullscreen } = useFullscreen();
 
   // TODO: Some routes are currently unfinished and disabled. Reactivate the routes when the pages are created
@@ -100,10 +100,6 @@ const DefaultLayout = ({
     },
   ];
 
-  const isActiveRoute = (currentRoute: string) => {
-    return currentRoute === route;
-  };
-
   if (isLoading || isFetching) {
     return <LoadingOverlay />;
   }
@@ -118,7 +114,7 @@ const DefaultLayout = ({
           style={{ display: "flex", alignItems: "center" }}
           px="sm"
         >
-          <Group position="apart" w="100%">
+          <Group w="100%">
             <ActionIcon
               color="red"
               radius="xs"
@@ -130,19 +126,18 @@ const DefaultLayout = ({
             <Button.Group>
               {mainRoutes.map((route) => (
                 <Button
-                  color={isActiveRoute(route.route) ? "red" : "gray"}
-                  compact
                   key={route.route}
                   leftIcon={route.icon}
                   radius="xs"
                   onClick={() => void push(route.route)}
                   uppercase
+                  variant="transparent"
                 >
                   {route.label}
                 </Button>
               ))}
             </Button.Group>
-            <Group>
+            <Group ml="auto">
               <Menu shadow="md" radius={0} width={200}>
                 <Menu.Target>
                   <ActionIcon>
