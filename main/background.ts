@@ -3,7 +3,7 @@ import serve from "electron-serve";
 import { createWindow } from "./helpers";
 import { updateElectronApp } from "update-electron-app";
 
-const isProd: boolean = process.env.NODE_ENV === "production";
+export const isProd: boolean = process.env.NODE_ENV === "production";
 
 export const minWindowSize = {
   height: 768,

@@ -92,17 +92,6 @@ const SettingsPage: NextPage = () => {
               onChange={(scheme) => setColorScheme(scheme as ColorScheme)}
               data={colorSchemes}
             />
-            {/*
-            <Text mt="xl" fw="bold">
-              Toggle Fullscreen
-            </Text>
-            <Text mb="lg">
-              Toggle between fullscreen and bordered windowed mode.
-            </Text>
-            <Button onClick={() => handleScreenMode()} color="blue">
-              {fullscreen ? "Exit Fullscreen Mode" : "Enter Fullscreen Mode"}
-            </Button>
-            */}
           </Accordion.Panel>
         </Accordion.Item>
         {/*
