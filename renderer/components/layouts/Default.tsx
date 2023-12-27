@@ -21,10 +21,12 @@ import {
   IconSquareLetterD,
   // IconTournament,
   IconUsersGroup,
+  IconWindowMaximize,
+  IconWindowMinimize,
   IconX,
 } from "@tabler/icons-react";
 import { useRouter } from "next/router";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useFullscreen } from "@mantine/hooks";
 import { ipcRenderer } from "electron";
 import LoadingOverlay from "../LoadingOverlay";
 import ActionButton from "../content/ActionButton";
@@ -53,6 +55,7 @@ const DefaultLayout = ({
 }: DefaultLayoutProps) => {
   const [opened, { open, close }] = useDisclosure(false);
   const { route, push } = useRouter();
+  const { toggle, fullscreen } = useFullscreen();
 
   // TODO: Some routes are currently unfinished and disabled. Reactivate the routes when the pages are created
   const mainRoutes: NavbarLinkProps[] = [
@@ -159,6 +162,13 @@ const DefaultLayout = ({
                   ))}
                 </Menu.Dropdown>
               </Menu>
+              <ActionButton
+                action={() => void toggle()}
+                icon={
+                  fullscreen ? <IconWindowMinimize /> : <IconWindowMaximize />
+                }
+                label={`${fullscreen ? "Minimize" : "Maximize"} Window`}
+              />
               <ActionButton
                 action={() => open()}
                 icon={<IconX />}
