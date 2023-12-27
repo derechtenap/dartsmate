@@ -2,6 +2,7 @@ import {
   screen,
   BrowserWindow,
   BrowserWindowConstructorOptions,
+  Menu,
   Rectangle,
 } from "electron";
 import Store from "electron-store";
@@ -83,8 +84,16 @@ export default (
       contextIsolation: false,
       ...options.webPreferences,
     },
+    autoHideMenuBar: true,
+    resizable: true,
+    movable: true,
+    frame: false,
   };
   win = new BrowserWindow(browserOptions);
+
+  // Remove application menu
+  win.setMenu(null);
+  Menu.setApplicationMenu(null);
 
   win.on("close", saveState);
 
