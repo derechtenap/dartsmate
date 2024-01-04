@@ -11,3 +11,26 @@
 *::after {
   user-select: none;
 }
+
+/* 
+ * This CSS-Rule is added to the titlebar of the layouts to make the app 
+ * draggable.
+ */
+
+.draggable {
+  -webkit-app-region: drag;
+  /* TODO: Cursor appearance not changing in production mode... */
+  cursor: move !important;
+}
+
+/* 
+ * Since the entire titlebar is made draggable, certain interactive elements
+ * must be explicitly set to `no-drag` to allow regular user interaction.
+ */
+
+.draggable button,
+.draggable input,
+.draggable textarea,
+.draggable select {
+  -webkit-app-region: no-drag
+}

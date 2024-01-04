@@ -2,11 +2,11 @@ import {
   screen,
   BrowserWindow,
   BrowserWindowConstructorOptions,
+  Menu,
   Rectangle,
 } from "electron";
 import Store from "electron-store";
-
-import { minWindowSize } from "../background";
+import { isProd, minWindowSize } from "../background";
 
 export default (
   windowName: string,
@@ -83,8 +83,19 @@ export default (
       contextIsolation: false,
       ...options.webPreferences,
     },
+    // Keep frame and menu bar for easier debugging in dev mode
+    autoHideMenuBar: isProd ? true : false,
+    resizable: true,
+    movable: true,
+    frame: isProd ? false : true,
   };
   win = new BrowserWindow(browserOptions);
+
+  // Remove application menu, when the app runs in production mode
+  if (isProd) {
+    win.setMenu(null);
+    Menu.setApplicationMenu(null);
+  }
 
   win.on("close", saveState);
 

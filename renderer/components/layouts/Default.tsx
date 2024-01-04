@@ -21,10 +21,12 @@ import {
   IconSquareLetterD,
   // IconTournament,
   IconUsersGroup,
+  IconWindowMaximize,
+  IconWindowMinimize,
   IconX,
 } from "@tabler/icons-react";
 import { useRouter } from "next/router";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useFullscreen } from "@mantine/hooks";
 import { ipcRenderer } from "electron";
 import LoadingOverlay from "../LoadingOverlay";
 import ActionButton from "../content/ActionButton";
@@ -52,7 +54,8 @@ const DefaultLayout = ({
   isSuccess,
 }: DefaultLayoutProps) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const { route, push } = useRouter();
+  const { push } = useRouter();
+  const { toggle, fullscreen } = useFullscreen();
 
   // TODO: Some routes are currently unfinished and disabled. Reactivate the routes when the pages are created
   const mainRoutes: NavbarLinkProps[] = [
@@ -97,10 +100,6 @@ const DefaultLayout = ({
     },
   ];
 
-  const isActiveRoute = (currentRoute: string) => {
-    return currentRoute === route;
-  };
-
   if (isLoading || isFetching) {
     return <LoadingOverlay />;
   }
@@ -110,11 +109,12 @@ const DefaultLayout = ({
       py={0}
       header={
         <Header
+          className="draggable"
           height={headerHeight}
           style={{ display: "flex", alignItems: "center" }}
           px="sm"
         >
-          <Group position="apart" w="100%">
+          <Group w="100%">
             <ActionIcon
               color="red"
               radius="xs"
@@ -126,19 +126,18 @@ const DefaultLayout = ({
             <Button.Group>
               {mainRoutes.map((route) => (
                 <Button
-                  color={isActiveRoute(route.route) ? "red" : "gray"}
-                  compact
                   key={route.route}
                   leftIcon={route.icon}
                   radius="xs"
                   onClick={() => void push(route.route)}
                   uppercase
+                  variant="transparent"
                 >
                   {route.label}
                 </Button>
               ))}
             </Button.Group>
-            <Group>
+            <Group ml="auto">
               <Menu shadow="md" radius={0} width={200}>
                 <Menu.Target>
                   <ActionIcon>
@@ -158,6 +157,13 @@ const DefaultLayout = ({
                   ))}
                 </Menu.Dropdown>
               </Menu>
+              <ActionButton
+                action={() => void toggle()}
+                icon={
+                  fullscreen ? <IconWindowMinimize /> : <IconWindowMaximize />
+                }
+                label={`${fullscreen ? "Minimize" : "Maximize"} Window`}
+              />
               <ActionButton
                 action={() => open()}
                 icon={<IconX />}
