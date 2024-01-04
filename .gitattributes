@@ -8,3 +8,6 @@
 *.jpeg binary
 *.gif binary
 *.bmp binary
+*.pdn binary
+*.ico binary
+*.icns binary
