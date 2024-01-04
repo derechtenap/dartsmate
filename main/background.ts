@@ -1,7 +1,7 @@
 import { app, ipcMain } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
-import { updateElectronApp } from "update-electron-app";
+// import { updateElectronApp } from "update-electron-app";
 
 export const isProd: boolean = process.env.NODE_ENV === "production";
 
@@ -35,11 +35,18 @@ void (async () => {
   }
 })();
 
-// No need to wait for your app's ready event...
-updateElectronApp({
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  logger: require("electron-log"),
-});
+/*
+ *
+ * Currently disabled
+ * TODO: Figure the problem out
+ *
+ * // No need to wait for your app's ready event...
+ * updateElectronApp({
+ *  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+ *  logger: require("electron-log"),
+ * });
+ *
+ */
 
 app.on("window-all-closed", () => {
   app.quit();
