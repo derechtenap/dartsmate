@@ -25,7 +25,7 @@ If applicable, add screenshots to help explain your problem.
 
 **App & OS information**
 - OS [e.g. Windows]
-- DartMate version [e.g. 0.1.0]
+- DartsMate version [e.g. 0.1.0]
 
 **Additional context**
 Add any other context about the problem here.

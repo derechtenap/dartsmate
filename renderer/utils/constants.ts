@@ -5,12 +5,12 @@ import { Checkout, MatchStatus } from "types/match";
 
 export const APP_NAME = pkg.productName;
 
-// Directories where dartmate stores local used profiles and saved match data
+// Directories where dartsmate stores local used profiles and saved match data
 export const APP_DIR = join(homedir(), APP_NAME.toLowerCase());
 export const PROFILES_DIR = join(APP_DIR, "profiles");
 export const MATCHES_DIR = join(APP_DIR, "matches");
 
-// Filename extensions used by Dartmate
+// Filename extensions used by Dartsmate
 export const PROFILE_FILENAME_EXTENSION = ".profile";
 export const MATCH_FILENAME_EXTENSION = ".match";
 

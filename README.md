@@ -1,11 +1,11 @@
-# :dart: DartMate
+# :dart: DartsMate
 
-**Analyze, compare and track your dart games with DartMate - Build with [nextron](https://github.com/saltyshiomix/nextron), [Next.js](https://github.com/vercel/next.js) & [Mantine](https://github.com/mantinedev/mantine)**
+**Analyze, compare and track your dart games with DartsMate - Build with [nextron](https://github.com/saltyshiomix/nextron), [Next.js](https://github.com/vercel/next.js) & [Mantine](https://github.com/mantinedev/mantine)**
 
 :warning: The project is currently still a work in progress. Many functions and ideas are not implemented yet!
 
 ## :sparkles: Features
-**Explore the Future:** Dive into our [project roadmap](https://github.com/derechtenap/dartmate/wiki/Roadmap) to discover exciting upcoming features!
+**Explore the Future:** Dive into our [project roadmap](https://github.com/derechtenap/dartsmate/wiki/Roadmap) to discover exciting upcoming features!
 
 
 - **Create & Manage Profiles:** Easily create and manage player profiles for your matches.

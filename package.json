@@ -1,12 +1,12 @@
 {
   "private": true,
-  "name": "dartmate",
-  "productName": "DartMate",
+  "name": "dartsmate",
+  "productName": "DartsMate",
   "description": "Analyze, track and compare your dart games.",
   "version": "0.1.3",
-  "author": "DartMate Contributors",
+  "author": "DartsMate Contributors",
   "main": "app/background.js",
-  "repository": "https://github.com/derechtenap/dartmate",
+  "repository": "https://github.com/derechtenap/dartsmate",
   "scripts": {
     "dev": "nextron",
     "build": "nextron build",
