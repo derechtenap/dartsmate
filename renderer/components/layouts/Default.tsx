@@ -40,14 +40,8 @@ const DefaultLayout = ({
   children,
   isFetching,
   isLoading,
-}: // isSuccess,
-DefaultLayoutProps) => {
-  /*
-   *
-   * TODO: Some routes are currently unfinished and disabled.
-   * Reactivate the routes when the pages are created!
-   *
-   */
+  isSuccess,
+}: DefaultLayoutProps) => {
   const mainRoutes: NavbarLinkProps[] = [
     {
       icon: <IconDisc />,
@@ -155,7 +149,10 @@ DefaultLayoutProps) => {
           ))}
         </Stack>
       </AppShell.Navbar>
-      <AppShell.Main h="100vh">{children}</AppShell.Main>
+      <AppShell.Main h="100vh">
+        {/* TODO: Add better error handling... */}
+        {isSuccess ? children : "Error_Unable_To_Create_Page"}
+      </AppShell.Main>
     </AppShell>
   );
 };
