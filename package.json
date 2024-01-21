@@ -28,9 +28,9 @@
     "update-electron-app": "^3.0.0"
   },
   "devDependencies": {
-    "@mantine/core": "^6.0.21",
-    "@mantine/hooks": "^6.0.21",
-    "@mantine/next": "^6.0.21",
+    "@mantine/core": "^7.4.2",
+    "@mantine/hooks": "^7.4.2",
+    "@mantine/notifications": "^7.4.2",
     "@next/eslint-plugin-next": "^13.5.6",
     "@tabler/icons-react": "^2.44.0",
     "@tanstack/eslint-plugin-query": "^4.36.1",
