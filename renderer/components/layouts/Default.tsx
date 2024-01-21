@@ -1,35 +1,23 @@
 import {
   ActionIcon,
   AppShell,
-  Button,
-  Center,
+  Flex,
   Group,
-  Header,
-  Menu,
-  Modal,
   Stack,
-  Text,
-  Title,
+  Tooltip,
 } from "@mantine/core";
 import {
   IconDisc,
-  IconDots,
+  IconLetterD,
   IconList,
   // IconListNumbers,
   // IconSchool,
   IconSettings,
-  IconSquareLetterD,
   // IconTournament,
   IconUsersGroup,
-  IconWindowMaximize,
-  IconWindowMinimize,
-  IconX,
 } from "@tabler/icons-react";
-import { useRouter } from "next/router";
-import { useDisclosure, useFullscreen } from "@mantine/hooks";
-import { ipcRenderer } from "electron";
 import LoadingOverlay from "../LoadingOverlay";
-import ActionButton from "../content/ActionButton";
+import { APP_NAME } from "utils/constants";
 
 type DefaultLayoutProps = {
   children: React.ReactNode;
@@ -53,11 +41,12 @@ const DefaultLayout = ({
   isLoading,
   isSuccess,
 }: DefaultLayoutProps) => {
-  const [opened, { open, close }] = useDisclosure(false);
-  const { push } = useRouter();
-  const { toggle, fullscreen } = useFullscreen();
-
-  // TODO: Some routes are currently unfinished and disabled. Reactivate the routes when the pages are created
+  /*
+   *
+   * TODO: Some routes are currently unfinished and disabled.
+   * Reactivate the routes when the pages are created!
+   *
+   */
   const mainRoutes: NavbarLinkProps[] = [
     { icon: <IconDisc size={14} />, label: "Lobby", route: "/lobby" },
     /*
@@ -105,119 +94,64 @@ const DefaultLayout = ({
   }
 
   return (
-    <AppShell
-      py={0}
-      header={
-        <Header
-          className="draggable"
-          height={headerHeight}
-          style={{ display: "flex", alignItems: "center" }}
-          px="sm"
-        >
-          <Group w="100%">
-            <ActionIcon
-              color="red"
-              radius="xs"
-              variant="filled"
-              onClick={() => void push("/")}
-            >
-              <IconSquareLetterD />
+    <AppShell header={{ height: headerHeight }} py={0}>
+      <AppShell.Header>
+        <Flex mx="sm" align="center" h={headerHeight}>
+          <Group fz="sm" gap="sm" tt="uppercase">
+            <ActionIcon aria-label={`${APP_NAME} Logo`} variant="light">
+              <IconLetterD />
             </ActionIcon>
-            <Button.Group>
-              {mainRoutes.map((route) => (
-                <Button
-                  key={route.route}
-                  leftIcon={route.icon}
-                  radius="xs"
-                  onClick={() => void push(route.route)}
-                  uppercase
-                  variant="transparent"
-                >
-                  {route.label}
-                </Button>
-              ))}
-            </Button.Group>
-            <Group ml="auto">
-              <Menu shadow="md" radius={0} width={200}>
-                <Menu.Target>
-                  <ActionIcon>
-                    <IconDots />
-                  </ActionIcon>
-                </Menu.Target>
-
-                <Menu.Dropdown>
-                  {miscRoutes.map((route) => (
-                    <Menu.Item
-                      icon={route.icon}
-                      key={route.label}
-                      onClick={() => void push(route.route)}
-                    >
-                      {route.label}
-                    </Menu.Item>
-                  ))}
-                </Menu.Dropdown>
-              </Menu>
-              <ActionButton
-                action={() => void toggle()}
-                icon={
-                  fullscreen ? <IconWindowMinimize /> : <IconWindowMaximize />
+            {APP_NAME}
+          </Group>
+          <Group ml="auto">
+            {miscRoutes.map((route) => (
+              <Tooltip
+                key={route.route}
+                label={route.label}
+                position="bottom"
+                transitionProps={
+                  {
+                    // duration: 0
+                  }
                 }
-                label={`${fullscreen ? "Minimize" : "Maximize"} Window`}
-              />
-              <ActionButton
-                action={() => open()}
-                icon={<IconX />}
-                label="Quit App"
-              />
-            </Group>
+                offset={15}
+                withArrow
+              >
+                <ActionIcon c="gray" variant="transparent">
+                  {route.icon}
+                </ActionIcon>
+              </Tooltip>
+            ))}
           </Group>
-        </Header>
-      }
-    >
-      <Modal
-        opened={opened}
-        onClose={close}
-        centered
-        withCloseButton={false}
-        overlayProps={{
-          blur: 5,
-        }}
-      >
-        <Modal.Body>
-          <Title mb="lg">Confirm Quit</Title>
-          <Text color="dimmed" mb="lg">
-            Any unsaved data will be lost. Are you sure you want to quit the
-            app?
-          </Text>
-          <Group>
-            <Button
-              onClick={() => void ipcRenderer.send("quit-app")}
-              variant="outline"
+        </Flex>
+      </AppShell.Header>
+      <AppShell.Navbar h="100vh">
+        <Stack mt="sm" mx="sm">
+          {mainRoutes.map((route) => (
+            <Tooltip
+              key={route.route}
+              label={route.label}
+              position="right"
+              transitionProps={
+                {
+                  // duration: 0,
+                }
+              }
+              offset={20}
+              withArrow
             >
-              Yes
-            </Button>
-            <Button onClick={() => void close()} variant="default">
-              No
-            </Button>
-          </Group>
-        </Modal.Body>
-      </Modal>
-      {isSuccess ? (
-        children
-      ) : (
-        <Center w="50%" mx="auto" h="100vh">
-          <Stack>
-            <Title>Oh snap!</Title>
-            <Text>
-              An internal error has occurred, preventing the creation of the
-              page you requested. We apologize for the inconvenience. To resolve
-              this issue, we recommend restarting the application and attempting
-              the operation again. If the problem persists, please contact our
-              support team for further assistance.
-            </Text>
-          </Stack>
-        </Center>
-      )}
+              <ActionIcon
+                aria-label={route.label}
+                c="gray"
+                variant="transparent"
+              >
+                {route.icon}
+              </ActionIcon>
+            </Tooltip>
+          ))}
+        </Stack>
+      </AppShell.Navbar>
+      <AppShell.Main h="100vh">{children}</AppShell.Main>
     </AppShell>
   );
 };
