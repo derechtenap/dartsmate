@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@mantine/core": "^7.4.2",
+    "@mantine/form": "^7.4.2",
     "@mantine/hooks": "^7.4.2",
     "@mantine/notifications": "^7.4.2",
     "@next/eslint-plugin-next": "^13.5.6",
