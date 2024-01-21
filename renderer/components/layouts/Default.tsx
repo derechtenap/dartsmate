@@ -122,8 +122,8 @@ const DefaultLayout = ({
           </Group>
         </Flex>
       </AppShell.Header>
-      <AppShell.Navbar h="100vh">
-        <Stack mt="sm" mx="sm">
+      <AppShell.Navbar h="100vh" w={navbarWidth}>
+        <Stack mt="sm" mx="auto">
           {mainRoutes.map((route) => (
             <Link href={route.route} key={route.route}>
               <Tooltip
@@ -134,7 +134,7 @@ const DefaultLayout = ({
                     // duration: 0,
                   }
                 }
-                offset={20}
+                offset={30}
                 withArrow
               >
                 <ActionIcon
