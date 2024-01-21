@@ -10,14 +10,15 @@ import {
   IconDisc,
   IconLetterD,
   IconList,
-  // IconListNumbers,
-  // IconSchool,
+  IconListNumbers,
+  IconSchool,
   IconSettings,
-  // IconTournament,
+  IconTournament,
   IconUsersGroup,
 } from "@tabler/icons-react";
 import LoadingOverlay from "../LoadingOverlay";
 import { APP_NAME } from "utils/constants";
+import Link from "next/link";
 
 type DefaultLayoutProps = {
   children: React.ReactNode;
@@ -39,8 +40,8 @@ const DefaultLayout = ({
   children,
   isFetching,
   isLoading,
-  isSuccess,
-}: DefaultLayoutProps) => {
+}: // isSuccess,
+DefaultLayoutProps) => {
   /*
    *
    * TODO: Some routes are currently unfinished and disabled.
@@ -48,42 +49,41 @@ const DefaultLayout = ({
    *
    */
   const mainRoutes: NavbarLinkProps[] = [
-    { icon: <IconDisc size={14} />, label: "Lobby", route: "/lobby" },
-    /*
     {
-      icon: <IconSchool size={14} />,
+      icon: <IconDisc />,
+      label: "Lobby",
+      route: "/lobby",
+    },
+    {
+      icon: <IconSchool />,
       label: "Training",
       route: "/training",
     },
-
     {
-      icon: <IconTournament size={14} />,
+      icon: <IconTournament />,
       label: "Tournament",
       route: "/tournament",
     },
-    */
     {
-      icon: <IconUsersGroup size={14} />,
+      icon: <IconUsersGroup />,
       label: "Profiles",
       route: "/profiles",
     },
     {
-      icon: <IconList size={14} />,
+      icon: <IconList />,
       label: "Replays",
       route: "/replays",
     },
-    /*
     {
-      icon: <IconListNumbers size={14} />,
+      icon: <IconListNumbers />,
       label: "Ranking",
       route: "/ranking",
     },
-    */
   ];
 
   const miscRoutes: NavbarLinkProps[] = [
     {
-      icon: <IconSettings size={14} />,
+      icon: <IconSettings />,
       label: "Settings",
       route: "/settings",
     },
@@ -98,29 +98,32 @@ const DefaultLayout = ({
       <AppShell.Header>
         <Flex mx="sm" align="center" h={headerHeight}>
           <Group fz="sm" gap="sm" tt="uppercase">
-            <ActionIcon aria-label={`${APP_NAME} Logo`} variant="light">
-              <IconLetterD />
-            </ActionIcon>
+            <Link href="/">
+              <ActionIcon aria-label={`${APP_NAME} Logo`} variant="light">
+                <IconLetterD />
+              </ActionIcon>
+            </Link>
             {APP_NAME}
           </Group>
           <Group ml="auto">
             {miscRoutes.map((route) => (
-              <Tooltip
-                key={route.route}
-                label={route.label}
-                position="bottom"
-                transitionProps={
-                  {
-                    // duration: 0
+              <Link href={route.route} key={route.route}>
+                <Tooltip
+                  label={route.label}
+                  position="bottom"
+                  transitionProps={
+                    {
+                      // duration: 0
+                    }
                   }
-                }
-                offset={15}
-                withArrow
-              >
-                <ActionIcon c="gray" variant="transparent">
-                  {route.icon}
-                </ActionIcon>
-              </Tooltip>
+                  offset={15}
+                  withArrow
+                >
+                  <ActionIcon c="gray" variant="transparent">
+                    {route.icon}
+                  </ActionIcon>
+                </Tooltip>
+              </Link>
             ))}
           </Group>
         </Flex>
@@ -128,26 +131,27 @@ const DefaultLayout = ({
       <AppShell.Navbar h="100vh">
         <Stack mt="sm" mx="sm">
           {mainRoutes.map((route) => (
-            <Tooltip
-              key={route.route}
-              label={route.label}
-              position="right"
-              transitionProps={
-                {
-                  // duration: 0,
+            <Link href={route.route} key={route.route}>
+              <Tooltip
+                label={route.label}
+                position="right"
+                transitionProps={
+                  {
+                    // duration: 0,
+                  }
                 }
-              }
-              offset={20}
-              withArrow
-            >
-              <ActionIcon
-                aria-label={route.label}
-                c="gray"
-                variant="transparent"
+                offset={20}
+                withArrow
               >
-                {route.icon}
-              </ActionIcon>
-            </Tooltip>
+                <ActionIcon
+                  aria-label={route.label}
+                  c="gray"
+                  variant="transparent"
+                >
+                  {route.icon}
+                </ActionIcon>
+              </Tooltip>
+            </Link>
           ))}
         </Stack>
       </AppShell.Navbar>
