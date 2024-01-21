@@ -60,11 +60,10 @@ const ProfilesPage: NextPage = () => {
         <>
           <Text>This action cannot be undone!</Text>
           <Group mt="md">
-            <Button compact onClick={() => handleDeleteProfile()}>
+            <Button onClick={() => handleDeleteProfile()}>
               Delete Profile
             </Button>
             <Button
-              compact
               color="dark"
               variant="subtle"
               onClick={() => notifications.clean()}
@@ -109,7 +108,6 @@ const ProfilesPage: NextPage = () => {
               maw={400}
               p="xs"
               mx="auto"
-              placeholder=""
             >
               <Stack>
                 <Link

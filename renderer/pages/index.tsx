@@ -29,7 +29,7 @@ const IndexPage: NextPage = (): JSX.Element => {
   return (
     <DefaultLayout isFetching={false} isLoading={false} isSuccess={true}>
       <Center h="100%">
-        <Stack spacing="xs">
+        <Stack>
           <Title tt="uppercase" fs="italic" size={100} lh={0.8}>
             {APP_NAME}
           </Title>
