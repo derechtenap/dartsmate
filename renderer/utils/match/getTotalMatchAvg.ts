@@ -1,20 +1,23 @@
 import type { MatchRound } from "types/match";
 
-// TODO: Instead of using the `navigator.language` allow the user to specify a app language
-
 /**
  *
  * Calculate the total average score from a player's match rounds.
  *
  * @param {MatchRound[]} playerRounds - An array of MatchRound objects representing the player's rounds.
- * @returns {string} The total average score formatted as a local string using the navigator language.
+ * @returns {number} The players average round score. Returns 0 if the player hasn't played any rounds
  *
  */
-export const getTotalMatchAvg = (playerRounds: MatchRound[]): string => {
-  if (playerRounds.length === 0) return (0).toLocaleString(navigator.language);
-  const averageScore =
-    playerRounds.reduce((total, round) => total + round.roundTotal, 0) /
-    playerRounds.length;
+export const getTotalMatchAvg = (playerRounds: MatchRound[]): number => {
+  // Return 0 when the player haven't player one round
+  if (playerRounds.length === 0) return 0;
 
-  return averageScore.toLocaleString(navigator.language);
+  const sumOfScores = playerRounds.reduce(
+    (total, roundScore) => total + roundScore.roundTotal,
+    0
+  );
+
+  const averageScore = sumOfScores / playerRounds.length;
+
+  return averageScore;
 };

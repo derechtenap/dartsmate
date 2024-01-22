@@ -1,6 +1,16 @@
 import type { NextPage } from "next";
-import DefaultLayout from "@/components/layouts/Default";
-import { Badge, Card, Group, Table, Tabs, Text, Tooltip } from "@mantine/core";
+import DefaultLayout, { navbarWidth } from "@/components/layouts/Default";
+import {
+  Badge,
+  Container,
+  Group,
+  NumberFormatter,
+  ScrollArea,
+  Table,
+  Tabs,
+  Text,
+  Tooltip,
+} from "@mantine/core";
 import { useRouter } from "next/router";
 import { useCurrentMatch } from "hooks/useCurrentMatch";
 import type { UUID } from "crypto";
@@ -8,12 +18,13 @@ import PageHeader from "@/components/content/PageHeader";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
 import { getTotalMatchAvg } from "utils/match/getTotalMatchAvg";
 import {
-  IconCrown,
   IconHistory,
   IconRepeat,
   IconTable,
+  IconTrophy,
 } from "@tabler/icons-react";
-import BadgeMatchStatus from "@/components/content/BadgeMatchStatus";
+import { getHighestRoundScoreForPlayer } from "utils/match/getHighestRoundScorePlayer";
+import { getRoundsAboveThreshold } from "utils/match/getRoundsAboveThreshold";
 
 const GameResultsPage: NextPage = () => {
   const router = useRouter();
@@ -25,154 +36,216 @@ const GameResultsPage: NextPage = () => {
     data: matchData,
   } = useCurrentMatch(matchQueryUuid as UUID);
 
+  const tabIconSize = "18px";
+
   return (
     <DefaultLayout
       isFetching={isFetching}
       isLoading={isLoading}
       isSuccess={isSuccess}
     >
-      <PageHeader title="Results">
-        <Group position="apart">
-          <Text>
+      <ScrollArea.Autosize ml={navbarWidth + 1}>
+        <Container w={900}>
+          <PageHeader title="Results">
             {`${matchData?.players.length || 0} Players - ${
               matchData?.initialScore || 0
             } ${matchData?.matchCheckout || "Any"}-Out`}
-          </Text>
-          <BadgeMatchStatus
-            matchStatus={matchData?.matchStatus || "undefined"}
-          />
-        </Group>
-      </PageHeader>
+          </PageHeader>
 
-      <Tabs defaultValue="overview">
-        <Tabs.List>
-          <Tabs.Tab value="overview" icon={<IconTable size="0.8rem" />}>
-            Overview
-          </Tabs.Tab>
-          <Tabs.Tab value="details" icon={<IconHistory size="0.8rem" />}>
-            Round Details
-          </Tabs.Tab>
-          <Tabs.Tab value="matchReplay" icon={<IconRepeat size="0.8rem" />}>
-            Match Replay
-          </Tabs.Tab>
-        </Tabs.List>
-
-        <Tabs.Panel value="overview" pt="lg">
-          <Table>
-            <thead>
-              <tr>
-                <th>Player</th>
-                <th>Score Left</th>
-                <th>Rounds</th>
-                <th>Darts</th>
-                <th>AVG</th>
-              </tr>
-            </thead>
-            <tbody>
-              {matchData?.players.map((player) => (
-                <tr key={player.uuid}>
-                  <td>
-                    <Group>
-                      <ProfileAvatar profile={player} />
-                      <Group>
-                        {player.isWinner ? (
-                          <Tooltip label={`${player.username} won the match!`}>
-                            <IconCrown
-                              color="gold"
-                              style={{ cursor: "help" }}
-                            />
-                          </Tooltip>
-                        ) : undefined}
-                        {player.username}
-                      </Group>
-                    </Group>
-                  </td>
-                  <td>{player.scoreLeft}</td> <td>{player.rounds.length}</td>
-                  <td>
-                    {player.rounds.reduce(
-                      (total, round) => total + round.throwDetails.length,
-                      0
-                    )}
-                  </td>
-                  <td>{getTotalMatchAvg(player.rounds)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Tabs.Panel>
-
-        <Tabs.Panel value="details" pt="lg">
-          <Tabs
-            orientation="vertical"
-            defaultValue={matchData?.players[0].uuid}
-          >
+          <Tabs defaultValue="overview">
             <Tabs.List>
-              {matchData?.players.map((player) => (
-                <Tabs.Tab
-                  key={player.uuid}
-                  value={player.uuid}
-                  icon={<ProfileAvatar profile={player} size="sm" />}
-                >
-                  {player.username}
-                </Tabs.Tab>
-              ))}
+              <Tabs.Tab
+                leftSection={<IconTable size={tabIconSize} />}
+                value="overview"
+              >
+                Overview
+              </Tabs.Tab>
+              <Tabs.Tab
+                leftSection={<IconHistory size={tabIconSize} />}
+                value="details"
+              >
+                Round Details
+              </Tabs.Tab>
+              <Tabs.Tab
+                leftSection={<IconRepeat size={tabIconSize} />}
+                value="matchReplay"
+              >
+                Match Replay
+              </Tabs.Tab>
             </Tabs.List>
 
-            {matchData?.players.map((player, _idx) => (
-              <Tabs.Panel key={player.uuid} value={player.uuid} pl="lg">
-                <Card>
-                  <Table>
-                    <thead>
-                      <tr>
-                        <th>Round</th>
-                        <th>Score</th>
-                        <th>Round AVG</th>
-                        <th>Throws</th>
-                        <th>Round Time</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {matchData.players[_idx].rounds.map((round, _idx) => (
-                        <tr key={_idx}>
-                          <td>{_idx + 1}</td>
-                          <td>{round.roundTotal}</td>
-                          <td>{round.roundAverage.toFixed(2)}</td>
-                          <td>
-                            <Group align="center" grow>
-                              {round.throwDetails.map((roundThrow, _idx) => (
-                                <Tooltip
-                                  key={_idx}
-                                  label={`Score ${roundThrow.score}`}
-                                >
-                                  <Badge
-                                    variant="filled"
-                                    style={{ cursor: "help" }}
-                                  >
-                                    {roundThrow.isDouble
-                                      ? `D${roundThrow.dartboardZone}`
-                                      : roundThrow.isTriple
-                                      ? `T${roundThrow.dartboardZone}`
-                                      : roundThrow.dartboardZone}
-                                  </Badge>
-                                </Tooltip>
-                              ))}
-                            </Group>
-                          </td>
-                          <td>{round.elapsedTime} Seconds</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </Card>
-              </Tabs.Panel>
-            ))}
-          </Tabs>
-        </Tabs.Panel>
+            <Tabs.Panel value="overview">
+              <Table
+                captionSide="top"
+                highlightOnHover
+                mt="lg"
+                stickyHeader
+                striped
+                withColumnBorders
+              >
+                <Table.Caption tt="uppercase" fz="xs">
+                  Set: 1 - Leg: 1
+                </Table.Caption>
+                <Table.Thead>
+                  <Table.Tr fz="xs" tt="uppercase">
+                    <Table.Th>Player</Table.Th>
+                    <Table.Th>Darts</Table.Th>
+                    <Table.Th>First 9 Avg.</Table.Th>
+                    <Table.Th>Average</Table.Th>
+                    <Table.Th>Highest Score</Table.Th>
+                    <Table.Th>100+</Table.Th>
+                    <Table.Th>180</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>
+                  {matchData?.players.map((player) => (
+                    <Table.Tr key={player.uuid}>
+                      <Table.Td>
+                        <Group>
+                          <ProfileAvatar profile={player} />
+                          <Group>
+                            {player.isWinner ? (
+                              <IconTrophy color="gold" />
+                            ) : undefined}
+                            {player.username}
+                          </Group>
+                        </Group>
+                      </Table.Td>
+                      <Table.Td>
+                        {player.rounds.reduce(
+                          (total, round) => total + round.throwDetails.length,
+                          0
+                        )}
+                      </Table.Td>
+                      <Table.Td>
+                        <NumberFormatter
+                          decimalScale={2}
+                          value={
+                            (player.rounds[0].roundAverage +
+                              player.rounds[1].roundAverage +
+                              player.rounds[2].roundAverage) /
+                            3
+                          }
+                        />
+                      </Table.Td>
+                      <Table.Td>
+                        <NumberFormatter
+                          decimalScale={2}
+                          value={getTotalMatchAvg(player.rounds)}
+                        />
+                      </Table.Td>
+                      <Table.Td>
+                        <NumberFormatter
+                          decimalScale={0}
+                          value={getHighestRoundScoreForPlayer(player)}
+                        />
+                      </Table.Td>
+                      <Table.Td>
+                        <NumberFormatter
+                          decimalScale={0}
+                          value={getRoundsAboveThreshold(player, 100)}
+                        />
+                      </Table.Td>
+                      <Table.Td>
+                        <NumberFormatter
+                          decimalScale={0}
+                          value={getRoundsAboveThreshold(player, 180)}
+                        />
+                      </Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Tabs.Panel>
 
-        <Tabs.Panel value="matchReplay" pt="lg">
-          {/* TODO: Add Match Replay Page */}
-        </Tabs.Panel>
-      </Tabs>
+            <Tabs.Panel value="details">
+              <Tabs
+                orientation="vertical"
+                defaultValue={matchData?.players[0].uuid}
+              >
+                <Tabs.List mt="lg">
+                  {matchData?.players.map((player) => (
+                    <Tabs.Tab
+                      key={player.uuid}
+                      value={player.uuid}
+                      leftSection={<ProfileAvatar profile={player} size="sm" />}
+                    >
+                      {player.username}
+                    </Tabs.Tab>
+                  ))}
+                </Tabs.List>
+
+                {matchData?.players.map((player, _idx) => (
+                  <Tabs.Panel key={player.uuid} value={player.uuid} pl="lg">
+                    <Table
+                      captionSide="top"
+                      highlightOnHover
+                      mt="lg"
+                      stickyHeader
+                      striped
+                      withColumnBorders
+                    >
+                      <Table.Caption tt="uppercase" fz="xs">
+                        Set: 1 - Leg: 1
+                      </Table.Caption>
+                      <Table.Thead>
+                        <Table.Tr fz="xs" tt="uppercase">
+                          <Table.Th>Round</Table.Th>
+                          <Table.Th>Score</Table.Th>
+                          <Table.Th>Round AVG</Table.Th>
+                          <Table.Th>Throws</Table.Th>
+                          <Table.Th>Round Time</Table.Th>
+                        </Table.Tr>
+                      </Table.Thead>
+                      <Table.Tbody>
+                        {matchData.players[_idx].rounds.map((round, _idx) => (
+                          <Table.Tr key={_idx}>
+                            <Table.Td>{_idx + 1}</Table.Td>
+                            <Table.Td>{round.roundTotal}</Table.Td>
+                            <Table.Td>
+                              <NumberFormatter
+                                decimalScale={2}
+                                value={round.roundAverage}
+                              />
+                            </Table.Td>
+                            <Table.Td>
+                              <Group align="center" grow>
+                                {round.throwDetails.map((roundThrow, _idx) => (
+                                  <Tooltip
+                                    key={_idx}
+                                    label={`Score ${roundThrow.score}`}
+                                  >
+                                    <Badge
+                                      variant="filled"
+                                      style={{ cursor: "help" }}
+                                    >
+                                      {roundThrow.isDouble
+                                        ? `D${roundThrow.dartboardZone}`
+                                        : roundThrow.isTriple
+                                        ? `T${roundThrow.dartboardZone}`
+                                        : roundThrow.dartboardZone}
+                                    </Badge>
+                                  </Tooltip>
+                                ))}
+                              </Group>
+                            </Table.Td>
+                            <Table.Td>{round.elapsedTime} Seconds</Table.Td>
+                          </Table.Tr>
+                        ))}
+                      </Table.Tbody>
+                    </Table>
+                  </Tabs.Panel>
+                ))}
+              </Tabs>
+            </Tabs.Panel>
+
+            <Tabs.Panel value="matchReplay">
+              {/* TODO: Add Match Replay Page */}
+              <Text mt="lg">This feature will be added in a later update!</Text>
+            </Tabs.Panel>
+          </Tabs>
+        </Container>
+      </ScrollArea.Autosize>
     </DefaultLayout>
   );
 };
