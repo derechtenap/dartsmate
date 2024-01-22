@@ -5,16 +5,7 @@ import type { UUID } from "crypto";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import { useEffect, useState } from "react";
 import DefaultLayout from "@/components/layouts/Default";
-import {
-  Button,
-  Card,
-  Grid,
-  Group,
-  Modal,
-  Stack,
-  Text,
-  useMantineTheme,
-} from "@mantine/core";
+import { Button, Card, Grid, Group, Modal, Stack, Text } from "@mantine/core";
 import {
   DARTBOARD_ZONES,
   MATCHES_DIR,
@@ -35,7 +26,6 @@ import { handleAbortMatch } from "utils/match/handleAbortMatch";
 
 const GamePlayingPage: NextPage = () => {
   const router = useRouter();
-  const theme = useMantineTheme();
   const { uuid } = router.query;
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0); // TODO: Add randomize player Start
   const [multipliers, setMultipliers] = useState({
@@ -169,10 +159,6 @@ const GamePlayingPage: NextPage = () => {
         title="Confirm Match Abortion"
         centered
         overlayProps={{
-          color:
-            theme.colorScheme === "dark"
-              ? theme.colors.dark[9]
-              : theme.colors.gray[2],
           opacity: 0.55,
           blur: 3,
         }}
@@ -186,10 +172,10 @@ const GamePlayingPage: NextPage = () => {
         </Group>
       </Modal>
       <Grid gutter="xl" m="lg">
-        <Grid.Col md="auto">
+        <Grid.Col>
           <Grid>
             {matchData?.players.map((player, _idx) => (
-              <Grid.Col sm={6} lg={3} key={player.uuid}>
+              <Grid.Col key={player.uuid}>
                 <Card
                   withBorder
                   style={{
@@ -213,10 +199,10 @@ const GamePlayingPage: NextPage = () => {
             ))}
           </Grid>
         </Grid.Col>
-        <Grid.Col md={4} xl={3}>
+        <Grid.Col>
           <Grid grow>
             {DARTBOARD_ZONES.map((zone) => (
-              <Grid.Col md={3} key={zone}>
+              <Grid.Col key={zone}>
                 <Button
                   variant="light"
                   w="100%"
@@ -229,7 +215,7 @@ const GamePlayingPage: NextPage = () => {
             ))}
           </Grid>
           <Stack ta="center" my="lg" mx={0}>
-            <Group my="lg" position="apart" grow>
+            <Group my="lg" grow>
               <Button
                 onClick={() => handleMultipliers("DOUBLE")}
                 variant={multipliers.double ? "light" : "default"}

@@ -100,7 +100,7 @@ const ProfilesPage: NextPage = () => {
       isSuccess={isSuccess}
     >
       <Grid align="flex-start">
-        <Grid.Col span={3} lg={2} mah={contentHeight}>
+        <Grid.Col span={3} mah={contentHeight}>
           <Paper withBorder>
             <ScrollArea.Autosize
               mah={contentHeight - 5}
@@ -176,20 +176,23 @@ const ProfilesPage: NextPage = () => {
                 </Paper>
               </Group>
               <Tabs defaultValue="achievements" mt="lg">
-                <Tabs.List grow position="apart">
+                <Tabs.List grow>
                   <Tabs.Tab
                     value="achievements"
-                    icon={<IconTrophy size="0.8rem" />}
+                    leftSection={<IconTrophy size="0.8rem" />}
                   >
                     Achievements
                   </Tabs.Tab>
                   <Tabs.Tab
                     value="statistics"
-                    icon={<IconFileAnalytics size="0.8rem" />}
+                    leftSection={<IconFileAnalytics size="0.8rem" />}
                   >
                     Statistics
                   </Tabs.Tab>
-                  <Tabs.Tab value="matches" icon={<IconList size="0.8rem" />}>
+                  <Tabs.Tab
+                    value="matches"
+                    leftSection={<IconList size="0.8rem" />}
+                  >
                     Matches
                   </Tabs.Tab>
                 </Tabs.List>

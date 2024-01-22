@@ -157,7 +157,11 @@ const LobbyPage: NextPage = () => {
             </EmptyState>
           ) : (
             <>
-              <Input icon={<IconSearch />} placeholder="Search..." disabled />
+              <Input
+                leftSection={<IconSearch />}
+                placeholder="Search..."
+                disabled
+              />
               {profiles.map((profile) => {
                 // Check if the profile is already in matchPlayerList
                 const isProfileInList = matchPlayerList.some(
@@ -165,30 +169,11 @@ const LobbyPage: NextPage = () => {
                 );
                 return (
                   <Box
-                    sx={(theme) => ({
-                      backgroundColor:
-                        theme.colorScheme === "dark"
-                          ? theme.colors.dark[6]
-                          : theme.colors.gray[0],
-                      textAlign: "center",
-                      display: "flex",
-                      gap: theme.spacing.lg,
-                      alignItems: "center",
-                      padding: theme.spacing.sm,
-                      borderRadius: theme.radius.md,
-                      cursor: "pointer",
-                      "&:hover": {
-                        backgroundColor:
-                          theme.colorScheme === "dark"
-                            ? theme.colors.dark[5]
-                            : theme.colors.gray[1],
-                      },
-                    })}
                     key={profile.uuid}
                     onClick={() => handlePlayerListUpdate(profile)}
                   >
                     <ProfileAvatar profile={profile} />
-                    <Text color={isProfileInList ? "revert" : "dimmed"}>
+                    <Text c={isProfileInList ? "revert" : "dimmed"}>
                       {profile.username}
                     </Text>
                     <ActionIcon ml="auto" variant="default">
@@ -201,7 +186,7 @@ const LobbyPage: NextPage = () => {
           )}
         </Stack>
       </Drawer>
-      <Grid h="100%" m={0}>
+      <Grid>
         <Grid.Col span={9} py={0}>
           {isPlayerListEmpty ? (
             <EmptyState
@@ -216,19 +201,18 @@ const LobbyPage: NextPage = () => {
             <ScrollArea.Autosize
               mah={contentHeight - 5}
               mih={contentHeight - 5}
-              placeholder=""
             >
               <Stack mr="xl">
                 <Title fz="lg">Players</Title>
                 <Table highlightOnHover>
-                  <thead>
-                    <tr>
-                      <th>
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th>
                         <Text fz="xs" tt="uppercase" mr="auto">
                           {matchPlayerList.length} Players
                         </Text>
-                      </th>
-                      <th>
+                      </Table.Th>
+                      <Table.Th>
                         <Flex align="center" gap="lg" justify="end">
                           <ActionButton
                             action={open}
@@ -243,29 +227,29 @@ const LobbyPage: NextPage = () => {
                             size="1.25rem"
                           />
                         </Flex>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                      </Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>
                     {matchPlayerList.map((player) => (
-                      <tr key={player.uuid}>
-                        <td>
+                      <Table.Tr key={player.uuid}>
+                        <Table.Td>
                           <Group>
                             <ProfileAvatar profile={player} size="md" />
                             <Text truncate>{player.username}</Text>
                           </Group>
-                        </td>
-                        <td>
+                        </Table.Td>
+                        <Table.Td>
                           <ActionButton
                             action={() => handlePlayerListUpdate(player)}
                             icon={<IconUserMinus />}
                             label={`Remove ${player.username}`}
                             ml="auto"
                           />
-                        </td>
-                      </tr>
+                        </Table.Td>
+                      </Table.Tr>
                     ))}
-                  </tbody>
+                  </Table.Tbody>
                 </Table>
               </Stack>
             </ScrollArea.Autosize>

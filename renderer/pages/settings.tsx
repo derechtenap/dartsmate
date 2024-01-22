@@ -10,7 +10,7 @@ import {
   SegmentedControl,
   Text,
 } from "@mantine/core";
-import type { ColorScheme, SegmentedControlProps } from "@mantine/core";
+import type { SegmentedControlProps } from "@mantine/core";
 import { useLocalStorage, useOs } from "@mantine/hooks";
 import { getFolderSize } from "utils/fs/getFolderSize";
 import { APP_NAME, MATCHES_DIR, PROFILES_DIR } from "utils/constants";
@@ -26,7 +26,7 @@ const SettingsPage: NextPage = () => {
 
   const os = useOs();
 
-  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+  const [colorScheme, setColorScheme] = useLocalStorage({
     key: "mantine-color-scheme",
   });
 
@@ -89,7 +89,7 @@ const SettingsPage: NextPage = () => {
             </Text>
             <SegmentedControl
               value={colorScheme}
-              onChange={(scheme) => setColorScheme(scheme as ColorScheme)}
+              onChange={(scheme) => setColorScheme(scheme)}
               data={colorSchemes}
             />
           </Accordion.Panel>

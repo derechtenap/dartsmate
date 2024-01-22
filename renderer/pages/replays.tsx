@@ -95,7 +95,7 @@ const ReplaysPage: NextPage = () => {
       isSuccess={isSuccess}
     >
       <ScrollArea.Autosize ml={navbarWidth + 1}>
-        <Table w={1000} mx="auto">
+        <Table w={900} mx="auto">
           <Table.Thead>
             <Table.Tr>
               <Table.Th>Match</Table.Th>
