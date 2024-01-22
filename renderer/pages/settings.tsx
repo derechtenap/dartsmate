@@ -1,17 +1,20 @@
 import type { NextPage } from "next";
-import DefaultLayout from "@/components/layouts/Default";
+import DefaultLayout, { navbarWidth } from "@/components/layouts/Default";
 import PageHeader from "@/components/content/PageHeader";
 import {
   Accordion,
   Alert,
   Button,
+  Center,
+  Container,
   Group,
-  Kbd,
+  MantineColorScheme,
+  ScrollArea,
   SegmentedControl,
+  SegmentedControlProps,
   Text,
+  useMantineColorScheme,
 } from "@mantine/core";
-import type { SegmentedControlProps } from "@mantine/core";
-import { useLocalStorage, useOs } from "@mantine/hooks";
 import { getFolderSize } from "utils/fs/getFolderSize";
 import { APP_NAME, MATCHES_DIR, PROFILES_DIR } from "utils/constants";
 import { readFolder } from "utils/fs/readFolder";
@@ -20,19 +23,44 @@ import { notifications } from "@mantine/notifications";
 import path from "path";
 import { useEffect, useState } from "react";
 import { filesize } from "filesize";
+import { IconMoon, IconSun, IconSunMoon } from "@tabler/icons-react";
 
 const SettingsPage: NextPage = () => {
   const [folderSize, setFolderSize] = useState(0);
-
-  const os = useOs();
-
-  const [colorScheme, setColorScheme] = useLocalStorage({
-    key: "mantine-color-scheme",
+  const { colorScheme, setColorScheme } = useMantineColorScheme({
+    // keepTransitions: true,
   });
 
+  const iconProps = {
+    width: 20,
+    height: 20,
+  };
+
   const colorSchemes: SegmentedControlProps["data"] = [
-    { label: "Light", value: "light" },
-    { label: "Dark", value: "dark" },
+    {
+      label: (
+        <Center style={{ gap: 10 }}>
+          <IconSun {...iconProps} /> <Text>Light</Text>
+        </Center>
+      ),
+      value: "light",
+    },
+    {
+      label: (
+        <Center style={{ gap: 10 }}>
+          <IconMoon {...iconProps} /> <Text>Dark</Text>
+        </Center>
+      ),
+      value: "dark",
+    },
+    {
+      label: (
+        <Center style={{ gap: 10 }}>
+          <IconSunMoon {...iconProps} /> <Text>Auto</Text>
+        </Center>
+      ),
+      value: "auto",
+    },
   ];
 
   const getAppFolderSize = () => {
@@ -70,74 +98,83 @@ const SettingsPage: NextPage = () => {
 
   return (
     <DefaultLayout isFetching={false} isLoading={false} isSuccess={true}>
-      <PageHeader title="Settings">
-        Here you can change your app settings. Some settings can be overridden
-        on each page by pressing the corresponding hotkeys.
-      </PageHeader>
-      <Accordion variant="contained" defaultValue="general">
-        <Accordion.Item value="general">
-          <Accordion.Control>
-            <Text fw="bold">General Preferences</Text>
-          </Accordion.Control>
-          <Accordion.Panel>
-            <Text fw="bold">Color Scheme</Text>
-            <Text mb="lg">
-              You can set a preferred color scheme for {APP_NAME}. By default{" "}
-              {APP_NAME} uses your color scheme from the operating system. You
-              can change the color scheme at any time by pressing{" "}
-              <Kbd>{os !== "macos" ? "CTRL+T" : "⌘+T"}</Kbd>.
-            </Text>
-            <SegmentedControl
-              value={colorScheme}
-              onChange={(scheme) => setColorScheme(scheme)}
-              data={colorSchemes}
-            />
-          </Accordion.Panel>
-        </Accordion.Item>
-        {/*
-        <Accordion.Item value="notificationsAndAlerts">
-          <Accordion.Control>
-            <Text fw="bold">Notifications and Alerts</Text>
-          </Accordion.Control>
-          <Accordion.Panel>...</Accordion.Panel>
-        </Accordion.Item>
-        */}
-        <Accordion.Item value="dataManagement">
-          <Accordion.Control>
-            <Text fw="bold">Data Management</Text>
-          </Accordion.Control>
-          <Accordion.Panel>
-            <Text>Here you can manage the data created by {APP_NAME}.</Text>
-            <Alert
-              my="lg"
-              title="Danger Zone"
-              color="red"
-              radius="xs"
-              variant="filled"
-            >
-              <Text>
-                Deleting your saved profiles or matches cannot be undone!
-                Profiles and matches currently occupy{" "}
-                {filesize(folderSize, { standard: "jedec" })} on your hard disk.
-              </Text>
-              <Group mt="lg">
-                <Button
-                  variant="white"
-                  onClick={() => deleteFolderContent(PROFILES_DIR)}
+      <ScrollArea.Autosize ml={navbarWidth + 1}>
+        <Container w={900}>
+          <PageHeader title="Settings">
+            Here you can change your app settings. Some settings can be
+            overridden on each page by pressing the corresponding hotkeys.
+          </PageHeader>
+          <Accordion variant="contained" defaultValue="general">
+            <Accordion.Item value="general">
+              <Accordion.Control>
+                <Text fw="bold">General Preferences</Text>
+              </Accordion.Control>
+              <Accordion.Panel>
+                <Text fw="bold">Color Scheme</Text>
+                <Text mb="lg">
+                  Customize your {APP_NAME} experience by selecting a preferred
+                  color scheme. By default, {APP_NAME} synchronizes with your
+                  operating system's color scheme. Choose the "Auto" theme to
+                  enable {APP_NAME} to dynamically adjust the theme for you.
+                </Text>
+
+                <SegmentedControl
+                  color="red"
+                  data={colorSchemes}
+                  onChange={(newScheme) =>
+                    setColorScheme(newScheme as MantineColorScheme)
+                  }
+                  value={colorScheme}
+                />
+              </Accordion.Panel>
+            </Accordion.Item>
+            {/*
+          <Accordion.Item value="notificationsAndAlerts">
+            <Accordion.Control>
+              <Text fw="bold">Notifications and Alerts</Text>
+            </Accordion.Control>
+            <Accordion.Panel>...</Accordion.Panel>
+          </Accordion.Item>
+          */}
+            <Accordion.Item value="dataManagement">
+              <Accordion.Control>
+                <Text fw="bold">Data Management</Text>
+              </Accordion.Control>
+              <Accordion.Panel>
+                <Text>Here you can manage the data created by {APP_NAME}.</Text>
+                <Alert
+                  my="lg"
+                  title="Danger Zone"
+                  color="red"
+                  radius="xs"
+                  variant="filled"
                 >
-                  Delete Profiles
-                </Button>
-                <Button
-                  variant="white"
-                  onClick={() => deleteFolderContent(MATCHES_DIR)}
-                >
-                  Delete Matches
-                </Button>
-              </Group>
-            </Alert>
-          </Accordion.Panel>
-        </Accordion.Item>
-      </Accordion>
+                  <Text>
+                    Deleting your saved profiles or matches cannot be undone!
+                    Profiles and matches currently occupy{" "}
+                    {filesize(folderSize, { standard: "jedec" })} on your hard
+                    disk.
+                  </Text>
+                  <Group mt="lg">
+                    <Button
+                      variant="white"
+                      onClick={() => deleteFolderContent(PROFILES_DIR)}
+                    >
+                      Delete Profiles
+                    </Button>
+                    <Button
+                      variant="white"
+                      onClick={() => deleteFolderContent(MATCHES_DIR)}
+                    >
+                      Delete Matches
+                    </Button>
+                  </Group>
+                </Alert>
+              </Accordion.Panel>
+            </Accordion.Item>
+          </Accordion>
+        </Container>
+      </ScrollArea.Autosize>
     </DefaultLayout>
   );
 };
