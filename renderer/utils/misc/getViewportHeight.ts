@@ -9,7 +9,6 @@ import { useViewportSize } from "@mantine/hooks";
  */
 export const getViewportHeight = () => {
   const { height } = useViewportSize();
-  const appShellPadding = 30; // px
 
-  return height - headerHeight - appShellPadding;
+  return height - headerHeight;
 };

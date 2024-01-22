@@ -98,8 +98,6 @@ const ProfileEditorPage: NextPage = () => {
 
   const EDITOR_MODE = query.mode || "create"; // Default to create mode when the query mode is undefined
 
-  console.info(EDITOR_MODE, query);
-
   return (
     <form
       onSubmit={form.onSubmit(() => {

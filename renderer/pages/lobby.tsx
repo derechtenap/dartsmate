@@ -1,9 +1,17 @@
 import type { NextPage } from "next";
-import DefaultLayout from "@/components/layouts/Default";
+import DefaultLayout, { navbarWidth } from "@/components/layouts/Default";
 import {
   ActionIcon,
+  Autocomplete,
+  Badge,
   Box,
   Button,
+  Card,
+  Center,
+  Checkbox,
+  CheckboxGroup,
+  Container,
+  Divider,
   Drawer,
   Flex,
   Grid,
@@ -12,6 +20,8 @@ import {
   NativeSelect,
   NumberInput,
   ScrollArea,
+  SegmentedControl,
+  SimpleGrid,
   Stack,
   Table,
   Text,
@@ -45,13 +55,12 @@ import {
 } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import ActionButton from "@/components/content/ActionButton";
-import { getViewportHeight } from "utils/misc/getViewportHeight";
 import EmptyState from "@/components/content/EmptyState";
 import Link from "next/link";
+import { getViewportHeight } from "utils/misc/getViewportHeight";
 
 const LobbyPage: NextPage = () => {
   const router = useRouter();
-  const contentHeight = getViewportHeight();
   const { isFetching, isLoading, isSuccess, data: profiles } = useProfiles();
   const { mutate } = useAddCurrentMatch();
   const [matchPlayerList, setMatchPlayerList] = useState<Player[]>([]);
@@ -139,153 +148,90 @@ const LobbyPage: NextPage = () => {
       isLoading={isLoading}
       isSuccess={isSuccess}
     >
-      <Drawer
-        opened={opened}
-        onClose={close}
-        size="100%"
-        title="Choose Your Players"
-      >
-        <Stack>
-          {profiles.length === 0 ? (
-            <EmptyState
-              title="Where is everybody?"
-              text="We couldn't find any profiles!"
-            >
-              <Link href="/profiles">
-                <Button mt="lg">Create Profiles</Button>
-              </Link>
-            </EmptyState>
-          ) : (
-            <>
-              <Input
-                leftSection={<IconSearch />}
-                placeholder="Search..."
-                disabled
-              />
-              {profiles.map((profile) => {
-                // Check if the profile is already in matchPlayerList
-                const isProfileInList = matchPlayerList.some(
-                  (player) => player.uuid === profile.uuid
-                );
-                return (
-                  <Box
-                    key={profile.uuid}
-                    onClick={() => handlePlayerListUpdate(profile)}
-                  >
-                    <ProfileAvatar profile={profile} />
-                    <Text c={isProfileInList ? "revert" : "dimmed"}>
-                      {profile.username}
-                    </Text>
-                    <ActionIcon ml="auto" variant="default">
-                      {isProfileInList ? <IconUserMinus /> : <IconUserPlus />}
-                    </ActionIcon>
-                  </Box>
-                );
-              })}
-            </>
-          )}
-        </Stack>
-      </Drawer>
-      <Grid>
-        <Grid.Col span={9} py={0}>
-          {isPlayerListEmpty ? (
-            <EmptyState
-              title="Where is everyone again?"
-              text="Add players by clicking the button below."
-            >
-              <Button mt="lg" onClick={open}>
-                Add Players
-              </Button>
-            </EmptyState>
-          ) : (
-            <ScrollArea.Autosize
-              mah={contentHeight - 5}
-              mih={contentHeight - 5}
-            >
-              <Stack mr="xl">
-                <Title fz="lg">Players</Title>
-                <Table highlightOnHover>
-                  <Table.Thead>
-                    <Table.Tr>
-                      <Table.Th>
-                        <Text fz="xs" tt="uppercase" mr="auto">
-                          {matchPlayerList.length} Players
-                        </Text>
-                      </Table.Th>
-                      <Table.Th>
-                        <Flex align="center" gap="lg" justify="end">
-                          <ActionButton
-                            action={open}
-                            icon={<IconUsersPlus />}
-                            label="Add Players"
-                            size="1.25rem"
-                          />
-                          <ActionButton
-                            action={() => setMatchPlayerList([])}
-                            icon={<IconUserOff />}
-                            label="Remove all Players"
-                            size="1.25rem"
-                          />
-                        </Flex>
-                      </Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>
-                    {matchPlayerList.map((player) => (
-                      <Table.Tr key={player.uuid}>
-                        <Table.Td>
-                          <Group>
-                            <ProfileAvatar profile={player} size="md" />
-                            <Text truncate>{player.username}</Text>
-                          </Group>
-                        </Table.Td>
-                        <Table.Td>
-                          <ActionButton
-                            action={() => handlePlayerListUpdate(player)}
-                            icon={<IconUserMinus />}
-                            label={`Remove ${player.username}`}
-                            ml="auto"
-                          />
-                        </Table.Td>
-                      </Table.Tr>
-                    ))}
-                  </Table.Tbody>
-                </Table>
-              </Stack>
-            </ScrollArea.Autosize>
-          )}
-        </Grid.Col>
-        <Grid.Col span="auto" p={0}>
-          <Box
-            h="100%"
-            style={{ display: "grid", alignContent: "space-between" }}
-          >
-            <Stack>
-              <Title fz="xl">Match Settings</Title>
-              <NumberInput
-                label="Score"
-                variant="filled"
-                {...form.getInputProps("initialScore")}
-              />
-              <NativeSelect
-                data={["Any", "Single", "Double", "Triple"]}
-                label="Checkout"
-                variant="filled"
-                {...form.getInputProps("matchCheckout")}
-              />
-            </Stack>
-            <Button
-              tt="uppercase"
-              disabled={isPlayerListEmpty}
-              onClick={() => handleStartMatch()}
-            >
-              <Group>
-                <IconTarget /> Start Match
-              </Group>
-            </Button>
-          </Box>
-        </Grid.Col>
-      </Grid>
+      <ScrollArea.Autosize ml={navbarWidth + 1} h={getViewportHeight()}>
+        <Container maw={1200} py="lg">
+          <Grid>
+            <Grid.Col span={7}>
+              <Card bg="transparent">Left</Card>
+            </Grid.Col>
+            <Grid.Col span={5}>
+              <Card withBorder>
+                <Title size="h3" tt="uppercase">
+                  Match Settings
+                </Title>
+                <Stack my="lg">
+                  <Divider label="Score" labelPosition="left" />
+                  <SegmentedControl
+                    color="red"
+                    defaultValue="501"
+                    data={[
+                      /* TODO: Add custom score input */
+                      {
+                        label: "301",
+                        value: "301",
+                      },
+                      {
+                        label: "501",
+                        value: "501",
+                      },
+                      {
+                        label: "701",
+                        value: "701",
+                      },
+                    ]}
+                    size="xs"
+                    tt="uppercase"
+                  />
+                  <Divider
+                    label="Starting and Finishing Rules"
+                    labelPosition="left"
+                  />
+                  <SegmentedControl
+                    color="red"
+                    data={["Straight in", "Double in", "Master in"]}
+                    size="xs"
+                    tt="uppercase"
+                  />
+                  <SegmentedControl
+                    color="red"
+                    defaultValue="Double out"
+                    data={["Straight out", "Double out", "Master out"]}
+                    size="xs"
+                    tt="uppercase"
+                  />
+                  <Divider label="Win Condition" labelPosition="left" />
+                  <SegmentedControl
+                    color="red"
+                    defaultValue="Best of"
+                    data={["Best of", "First to"]}
+                    size="xs"
+                    tt="uppercase"
+                  />
+                  <Group grow>
+                    <NumberInput min={1} max={16} defaultValue={3} />
+                    <SegmentedControl
+                      color="red"
+                      defaultValue="Legs"
+                      data={["Sets", "Legs"]}
+                      size="xs"
+                      tt="uppercase"
+                    />
+                  </Group>
+                  <Divider label="Additional Settings" labelPosition="left" />
+                  <CheckboxGroup>
+                    <Checkbox label="Random Starting Player" />
+                    <Checkbox my="xs" label="Enable Teams" />
+                  </CheckboxGroup>
+                </Stack>
+                <Divider variant="dashed" />
+                <Button tt="uppercase" fullWidth mt="md" radius="xs">
+                  Start Match
+                </Button>
+              </Card>
+            </Grid.Col>
+          </Grid>
+        </Container>
+      </ScrollArea.Autosize>
     </DefaultLayout>
   );
 };
