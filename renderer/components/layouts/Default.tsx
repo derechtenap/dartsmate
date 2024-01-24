@@ -20,6 +20,8 @@ import LoadingOverlay from "../LoadingOverlay";
 import { APP_NAME } from "utils/constants";
 import Link from "next/link";
 
+import LayoutControls from "./misc/LayoutControls";
+
 type DefaultLayoutProps = {
   children: React.ReactNode;
   isFetching?: boolean;
@@ -119,6 +121,7 @@ const DefaultLayout = ({
                 </Tooltip>
               </Link>
             ))}
+            <LayoutControls />
           </Group>
         </Flex>
       </AppShell.Header>
