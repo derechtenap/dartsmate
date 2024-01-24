@@ -1,9 +1,11 @@
 @charset "utf-8";
 
 /* 
+ *
  * Prevent the user from highlighting non-interactive elements, e.g., text. 
  * The user can still click and interact with buttons or links using 
  * this method.
+ *
  */
 
 *,
@@ -13,24 +15,33 @@
 }
 
 /* 
- * This CSS-Rule is added to the titlebar of the layouts to make the app 
- * draggable.
+ *
+ * This CSS-Rule is added to the html body to make the app draggable.
+ *
  */
 
-.draggable {
+#draggable {
   -webkit-app-region: drag;
-  /* TODO: Cursor appearance not changing in production mode... */
-  cursor: move !important;
 }
 
 /* 
- * Since the entire titlebar is made draggable, certain interactive elements
+ *
+ * Since the entire html body is made draggable, certain interactive elements
  * must be explicitly set to `no-drag` to allow regular user interaction.
+ *
  */
 
-.draggable button,
-.draggable input,
-.draggable textarea,
-.draggable select {
-  -webkit-app-region: no-drag
+#draggable button,
+#draggable input,
+#draggable textarea,
+#draggable select,
+#draggable menu,
+#draggable fieldset,
+#draggable video,
+#draggable audio,
+#draggable details,
+#draggable label,
+/* Make `span` elements inside `.mantine-ColorSwatch-root` non-draggable and clickable */
+.mantine-ColorSwatch-root > * {
+  -webkit-app-region: no-drag;
 }

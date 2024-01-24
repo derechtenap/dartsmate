@@ -7,7 +7,7 @@ const Document = () => {
       <Head>
         <ColorSchemeScript defaultColorScheme="auto" />
       </Head>
-      <body>
+      <body id="draggable">
         <Main />
         <NextScript />
       </body>
