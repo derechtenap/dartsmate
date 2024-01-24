@@ -21,8 +21,6 @@ export const LayoutControls = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const { toggle, fullscreen } = useFullscreen();
 
-  console.info(fullscreen);
-
   return (
     <>
       <Modal
