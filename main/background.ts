@@ -24,6 +24,12 @@ void (async () => {
     width: minWindowSize.width,
     minHeight: minWindowSize.height,
     minWidth: minWindowSize.width,
+    /*
+     * Disable the ability to maximize the window with a double tap.
+     * Users can still maximize the window using the Mantine
+     * `useFullscreen` hook.
+     */
+    maximizable: false,
   });
 
   if (isProd) {
