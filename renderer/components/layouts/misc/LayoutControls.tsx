@@ -1,7 +1,6 @@
 import {
   ActionIcon,
   Button,
-  Center,
   Group,
   Modal,
   Stack,
@@ -9,13 +8,20 @@ import {
   Title,
   Tooltip,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { IconX } from "@tabler/icons-react";
+import { useDisclosure, useFullscreen } from "@mantine/hooks";
+import {
+  IconWindowMaximize,
+  IconWindowMinimize,
+  IconX,
+} from "@tabler/icons-react";
 import { APP_NAME } from "utils/constants";
 import { closeApp } from "utils/misc/closeApp";
 
 export const LayoutControls = () => {
   const [opened, { open, close }] = useDisclosure(false);
+  const { toggle, fullscreen } = useFullscreen();
+
+  console.info(fullscreen);
 
   return (
     <>
@@ -56,6 +62,15 @@ export const LayoutControls = () => {
         </Stack>
       </Modal>
       <Group>
+        <Tooltip label={fullscreen ? "Minimize Window" : "Maximize Window"}>
+          <ActionIcon
+            c="gray"
+            variant="transparent"
+            onClick={() => void toggle()}
+          >
+            {fullscreen ? <IconWindowMinimize /> : <IconWindowMaximize />}
+          </ActionIcon>
+        </Tooltip>
         <Tooltip label={`Close ${APP_NAME}`}>
           <ActionIcon c="gray" onClick={() => open()} variant="transparent">
             <IconX />
