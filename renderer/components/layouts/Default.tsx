@@ -93,7 +93,7 @@ const DefaultLayout = ({
     <AppShell header={{ height: headerHeight }} py={0}>
       <AppShell.Header>
         <Flex mx="sm" align="center" h={headerHeight}>
-          <Group fz="sm" gap="sm" tt="uppercase">
+          <Group fz="sm" gap="sm" tt="uppercase" fw="bold">
             <Link href="/">
               <ActionIcon aria-label={`${APP_NAME} Logo`} variant="light">
                 <IconLetterD />
