@@ -56,7 +56,7 @@ const SettingsPage: NextPage = () => {
     {
       label: (
         <Center style={{ gap: 10 }}>
-          <IconSunMoon {...iconProps} /> <Text>Auto</Text>
+          <IconSunMoon {...iconProps} /> <Text>System</Text>
         </Center>
       ),
       value: "auto",
@@ -114,8 +114,8 @@ const SettingsPage: NextPage = () => {
                 <Text mb="lg">
                   Customize your {APP_NAME} experience by selecting a preferred
                   color scheme. By default, {APP_NAME} synchronizes with your
-                  operating system's color scheme. Choose the "Auto" theme to
-                  enable {APP_NAME} to dynamically adjust the theme for you.
+                  operating system's color scheme. You can override this
+                  behavior by selecting the "Light" or "Dark" theme option.
                 </Text>
 
                 <SegmentedControl
