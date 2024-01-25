@@ -109,10 +109,12 @@ const DefaultLayout = ({
           <Group ml="auto">
             {network.online ? (
               <Tooltip
-                label={`Online profiles and matches are available.`}
-                position="bottom"
-                withArrow
+                label="Online profiles and matches are available."
+                multiline
                 offset={15}
+                position="bottom"
+                w={200}
+                withArrow
               >
                 <IconCloudUpload
                   color="green"
@@ -124,7 +126,11 @@ const DefaultLayout = ({
             ) : (
               <Tooltip
                 label={`${APP_NAME} is running in local mode. Online profiles and matches are unavailable.`}
+                multiline
+                offset={15}
                 position="bottom"
+                w={200}
+                withArrow
               >
                 <IconCloudX
                   color="red"
