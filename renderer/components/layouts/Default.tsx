@@ -107,39 +107,34 @@ const DefaultLayout = ({
             {APP_NAME}
           </Group>
           <Group ml="auto">
-            {network.online ? (
-              <Tooltip
-                label="Online profiles and matches are available."
-                multiline
-                offset={15}
-                position="bottom"
-                w={200}
-                withArrow
-              >
+            <Tooltip
+              label={
+                network.online
+                  ? "Online profiles and matches are available."
+                  : `${APP_NAME} is running in local mode. Online profiles and matches are unavailable.`
+              }
+              multiline
+              offset={15}
+              position="bottom"
+              w={200}
+              withArrow
+            >
+              {network.online ? (
                 <IconCloudUpload
                   color="green"
                   style={{
                     cursor: "help",
                   }}
                 />
-              </Tooltip>
-            ) : (
-              <Tooltip
-                label={`${APP_NAME} is running in local mode. Online profiles and matches are unavailable.`}
-                multiline
-                offset={15}
-                position="bottom"
-                w={200}
-                withArrow
-              >
+              ) : (
                 <IconCloudX
                   color="red"
                   style={{
                     cursor: "help",
                   }}
                 />
-              </Tooltip>
-            )}
+              )}
+            </Tooltip>
             {miscRoutes.map((route) => (
               <Link href={route.route} key={route.route}>
                 <Tooltip
