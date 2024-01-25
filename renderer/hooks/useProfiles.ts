@@ -19,6 +19,7 @@ const getProfiles = () => {
 
 export const useProfiles = () => {
   return useQuery({
+    networkMode: "always", // Let the app use the filesystem, even if the os is offline
     queryKey: ["profiles"],
     queryFn: () => getProfiles(),
     cacheTime: 10 * 60 * 1000, // 10 minutes

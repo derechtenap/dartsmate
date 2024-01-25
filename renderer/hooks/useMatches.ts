@@ -19,6 +19,7 @@ const getMatches = () => {
 
 export const useMatches = () => {
   return useQuery({
+    networkMode: "always", // Let the app use the filesystem, even if the os is offline
     queryKey: ["matches"],
     queryFn: () => getMatches(),
     cacheTime: 10 * 60 * 1000, // 10 minutes

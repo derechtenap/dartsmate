@@ -37,6 +37,7 @@ const addCurrentMatch = (uuid: UUID) => {
 
 export const useCurrentMatch = (uuid: UUID) => {
   return useQuery({
+    networkMode: "always", // Let the app use the filesystem, even if the os is offline
     queryKey: ["currentMatch", uuid],
     queryFn: () => getCurrentMatch(uuid),
     cacheTime: 10 * 60 * 1000, // 10 minutes
