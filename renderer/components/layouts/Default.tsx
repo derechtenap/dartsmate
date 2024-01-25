@@ -7,6 +7,8 @@ import {
   Tooltip,
 } from "@mantine/core";
 import {
+  IconCloudUpload,
+  IconCloudX,
   IconDisc,
   IconLetterD,
   IconList,
@@ -21,6 +23,7 @@ import { APP_NAME } from "utils/constants";
 import Link from "next/link";
 
 import LayoutControls from "./misc/LayoutControls";
+import { useNetwork } from "@mantine/hooks";
 
 type DefaultLayoutProps = {
   children: React.ReactNode;
@@ -44,6 +47,8 @@ const DefaultLayout = ({
   isLoading,
   isSuccess,
 }: DefaultLayoutProps) => {
+  const network = useNetwork();
+
   const mainRoutes: NavbarLinkProps[] = [
     {
       icon: <IconDisc />,
@@ -102,6 +107,33 @@ const DefaultLayout = ({
             {APP_NAME}
           </Group>
           <Group ml="auto">
+            {network.online ? (
+              <Tooltip
+                label={`Online profiles and matches are available.`}
+                position="bottom"
+                withArrow
+                offset={15}
+              >
+                <IconCloudUpload
+                  color="green"
+                  style={{
+                    cursor: "help",
+                  }}
+                />
+              </Tooltip>
+            ) : (
+              <Tooltip
+                label={`${APP_NAME} is running in local mode. Online profiles and matches are unavailable.`}
+                position="bottom"
+              >
+                <IconCloudX
+                  color="red"
+                  style={{
+                    cursor: "help",
+                  }}
+                />
+              </Tooltip>
+            )}
             {miscRoutes.map((route) => (
               <Link href={route.route} key={route.route}>
                 <Tooltip
