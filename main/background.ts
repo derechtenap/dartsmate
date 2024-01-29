@@ -2,6 +2,8 @@ import { app, ipcMain } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
 // import { updateElectronApp } from "update-electron-app";
+import { autoUpdater } from "electron-updater";
+import log from "electron-log";
 
 export const isProd: boolean = process.env.NODE_ENV === "production";
 
@@ -17,7 +19,21 @@ if (isProd) {
 }
 
 void (async () => {
-  await app.whenReady();
+  await app.whenReady().then(() => {
+    log.initialize();
+    log.transports.file.level = "debug";
+    autoUpdater.logger = log;
+    autoUpdater.allowPrerelease = true; // TODO: Remove if first stable release is available
+
+    autoUpdater
+      .checkForUpdatesAndNotify()
+      .then(() => {
+        log.info("checked for updates");
+      })
+      .catch(() => {
+        log.error("Something went wrong while updating...");
+      });
+  });
 
   const mainWindow = createWindow("main", {
     height: minWindowSize.height,
@@ -40,19 +56,6 @@ void (async () => {
     mainWindow.webContents.openDevTools();
   }
 })();
-
-/*
- *
- * Currently disabled
- * TODO: Figure the problem out
- *
- * // No need to wait for your app's ready event...
- * updateElectronApp({
- *  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
- *  logger: require("electron-log"),
- * });
- *
- */
 
 app.on("window-all-closed", () => {
   app.quit();

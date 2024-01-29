@@ -1,12 +1,12 @@
 {
   "private": true,
-  "name": "dartmate",
-  "productName": "DartMate",
+  "name": "dartsmate",
+  "productName": "DartsMate",
   "description": "Analyze, track and compare your dart games.",
   "version": "0.2.0",
-  "author": "DartMate Contributors",
+  "author": "DartsMate Contributors",
   "main": "app/background.js",
-  "repository": "https://github.com/derechtenap/dartmate",
+  "repository": "https://github.com/derechtenap/dartsmate",
   "scripts": {
     "dev": "nextron",
     "build": "nextron build",
@@ -25,7 +25,7 @@
     "electron-log": "^5.0.1",
     "electron-serve": "^1.2.0",
     "electron-store": "^8.1.0",
-    "update-electron-app": "^3.0.0"
+    "electron-updater": "^6.1.7"
   },
   "devDependencies": {
     "@mantine/core": "^7.4.2",
