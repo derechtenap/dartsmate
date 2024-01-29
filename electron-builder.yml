@@ -14,3 +14,7 @@ publish:
     protocol: https
 win:
   target: nsis
+nsis:
+  allowToChangeInstallationDirectory: true
+  deleteAppDataOnUninstall: true
+  oneClick: false # `false` = assisted installer
