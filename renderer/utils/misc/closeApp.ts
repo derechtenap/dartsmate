@@ -3,10 +3,14 @@ import { ipcRenderer } from "electron";
 /**
  *
  * Sends a signal to the ipcRenderer to close the app.
- * @function
+ * Logs an error message if the code fails.
  * @returns {void}
  *
  */
 export const closeApp = (): void => {
-  ipcRenderer.send("quit-app");
+  try {
+    ipcRenderer.send("quit-app");
+  } catch (error) {
+    console.error(`Failed to close the app! (${error as string})`);
+  }
 };
