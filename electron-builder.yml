@@ -1,6 +1,6 @@
 appId: com.app.dartmate
-productName: DartMate
-copyright: Copyright © 2022-2024 DartMate Contributors
+productName: DartsMate
+copyright: Copyright © 2022-2024 DartsMate Contributors
 directories:
   output: dist
   buildResources: resources
