@@ -27,7 +27,7 @@ export const getI18nProperties = async (
   };
 };
 
-export const makeStaticProperties = (namespaces = []) => {
+export const makeStaticProperties = (namespaces: string[] = []) => {
   return async function (context: GetServerSidePropsContext) {
     return {
       props: await getI18nProperties(context, namespaces),
