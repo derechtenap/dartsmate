@@ -1,9 +1,10 @@
 import { Html, Head, Main, NextScript } from "next/document";
 import { ColorSchemeScript } from "@mantine/core";
+import i18next from "../../next-i18next.config";
 
 const Document = () => {
   return (
-    <Html>
+    <Html lang={i18next.i18n.defaultLocale}>
       <Head>
         <ColorSchemeScript defaultColorScheme="auto" />
       </Head>

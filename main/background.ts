@@ -1,9 +1,10 @@
 import { app, ipcMain } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
-// import { updateElectronApp } from "update-electron-app";
 import { autoUpdater } from "electron-updater";
 import log from "electron-log";
+import i18next from "../next-i18next.config";
+import { userStore } from "./helpers/user-store";
 
 export const isProd: boolean = process.env.NODE_ENV === "production";
 
@@ -48,11 +49,13 @@ void (async () => {
     maximizable: false,
   });
 
+  const locale = userStore.get("locale", i18next.i18n.defaultLocale) as string;
+
   if (isProd) {
-    await mainWindow.loadURL("app://./index.html");
+    await mainWindow.loadURL("app://./${locale}/");
   } else {
     const port = process.argv[2];
-    await mainWindow.loadURL(`http://localhost:${port}/`);
+    await mainWindow.loadURL(`http://localhost:${port}/${locale}/`);
     mainWindow.webContents.openDevTools();
   }
 })();
