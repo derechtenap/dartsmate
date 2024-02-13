@@ -8,6 +8,7 @@ import {
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 import "../styles/globals.css";
 import "../styles/scrollbar.css";
+import { appWithTranslation } from "next-i18next";
 import { useEffect, useState } from "react";
 import { checkAppFolders } from "utils/fs/checkAppFolders";
 import { useRouter } from "next/router";
@@ -76,4 +77,4 @@ const App = ({
   );
 };
 
-export default App;
+export default appWithTranslation(App);
