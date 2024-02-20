@@ -80,7 +80,7 @@ export default (
     ...state,
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: false,
+      contextIsolation: true,
       ...options.webPreferences,
     },
     // Keep frame and menu bar for easier debugging in dev mode

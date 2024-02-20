@@ -1,7 +1,9 @@
 import { app, ipcMain } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
-// import { updateElectronApp } from "update-electron-app";
+import path from "path";
+import { userStore } from "./helpers/user-store";
+import i18next from "../next-i18next.config.js";
 
 export const isProd: boolean = process.env.NODE_ENV === "production";
 
@@ -24,29 +26,22 @@ void (async () => {
     width: minWindowSize.width,
     minHeight: minWindowSize.height,
     minWidth: minWindowSize.width,
+    webPreferences: {
+      preload: path.join(__dirname, "main/preload.js"),
+      // nodeIntegration: true,
+    },
   });
 
+  const locale = userStore.get("locale", i18next.i18n.defaultLocale) as string;
+
   if (isProd) {
-    await mainWindow.loadURL("app://./index.html");
+    await mainWindow.loadURL(`app://./${locale}/index.html`);
   } else {
     const port = process.argv[2];
-    await mainWindow.loadURL(`http://localhost:${port}/`);
+    await mainWindow.loadURL(`http://localhost:${port}/${locale}`);
     mainWindow.webContents.openDevTools();
   }
 })();
-
-/*
- *
- * Currently disabled
- * TODO: Figure the problem out
- *
- * // No need to wait for your app's ready event...
- * updateElectronApp({
- *  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
- *  logger: require("electron-log"),
- * });
- *
- */
 
 app.on("window-all-closed", () => {
   app.quit();
