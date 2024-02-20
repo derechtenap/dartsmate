@@ -27,8 +27,6 @@
     "electron-store": "^8.1.0"
   },
   "devDependencies": {
-    "@emotion/react": "^11.11.1",
-    "@emotion/server": "^11.11.0",
     "@mantine/carousel": "^6.0.21",
     "@mantine/core": "^6.0.21",
     "@mantine/dates": "^6.0.21",
