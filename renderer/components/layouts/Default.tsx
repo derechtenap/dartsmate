@@ -4,7 +4,6 @@ import {
   Button,
   Center,
   Group,
-  Header,
   Menu,
   Modal,
   Stack,
@@ -107,73 +106,72 @@ const DefaultLayout = ({
   return (
     <AppShell
       py={0}
-      header={
-        <Header
-          className="draggable"
-          height={headerHeight}
-          style={{ display: "flex", alignItems: "center" }}
-          px="sm"
-        >
-          <Group w="100%">
-            <ActionIcon
-              color="red"
-              radius="xs"
-              variant="filled"
-              onClick={() => void push("/")}
-            >
-              <IconSquareLetterD />
-            </ActionIcon>
-            <Button.Group>
-              {mainRoutes.map((route) => (
-                <Button
-                  key={route.route}
-                  leftIcon={route.icon}
-                  radius="xs"
-                  onClick={() => void push(route.route)}
-                  uppercase
-                  variant="transparent"
-                >
-                  {route.label}
-                </Button>
-              ))}
-            </Button.Group>
-            <Group ml="auto">
-              <Menu shadow="md" radius={0} width={200}>
-                <Menu.Target>
-                  <ActionIcon>
-                    <IconDots />
-                  </ActionIcon>
-                </Menu.Target>
-
-                <Menu.Dropdown>
-                  {miscRoutes.map((route) => (
-                    <Menu.Item
-                      icon={route.icon}
-                      key={route.label}
-                      onClick={() => void push(route.route)}
-                    >
-                      {route.label}
-                    </Menu.Item>
-                  ))}
-                </Menu.Dropdown>
-              </Menu>
-              <ActionButton
-                action={() => void toggle()}
-                icon={
-                  fullscreen ? <IconWindowMinimize /> : <IconWindowMaximize />
-                }
-                label={`${fullscreen ? "Minimize" : "Maximize"} Window`}
-              />
-              <ActionButton
-                action={() => open()}
-                icon={<IconX />}
-                label="Quit App"
-              />
-            </Group>
-          </Group>
-        </Header>
-      }
+      header={{
+        height: headerHeight,
+      }}
     >
+      <AppShell.Header
+        className="draggable"
+        style={{ display: "flex", alignItems: "center" }}
+        px="sm"
+      >
+        <Group w="100%">
+          <ActionIcon
+            color="red"
+            radius="xs"
+            variant="filled"
+            onClick={() => void push("/")}
+          >
+            <IconSquareLetterD />
+          </ActionIcon>
+          <Button.Group>
+            {mainRoutes.map((route) => (
+              <Button
+                key={route.route}
+                leftSection={route.icon}
+                radius="xs"
+                onClick={() => void push(route.route)}
+                variant="transparent"
+              >
+                {route.label}
+              </Button>
+            ))}
+          </Button.Group>
+          <Group ml="auto">
+            <Menu shadow="md" radius={0} width={200}>
+              <Menu.Target>
+                <ActionIcon>
+                  <IconDots />
+                </ActionIcon>
+              </Menu.Target>
+
+              <Menu.Dropdown>
+                {miscRoutes.map((route) => (
+                  <Menu.Item
+                    leftSection={route.icon}
+                    key={route.label}
+                    onClick={() => void push(route.route)}
+                  >
+                    {route.label}
+                  </Menu.Item>
+                ))}
+              </Menu.Dropdown>
+            </Menu>
+            <ActionButton
+              action={() => void toggle()}
+              icon={
+                fullscreen ? <IconWindowMinimize /> : <IconWindowMaximize />
+              }
+              label={`${fullscreen ? "Minimize" : "Maximize"} Window`}
+            />
+            <ActionButton
+              action={() => open()}
+              icon={<IconX />}
+              label="Quit App"
+            />
+          </Group>
+        </Group>
+      </AppShell.Header>
       <Modal
         opened={opened}
         onClose={close}
@@ -185,7 +183,7 @@ const DefaultLayout = ({
       >
         <Modal.Body>
           <Title mb="lg">Confirm Quit</Title>
-          <Text color="dimmed" mb="lg">
+          <Text c="dimmed" mb="lg">
             Any unsaved data will be lost. Are you sure you want to quit the
             app?
           </Text>

@@ -36,7 +36,7 @@ const EmptyState = ({
   text,
 }: EmptyStateProps): JSX.Element => {
   return (
-    <Group h="100%" position="center">
+    <Group h="100%">
       <Paper p="lg" w="80%" maw={650}>
         <IconAlertHexagonFilled
           size="4rem"

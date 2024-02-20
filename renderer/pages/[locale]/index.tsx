@@ -18,7 +18,7 @@ const IndexPage = () => {
 
   return (
     <Container>
-      <Title>{t("home")}</Title>
+      <Title>{t("yes")}</Title>
       <Text>
         Locale is: <code>{locale}</code>
       </Text>
