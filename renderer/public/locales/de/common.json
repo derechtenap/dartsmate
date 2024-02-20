@@ -1,8 +1,4 @@
 {
-  "goToHome": "Geh zur Startseite",
-  "goToNext": "Geh zu Next",
-  "home": "Startseite",
-  "next": "Next",
-  "noMessageFound": "Keine Nachricht gefunden",
-  "testIPC": "IPC testen"
+  "yes": "Ja",
+  "no": "Nein"
 }
