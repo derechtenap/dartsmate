@@ -25,6 +25,7 @@ const App = ({
   return (
     <QueryClientProvider client={queryClient}>
       <MantineProvider
+        defaultColorScheme="auto"
         theme={{
           primaryColor: "red",
         }}
