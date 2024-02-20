@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-undef */
+
 /** 
  * 
  * @type {import('next-i18next').UserConfig} 

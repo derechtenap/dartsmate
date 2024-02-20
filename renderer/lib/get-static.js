@@ -1,4 +1,7 @@
-import {serverSideTranslations} from "next-i18next/serverSideTranslations"
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 
 import i18next from "../../next-i18next.config.js"
 

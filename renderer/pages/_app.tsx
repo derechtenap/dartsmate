@@ -1,23 +1,22 @@
 import type { AppProps } from "next/app";
-import Head from "next/head";
 import {
   ColorScheme,
   ColorSchemeProvider,
   MantineProvider,
 } from "@mantine/core";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
-import "../styles/globals.css";
-import "../styles/scrollbar.css";
+// import "../styles/globals.css";
+// import "../styles/scrollbar.css";
 import { appWithTranslation } from "next-i18next";
-import { useEffect, useState } from "react";
-import { checkAppFolders } from "utils/fs/checkAppFolders";
-import { useRouter } from "next/router";
+import { useState } from "react";
+// import { checkAppFolders } from "utils/fs/checkAppFolders";
+// import { useRouter } from "next/router";
 import { Hydrate, QueryClientProvider } from "@tanstack/react-query";
 import { QueryClient } from "@tanstack/query-core";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { DehydratedState } from "@tanstack/react-query";
 import { Notifications } from "@mantine/notifications";
-import { APP_NAME } from "utils/constants";
+// import { APP_NAME } from "utils/constants";
 
 const App = ({
   Component,
@@ -25,7 +24,7 @@ const App = ({
 }: AppProps<{
   dehydratedState: DehydratedState;
 }>) => {
-  const router = useRouter();
+  // const router = useRouter();
   const [queryClient] = useState(() => new QueryClient());
 
   // Store color scheme in the `localStorage`
@@ -42,38 +41,35 @@ const App = ({
   // Change color scheme by pressing `ctrl + t`
   useHotkeys([["ctrl+t", () => toggleColorScheme()]]);
 
+  /*
   useEffect(() => {
     // Check if all necessary app folders are already created
     void checkAppFolders();
   }, [router.pathname]);
+ */
 
   return (
-    <>
-      <Head>
-        <title>{APP_NAME}</title>
-      </Head>
-      <QueryClientProvider client={queryClient}>
-        <ColorSchemeProvider
-          colorScheme={colorScheme}
-          toggleColorScheme={toggleColorScheme}
+    <QueryClientProvider client={queryClient}>
+      <ColorSchemeProvider
+        colorScheme={colorScheme}
+        toggleColorScheme={toggleColorScheme}
+      >
+        <MantineProvider
+          withGlobalStyles
+          withNormalizeCSS
+          theme={{
+            colorScheme,
+            primaryColor: "red",
+          }}
         >
-          <MantineProvider
-            withGlobalStyles
-            withNormalizeCSS
-            theme={{
-              colorScheme,
-              primaryColor: "red",
-            }}
-          >
-            <Notifications limit={5} position="top-right" />
-            <Hydrate state={pageProps.dehydratedState}>
-              <Component {...pageProps} />
-            </Hydrate>
-          </MantineProvider>
-        </ColorSchemeProvider>
-        <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
-      </QueryClientProvider>
-    </>
+          <Notifications limit={5} position="top-right" />
+          <Hydrate state={pageProps.dehydratedState}>
+            <Component {...pageProps} />
+          </Hydrate>
+        </MantineProvider>
+      </ColorSchemeProvider>
+      <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+    </QueryClientProvider>
   );
 };
 
