@@ -2,8 +2,9 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 
 import { getStaticPaths, makeStaticProperties } from "../../lib/get-static";
-import { Container, Title, Text, Button } from "@mantine/core";
+import { Title, Text, Button } from "@mantine/core";
 import { useRouter } from "next/router";
+import DefaultLayout from "@/components/layouts/Default";
 
 const IndexPage = () => {
   const {
@@ -17,7 +18,7 @@ const IndexPage = () => {
   };
 
   return (
-    <Container>
+    <DefaultLayout>
       <Title>{t("yes")}</Title>
       <Text>
         Locale is: <code>{locale}</code>
@@ -25,7 +26,7 @@ const IndexPage = () => {
       <Button onClick={() => changeLocale(locale === "en" ? "de" : "en")}>
         Switch Locale
       </Button>
-    </Container>
+    </DefaultLayout>
   );
 };
 
