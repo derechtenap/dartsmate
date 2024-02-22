@@ -35,16 +35,21 @@ import { APP_NAME, APP_VERSION } from "utils/constants";
 
 type DefaultLayoutProps = {
   children: React.ReactNode;
+  withNavbarOpen: boolean;
 };
 
 export const headerHeight = 50; // px
 export const navbarWidth = 200; // px
 
-const DefaultLayout = ({ children }: DefaultLayoutProps) => {
+const DefaultLayout = ({
+  children,
+  withNavbarOpen = true,
+}: DefaultLayoutProps) => {
   const { toggle: toggleFullscreen, fullscreen } = useFullscreen();
-  const [isNavbarOpened, { toggle: toggleNavbar }] = useDisclosure(true);
-  const clientOs = useOs();
-  const networkStatus = useNetwork();
+  const [isNavbarOpened, { toggle: toggleNavbar }] =
+    useDisclosure(withNavbarOpen);
+  const CLIENT_OS = useOs();
+  const NETWORK_STATUS = useNetwork();
 
   const router = useRouter();
   const locale = i18n?.language as string;
@@ -167,10 +172,11 @@ const DefaultLayout = ({ children }: DefaultLayoutProps) => {
               {APP_VERSION}
             </Text>
             <Text component="span" fz="xs" display="block">
-              {clientOs.charAt(0).toLocaleUpperCase(locale) + clientOs.slice(1)}
+              {CLIENT_OS.charAt(0).toLocaleUpperCase(locale) +
+                CLIENT_OS.slice(1)}
             </Text>
             <Text component="span" fz="xs" display="block">
-              Network Status: {networkStatus.online ? "Online" : "Offline"}
+              Network Status: {NETWORK_STATUS.online ? "Online" : "Offline"}
             </Text>
           </Text>
         </AppShell.Section>

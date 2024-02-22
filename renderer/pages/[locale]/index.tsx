@@ -18,7 +18,7 @@ const IndexPage = () => {
   };
 
   return (
-    <DefaultLayout>
+    <DefaultLayout withNavbarOpen>
       <Title>{t("yes")}</Title>
       <Text>
         Locale is: <code>{locale}</code>
