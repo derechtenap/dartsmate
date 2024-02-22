@@ -1,4 +1,13 @@
 {
   "yes": "Ja",
-  "no": "Nein"
+  "no": "Nein",
+  "navbarLabels": {
+    "home": "Startseite",
+    "newMatch": "Neues Spiel",
+    "practice": "Übung",
+    "history": "Spielverlauf",
+    "profile": "Profil",
+    "statistics": "Statistiken",
+    "settings": "Einstellungen"
+  }
 }

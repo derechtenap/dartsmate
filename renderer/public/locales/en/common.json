@@ -1,4 +1,13 @@
 {
   "yes": "Yes",
-  "no": "No"
+  "no": "No",
+  "navbarLabels": {
+    "home": "Home",
+    "newMatch": "New Match",
+    "practice": "Practice",
+    "history": "Match History",
+    "profile": "Profile",
+    "statistics": "Statistics",
+    "settings": "Settings"
+  }
 }
