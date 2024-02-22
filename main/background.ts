@@ -27,8 +27,7 @@ void (async () => {
     minHeight: minWindowSize.height,
     minWidth: minWindowSize.width,
     webPreferences: {
-      preload: path.join(__dirname, "main/preload.js"),
-      // nodeIntegration: true,
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
