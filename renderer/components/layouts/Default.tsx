@@ -1,221 +1,210 @@
 import {
   ActionIcon,
   AppShell,
-  Button,
-  Center,
+  Divider,
+  Flex,
   Group,
-  Menu,
-  Modal,
-  Stack,
+  NavLink,
+  ScrollAreaAutosize,
   Text,
-  Title,
+  Tooltip,
 } from "@mantine/core";
 import {
-  IconDisc,
-  IconDots,
-  IconList,
-  // IconListNumbers,
-  // IconSchool,
+  useDisclosure,
+  useFullscreen,
+  useNetwork,
+  useOs,
+} from "@mantine/hooks";
+import {
+  IconBarbell,
+  IconChartBar,
+  IconHistory,
+  IconHome,
+  IconMenu2,
+  IconMinus,
   IconSettings,
-  IconSquareLetterD,
-  // IconTournament,
-  IconUsersGroup,
-  IconWindowMaximize,
-  IconWindowMinimize,
-  IconX,
+  IconSquare,
+  IconSquareX,
+  IconSquaresDiagonal,
+  IconTarget,
+  IconUser,
 } from "@tabler/icons-react";
+import { i18n, useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import { useDisclosure, useFullscreen } from "@mantine/hooks";
-import { ipcRenderer } from "electron";
-import LoadingOverlay from "../LoadingOverlay";
-import ActionButton from "../content/ActionButton";
+import { APP_NAME, APP_VERSION } from "utils/constants";
+import sendIPC from "utils/ipc/send";
 
 type DefaultLayoutProps = {
   children: React.ReactNode;
-  isFetching?: boolean;
-  isLoading?: boolean;
-  isSuccess?: boolean;
+  withNavbarOpen: boolean;
 };
 
-type NavbarLinkProps = {
-  icon: JSX.Element;
-  label: string;
-  route: string;
-};
-
-export const navbarWidth = 70;
-export const headerHeight = 45;
+export const headerHeight = 50; // px
+export const navbarWidth = 200; // px
 
 const DefaultLayout = ({
   children,
-  isFetching,
-  isLoading,
-  isSuccess,
+  withNavbarOpen = true,
 }: DefaultLayoutProps) => {
-  const [opened, { open, close }] = useDisclosure(false);
-  const { push } = useRouter();
-  const { toggle, fullscreen } = useFullscreen();
+  const { toggle: toggleFullscreen, fullscreen } = useFullscreen();
+  const [isNavbarOpened, { toggle: toggleNavbar }] =
+    useDisclosure(withNavbarOpen);
+  const CLIENT_OS = useOs();
+  const NETWORK_STATUS = useNetwork();
 
-  // TODO: Some routes are currently unfinished and disabled. Reactivate the routes when the pages are created
-  const mainRoutes: NavbarLinkProps[] = [
-    { icon: <IconDisc size={14} />, label: "Lobby", route: "/lobby" },
-    /*
-    {
-      icon: <IconSchool size={14} />,
-      label: "Training",
-      route: "/training",
-    },
+  const router = useRouter();
+  const locale = i18n?.language as string;
+  const { t } = useTranslation(["common"]);
 
+  const navbarRoutes = [
     {
-      icon: <IconTournament size={14} />,
-      label: "Tournament",
-      route: "/tournament",
-    },
-    */
-    {
-      icon: <IconUsersGroup size={14} />,
-      label: "Profiles",
-      route: "/profiles",
+      icon: <IconHome />,
+      label: t("navbarLabels.home"),
+      route: "/",
     },
     {
-      icon: <IconList size={14} />,
-      label: "Replays",
-      route: "/replays",
+      icon: <IconTarget />,
+      label: t("navbarLabels.newMatch"),
+      route: "/lobby",
     },
-    /*
     {
-      icon: <IconListNumbers size={14} />,
-      label: "Ranking",
-      route: "/ranking",
+      icon: <IconBarbell />,
+      label: t("navbarLabels.practice"),
+      route: "/practice",
     },
-    */
-  ];
-
-  const miscRoutes: NavbarLinkProps[] = [
     {
-      icon: <IconSettings size={14} />,
-      label: "Settings",
+      icon: <IconHistory />,
+      label: t("navbarLabels.history"),
+      route: "/history",
+    },
+    {
+      icon: <IconUser />,
+      label: t("navbarLabels.profile"),
+      route: "/profile",
+    },
+    {
+      icon: <IconChartBar />,
+      label: t("navbarLabels.statistics"),
+      route: "/statistics",
+    },
+    {
+      icon: <IconSettings />,
+      label: t("navbarLabels.settings"),
       route: "/settings",
     },
   ];
 
-  if (isLoading || isFetching) {
-    return <LoadingOverlay />;
-  }
+  const isActiveRoute = (route: string) => {
+    return `/${locale + route}` === router.asPath;
+  };
 
   return (
     <AppShell
-      py={0}
       header={{
         height: headerHeight,
       }}
+      navbar={{
+        width: {
+          // `md` is the smallest used breakpoint since the app requires 1024x768 pixels
+          md: navbarWidth,
+          lg: navbarWidth * 1.25,
+          xl: navbarWidth * 1.4,
+        },
+        breakpoint: "xs",
+        collapsed: {
+          mobile: !isNavbarOpened,
+          desktop: !isNavbarOpened,
+        },
+      }}
     >
-      <AppShell.Header
-        className="draggable"
-        style={{ display: "flex", alignItems: "center" }}
-        px="sm"
-      >
-        <Group w="100%">
-          <ActionIcon
-            color="red"
-            radius="xs"
-            variant="filled"
-            onClick={() => void push("/")}
-          >
-            <IconSquareLetterD />
-          </ActionIcon>
-          <Button.Group>
-            {mainRoutes.map((route) => (
-              <Button
-                key={route.route}
-                leftSection={route.icon}
-                radius="xs"
-                onClick={() => void push(route.route)}
+      <AppShell.Header className="draggable">
+        <Flex
+          align="center"
+          justify="space-between"
+          h={headerHeight}
+          mah={headerHeight}
+          px="sm"
+          w="100%"
+        >
+          <Group gap="lg">
+            <Tooltip label={t("toggleNavigation")} withArrow>
+              <ActionIcon
+                color="gray"
+                onClick={toggleNavbar}
                 variant="transparent"
               >
-                {route.label}
-              </Button>
-            ))}
-          </Button.Group>
-          <Group ml="auto">
-            <Menu shadow="md" radius={0} width={200}>
-              <Menu.Target>
-                <ActionIcon>
-                  <IconDots />
-                </ActionIcon>
-              </Menu.Target>
-
-              <Menu.Dropdown>
-                {miscRoutes.map((route) => (
-                  <Menu.Item
-                    leftSection={route.icon}
-                    key={route.label}
-                    onClick={() => void push(route.route)}
-                  >
-                    {route.label}
-                  </Menu.Item>
-                ))}
-              </Menu.Dropdown>
-            </Menu>
-            <ActionButton
-              action={() => void toggle()}
-              icon={
-                fullscreen ? <IconWindowMinimize /> : <IconWindowMaximize />
-              }
-              label={`${fullscreen ? "Minimize" : "Maximize"} Window`}
-            />
-            <ActionButton
-              action={() => open()}
-              icon={<IconX />}
-              label="Quit App"
-            />
-          </Group>
-        </Group>
-      </AppShell.Header>
-      <Modal
-        opened={opened}
-        onClose={close}
-        centered
-        withCloseButton={false}
-        overlayProps={{
-          blur: 5,
-        }}
-      >
-        <Modal.Body>
-          <Title mb="lg">Confirm Quit</Title>
-          <Text c="dimmed" mb="lg">
-            Any unsaved data will be lost. Are you sure you want to quit the
-            app?
-          </Text>
-          <Group>
-            <Button
-              onClick={() => void ipcRenderer.send("quit-app")}
-              variant="outline"
-            >
-              Yes
-            </Button>
-            <Button onClick={() => void close()} variant="default">
-              No
-            </Button>
-          </Group>
-        </Modal.Body>
-      </Modal>
-      {isSuccess ? (
-        children
-      ) : (
-        <Center w="50%" mx="auto" h="100vh">
-          <Stack>
-            <Title>Oh snap!</Title>
-            <Text>
-              An internal error has occurred, preventing the creation of the
-              page you requested. We apologize for the inconvenience. To resolve
-              this issue, we recommend restarting the application and attempting
-              the operation again. If the problem persists, please contact our
-              support team for further assistance.
+                <IconMenu2 />
+              </ActionIcon>
+            </Tooltip>
+            <Text fz="sm" ta="center" tt="uppercase">
+              {APP_NAME}
             </Text>
-          </Stack>
-        </Center>
-      )}
+          </Group>
+          <Group gap="lg">
+            {!fullscreen ? (
+              <Tooltip label={t("minimizeApp")} withArrow>
+                <ActionIcon
+                  c="dimmed"
+                  onClick={() => sendIPC("minimize-app-window")}
+                  variant="transparent"
+                >
+                  <IconMinus />
+                </ActionIcon>
+              </Tooltip>
+            ) : null}
+            <Tooltip
+              label={fullscreen ? t("windowedMode") : t("fullscreenMode")}
+              withArrow
+            >
+              <ActionIcon
+                c="dimmed"
+                onClick={() => void toggleFullscreen()}
+                variant="transparent"
+              >
+                {fullscreen ? <IconSquaresDiagonal /> : <IconSquare />}
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label={t("closeApp")} withArrow>
+              <ActionIcon
+                c="dimmed"
+                onClick={() => sendIPC("close-app")}
+                variant="transparent"
+              >
+                <IconSquareX />
+              </ActionIcon>
+            </Tooltip>
+          </Group>
+        </Flex>
+      </AppShell.Header>
+      <AppShell.Navbar>
+        <AppShell.Section component={ScrollAreaAutosize} grow>
+          {navbarRoutes.map((route) => (
+            <NavLink
+              active={isActiveRoute(route.route)}
+              key={route.route}
+              label={route.label}
+              leftSection={route.icon}
+              variant="filled"
+            />
+          ))}
+        </AppShell.Section>
+        <Divider />
+        <AppShell.Section p="lg">
+          <Text c="dimmed" ta="center">
+            <Text component="span" fz="xs" display="block">
+              {APP_VERSION}
+            </Text>
+            <Text component="span" fz="xs" display="block">
+              {CLIENT_OS.charAt(0).toLocaleUpperCase(locale) +
+                CLIENT_OS.slice(1)}
+            </Text>
+            <Text component="span" fz="xs" display="block">
+              Network Status: {NETWORK_STATUS.online ? "Online" : "Offline"}
+            </Text>
+          </Text>
+        </AppShell.Section>
+      </AppShell.Navbar>
+      <AppShell.Main>{children}</AppShell.Main>
     </AppShell>
   );
 };

@@ -1,4 +1,18 @@
 {
   "yes": "Yes",
-  "no": "No"
+  "no": "No",
+  "toggleNavigation": "Toggle Navigation",
+  "minimizeApp": "Minimize",
+  "fullscreenMode": "Fullscreen",
+  "windowedMode": "Windowed Mode",
+  "closeApp": "Close",
+  "navbarLabels": {
+    "home": "Home",
+    "newMatch": "New Match",
+    "practice": "Practice",
+    "history": "Match History",
+    "profile": "Profile",
+    "statistics": "Statistics",
+    "settings": "Settings"
+  }
 }

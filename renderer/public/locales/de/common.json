@@ -1,4 +1,18 @@
 {
   "yes": "Ja",
-  "no": "Nein"
+  "no": "Nein",
+  "toggleNavigation": "Navigation umschalten",
+  "minimizeApp": "Minimieren",
+  "fullscreenMode": "Vollbild",
+  "windowedMode": "Fenstermodus",
+  "closeApp": "Schließen",
+  "navbarLabels": {
+    "home": "Startseite",
+    "newMatch": "Neues Spiel",
+    "practice": "Übung",
+    "history": "Spielverlauf",
+    "profile": "Profil",
+    "statistics": "Statistiken",
+    "settings": "Einstellungen"
+  }
 }

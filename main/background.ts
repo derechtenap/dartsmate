@@ -1,4 +1,4 @@
-import { app, ipcMain } from "electron";
+import { app } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
 import path from "path";
@@ -27,8 +27,9 @@ void (async () => {
     minHeight: minWindowSize.height,
     minWidth: minWindowSize.width,
     webPreferences: {
-      preload: path.join(__dirname, "main/preload.js"),
-      // nodeIntegration: true,
+      contextIsolation: true,
+      nodeIntegration: true,
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
@@ -44,9 +45,5 @@ void (async () => {
 })();
 
 app.on("window-all-closed", () => {
-  app.quit();
-});
-
-ipcMain.on("quit-app", () => {
   app.quit();
 });

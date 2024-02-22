@@ -19,8 +19,6 @@
 
 .draggable {
   -webkit-app-region: drag;
-  /* TODO: Cursor appearance not changing in production mode... */
-  cursor: move !important;
 }
 
 /* 
