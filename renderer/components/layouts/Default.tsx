@@ -31,8 +31,8 @@ import {
 } from "@tabler/icons-react";
 import { i18n, useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-
 import { APP_NAME, APP_VERSION } from "utils/constants";
+import sendIPC from "utils/ipc/send";
 
 type DefaultLayoutProps = {
   children: React.ReactNode;
@@ -143,7 +143,11 @@ const DefaultLayout = ({
           <Group gap="lg">
             {!fullscreen ? (
               <Tooltip label={t("minimizeApp")} withArrow>
-                <ActionIcon c="dimmed" variant="transparent">
+                <ActionIcon
+                  c="dimmed"
+                  onClick={() => sendIPC("minimize-app-window")}
+                  variant="transparent"
+                >
                   <IconMinus />
                 </ActionIcon>
               </Tooltip>
@@ -161,7 +165,11 @@ const DefaultLayout = ({
               </ActionIcon>
             </Tooltip>
             <Tooltip label={t("closeApp")} withArrow>
-              <ActionIcon c="dimmed" variant="transparent">
+              <ActionIcon
+                c="dimmed"
+                onClick={() => sendIPC("close-app")}
+                variant="transparent"
+              >
                 <IconSquareX />
               </ActionIcon>
             </Tooltip>

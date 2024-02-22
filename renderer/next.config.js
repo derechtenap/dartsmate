@@ -4,8 +4,11 @@
  *
  */
 module.exports = {
-  trailingSlash: true,
   images: {
     unoptimized: true,
   },
+  trailingSlash: true,
+  webpack: (config) => {
+    return config;
+  }
 };
