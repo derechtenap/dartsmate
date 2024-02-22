@@ -4,6 +4,7 @@ import pkg from "../../package.json";
 import { Checkout, MatchStatus } from "types/match";
 
 export const APP_NAME = pkg.productName;
+export const APP_VERSION = pkg.version;
 
 // Directories where dartsmate stores local used profiles and saved match data
 export const APP_DIR = join(homedir(), APP_NAME.toLowerCase());
