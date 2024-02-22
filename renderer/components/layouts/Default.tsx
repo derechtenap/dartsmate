@@ -1,13 +1,13 @@
 import {
   ActionIcon,
   AppShell,
-  Burger,
   Divider,
   Flex,
   Group,
   NavLink,
   ScrollAreaAutosize,
   Text,
+  Tooltip,
 } from "@mantine/core";
 import {
   useDisclosure,
@@ -20,6 +20,7 @@ import {
   IconChartBar,
   IconHistory,
   IconHome,
+  IconMenu2,
   IconMinus,
   IconSettings,
   IconSquare,
@@ -126,30 +127,44 @@ const DefaultLayout = ({
           w="100%"
         >
           <Group gap="lg">
-            <Burger
-              aria-label=""
-              onClick={toggleNavbar}
-              opened={isNavbarOpened}
-              size="sm"
-            />
+            <Tooltip label={t("toggleNavigation")} withArrow>
+              <ActionIcon
+                color="gray"
+                onClick={toggleNavbar}
+                variant="transparent"
+              >
+                <IconMenu2 />
+              </ActionIcon>
+            </Tooltip>
             <Text fz="sm" ta="center" tt="uppercase">
               {APP_NAME}
             </Text>
           </Group>
           <Group gap="lg">
-            <ActionIcon c="dimmed" variant="transparent">
-              <IconMinus />
-            </ActionIcon>
-            <ActionIcon
-              c="dimmed"
-              onClick={() => void toggleFullscreen()}
-              variant="transparent"
+            {!fullscreen ? (
+              <Tooltip label={t("minimizeApp")} withArrow>
+                <ActionIcon c="dimmed" variant="transparent">
+                  <IconMinus />
+                </ActionIcon>
+              </Tooltip>
+            ) : null}
+            <Tooltip
+              label={fullscreen ? t("windowedMode") : t("fullscreenMode")}
+              withArrow
             >
-              {fullscreen ? <IconSquaresDiagonal /> : <IconSquare />}
-            </ActionIcon>
-            <ActionIcon c="dimmed" variant="transparent">
-              <IconSquareX />
-            </ActionIcon>
+              <ActionIcon
+                c="dimmed"
+                onClick={() => void toggleFullscreen()}
+                variant="transparent"
+              >
+                {fullscreen ? <IconSquaresDiagonal /> : <IconSquare />}
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label={t("closeApp")} withArrow>
+              <ActionIcon c="dimmed" variant="transparent">
+                <IconSquareX />
+              </ActionIcon>
+            </Tooltip>
           </Group>
         </Flex>
       </AppShell.Header>

@@ -1,6 +1,11 @@
 {
   "yes": "Ja",
   "no": "Nein",
+  "toggleNavigation": "Navigation umschalten",
+  "minimizeApp": "Minimieren",
+  "fullscreenMode": "Vollbild",
+  "windowedMode": "Fenstermodus",
+  "closeApp": "Schließen",
   "navbarLabels": {
     "home": "Startseite",
     "newMatch": "Neues Spiel",

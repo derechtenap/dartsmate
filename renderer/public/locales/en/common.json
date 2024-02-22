@@ -1,6 +1,11 @@
 {
   "yes": "Yes",
   "no": "No",
+  "toggleNavigation": "Toggle Navigation",
+  "minimizeApp": "Minimize",
+  "fullscreenMode": "Fullscreen",
+  "windowedMode": "Windowed Mode",
+  "closeApp": "Close",
   "navbarLabels": {
     "home": "Home",
     "newMatch": "New Match",
