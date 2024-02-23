@@ -59,37 +59,37 @@ const DefaultLayout = ({
   const navbarRoutes = [
     {
       icon: <IconHome />,
-      label: t("navbarLabels.home"),
+      label: t("routes.home"),
       route: "/",
     },
     {
       icon: <IconTarget />,
-      label: t("navbarLabels.newMatch"),
+      label: t("routes.newMatch"),
       route: "/lobby",
     },
     {
       icon: <IconBarbell />,
-      label: t("navbarLabels.practice"),
+      label: t("routes.practice"),
       route: "/practice",
     },
     {
       icon: <IconHistory />,
-      label: t("navbarLabels.history"),
+      label: t("routes.history"),
       route: "/history",
     },
     {
       icon: <IconUser />,
-      label: t("navbarLabels.profile"),
+      label: t("routes.profile"),
       route: "/profile",
     },
     {
       icon: <IconChartBar />,
-      label: t("navbarLabels.statistics"),
+      label: t("routes.statistics"),
       route: "/statistics",
     },
     {
       icon: <IconSettings />,
-      label: t("navbarLabels.settings"),
+      label: t("routes.settings"),
       route: "/settings",
     },
   ];

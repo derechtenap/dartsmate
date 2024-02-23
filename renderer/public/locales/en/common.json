@@ -6,7 +6,7 @@
   "fullscreenMode": "Fullscreen",
   "windowedMode": "Windowed Mode",
   "closeApp": "Close",
-  "navbarLabels": {
+  "routes": {
     "home": "Home",
     "newMatch": "New Match",
     "practice": "Practice",
