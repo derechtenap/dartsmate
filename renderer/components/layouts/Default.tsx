@@ -1,6 +1,7 @@
 import {
   ActionIcon,
   AppShell,
+  Container,
   Divider,
   Flex,
   Group,
@@ -209,7 +210,15 @@ const DefaultLayout = ({
           </Text>
         </AppShell.Section>
       </AppShell.Navbar>
-      <AppShell.Main>{children}</AppShell.Main>
+      <AppShell.Main>
+        <Container
+          pl={{
+            xs: 0,
+          }}
+        >
+          {children}
+        </Container>
+      </AppShell.Main>
     </AppShell>
   );
 };
