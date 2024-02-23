@@ -28,7 +28,6 @@ import {
 import { i18n as _i18n } from "../../.././../next-i18next.config";
 import { useRouter } from "next/router";
 
-// TODO: This page needs a refactor
 const SettingsPage = () => {
   const iconStyles = { height: rem(20), width: rem(20) };
   const { colorScheme, setColorScheme } = useMantineColorScheme();
@@ -117,77 +116,93 @@ const SettingsPage = () => {
 
   const handleChangeLanguage = (newLanguage: string) => {
     const newPath = router.pathname.replace("[locale]", newLanguage);
-
     void router.push(newPath);
   };
+
+  const renderTabs = () => {
+    return (
+      <Grid.Col span={4}>
+        {settingsRoutes.map((route) => (
+          <NavLink
+            active={activeTab === route.tabValue}
+            key={route.label}
+            leftSection={route.icon}
+            label={route.label}
+            onClick={() => setActiveTab(route.tabValue)}
+            variant="filled"
+          />
+        ))}
+      </Grid.Col>
+    );
+  };
+
+  const renderColorSchemeTab = () => {
+    return (
+      <Tabs.Panel value="cs">
+        <Stack>
+          <Title>
+            {t("settings.colorScheme.title", {
+              ns: "settings",
+            })}
+          </Title>
+          <Text mb="lg">
+            {t("settings.colorScheme.text", {
+              ns: "settings",
+            })}
+          </Text>
+          <SegmentedControl
+            color="red"
+            onChange={(newScheme) =>
+              setColorScheme(newScheme as MantineColorScheme)
+            }
+            data={dataColorSchemes}
+            defaultValue={colorScheme}
+            withItemsBorders={false}
+          />
+        </Stack>
+      </Tabs.Panel>
+    );
+  };
+
+  const renderLanguageTab = () => {
+    return (
+      <Tabs.Panel value="la">
+        <Stack>
+          <Title>
+            {t("settings.language.title", {
+              ns: "settings",
+            })}
+          </Title>
+          <Text mb="lg">
+            {t("settings.language.text", {
+              ns: "settings",
+            })}
+          </Text>
+          <Select
+            allowDeselect={false}
+            searchable
+            label={t("settings.language.title", {
+              ns: "settings",
+            })}
+            defaultValue={local}
+            data={locals}
+            onChange={(newLanguage) =>
+              handleChangeLanguage(newLanguage as string)
+            }
+          />
+        </Stack>
+      </Tabs.Panel>
+    );
+  };
+
   return (
     <DefaultLayout withNavbarOpen>
       <Grid>
-        <Grid.Col span={4}>
-          {settingsRoutes.map((route) => (
-            <NavLink
-              active={activeTab === route.tabValue}
-              key={route.label}
-              leftSection={route.icon}
-              label={route.label}
-              onClick={() => setActiveTab(route.tabValue)}
-              variant="filled"
-            />
-          ))}
-        </Grid.Col>
+        {renderTabs()}
         <Grid.Col span="auto">
           <Tabs value={activeTab}>
-            <Tabs.Panel value="cs">
-              <Stack>
-                <Title>
-                  {t("settings.colorScheme.title", {
-                    ns: "settings",
-                  })}
-                </Title>
-                <Text mb="lg">
-                  {t("settings.colorScheme.text", {
-                    ns: "settings",
-                  })}
-                </Text>
-                <SegmentedControl
-                  color="red"
-                  onChange={(newScheme) =>
-                    setColorScheme(newScheme as MantineColorScheme)
-                  }
-                  data={dataColorSchemes}
-                  defaultValue={colorScheme}
-                  withItemsBorders={false}
-                />
-              </Stack>
-            </Tabs.Panel>
-            <Tabs.Panel value="la">
-              <Stack>
-                <Title>
-                  {t("settings.language.title", {
-                    ns: "settings",
-                  })}
-                </Title>
-                <Text mb="lg">
-                  {" "}
-                  {t("settings.language.text", {
-                    ns: "settings",
-                  })}
-                </Text>
-                <Select
-                  allowDeselect={false}
-                  searchable
-                  label={t("settings.language.title", {
-                    ns: "settings",
-                  })}
-                  defaultValue={local}
-                  data={locals}
-                  nothingFoundMessage="Nothing found..."
-                  onChange={(newLanguage) =>
-                    handleChangeLanguage(newLanguage as string)
-                  }
-                />
-              </Stack>
-            </Tabs.Panel>
+            {renderColorSchemeTab()}
+            {renderLanguageTab()}
           </Tabs>
         </Grid.Col>
       </Grid>
