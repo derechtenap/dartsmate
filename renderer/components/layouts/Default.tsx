@@ -1,6 +1,7 @@
 import {
   ActionIcon,
   AppShell,
+  Container,
   Divider,
   Flex,
   Group,
@@ -59,43 +60,47 @@ const DefaultLayout = ({
   const navbarRoutes = [
     {
       icon: <IconHome />,
-      label: t("navbarLabels.home"),
+      label: t("routes.home"),
       route: "/",
     },
     {
       icon: <IconTarget />,
-      label: t("navbarLabels.newMatch"),
+      label: t("routes.newMatch"),
       route: "/lobby",
     },
     {
       icon: <IconBarbell />,
-      label: t("navbarLabels.practice"),
+      label: t("routes.practice"),
       route: "/practice",
     },
     {
       icon: <IconHistory />,
-      label: t("navbarLabels.history"),
+      label: t("routes.history"),
       route: "/history",
     },
     {
       icon: <IconUser />,
-      label: t("navbarLabels.profile"),
+      label: t("routes.profile"),
       route: "/profile",
     },
     {
       icon: <IconChartBar />,
-      label: t("navbarLabels.statistics"),
+      label: t("routes.statistics"),
       route: "/statistics",
     },
     {
       icon: <IconSettings />,
-      label: t("navbarLabels.settings"),
+      label: t("routes.settings"),
       route: "/settings",
     },
   ];
 
   const isActiveRoute = (route: string) => {
-    return `/${locale + route}` === router.asPath;
+    if (route === "/") {
+      return `/${locale + route}` === router.asPath;
+    }
+
+    return `/${locale + route}/` === router.asPath;
   };
 
   return (
@@ -185,6 +190,7 @@ const DefaultLayout = ({
               label={route.label}
               leftSection={route.icon}
               variant="filled"
+              onClick={() => void router.push(`/${locale + route.route}`)}
             />
           ))}
         </AppShell.Section>
@@ -204,7 +210,15 @@ const DefaultLayout = ({
           </Text>
         </AppShell.Section>
       </AppShell.Navbar>
-      <AppShell.Main>{children}</AppShell.Main>
+      <AppShell.Main>
+        <Container
+          pl={{
+            xs: 0,
+          }}
+        >
+          {children}
+        </Container>
+      </AppShell.Main>
     </AppShell>
   );
 };

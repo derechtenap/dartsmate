@@ -1,0 +1,21 @@
+{
+  "colorSchemes": {
+    "light": "Hell",
+    "dark": "Dunkel",
+    "auto": "System"
+  },
+  "settings": {
+    "colorScheme": {
+      "title": "Farbschema",
+      "text": "Wählen Sie ein helles oder dunkles Farbschema, um Ihre Erfahrung zu personalisieren. Sie können auch \"System\" auswählen, um das Farbschema der App basierend auf den Einstellungen Ihres Betriebssystems zu wählen."
+    },
+    "language": {
+      "title": "Sprache",
+      "text": "Wählen Sie Ihre bevorzugte Sprache für die App aus."
+    }
+  },
+  "languages": {
+    "de": "Deutsch",
+    "en": "Englisch"
+  }
+}
