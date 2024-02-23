@@ -95,7 +95,11 @@ const DefaultLayout = ({
   ];
 
   const isActiveRoute = (route: string) => {
-    return `/${locale + route}` === router.asPath;
+    if (route === "/") {
+      return `/${locale + route}` === router.asPath;
+    }
+
+    return `/${locale + route}/` === router.asPath;
   };
 
   return (
@@ -185,6 +189,7 @@ const DefaultLayout = ({
               label={route.label}
               leftSection={route.icon}
               variant="filled"
+              onClick={() => void router.push(`/${locale + route.route}`)}
             />
           ))}
         </AppShell.Section>
