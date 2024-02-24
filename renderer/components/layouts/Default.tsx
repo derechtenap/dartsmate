@@ -212,7 +212,7 @@ const DefaultLayout = ({
       </AppShell.Navbar>
       <AppShell.Main>
         <Container
-          pl={{
+          px={{
             xs: 0,
           }}
         >
