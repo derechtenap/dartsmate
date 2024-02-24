@@ -22,7 +22,7 @@ const IndexPage = () => {
 
   return (
     <DefaultLayout withNavbarOpen>
-      <Paper component="header" p="xl" m={0} w={undefined}>
+      <Paper component="header" radius={0} p="xl" m={0}>
         <Stack>
           <Group align="start">
             <Avatar color="blue" size="xl" variant="filled">
