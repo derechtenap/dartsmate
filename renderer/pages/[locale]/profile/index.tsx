@@ -33,7 +33,7 @@ const IndexPage = () => {
               <Text c="dimmed">nap</Text>
             </Stack>
             <Group ml="auto">
-              <Tooltip label="Edit Profile" withArrow>
+              <Tooltip label={t("editProfile", { ns: "profile" })} withArrow>
                 <ActionIcon color="white" variant="transparent">
                   <IconEdit />
                 </ActionIcon>
@@ -43,31 +43,31 @@ const IndexPage = () => {
           <Group gap="xl" ta="center" grow mt="lg">
             <Stack gap="xs">
               <Text c="dimmed" fz="xs">
-                Darts
+                {t("stats.darts")}
               </Text>
               <NumberFormatter value={0} />
             </Stack>
             <Stack gap="xs">
               <Text c="dimmed" fz="xs">
-                180s
+                {t("stats.180s")}
               </Text>
               <NumberFormatter value={0} />
             </Stack>
             <Stack gap="xs">
               <Text c="dimmed" fz="xs">
-                Matches
+                {t("stats.matches")}
               </Text>
               <NumberFormatter value={0} />
             </Stack>
             <Stack gap="xs">
               <Text c="dimmed" fz="xs">
-                Trainings
+                {t("stats.trainings")}
               </Text>
               <NumberFormatter value={0} />
             </Stack>
             <Stack gap="xs">
               <Text c="dimmed" fz="xs">
-                AVG
+                {t("stats.avg")}
               </Text>
               <NumberFormatter decimalScale={3} value={0} />
             </Stack>
@@ -81,6 +81,6 @@ const IndexPage = () => {
 
 export default IndexPage;
 
-export const getStaticProps = makeStaticProperties(["common"]);
+export const getStaticProps = makeStaticProperties(["common", "profile"]);
 
 export { getStaticPaths };

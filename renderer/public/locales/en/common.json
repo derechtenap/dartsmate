@@ -14,5 +14,12 @@
     "profile": "Profile",
     "statistics": "Statistics",
     "settings": "Settings"
+  },
+  "stats": {
+    "darts": "Darts",
+    "180s": "180s",
+    "matches": "Matches",
+    "trainings": "Trainings",
+    "avg": "AVG"
   }
 }
