@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-
+import type { NextPage } from "next";
 import { getStaticPaths, makeStaticProperties } from "../../../lib/get-static";
 import DefaultLayout from "@/components/layouts/Default";
 import {
@@ -17,9 +17,14 @@ import {
 } from "@mantine/core";
 import type { NumberFormatterProps } from "@mantine/core";
 import { IconEdit } from "@tabler/icons-react";
+import { useRouter } from "next/router";
 
-const IndexPage = () => {
-  const { t } = useTranslation();
+const ProfileIndexPage: NextPage = () => {
+  const {
+    t,
+    i18n: { language: locale },
+  } = useTranslation();
+  const router = useRouter();
 
   const stat = (
     statText: string,
@@ -52,7 +57,10 @@ const IndexPage = () => {
             </Stack>
             <Group ml="auto">
               <Tooltip label={t("editProfile", { ns: "profile" })} withArrow>
-                <ActionIcon variant="transparent">
+                <ActionIcon
+                  onClick={() => void router.push(`/${locale}/profile/edit`)}
+                  variant="filled"
+                >
                   <IconEdit />
                 </ActionIcon>
               </Tooltip>
@@ -74,7 +82,7 @@ const IndexPage = () => {
   );
 };
 
-export default IndexPage;
+export default ProfileIndexPage;
 
 export const getStaticProps = makeStaticProperties(["common", "profile"]);
 
