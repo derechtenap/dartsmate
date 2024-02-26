@@ -34,13 +34,22 @@ void (async () => {
   });
 
   const locale = userStore.get("locale", i18next.i18n.defaultLocale) as string;
+  const defaultProfile = userStore.get("defaultProfile", null);
+  const port = process.argv[2];
+  const profileCreationURL = isProd
+    ? `app://./${locale}/profile/create.html`
+    : `http://localhost:${port}/${locale}/profile/create`;
 
-  if (isProd) {
-    await mainWindow.loadURL(`app://./${locale}/index.html`);
+  if (!defaultProfile) {
+    // Default profile is undefined, load url to create a new profile
+    await mainWindow.loadURL(profileCreationURL);
   } else {
-    const port = process.argv[2];
-    await mainWindow.loadURL(`http://localhost:${port}/${locale}`);
-    mainWindow.webContents.openDevTools();
+    if (isProd) {
+      await mainWindow.loadURL(`app://./${locale}/index.html`);
+    } else {
+      await mainWindow.loadURL(`http://localhost:${port}/${locale}`);
+      mainWindow.webContents.openDevTools();
+    }
   }
 })();
 
