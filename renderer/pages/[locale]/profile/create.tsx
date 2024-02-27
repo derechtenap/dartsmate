@@ -5,6 +5,9 @@ import {
   BackgroundImage,
   Button,
   Center,
+  CheckIcon,
+  ColorSwatch,
+  DefaultMantineColor,
   Divider,
   Grid,
   Group,
@@ -13,17 +16,23 @@ import {
   Text,
   TextInput,
   Title,
+  useMantineTheme,
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { IconUserPlus } from "@tabler/icons-react";
 import { useTranslation } from "next-i18next";
 import sendIPC from "utils/ipc/send";
-import { modals } from "@mantine/modals";
 import { useDisclosure } from "@mantine/hooks";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
+import { useState } from "react";
 
 const CreateProfilePage: NextPage = () => {
   const { t } = useTranslation();
+  const theme = useMantineTheme();
+  const [avatarColor, setAvatarColor] = useState<DefaultMantineColor>(
+    theme.primaryColor
+  );
+
   const [opened, { open, close }] = useDisclosure(false);
   interface FormValues {
     color: string;
@@ -52,13 +61,39 @@ const CreateProfilePage: NextPage = () => {
     },
   });
 
+  // Manually update the color, since the ...props method doesn't work on the color swatches
+  const updateAvatarColor = (color: DefaultMantineColor) => {
+    setAvatarColor(color);
+    form.setValues({
+      color: color,
+    });
+  };
+
+  const swatches = Object.keys(theme.colors).map((color) => (
+    <ColorSwatch
+      color={theme.colors[color][6]}
+      key={color}
+      style={{ cursor: "pointer" }}
+      onClick={() => updateAvatarColor(color)}
+    >
+      {color === avatarColor ? (
+        <CheckIcon width={15} style={{ color: "white" }} />
+      ) : null}
+    </ColorSwatch>
+  ));
+
   return (
     <>
       <Modal
+        component="form"
         opened={opened}
         onClose={close}
         closeOnClickOutside={false}
         fullScreen
+        onSubmit={(e) => {
+          e.preventDefault();
+          console.info(form.values);
+        }}
       >
         <Stack maw={600} mx="auto" gap="xl">
           <Title>Welcome! Let's Create Your Profile</Title>
@@ -76,6 +111,7 @@ const CreateProfilePage: NextPage = () => {
               form.getInputProps("username").value as string
             )}
           </Avatar>
+          <Group>{swatches}</Group>
           <Group grow>
             <TextInput
               data-autofocus
@@ -95,7 +131,9 @@ const CreateProfilePage: NextPage = () => {
             {...form.getInputProps("username")}
           />
           <Divider />
-          <Button disabled={!form.isValid()}>Create Profile</Button>
+          <Button type="submit" disabled={!form.isValid()}>
+            Create Profile
+          </Button>
         </Stack>
       </Modal>
       <Grid mah="100vh" p={0} m={0} gutter={0}>
@@ -131,7 +169,7 @@ const CreateProfilePage: NextPage = () => {
             </Stack>
           </Center>
         </Grid.Col>
-      </Grid>{" "}
+      </Grid>
     </>
   );
 };
