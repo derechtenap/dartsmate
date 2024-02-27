@@ -37,7 +37,7 @@ void (async () => {
   const defaultProfile = userStore.get("defaultProfile", null);
   const port = process.argv[2];
   const profileCreationURL = isProd
-    ? `app://./${locale}/profile/create.html`
+    ? `app://./${locale}/profile/create`
     : `http://localhost:${port}/${locale}/profile/create`;
 
   if (!defaultProfile) {
@@ -45,7 +45,7 @@ void (async () => {
     await mainWindow.loadURL(profileCreationURL);
   } else {
     if (isProd) {
-      await mainWindow.loadURL(`app://./${locale}/index.html`);
+      await mainWindow.loadURL(`app://./${locale}/`);
     } else {
       await mainWindow.loadURL(`http://localhost:${port}/${locale}`);
       mainWindow.webContents.openDevTools();
