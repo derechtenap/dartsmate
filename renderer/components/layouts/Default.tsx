@@ -11,6 +11,7 @@ import {
   Tooltip,
 } from "@mantine/core";
 import {
+  upperFirst,
   useDisclosure,
   useFullscreen,
   useNetwork,
@@ -201,8 +202,7 @@ const DefaultLayout = ({
               {APP_VERSION}
             </Text>
             <Text component="span" fz="xs" display="block">
-              {CLIENT_OS.charAt(0).toLocaleUpperCase(locale) +
-                CLIENT_OS.slice(1)}
+              {upperFirst(CLIENT_OS)}
             </Text>
             <Text component="span" fz="xs" display="block">
               Network Status: {NETWORK_STATUS.online ? "Online" : "Offline"}
