@@ -25,15 +25,20 @@ import sendIPC from "utils/ipc/send";
 import { useDisclosure } from "@mantine/hooks";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import { useState } from "react";
-import DefaultLayout from "@/components/layouts/Default";
+import { createUser } from "utils/db/createUser";
+import { useRouter } from "next/router";
 
 const CreateProfilePage: NextPage = () => {
-  const { t } = useTranslation();
+  const {
+    t,
+    i18n: { language: locale },
+  } = useTranslation();
   const theme = useMantineTheme();
   const [avatarColor, setAvatarColor] = useState<DefaultMantineColor>(
     theme.primaryColor
   );
 
+  const router = useRouter();
   const [opened, { open, close }] = useDisclosure(false);
   interface FormValues {
     color: string;
@@ -84,7 +89,7 @@ const CreateProfilePage: NextPage = () => {
   ));
 
   return (
-    <DefaultLayout withNavbarOpen>
+    <>
       <Modal
         component="form"
         opened={opened}
@@ -94,7 +99,14 @@ const CreateProfilePage: NextPage = () => {
         fullScreen
         onSubmit={(e) => {
           e.preventDefault();
-          console.info(form.values);
+          createUser(form.values)
+            .then(() => {
+              console.info("SUCCESS");
+              void router.push(`/${locale}`);
+            })
+            .catch(() => {
+              console.error("ERROR WHILE CREATING PROFILE!");
+            });
         }}
       >
         <Stack maw={600} mx="auto" gap="xl">
@@ -177,7 +189,7 @@ const CreateProfilePage: NextPage = () => {
           </Center>
         </Grid.Col>
       </Grid>
-    </DefaultLayout>
+    </>
   );
 };
 

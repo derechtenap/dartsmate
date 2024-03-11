@@ -52,3 +52,5 @@ export const MATCH_SCORE = {
   MIN: 3,
   MAX: 901,
 };
+
+export const DATABASE_VERSION = 1;
