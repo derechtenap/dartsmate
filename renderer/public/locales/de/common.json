@@ -14,5 +14,12 @@
     "profile": "Profil",
     "statistics": "Statistiken",
     "settings": "Einstellungen"
+  },
+  "stats": {
+    "darts": "Darts",
+    "180s": "180er",
+    "matches": "Spiele",
+    "trainings": "Trainings",
+    "avg": "Durchschnitt"
   }
 }

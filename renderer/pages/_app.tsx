@@ -9,6 +9,7 @@ import type { DehydratedState } from "@tanstack/react-query";
 
 // All packages except `@mantine/hooks` require styles imports!
 import "@mantine/core/styles.css";
+import "@mantine/dropzone/styles.css";
 
 // Put overrides with custom stylesheets here
 import "../styles/globals.css";

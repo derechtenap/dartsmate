@@ -197,9 +197,9 @@ const SettingsPage = () => {
 
   return (
     <DefaultLayout withNavbarOpen>
-      <Grid>
+      <Grid gutter={0}>
         {renderTabs()}
-        <Grid.Col span="auto">
+        <Grid.Col span="auto" px="xs">
           <Tabs value={activeTab}>
             {renderColorSchemeTab()}
             {renderLanguageTab()}
