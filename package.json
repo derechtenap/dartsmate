@@ -28,6 +28,8 @@
   },
   "devDependencies": {
     "@mantine/core": "^7.5.3",
+    "@mantine/dropzone": "^7.6.1",
+    "@mantine/form": "^7.6.0",
     "@mantine/hooks": "^7.5.3",
     "@next/eslint-plugin-next": "^13.5.6",
     "@tabler/icons-react": "^2.44.0",
@@ -57,6 +59,7 @@
     "postcss-simple-vars": "^7.0.1",
     "prettier": "2.8.8",
     "react": "^18.2.0",
+    "react-avatar-editor": "^13.0.2",
     "react-dom": "^18.2.0"
   }
 }

@@ -25,6 +25,7 @@ import sendIPC from "utils/ipc/send";
 import { useDisclosure } from "@mantine/hooks";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import { useState } from "react";
+import DefaultLayout from "@/components/layouts/Default";
 
 const CreateProfilePage: NextPage = () => {
   const { t } = useTranslation();
@@ -45,7 +46,7 @@ const CreateProfilePage: NextPage = () => {
 
   const form = useForm<FormValues>({
     initialValues: {
-      color: "red",
+      color: avatarColor,
       name: {
         firstName: "",
         lastName: "",
@@ -83,11 +84,12 @@ const CreateProfilePage: NextPage = () => {
   ));
 
   return (
-    <>
+    <DefaultLayout withNavbarOpen>
       <Modal
         component="form"
         opened={opened}
         onClose={close}
+        withCloseButton={false}
         closeOnClickOutside={false}
         fullScreen
         onSubmit={(e) => {
@@ -131,9 +133,14 @@ const CreateProfilePage: NextPage = () => {
             {...form.getInputProps("username")}
           />
           <Divider />
-          <Button type="submit" disabled={!form.isValid()}>
-            Create Profile
-          </Button>
+          <Group grow>
+            <Button type="submit" disabled={!form.isValid()}>
+              Create Profile
+            </Button>
+            <Button c="dimmed" variant="default" onClick={close}>
+              {t("closeApp")}
+            </Button>
+          </Group>
         </Stack>
       </Modal>
       <Grid mah="100vh" p={0} m={0} gutter={0}>
@@ -160,7 +167,7 @@ const CreateProfilePage: NextPage = () => {
                 </Button>
                 <Button
                   c="dimmed"
-                  variant="transparent"
+                  variant="default"
                   onClick={() => sendIPC("close-app")}
                 >
                   {t("closeApp")}
@@ -170,7 +177,7 @@ const CreateProfilePage: NextPage = () => {
           </Center>
         </Grid.Col>
       </Grid>
-    </>
+    </DefaultLayout>
   );
 };
 
