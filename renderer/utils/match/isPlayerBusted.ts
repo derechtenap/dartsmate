@@ -1,4 +1,4 @@
-import type { Checkout } from "types/match";
+import type { Checkout } from 'types/match'
 
 /**
  *
@@ -9,21 +9,18 @@ import type { Checkout } from "types/match";
  * @returns {boolean} `true` if the player has busted, otherwise `false`.
  *
  */
-export const isPlayerBusted = (
-  currentScore: number,
-  checkout: Checkout
-): boolean => {
-  if (currentScore === 0) return false;
+export const isPlayerBusted = (currentScore: number, checkout: Checkout): boolean => {
+  if (currentScore === 0) return false
 
-  if (checkout === "Double" && currentScore < checkoutValue("Double")) {
-    return true;
+  if (checkout === 'Double' && currentScore < checkoutValue('Double')) {
+    return true
   }
-  if (checkout === "Triple" && currentScore < checkoutValue("Triple")) {
-    return true;
+  if (checkout === 'Triple' && currentScore < checkoutValue('Triple')) {
+    return true
   }
 
-  return currentScore < 0;
-};
+  return currentScore < 0
+}
 
 /**
  *
@@ -33,5 +30,5 @@ export const isPlayerBusted = (
  * @returns {number} The minimum score required for the checkout.
  */
 const checkoutValue = (checkout: Checkout): number => {
-  return checkout === "Double" ? 2 : 3;
-};
+  return checkout === 'Double' ? 2 : 3
+}

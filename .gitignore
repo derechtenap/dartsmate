@@ -1,6 +1,6 @@
 node_modules
-*.log
-.next
-app
 dist
-.env
+build
+out
+.DS_Store
+*.log*

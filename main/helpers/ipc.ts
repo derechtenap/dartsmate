@@ -1,21 +1,21 @@
-import { BrowserWindow, app, ipcMain } from "electron";
-import { userStore } from "./user-store";
-import log from "electron-log";
+import { BrowserWindow, app, ipcMain } from 'electron'
+import { userStore } from './user-store'
+import log from 'electron-log'
 
-ipcMain.handle("setLocale", (_event, locale) => {
-  userStore.set("locale", locale);
-});
+ipcMain.handle('setLocale', (_event, locale) => {
+  userStore.set('locale', locale)
+})
 
-ipcMain.on("minimize-app-window", () => {
-  const focusedWindow = BrowserWindow.getFocusedWindow();
+ipcMain.on('minimize-app-window', () => {
+  const focusedWindow = BrowserWindow.getFocusedWindow()
 
   if (focusedWindow) {
-    focusedWindow.minimize();
+    focusedWindow.minimize()
   } else {
-    log.error("Attempted to minimize app window, but no focused window found.");
+    log.error('Attempted to minimize app window, but no focused window found.')
   }
-});
+})
 
-ipcMain.on("close-app", () => {
-  app.quit();
-});
+ipcMain.on('close-app', () => {
+  app.quit()
+})

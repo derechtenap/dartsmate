@@ -1,7 +1,7 @@
-import { writeFileSync } from "fs";
-import path from "path";
-import type { Match } from "types/match";
-import { MATCHES_DIR, MATCH_FILENAME_EXTENSION } from "utils/constants";
+import { writeFileSync } from 'fs'
+import path from 'path'
+import type { Match } from 'types/match'
+import { MATCHES_DIR, MATCH_FILENAME_EXTENSION } from 'utils/constants'
 
 /**
  *
@@ -14,13 +14,10 @@ import { MATCHES_DIR, MATCH_FILENAME_EXTENSION } from "utils/constants";
 export const handleAbortMatch = (currentMatchData: Match): void => {
   const finalMatchData = {
     ...currentMatchData,
-    matchStatus: "ABORTED",
-    updatedAt: Date.now(),
-  };
-  const matchFilePath = path.join(
-    MATCHES_DIR,
-    finalMatchData.matchUUID + MATCH_FILENAME_EXTENSION
-  );
+    matchStatus: 'ABORTED',
+    updatedAt: Date.now()
+  }
+  const matchFilePath = path.join(MATCHES_DIR, finalMatchData.matchUUID + MATCH_FILENAME_EXTENSION)
 
-  writeFileSync(matchFilePath, JSON.stringify(finalMatchData), "utf8");
-};
+  writeFileSync(matchFilePath, JSON.stringify(finalMatchData), 'utf8')
+}

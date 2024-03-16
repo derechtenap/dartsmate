@@ -1,5 +1,5 @@
-import { headerHeight } from "@/components/layouts/Default";
-import { useViewportSize } from "@mantine/hooks";
+import { headerHeight } from '@/components/layouts/Default'
+import { useViewportSize } from '@mantine/hooks'
 
 /**
  *
@@ -8,8 +8,8 @@ import { useViewportSize } from "@mantine/hooks";
  *
  */
 export const getViewportHeight = () => {
-  const { height } = useViewportSize();
-  const appShellPadding = 30; // px
+  const { height } = useViewportSize()
+  const appShellPadding = 30 // px
 
-  return height - headerHeight - appShellPadding;
-};
+  return height - headerHeight - appShellPadding
+}

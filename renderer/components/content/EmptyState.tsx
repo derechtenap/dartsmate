@@ -1,11 +1,11 @@
-import { Group, Paper, Title, Text } from "@mantine/core";
-import { IconAlertHexagonFilled } from "@tabler/icons-react";
+import { Group, Paper, Title, Text } from '@mantine/core'
+import { IconAlertHexagonFilled } from '@tabler/icons-react'
 
 type EmptyStateProps = {
-  children?: React.ReactNode;
-  title?: string;
-  text?: string;
-};
+  children?: React.ReactNode
+  title?: string
+  text?: string
+}
 
 /**
  *
@@ -30,32 +30,27 @@ type EmptyStateProps = {
  * @returns {JSX.Element} JSX.Element with an empty state dialog.
  *
  */
-const EmptyState = ({
-  children,
-  title,
-  text,
-}: EmptyStateProps): JSX.Element => {
+const EmptyState = ({ children, title, text }: EmptyStateProps): JSX.Element => {
   return (
     <Group h="100%">
       <Paper p="lg" w="80%" maw={650}>
         <IconAlertHexagonFilled
           size="4rem"
           style={{
-            opacity: 0.8,
+            opacity: 0.8
           }}
         />
         <Title my="lg">
-          {title ||
-            "Oops! It seems like there's no data to display at the moment."}
+          {title || "Oops! It seems like there's no data to display at the moment."}
         </Title>
         <Text fz="lg">
           {text ||
-            "Feel free to check back later. If the issue persists, please contact support for assistance."}
+            'Feel free to check back later. If the issue persists, please contact support for assistance.'}
         </Text>
         {children}
       </Paper>
     </Group>
-  );
-};
+  )
+}
 
-export default EmptyState;
+export default EmptyState

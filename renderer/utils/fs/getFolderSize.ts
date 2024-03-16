@@ -1,5 +1,5 @@
-import { readdirSync, statSync } from "fs";
-import path from "path";
+import { readdirSync, statSync } from 'fs'
+import path from 'path'
 
 /**
  *
@@ -10,23 +10,23 @@ import path from "path";
  *
  */
 export const getFolderSize = (folderPath: string): number => {
-  let folderSize = 0;
+  let folderSize = 0
 
   try {
-    const files = readdirSync(folderPath);
+    const files = readdirSync(folderPath)
 
     files.forEach((file) => {
-      const filePath = path.join(folderPath, file);
-      const stats = statSync(filePath);
+      const filePath = path.join(folderPath, file)
+      const stats = statSync(filePath)
 
       // Check if it's a file (not a directory)
       if (stats.isFile()) {
-        folderSize += stats.size;
+        folderSize += stats.size
       }
-    });
+    })
   } catch (err) {
-    console.error("Error reading folder:", err);
+    console.error('Error reading folder:', err)
   }
 
-  return folderSize;
-};
+  return folderSize
+}

@@ -1,3 +1,3 @@
-import Store from "electron-store";
+import Store from 'electron-store'
 
-export const userStore = new Store({ name: "app.dartsmate.store" });
+export const userStore = new Store({ name: 'app.dartsmate.store' })

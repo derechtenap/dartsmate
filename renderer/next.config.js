@@ -5,10 +5,10 @@
  */
 module.exports = {
   images: {
-    unoptimized: true,
+    unoptimized: true
   },
   trailingSlash: true,
   webpack: (config) => {
-    return config;
+    return config
   }
-};
+}

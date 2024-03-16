@@ -1,10 +1,10 @@
-import type { ActionIconProps } from "@mantine/core";
-import { ActionIcon, Tooltip } from "@mantine/core";
+import type { ActionIconProps } from '@mantine/core'
+import { ActionIcon, Tooltip } from '@mantine/core'
 
 interface ActionButtonProps extends ActionIconProps {
-  action: () => void;
-  icon: JSX.Element;
-  label: string;
+  action: () => void
+  icon: JSX.Element
+  label: string
 }
 
 const ActionButton = ({ action, icon, label, ...rest }: ActionButtonProps) => {
@@ -14,7 +14,7 @@ const ActionButton = ({ action, icon, label, ...rest }: ActionButtonProps) => {
         {icon}
       </ActionIcon>
     </Tooltip>
-  );
-};
+  )
+}
 
-export default ActionButton;
+export default ActionButton

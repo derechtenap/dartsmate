@@ -1,4 +1,4 @@
-import type { MatchRound } from "types/match";
+import type { MatchRound } from 'types/match'
 
 // TODO: Instead of using the `navigator.language` allow the user to specify a app language
 
@@ -11,10 +11,9 @@ import type { MatchRound } from "types/match";
  *
  */
 export const getTotalMatchAvg = (playerRounds: MatchRound[]): string => {
-  if (playerRounds.length === 0) return (0).toLocaleString(navigator.language);
+  if (playerRounds.length === 0) return (0).toLocaleString(navigator.language)
   const averageScore =
-    playerRounds.reduce((total, round) => total + round.roundTotal, 0) /
-    playerRounds.length;
+    playerRounds.reduce((total, round) => total + round.roundTotal, 0) / playerRounds.length
 
-  return averageScore.toLocaleString(navigator.language);
-};
+  return averageScore.toLocaleString(navigator.language)
+}

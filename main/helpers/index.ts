@@ -1,4 +1,4 @@
-import createWindow from "./create-window";
-import "./ipc";
+import createWindow from './create-window'
+import './ipc'
 
-export { createWindow };
+export { createWindow }

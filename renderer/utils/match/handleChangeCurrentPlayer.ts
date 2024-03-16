@@ -1,1 +1,1 @@
-export const handleChangeCurrentPlayer = () => {};
+export const handleChangeCurrentPlayer = () => {}

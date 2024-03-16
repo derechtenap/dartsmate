@@ -1,4 +1,4 @@
-import { Center, Loader, Stack, Text } from "@mantine/core";
+import { Center, Loader, Stack, Text } from '@mantine/core'
 
 const LoadingOverlay = () => {
   return (
@@ -10,7 +10,7 @@ const LoadingOverlay = () => {
         </Text>
       </Stack>
     </Center>
-  );
-};
+  )
+}
 
-export default LoadingOverlay;
+export default LoadingOverlay

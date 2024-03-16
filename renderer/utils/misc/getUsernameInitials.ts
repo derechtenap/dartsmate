@@ -14,8 +14,8 @@
  */
 export const getUsernameInitials = (username: string): string => {
   return username
-    .split(" ") // Split the username into parts based on spaces
+    .split(' ') // Split the username into parts based on spaces
     .map((words) => words.charAt(0)) // Get the first char of each username part
-    .join("")
-    .slice(0, 3); // Only return the first 3 characters
-};
+    .join('')
+    .slice(0, 3) // Only return the first 3 characters
+}

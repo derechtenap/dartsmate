@@ -9,8 +9,8 @@
  */
 const sendIPC = (channel: string, args: unknown = null): void => {
   if (window) {
-    window.ipc.send(channel, args);
+    window.ipc.send(channel, args)
   }
-};
+}
 
-export default sendIPC;
+export default sendIPC

@@ -1,50 +1,47 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { readFileSync } from "fs";
-import path from "path";
-import { Match } from "types/match";
-import { MATCHES_DIR } from "utils/constants";
-import { readFolder } from "utils/fs/readFolder";
-import type { UUID } from "crypto";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { readFileSync } from 'fs'
+import path from 'path'
+import { Match } from 'types/match'
+import { MATCHES_DIR } from 'utils/constants'
+import { readFolder } from 'utils/fs/readFolder'
+import type { UUID } from 'crypto'
 
 const getCurrentMatch = (uuid?: UUID) => {
-  const files = readFolder(MATCHES_DIR);
+  const files = readFolder(MATCHES_DIR)
 
   // Find the file that matches the provided UUID
   const matchingFile = files.find((matchFile) => {
-    const data = readFileSync(path.join(MATCHES_DIR, matchFile), "utf8");
-    const match = JSON.parse(data) as Match;
-    return match.matchUUID === uuid;
-  });
+    const data = readFileSync(path.join(MATCHES_DIR, matchFile), 'utf8')
+    const match = JSON.parse(data) as Match
+    return match.matchUUID === uuid
+  })
 
-  const data = readFileSync(
-    path.join(MATCHES_DIR, matchingFile as string),
-    "utf8"
-  );
-  return JSON.parse(data) as Match;
-};
+  const data = readFileSync(path.join(MATCHES_DIR, matchingFile as string), 'utf8')
+  return JSON.parse(data) as Match
+}
 
 const addCurrentMatch = (uuid: UUID) => {
-  const files = readFolder(MATCHES_DIR);
+  const files = readFolder(MATCHES_DIR)
 
   const matchingFile = files.find((matchFile) => {
-    const data = readFileSync(path.join(MATCHES_DIR, matchFile), "utf8");
-    const match = JSON.parse(data) as Match;
-    return match.matchUUID === uuid;
-  });
+    const data = readFileSync(path.join(MATCHES_DIR, matchFile), 'utf8')
+    const match = JSON.parse(data) as Match
+    return match.matchUUID === uuid
+  })
 
-  return matchingFile;
-};
+  return matchingFile
+}
 
 export const useCurrentMatch = (uuid: UUID) => {
   return useQuery({
-    queryKey: ["currentMatch", uuid],
+    queryKey: ['currentMatch', uuid],
     queryFn: () => getCurrentMatch(uuid),
-    cacheTime: 10 * 60 * 1000, // 10 minutes
-  });
-};
+    cacheTime: 10 * 60 * 1000 // 10 minutes
+  })
+}
 
 export const useAddCurrentMatch = () => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   return useMutation({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -62,8 +59,8 @@ export const useAddCurrentMatch = () => {
     mutationFn: (uuid: UUID) => addCurrentMatch(uuid),
     onSuccess: () => {
       // Remove old current match query
-      void queryClient.invalidateQueries(["currentMatch"]);
-      void queryClient.getQueryCache().clear();
-    },
-  });
-};
+      void queryClient.invalidateQueries(['currentMatch'])
+      void queryClient.getQueryCache().clear()
+    }
+  })
+}

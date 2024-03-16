@@ -1,5 +1,5 @@
-import { mkdirSync } from "fs";
+import { mkdirSync } from 'fs'
 
 export const createFolder = (path: string) => {
-  mkdirSync(path);
-};
+  mkdirSync(path)
+}

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 const Board = () => {
   /*
@@ -11,12 +11,12 @@ const Board = () => {
 
   // TODO: The values should be adjustable via the settings
   const colors = {
-    black: "black",
-    green: "green",
-    red: "red",
-    stroke: "white",
-    white: "white",
-  };
+    black: 'black',
+    green: 'green',
+    red: 'red',
+    stroke: 'white',
+    white: 'white'
+  }
 
   /*
    * x1 = Single Area
@@ -31,38 +31,36 @@ const Board = () => {
    * x6 = "Missing" Button (Pressed when the player failed to hit any
    * zones (x1-x5) on the board)
    */
-  const paths = ["x1", "x2", "x3"];
+  const paths = ['x1', 'x2', 'x3']
 
-  const numbers = [
-    20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5,
-  ];
+  const numbers = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5]
 
   const circles = {
     outerBullseye: {
       radius: 39,
       fill: colors.green,
       score: 25,
-      stroke: colors.white,
+      stroke: colors.white
     },
     bullseye: {
       radius: 19,
       fill: colors.red,
       score: 50,
-      stroke: colors.white,
-    },
-  };
+      stroke: colors.white
+    }
+  }
 
   const setFillColor = (path: string, idx: number) => {
     switch (path) {
-      case "#x1":
-        return idx % 2 == 0 ? colors.black : colors.white;
-      case "#x2":
-      case "#x3":
-        return idx % 2 == 0 ? colors.red : colors.green;
+      case '#x1':
+        return idx % 2 == 0 ? colors.black : colors.white
+      case '#x2':
+      case '#x3':
+        return idx % 2 == 0 ? colors.red : colors.green
       default:
-        throw new Error(`Color for path "${path}" cannot be set!`);
+        throw new Error(`Color for path "${path}" cannot be set!`)
     }
-  };
+  }
 
   return (
     <>
@@ -140,7 +138,7 @@ const Board = () => {
         Next Round
       </button>
     </>
-  );
-};
+  )
+}
 
-export default Board;
+export default Board
