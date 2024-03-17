@@ -5,6 +5,11 @@ import ReactDOM from 'react-dom/client'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 
 import IndexPage from './pages/Index'
+import PracticePage from './pages/Practice'
+import LobbyPage from './pages/Lobby'
+import HistoryPage from './pages/History'
+import ProfilePage from './pages/Profile'
+import StatisticsPage from './pages/Statistics'
 import SettingsPage from './pages/Settings'
 
 import { Center, Loader, MantineProvider } from '@mantine/core'
@@ -33,6 +38,11 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <HashRouter>
           <Routes>
             <Route Component={IndexPage} index path="/" />
+            <Route Component={LobbyPage} path="/lobby" />
+            <Route Component={PracticePage} path="/practice" />
+            <Route Component={HistoryPage} path="/history" />
+            <Route Component={ProfilePage} path="/profile" />
+            <Route Component={StatisticsPage} path="/statistics" />
             <Route Component={SettingsPage} path="/settings" />
             <Route Component={IndexPage} path="*" />
           </Routes>
