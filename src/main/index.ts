@@ -3,17 +3,27 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
+export const APP_WINDOW = {
+  height: 768, // px
+  width: 1024 // px
+}
+
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: APP_WINDOW.width,
+    height: APP_WINDOW.height,
+    minWidth: APP_WINDOW.width,
+    minHeight: APP_WINDOW.height,
     show: false,
-    autoHideMenuBar: false,
+    autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: false,
+      contextIsolation: true,
+      nodeIntegration: true,
+      defaultEncoding: 'utf-8'
     }
   })
 
@@ -47,6 +57,11 @@ app.whenReady().then(() => {
   // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
+
+    if (is.dev) {
+      // Open developer console when app runs in development mode.
+      window.webContents.openDevTools()
+    }
   })
 
   // IPC test
