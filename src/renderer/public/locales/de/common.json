@@ -6,6 +6,9 @@
   "fullscreenMode": "Vollbild",
   "windowedMode": "Fenstermodus",
   "closeApp": "Schließen",
+  "NetworkStatus": "Netzwerk Status",
+  "Online": "Online",
+  "Offline": "Offline",
   "routes": {
     "home": "Startseite",
     "newMatch": "Neues Spiel",

@@ -2,7 +2,10 @@ import './assets/base.css'
 
 import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
+import { HashRouter, Route, Routes } from 'react-router-dom'
+
+import IndexPage from './pages/Index'
+import SettingsPage from './pages/Settings'
 
 import { Center, Loader, MantineProvider } from '@mantine/core'
 
@@ -27,7 +30,13 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       }}
     >
       <Suspense fallback={loader}>
-        <App />
+        <HashRouter>
+          <Routes>
+            <Route Component={IndexPage} index path="/" />
+            <Route Component={SettingsPage} path="/settings" />
+            <Route Component={IndexPage} path="*" />
+          </Routes>
+        </HashRouter>
       </Suspense>
     </MantineProvider>
   </React.StrictMode>

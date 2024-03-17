@@ -6,6 +6,9 @@
   "fullscreenMode": "Fullscreen",
   "windowedMode": "Windowed Mode",
   "closeApp": "Close",
+  "NetworkStatus": "Network Status",
+  "Online": "Online",
+  "Offline": "Offline",
   "routes": {
     "home": "Home",
     "newMatch": "New Match",
