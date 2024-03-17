@@ -52,6 +52,9 @@ const DefaultLayout = ({ children, withNavbarOpen = false }: DefaultLayoutProps)
 
   const { t } = useTranslation(['common'])
 
+  const closeApp = (): void => window.electron.ipcRenderer.send('close-app')
+  const minimizeApp = (): void => window.electron.ipcRenderer.send('minimize-app')
+
   const navbarRoutes = [
     {
       icon: <IconHome />,
@@ -139,7 +142,7 @@ const DefaultLayout = ({ children, withNavbarOpen = false }: DefaultLayoutProps)
           <Group gap="lg">
             {!fullscreen ? (
               <Tooltip label={t('minimizeApp')} withArrow>
-                <ActionIcon c="dimmed" onClick={() => console.info('MINIZE')} variant="transparent">
+                <ActionIcon c="dimmed" onClick={minimizeApp} variant="transparent">
                   <IconMinus />
                 </ActionIcon>
               </Tooltip>
@@ -150,7 +153,7 @@ const DefaultLayout = ({ children, withNavbarOpen = false }: DefaultLayoutProps)
               </ActionIcon>
             </Tooltip>
             <Tooltip label={t('closeApp')} withArrow>
-              <ActionIcon c="dimmed" onClick={() => console.info('CLOSE')} variant="transparent">
+              <ActionIcon c="dimmed" onClick={closeApp} variant="transparent">
                 <IconSquareX />
               </ActionIcon>
             </Tooltip>
