@@ -4,24 +4,31 @@ import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 
-import { MantineProvider } from '@mantine/core'
+import { Center, Loader, MantineProvider } from '@mantine/core'
 
 import './utils/i18n'
 
-// Add the  styles for each package
+// Add the styles for each package except the `hooks` package.
 import '@mantine/core/styles.css'
+
+// A fallback loader while the main content is being loaded.
+const loader = (
+  <Center h="100vh">
+    <Loader />
+  </Center>
+)
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <Suspense fallback="Loading...">
-      <MantineProvider
-        defaultColorScheme="auto"
-        theme={{
-          primaryColor: 'red'
-        }}
-      >
+    <MantineProvider
+      defaultColorScheme="auto"
+      theme={{
+        primaryColor: 'red'
+      }}
+    >
+      <Suspense fallback={loader}>
         <App />
-      </MantineProvider>
-    </Suspense>
+      </Suspense>
+    </MantineProvider>
   </React.StrictMode>
 )
