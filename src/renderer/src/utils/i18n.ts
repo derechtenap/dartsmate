@@ -21,3 +21,5 @@ i18n
   })
 
 export default i18n
+
+export const locales = ['de', 'en']
