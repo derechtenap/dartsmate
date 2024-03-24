@@ -1,4 +1,4 @@
-app/
-dist/
-node_modules/
-postcss.config.cjs
+node_modules
+dist
+out
+.gitignore
