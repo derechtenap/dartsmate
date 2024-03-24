@@ -22,10 +22,8 @@ function createWindow(): void {
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false,
-      contextIsolation: true,
-      nodeIntegration: true,
-      defaultEncoding: 'utf-8'
+      sandbox: true,
+      contextIsolation: true
     }
   })
 
