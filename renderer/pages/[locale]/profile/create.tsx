@@ -25,7 +25,6 @@ import sendIPC from "utils/ipc/send";
 import { useDisclosure } from "@mantine/hooks";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import { useState } from "react";
-import DefaultLayout from "@/components/layouts/Default";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/router";
 
@@ -90,7 +89,7 @@ const CreateProfilePage: NextPage = () => {
   ));
 
   return (
-    <DefaultLayout withNavbarOpen>
+    <>
       <Modal
         component="form"
         opened={opened}
@@ -191,7 +190,7 @@ const CreateProfilePage: NextPage = () => {
           </Center>
         </Grid.Col>
       </Grid>
-    </DefaultLayout>
+    </>
   );
 };
 
