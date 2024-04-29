@@ -27,6 +27,7 @@ import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/router";
+import type { Profile } from "types/profile";
 
 const CreateProfilePage: NextPage = () => {
   const { t } = useTranslation();
@@ -40,23 +41,19 @@ const CreateProfilePage: NextPage = () => {
   );
 
   const [opened, { open, close }] = useDisclosure(false);
-  interface FormValues {
-    color: string;
-    name: {
-      firstName: string;
-      lastName: string;
-    };
-    username: string;
-  }
 
-  const form = useForm<FormValues>({
+  const form = useForm<Profile>({
     initialValues: {
+      bio: "",
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
       color: avatarColor,
       name: {
         firstName: "",
         lastName: "",
       },
       username: "",
+      uuid: userUUID,
     },
     validate: {
       name: {
@@ -100,13 +97,7 @@ const CreateProfilePage: NextPage = () => {
         onSubmit={(e) => {
           e.preventDefault();
           console.info(form.values);
-          window.ipc.setDefaultUser({
-            ...form.values,
-            bio: "",
-            createdAt: Date.now(),
-            updatedAt: Date.now(),
-            uuid: userUUID,
-          });
+          window.ipc.setDefaultUser(form.values);
           void router.push(`/${locale}`);
         }}
       >
