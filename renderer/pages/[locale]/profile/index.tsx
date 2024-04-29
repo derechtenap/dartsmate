@@ -8,18 +8,17 @@ import {
   Avatar,
   Divider,
   Group,
-  NumberFormatter,
   Paper,
   Stack,
   Text,
   Title,
   Tooltip,
 } from "@mantine/core";
-import type { NumberFormatterProps } from "@mantine/core";
 import { IconEdit } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { Profile } from "types/profile";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
+import Stat from "@/components/content/Stat";
 
 const ProfileIndexPage: NextPage = () => {
   const {
@@ -33,23 +32,6 @@ const ProfileIndexPage: NextPage = () => {
   useEffect(() => {
     void window.ipc.getDefaultUser().then(setDefaultUser);
   }, []);
-
-  const stat = (
-    statText: string,
-    value: number,
-    props?: NumberFormatterProps
-  ) => {
-    return (
-      <Stack gap="xs">
-        <Text c="dimmed" fz="xs">
-          {statText}
-        </Text>
-        <Text fw="bold" ff="mono" fz="xl">
-          <NumberFormatter {...props} value={value} />
-        </Text>
-      </Stack>
-    );
-  };
 
   if (defaultUser) {
     return (
@@ -78,13 +60,17 @@ const ProfileIndexPage: NextPage = () => {
               </Group>
             </Group>
             <Group gap="xl" ta="center" grow mt="lg">
-              {stat(t("stats.darts"), 0)}
-              {stat(t("stats.180s"), 0)}
-              {stat(t("stats.matches"), 0)}
-              {stat(t("stats.trainings"), 0)}
-              {stat(t("stats.avg"), 0, {
-                decimalScale: 3,
-              })}
+              <Stat text={t("stats.darts")} value={0} />
+              <Stat text={t("stats.180s")} value={0} />
+              <Stat text={t("stats.matches")} value={0} />
+              <Stat text={t("stats.trainings")} value={0} />
+              <Stat
+                text={t("stats.avg")}
+                value={0}
+                numberProps={{
+                  decimalScale: 2,
+                }}
+              />
             </Group>
           </Stack>
         </Paper>
