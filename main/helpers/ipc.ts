@@ -10,6 +10,10 @@ ipcMain.handle("setDefaultUser", (_event, defaultUser) => {
   userStore.set("defaultUser", defaultUser);
 });
 
+ipcMain.handle("getDefaultUser", () => {
+  return userStore.get("defaultUser");
+});
+
 ipcMain.on("minimize-app-window", () => {
   const focusedWindow = BrowserWindow.getFocusedWindow();
 

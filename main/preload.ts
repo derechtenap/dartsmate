@@ -22,6 +22,10 @@ const handler = {
   setDefaultUser(defaultUser: Profile) {
     void ipcRenderer.invoke("setDefaultUser", defaultUser);
   },
+
+  getDefaultUser() {
+    return ipcRenderer.invoke("getDefaultUser");
+  },
 };
 
 contextBridge.exposeInMainWorld("ipc", handler);

@@ -4,6 +4,10 @@ declare type Profile = {
   bio: string;
   color: DefaultMantineColor;
   createdAt: number;
+  name: {
+    firstName: string;
+    lastName: string;
+  };
   username: string;
   updatedAt: number;
   uuid: string;
