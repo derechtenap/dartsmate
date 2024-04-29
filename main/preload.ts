@@ -1,5 +1,6 @@
 import type { IpcRendererEvent } from "electron";
 import { contextBridge, ipcRenderer } from "electron";
+import { Profile } from "../renderer/types/profile";
 
 const handler = {
   send(channel: string, value: unknown) {
@@ -16,6 +17,10 @@ const handler = {
   },
   setLocale(locale: string) {
     void ipcRenderer.invoke(`setLocale`, locale);
+  },
+
+  setDefaultUser(defaultUser: Profile) {
+    void ipcRenderer.invoke("setDefaultUser", defaultUser);
   },
 };
 

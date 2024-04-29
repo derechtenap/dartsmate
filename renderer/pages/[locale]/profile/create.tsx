@@ -20,16 +20,22 @@ import {
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { IconUserPlus } from "@tabler/icons-react";
-import { useTranslation } from "next-i18next";
+import { i18n, useTranslation } from "next-i18next";
 import sendIPC from "utils/ipc/send";
 import { useDisclosure } from "@mantine/hooks";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import { useState } from "react";
 import DefaultLayout from "@/components/layouts/Default";
+import { v4 as uuidv4 } from "uuid";
+import { useRouter } from "next/router";
 
 const CreateProfilePage: NextPage = () => {
   const { t } = useTranslation();
   const theme = useMantineTheme();
+  const router = useRouter();
+  const locale = i18n?.language as string;
+  const userUUID = uuidv4();
+
   const [avatarColor, setAvatarColor] = useState<DefaultMantineColor>(
     theme.primaryColor
   );
@@ -95,6 +101,14 @@ const CreateProfilePage: NextPage = () => {
         onSubmit={(e) => {
           e.preventDefault();
           console.info(form.values);
+          window.ipc.setDefaultUser({
+            ...form.values,
+            bio: "",
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+            uuid: userUUID,
+          });
+          void router.push(`/${locale}`);
         }}
       >
         <Stack maw={600} mx="auto" gap="xl">

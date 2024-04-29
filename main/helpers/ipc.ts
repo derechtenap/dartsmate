@@ -6,6 +6,10 @@ ipcMain.handle("setLocale", (_event, locale) => {
   userStore.set("locale", locale);
 });
 
+ipcMain.handle("setDefaultUser", (_event, defaultUser) => {
+  userStore.set("defaultUser", defaultUser);
+});
+
 ipcMain.on("minimize-app-window", () => {
   const focusedWindow = BrowserWindow.getFocusedWindow();
 

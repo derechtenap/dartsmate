@@ -55,13 +55,14 @@ void (async () => {
   // Get stored locale or try to match the client os locale
   const locale = userStore.get("locale", preferredLocale) as string;
 
-  const defaultProfile = userStore.get("defaultProfile", null);
+  const defaultUser = userStore.get("defaultUser", null);
+
   const port = process.argv[2];
   const profileCreationURL = isProd
     ? `app://./${locale}/profile/create`
     : `http://localhost:${port}/${locale}/profile/create`;
 
-  if (!defaultProfile) {
+  if (!defaultUser) {
     // Default profile is undefined, load url to create a new profile
     await mainWindow.loadURL(profileCreationURL);
   } else {
