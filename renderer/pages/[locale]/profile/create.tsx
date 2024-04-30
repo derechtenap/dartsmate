@@ -112,6 +112,7 @@ const CreateProfilePage: NextPage = () => {
             color={form.getInputProps("color").value as string}
             size="xl"
             mx="auto"
+            variant="filled"
           >
             {getUsernameInitials(
               form.getInputProps("username").value as string
