@@ -12,6 +12,7 @@ import {
   ColorSwatch,
   DefaultMantineColor,
   Group,
+  Stack,
   TextInput,
   useMantineTheme,
 } from "@mantine/core";
@@ -80,55 +81,55 @@ const EditProfilePage: NextPage = () => {
   if (form.values) {
     return (
       <DefaultLayout withNavbarOpen>
-        {JSON.stringify(form.values)}
-
-        <Avatar
-          color={form.getInputProps("color").value as string}
-          size="xl"
-          mx="auto"
-          variant="filled"
-        >
-          {getUsernameInitials(
-            (form.getInputProps("username").value as string) || ""
-          )}
-        </Avatar>
-        <Group>{swatches}</Group>
-        <Group grow>
-          <TextInput
-            data-autofocus
-            label="First Name"
-            placeholder="John"
-            {...form.getInputProps("name.firstName")}
-          />
-          <TextInput
-            label="Last Name"
-            placeholder="Marston"
-            {...form.getInputProps("name.lastName")}
-          />
-        </Group>
-        <TextInput
-          label="Username"
-          placeholder="Johnny Boy"
-          {...form.getInputProps("username")}
-        />
-        <Group>
-          <Button
-            disabled={!form.isValid()}
-            leftSection={<IconUserEdit />}
-            onClick={handleEditProfile}
-            tt="uppercase"
-            w="fit-content"
+        <Stack gap="lg" m="lg">
+          <Avatar
+            color={form.getInputProps("color").value as string}
+            size="xl"
+            mx="auto"
+            variant="filled"
           >
-            Update Profile
-          </Button>
-          <Button
-            c="dimmed"
-            variant="default"
-            onClick={() => void router.push(`/${locale}/profile`)}
-          >
-            {t("no")}
-          </Button>
-        </Group>
+            {getUsernameInitials(
+              (form.getInputProps("username").value as string) || ""
+            )}
+          </Avatar>
+          <Group mx="auto">{swatches}</Group>
+          <Group grow>
+            <TextInput
+              data-autofocus
+              label="First Name"
+              placeholder="John"
+              {...form.getInputProps("name.firstName")}
+            />
+            <TextInput
+              label="Last Name"
+              placeholder="Marston"
+              {...form.getInputProps("name.lastName")}
+            />
+          </Group>
+          <TextInput
+            label="Username"
+            placeholder="Johnny Boy"
+            {...form.getInputProps("username")}
+          />
+          <Group>
+            <Button
+              disabled={!form.isValid()}
+              leftSection={<IconUserEdit />}
+              onClick={handleEditProfile}
+              tt="uppercase"
+              w="fit-content"
+            >
+              Update Profile
+            </Button>
+            <Button
+              c="dimmed"
+              variant="default"
+              onClick={() => void router.push(`/${locale}/profile`)}
+            >
+              {t("no")}
+            </Button>
+          </Group>
+        </Stack>
       </DefaultLayout>
     );
   }
