@@ -34,7 +34,7 @@ const SettingsPage = () => {
 
   const {
     t,
-    i18n: { language: local },
+    i18n: { language: locale },
   } = useTranslation();
 
   const settingsRoutes = [
@@ -66,8 +66,8 @@ const SettingsPage = () => {
   }));
 
   useEffect(() => {
-    window.ipc.setLocale(local);
-  }, [local]);
+    window.ipc.setLocale(locale);
+  }, [locale]);
 
   const dataColorSchemes: SegmentedControlProps["data"] = [
     {
@@ -89,7 +89,6 @@ const SettingsPage = () => {
         <Center style={{ gap: 10 }}>
           <IconMoon style={iconStyles} />
           <span>
-            {" "}
             {t("colorSchemes.dark", {
               ns: "settings",
             })}
@@ -184,7 +183,7 @@ const SettingsPage = () => {
             label={t("settings.language.title", {
               ns: "settings",
             })}
-            defaultValue={local}
+            defaultValue={locale}
             data={locals}
             onChange={(newLanguage) =>
               handleChangeLanguage(newLanguage as string)

@@ -20,7 +20,7 @@ import {
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { IconUserPlus } from "@tabler/icons-react";
-import { i18n, useTranslation } from "next-i18next";
+import { useTranslation } from "next-i18next";
 import sendIPC from "utils/ipc/send";
 import { useDisclosure } from "@mantine/hooks";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
@@ -30,10 +30,12 @@ import { useRouter } from "next/router";
 import type { Profile } from "types/profile";
 
 const CreateProfilePage: NextPage = () => {
-  const { t } = useTranslation();
+  const {
+    t,
+    i18n: { language: locale },
+  } = useTranslation();
   const theme = useMantineTheme();
   const router = useRouter();
-  const locale = i18n?.language as string;
   const userUUID = uuidv4();
 
   const [avatarColor, setAvatarColor] = useState<DefaultMantineColor>(

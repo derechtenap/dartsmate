@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import DefaultLayout from "@/components/layouts/Default";
 import { getStaticPaths, makeStaticProperties } from "lib/get-static";
-import { i18n, useTranslation } from "next-i18next";
+import { useTranslation } from "next-i18next";
 import { useEffect, useState } from "react";
 import type { Profile } from "types/profile";
 import { isNotEmpty, useForm } from "@mantine/form";
@@ -22,10 +22,12 @@ import { IconUserEdit } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 
 const EditProfilePage: NextPage = () => {
-  const { t } = useTranslation();
+  const {
+    t,
+    i18n: { language: locale },
+  } = useTranslation();
   const theme = useMantineTheme();
   const router = useRouter();
-  const locale = i18n?.language as string;
 
   const [defaultUser, setDefaultUser] = useState<Profile | null>(null);
 
