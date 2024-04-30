@@ -21,5 +21,21 @@
     "matches": "Matches",
     "trainings": "Trainings",
     "avg": "AVG"
+  },
+  "color": {
+    "blue": "Blue",
+    "cyan": "Cyan",
+    "dark": "Dark",
+    "grape": "Grape",
+    "gray": "Gray",
+    "green": "Green",
+    "indigo": "Indigo",
+    "lime": "Lime",
+    "orange": "Orange",
+    "pink": "Pink",
+    "red": "Red",
+    "teal": "Teal",
+    "violet": "Violet",
+    "yellow": "Yellow"
   }
 }

@@ -1,3 +1,30 @@
 {
-  "editProfile": "Edit Profile"
+  "profileCreation": {
+    "title": "Welcome! Let's Create Your Profile",
+    "description": "Get started by entering your details. All data is stored locally and won't be uploaded to the internet!"
+  },
+  "dartsmateWelcome": {
+    "title": "Welcome to Dartsmate!",
+    "description": "Your perfect companion for all things darts! Whether you're a casual player or a seasoned pro, Dartsmate is here to enhance your darting experience. Let the matches begin!"
+  },
+  "editProfile": "Edit Profile",
+  "formLabels": {
+    "firstName": {
+      "label": "First Name",
+      "placeholder": "John"
+    },
+    "lastName": {
+      "label": "Last Name",
+      "placeholder": "Marston"
+    },
+    "username": {
+      "label": "Username",
+      "placeholder": "Johnny Boy"
+    }
+  },
+  "buttons": {
+    "createProfile": "Create Profile",
+    "updateProfile": "Update Profile",
+    "cancel": "Cancel"
+  }
 }

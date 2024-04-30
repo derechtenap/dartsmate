@@ -21,5 +21,21 @@
     "matches": "Spiele",
     "trainings": "Trainings",
     "avg": "Durchschnitt"
+  },
+  "color": {
+    "blue": "Blau",
+    "cyan": "Türkis",
+    "dark": "Dunkel",
+    "grape": "Traube",
+    "gray": "Grau",
+    "green": "Grün",
+    "indigo": "Indigo",
+    "lime": "Limette",
+    "orange": "Orange",
+    "pink": "Rosa",
+    "red": "Rot",
+    "teal": "Blaugrün",
+    "violet": "Violett",
+    "yellow": "Gelb"
   }
 }

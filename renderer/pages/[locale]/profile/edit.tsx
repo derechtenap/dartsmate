@@ -11,6 +11,7 @@ import {
   CheckIcon,
   ColorSwatch,
   DefaultMantineColor,
+  Divider,
   Group,
   Stack,
   TextInput,
@@ -28,8 +29,8 @@ const EditProfilePage: NextPage = () => {
 
   const [defaultUser, setDefaultUser] = useState<Profile | null>(null);
 
-  const [avatarColor, setAvatarColor] = useState<DefaultMantineColor>(
-    defaultUser?.color || theme.primaryColor
+  const [avatarColor, setAvatarColor] = useState<DefaultMantineColor | null>(
+    null
   );
 
   const form = useForm<Profile>({
@@ -48,6 +49,7 @@ const EditProfilePage: NextPage = () => {
       setDefaultUser(defaultUserData);
       if (defaultUserData) {
         form.setValues(defaultUserData);
+        setAvatarColor(defaultUserData.color);
       }
     });
   }, []);
@@ -66,6 +68,7 @@ const EditProfilePage: NextPage = () => {
       key={color}
       style={{ cursor: "pointer" }}
       onClick={() => updateAvatarColor(color)}
+      title={t(`color.${color}`)}
     >
       {color === avatarColor ? (
         <CheckIcon width={15} style={{ color: "white" }} />
@@ -78,7 +81,7 @@ const EditProfilePage: NextPage = () => {
     void router.push(`/${locale}/profile`);
   };
 
-  if (form.values) {
+  if (defaultUser) {
     return (
       <DefaultLayout withNavbarOpen>
         <Stack gap="lg" m="lg">
@@ -96,21 +99,28 @@ const EditProfilePage: NextPage = () => {
           <Group grow>
             <TextInput
               data-autofocus
-              label="First Name"
-              placeholder="John"
+              label={t("formLabels.firstName.label", { ns: "profile" })}
+              placeholder={t("formLabels.firstName.placeholder", {
+                ns: "profile",
+              })}
               {...form.getInputProps("name.firstName")}
             />
             <TextInput
-              label="Last Name"
-              placeholder="Marston"
+              label={t("formLabels.lastName.label", { ns: "profile" })}
+              placeholder={t("formLabels.lastName.placeholder", {
+                ns: "profile",
+              })}
               {...form.getInputProps("name.lastName")}
             />
           </Group>
           <TextInput
-            label="Username"
-            placeholder="Johnny Boy"
+            label={t("formLabels.username.label", { ns: "profile" })}
+            placeholder={t("formLabels.username.placeholder", {
+              ns: "profile",
+            })}
             {...form.getInputProps("username")}
           />
+          <Divider />
           <Group>
             <Button
               disabled={!form.isValid()}
@@ -119,14 +129,14 @@ const EditProfilePage: NextPage = () => {
               tt="uppercase"
               w="fit-content"
             >
-              Update Profile
+              {t("buttons.updateProfile", { ns: "profile" })}
             </Button>
             <Button
               c="dimmed"
               variant="default"
               onClick={() => void router.push(`/${locale}/profile`)}
             >
-              {t("no")}
+              {t("buttons.cancel", { ns: "profile" })}
             </Button>
           </Group>
         </Stack>

@@ -78,6 +78,7 @@ const CreateProfilePage: NextPage = () => {
       key={color}
       style={{ cursor: "pointer" }}
       onClick={() => updateAvatarColor(color)}
+      title={t(`color.${color}`)}
     >
       {color === avatarColor ? (
         <CheckIcon width={15} style={{ color: "white" }} />
@@ -102,11 +103,8 @@ const CreateProfilePage: NextPage = () => {
         }}
       >
         <Stack maw={600} mx="auto" gap="xl">
-          <Title>Welcome! Let's Create Your Profile</Title>
-          <Text>
-            Get started by entering your details. All data is stored locally and
-            wont be uploaded to the internet!
-          </Text>
+          <Title>{t("profileCreation.title", { ns: "profile" })}</Title>
+          <Text>{t("profileCreation.description", { ns: "profile" })}</Text>
           <Divider />
           <Avatar
             color={form.getInputProps("color").value as string}
@@ -122,28 +120,34 @@ const CreateProfilePage: NextPage = () => {
           <Group grow>
             <TextInput
               data-autofocus
-              label="First Name"
-              placeholder="John"
+              label={t("formLabels.firstName.label", { ns: "profile" })}
+              placeholder={t("formLabels.firstName.placeholder", {
+                ns: "profile",
+              })}
               {...form.getInputProps("name.firstName")}
             />
             <TextInput
-              label="Last Name"
-              placeholder="Marston"
+              label={t("formLabels.lastName.label", { ns: "profile" })}
+              placeholder={t("formLabels.lastName.placeholder", {
+                ns: "profile",
+              })}
               {...form.getInputProps("name.lastName")}
             />
           </Group>
           <TextInput
-            label="Username"
-            placeholder="Johnny Boy"
+            label={t("formLabels.username.label", { ns: "profile" })}
+            placeholder={t("formLabels.username.placeholder", {
+              ns: "profile",
+            })}
             {...form.getInputProps("username")}
           />
           <Divider />
           <Group grow>
             <Button type="submit" disabled={!form.isValid()}>
-              Create Profile
+              {t("buttons.createProfile", { ns: "profile" })}
             </Button>
             <Button c="dimmed" variant="default" onClick={close}>
-              {t("closeApp")}
+              {t("buttons.cancel", { ns: "profile" })}
             </Button>
           </Group>
         </Stack>
@@ -155,11 +159,11 @@ const CreateProfilePage: NextPage = () => {
         <Grid.Col span="auto">
           <Center h="100vh" p="xl" maw={800}>
             <Stack gap="xl">
-              <Title fw="bold">Welcome to Dartsmate!</Title>
+              <Title fw="bold">
+                {t("dartsmateWelcome.title", { ns: "profile" })}
+              </Title>
               <Text c="dimmed" fz="xl">
-                Your perfect companion for all things darts! Whether you're a
-                casual player or a seasoned pro, Dartsmate is here to enhance
-                your darting experience. Let the matches begin!
+                {t("dartsmateWelcome.description", { ns: "profile" })}
               </Text>
               <Group>
                 <Button
@@ -168,7 +172,7 @@ const CreateProfilePage: NextPage = () => {
                   leftSection={<IconUserPlus />}
                   onClick={open}
                 >
-                  Create a Profile
+                  {t("buttons.createProfile", { ns: "profile" })}
                 </Button>
                 <Button
                   c="dimmed"
