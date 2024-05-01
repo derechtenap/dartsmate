@@ -39,7 +39,12 @@ const ProfileIndexPage: NextPage = () => {
         <Paper component="header" radius={0} p="xl" m={0}>
           <Stack>
             <Group align="start">
-              <Avatar color={defaultUser.color} size="xl" variant="filled">
+              <Avatar
+                color={defaultUser.color}
+                src={defaultUser.avatarImage}
+                size="xl"
+                variant="filled"
+              >
                 {getUsernameInitials(defaultUser.username)}
               </Avatar>
               <Stack gap={0}>
