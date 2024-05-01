@@ -128,13 +128,10 @@ const EditProfilePage: NextPage = () => {
               disabled={!form.isValid()}
               leftSection={<IconUserEdit />}
               onClick={handleEditProfile}
-              tt="uppercase"
-              w="fit-content"
             >
               {t("buttons.updateProfile", { ns: "profile" })}
             </Button>
             <Button
-              c="dimmed"
               variant="default"
               onClick={() => void router.push(`/${locale}/profile`)}
             >

@@ -168,19 +168,10 @@ const CreateProfilePage: NextPage = () => {
                 {t("dartsmateWelcome.description", { ns: "profile" })}
               </Text>
               <Group>
-                <Button
-                  tt="uppercase"
-                  w="fit-content"
-                  leftSection={<IconUserPlus />}
-                  onClick={open}
-                >
+                <Button leftSection={<IconUserPlus />} onClick={open}>
                   {t("buttons.createProfile", { ns: "profile" })}
                 </Button>
-                <Button
-                  c="dimmed"
-                  variant="default"
-                  onClick={() => sendIPC("close-app")}
-                >
+                <Button variant="default" onClick={() => sendIPC("close-app")}>
                   {t("closeApp")}
                 </Button>
               </Group>
