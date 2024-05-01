@@ -11,7 +11,6 @@ import {
   CheckIcon,
   ColorSwatch,
   DefaultMantineColor,
-  Divider,
   Group,
   Stack,
   TextInput,
@@ -20,6 +19,12 @@ import {
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import { IconUserEdit } from "@tabler/icons-react";
 import { useRouter } from "next/router";
+import {
+  Dropzone,
+  type FileWithPath,
+  IMAGE_MIME_TYPE,
+} from "@mantine/dropzone";
+import Resizer from "react-image-file-resizer";
 
 const EditProfilePage: NextPage = () => {
   const {
@@ -28,6 +33,9 @@ const EditProfilePage: NextPage = () => {
   } = useTranslation();
   const theme = useMantineTheme();
   const router = useRouter();
+  const avatarFileSize = 5 * 1024 ** 2; // 5MB
+  const avatarWidth = 128; // px
+  const avatarHeight = 128; // px
 
   const [defaultUser, setDefaultUser] = useState<Profile | null>(null);
 
@@ -83,20 +91,90 @@ const EditProfilePage: NextPage = () => {
     void router.push(`/${locale}/profile`);
   };
 
+  // Assuming this function is part of a React component or hook
+  const handleFileChange = (files: FileWithPath[]) => {
+    const file = files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = async (e) => {
+      if (!e.target) return;
+
+      try {
+        const resizedBase64 = await resizeImage(file); // Await the resizing result
+        form.setFieldValue("avatarImage", resizedBase64);
+      } catch (error) {
+        console.error("Error resizing the file: ", error);
+      }
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const resizeImage = (file: Blob): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      Resizer.imageFileResizer(
+        file,
+        avatarWidth, // New width
+        avatarHeight, // New height
+        "WEBP", // Output format
+        75, // Quality
+        0, // Rotation
+        (uri) => {
+          if (typeof uri === "string") {
+            resolve(uri);
+          } else {
+            reject(new Error("Failed to resize image"));
+          }
+        },
+        "base64"
+      );
+    });
+  };
+
   if (defaultUser) {
     return (
       <DefaultLayout withNavbarOpen>
-        <Stack gap="lg" m="lg">
+        <Stack gap="xl" mt="xl">
           <Avatar
-            color={form.getInputProps("color").value as string}
+            color={form.getValues().color}
+            src={form.values.avatarImage}
             size="xl"
             mx="auto"
             variant="filled"
           >
-            {getUsernameInitials(
-              (form.getInputProps("username").value as string) || ""
-            )}
+            <Dropzone
+              onDrop={(files) => {
+                handleFileChange(files);
+              }}
+              onReject={(files) => console.log("Rejected files", files)}
+              maxSize={avatarFileSize}
+              accept={IMAGE_MIME_TYPE}
+              styles={{
+                root: {
+                  background: "transparent",
+                  border: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                  height: "100%",
+                },
+              }}
+              maxFiles={1}
+              multiple={false}
+            >
+              {getUsernameInitials(form.values.username)}
+            </Dropzone>
           </Avatar>
+          <Button
+            disabled={!form.values.avatarImage}
+            onClick={() => form.setFieldValue("avatarImage", undefined)}
+          >
+            RESET_AVATAR
+          </Button>
           <Group mx="auto">{swatches}</Group>
           <Group grow>
             <TextInput
@@ -122,10 +200,9 @@ const EditProfilePage: NextPage = () => {
             })}
             {...form.getInputProps("username")}
           />
-          <Divider />
           <Group>
             <Button
-              disabled={!form.isValid()}
+              disabled={!form.isValid() || !form.isTouched()}
               leftSection={<IconUserEdit />}
               onClick={handleEditProfile}
             >
@@ -139,6 +216,14 @@ const EditProfilePage: NextPage = () => {
             </Button>
           </Group>
         </Stack>
+        <code>
+          {JSON.stringify([
+            form.isValid(),
+            form.isTouched(),
+            form.isDirty(),
+            form.values,
+          ])}
+        </code>
       </DefaultLayout>
     );
   }

@@ -1,6 +1,7 @@
 import type { DefaultMantineColor } from "@mantine/core";
 
 declare type Profile = {
+  avatarImage?: string;
   bio: string;
   color: DefaultMantineColor;
   createdAt: number;
