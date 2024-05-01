@@ -28,6 +28,12 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/router";
 import type { Profile } from "types/profile";
+import {
+  Dropzone,
+  type FileWithPath,
+  IMAGE_MIME_TYPE,
+} from "@mantine/dropzone";
+import Resizer from "react-image-file-resizer";
 
 const CreateProfilePage: NextPage = () => {
   const {
@@ -44,8 +50,13 @@ const CreateProfilePage: NextPage = () => {
 
   const [opened, { open, close }] = useDisclosure(false);
 
+  const avatarFileSize = 5 * 1024 ** 2; // 5MB
+  const avatarWidth = 128; // px
+  const avatarHeight = 128; // px
+
   const form = useForm<Profile>({
     initialValues: {
+      avatarImage: undefined,
       bio: "",
       createdAt: Date.now(),
       updatedAt: Date.now(),
@@ -71,6 +82,48 @@ const CreateProfilePage: NextPage = () => {
     setAvatarColor(color);
     form.setValues({
       color: color,
+    });
+  };
+
+  const handleFileChange = (files: FileWithPath[]) => {
+    const file = files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = async (e) => {
+      if (!e.target) return;
+
+      try {
+        const resizedBase64 = await resizeImage(file);
+        form.setFieldValue("avatarImage", resizedBase64);
+      } catch (error) {
+        console.error("Error resizing the file: ", error);
+      }
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const resizeImage = (file: Blob): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      Resizer.imageFileResizer(
+        file,
+        avatarWidth, // New width
+        avatarHeight, // New height
+        "WEBP", // Output format
+        75, // Quality
+        0, // Rotation
+        (uri) => {
+          if (typeof uri === "string") {
+            resolve(uri);
+          } else {
+            reject(new Error("Failed to resize image"));
+          }
+        },
+        "base64"
+      );
     });
   };
 
@@ -109,14 +162,39 @@ const CreateProfilePage: NextPage = () => {
           <Text>{t("profileCreation.description", { ns: "profile" })}</Text>
           <Divider />
           <Avatar
-            color={form.getInputProps("color").value as string}
+            color={form.getValues().color}
+            src={form.values.avatarImage}
             size="xl"
             mx="auto"
             variant="filled"
           >
-            {getUsernameInitials(
-              form.getInputProps("username").value as string
-            )}
+            <Dropzone
+              onDrop={(files) => {
+                handleFileChange(files);
+              }}
+              onReject={(files) => console.log("Rejected files", files)}
+              maxSize={avatarFileSize}
+              accept={IMAGE_MIME_TYPE}
+              styles={{
+                root: {
+                  background: "transparent",
+                  border: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                  height: "100%",
+                },
+              }}
+              maxFiles={1}
+              multiple={false}
+            >
+              {form.values.username ? (
+                getUsernameInitials(form.values.username)
+              ) : (
+                <>?</>
+              )}
+            </Dropzone>
           </Avatar>
           <Group>{swatches}</Group>
           <Group grow>
@@ -148,7 +226,7 @@ const CreateProfilePage: NextPage = () => {
             <Button type="submit" disabled={!form.isValid()}>
               {t("buttons.createProfile", { ns: "profile" })}
             </Button>
-            <Button c="dimmed" variant="default" onClick={close}>
+            <Button variant="default" onClick={close}>
               {t("buttons.cancel", { ns: "profile" })}
             </Button>
           </Group>

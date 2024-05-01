@@ -91,7 +91,6 @@ const EditProfilePage: NextPage = () => {
     void router.push(`/${locale}/profile`);
   };
 
-  // Assuming this function is part of a React component or hook
   const handleFileChange = (files: FileWithPath[]) => {
     const file = files[0];
 
@@ -103,7 +102,7 @@ const EditProfilePage: NextPage = () => {
       if (!e.target) return;
 
       try {
-        const resizedBase64 = await resizeImage(file); // Await the resizing result
+        const resizedBase64 = await resizeImage(file);
         form.setFieldValue("avatarImage", resizedBase64);
       } catch (error) {
         console.error("Error resizing the file: ", error);
