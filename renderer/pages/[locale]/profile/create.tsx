@@ -152,7 +152,7 @@ const CreateProfilePage: NextPage = () => {
         fullScreen
         onSubmit={(e) => {
           e.preventDefault();
-          console.info(form.values);
+          // TODO: Check if the creation was successful...
           window.ipc.setDefaultUser(form.values);
           void router.push(`/${locale}`);
         }}

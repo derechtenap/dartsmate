@@ -91,6 +91,7 @@ const EditProfilePage: NextPage = () => {
     void router.push(`/${locale}/profile`);
   };
 
+  // TODO: Give the user feedback if the file was to big or unsupported etc...
   const handleFileChange = (files: FileWithPath[]) => {
     const file = files[0];
 
