@@ -36,6 +36,7 @@ import {
 } from "@mantine/dropzone";
 import { notifications } from "@mantine/notifications";
 import resizeAvatarImage from "utils/avatars/resizeAvatarImage";
+import { DEFAULT_AVATAR_FILE_SIZE } from "utils/avatars/constants";
 
 const CreateProfilePage: NextPage = () => {
   const {
@@ -51,8 +52,6 @@ const CreateProfilePage: NextPage = () => {
   );
 
   const [opened, { open, close }] = useDisclosure(false);
-
-  const avatarFileSize = 5 * 1024 ** 2; // 5MB
 
   const form = useForm<Profile>({
     initialValues: {
@@ -170,7 +169,7 @@ const CreateProfilePage: NextPage = () => {
             <Dropzone
               onDrop={(files) => handleFileChange(files)}
               onReject={(files) => handleImageRejection(files)}
-              maxSize={avatarFileSize}
+              maxSize={DEFAULT_AVATAR_FILE_SIZE}
               accept={IMAGE_MIME_TYPE}
               styles={{
                 root: {

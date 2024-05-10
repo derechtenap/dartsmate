@@ -27,6 +27,7 @@ import {
 } from "@mantine/dropzone";
 import { notifications } from "@mantine/notifications";
 import resizeAvatarImage from "utils/avatars/resizeAvatarImage";
+import { DEFAULT_AVATAR_FILE_SIZE } from "utils/avatars/constants";
 
 const EditProfilePage: NextPage = () => {
   const {
@@ -35,7 +36,6 @@ const EditProfilePage: NextPage = () => {
   } = useTranslation();
   const theme = useMantineTheme();
   const router = useRouter();
-  const avatarFileSize = 1 * 1024 ** 2; // 1MB
 
   const [defaultUser, setDefaultUser] = useState<Profile | null>(null);
 
@@ -146,7 +146,7 @@ const EditProfilePage: NextPage = () => {
             <Dropzone
               onDrop={(files) => handleFileChange(files)}
               onReject={(files) => handleImageRejection(files)}
-              maxSize={avatarFileSize}
+              maxSize={DEFAULT_AVATAR_FILE_SIZE}
               accept={IMAGE_MIME_TYPE}
               styles={{
                 root: {

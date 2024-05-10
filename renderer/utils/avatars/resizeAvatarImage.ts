@@ -1,7 +1,5 @@
 import Resizer from "react-image-file-resizer";
-
-export const DEFAULT_AVATAR_HEIGHT = 128; // px
-export const DEFAULT_AVATAR_WIDTH = 128; // px
+import { DEFAULT_AVATAR_HEIGHT, DEFAULT_AVATAR_WIDTH } from "./constants";
 
 type AvatarOutputFormat = "JPEG" | "PNG" | "WEBP";
 
