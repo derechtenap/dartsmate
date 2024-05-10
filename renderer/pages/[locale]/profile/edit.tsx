@@ -212,14 +212,6 @@ const EditProfilePage: NextPage = () => {
             </Button>
           </Group>
         </Stack>
-        <code>
-          {JSON.stringify([
-            form.isValid(),
-            form.isTouched(),
-            form.isDirty(),
-            form.values,
-          ])}
-        </code>
       </DefaultLayout>
     );
   }
