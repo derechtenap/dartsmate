@@ -131,12 +131,19 @@ const CreateProfilePage: NextPage = () => {
 
   const handleImageRejection = (files: FileRejection[]) => {
     /**
-     * The array contains only one file,
-     * because the file dropzone configuration is specifically
-     * set to accept a single file at a time.
+     * We expect that the array contains only one file since the dropzone
+     * is configured to accept a single file at a time. Nonetheless, we
+     * check if files array is not empty to prevent accessing undefined.
      */
+    if (files.length === 0) {
+      console.error("Expected one image file, but the file array was empty.");
+      return;
+    }
+
     const file = files[0];
+
     notifications.show({
+      autoClose: 20000, // 20 seconds
       title: t(`errors.${file.errors[0].code}.title`),
       message: t(`errors.${file.errors[0].code}.message`),
     });
