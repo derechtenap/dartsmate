@@ -23,8 +23,10 @@ import {
   Dropzone,
   type FileWithPath,
   IMAGE_MIME_TYPE,
+  type FileRejection,
 } from "@mantine/dropzone";
 import Resizer from "react-image-file-resizer";
+import { notifications } from "@mantine/notifications";
 
 const EditProfilePage: NextPage = () => {
   const {
@@ -33,7 +35,7 @@ const EditProfilePage: NextPage = () => {
   } = useTranslation();
   const theme = useMantineTheme();
   const router = useRouter();
-  const avatarFileSize = 5 * 1024 ** 2; // 5MB
+  const avatarFileSize = 1 * 1024 ** 2; // 1MB
   const avatarWidth = 128; // px
   const avatarHeight = 128; // px
 
@@ -91,7 +93,6 @@ const EditProfilePage: NextPage = () => {
     void router.push(`/${locale}/profile`);
   };
 
-  // TODO: Give the user feedback if the file was to big or unsupported etc...
   const handleFileChange = (files: FileWithPath[]) => {
     const file = files[0];
 
@@ -134,6 +135,19 @@ const EditProfilePage: NextPage = () => {
     });
   };
 
+  const handleImageRejection = (files: FileRejection[]) => {
+    /**
+     * The array contains only one file,
+     * because the file dropzone configuration is specifically
+     * set to accept a single file at a time.
+     */
+    const file = files[0];
+    notifications.show({
+      title: t(`errors.${file.errors[0].code}.title`),
+      message: t(`errors.${file.errors[0].code}.message`),
+    });
+  };
+
   if (defaultUser) {
     return (
       <DefaultLayout withNavbarOpen>
@@ -149,7 +163,7 @@ const EditProfilePage: NextPage = () => {
               onDrop={(files) => {
                 handleFileChange(files);
               }}
-              onReject={(files) => console.log("Rejected files", files)}
+              onReject={(files) => handleImageRejection(files)}
               maxSize={avatarFileSize}
               accept={IMAGE_MIME_TYPE}
               styles={{

@@ -37,5 +37,27 @@
     "teal": "Blaugrün",
     "violet": "Violett",
     "yellow": "Gelb"
+  },
+  "errors": {
+    "file-invalid-type": {
+      "title": "Ungültiger Dateityp",
+      "message": "Der von Ihnen hochgeladene Dateityp wird nicht unterstützt. Bitte laden Sie Dateien in den zulässigen Formaten hoch."
+    },
+    "file-too-large": {
+      "title": "Datei zu groß",
+      "message": "Die Datei, die Sie hochladen möchten, überschreitet die maximal zulässige Größe. Bitte verringern Sie die Dateigröße und versuchen Sie es erneut."
+    },
+    "file-too-small": {
+      "title": "Datei zu klein",
+      "message": "Die Datei, die Sie hochladen möchten, ist kleiner als die erforderliche Mindestgröße. Bitte überprüfen Sie Ihre Datei und versuchen Sie es erneut."
+    },
+    "file-many-files": {
+      "title": "Zu viele Dateien",
+      "message": "Sie haben versucht, zu viele Dateien auf einmal hochzuladen. Bitte reduzieren Sie die Anzahl der Dateien und versuchen Sie es erneut."
+    },
+    "too-many-files": {
+      "title": "Zu viele Dateien",
+      "message": "Sie haben die maximale Anzahl von Dateien, die hochgeladen werden dürfen, überschritten. Bitte reduzieren Sie die Anzahl der Dateien und versuchen Sie es erneut."
+    }
   }
 }

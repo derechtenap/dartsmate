@@ -32,8 +32,10 @@ import {
   Dropzone,
   type FileWithPath,
   IMAGE_MIME_TYPE,
+  type FileRejection,
 } from "@mantine/dropzone";
 import Resizer from "react-image-file-resizer";
+import { notifications } from "@mantine/notifications";
 
 const CreateProfilePage: NextPage = () => {
   const {
@@ -127,6 +129,19 @@ const CreateProfilePage: NextPage = () => {
     });
   };
 
+  const handleImageRejection = (files: FileRejection[]) => {
+    /**
+     * The array contains only one file,
+     * because the file dropzone configuration is specifically
+     * set to accept a single file at a time.
+     */
+    const file = files[0];
+    notifications.show({
+      title: t(`errors.${file.errors[0].code}.title`),
+      message: t(`errors.${file.errors[0].code}.message`),
+    });
+  };
+
   const swatches = Object.keys(theme.colors).map((color) => (
     <ColorSwatch
       color={theme.colors[color][6]}
@@ -172,7 +187,7 @@ const CreateProfilePage: NextPage = () => {
               onDrop={(files) => {
                 handleFileChange(files);
               }}
-              onReject={(files) => console.log("Rejected files", files)}
+              onReject={(files) => handleImageRejection(files)}
               maxSize={avatarFileSize}
               accept={IMAGE_MIME_TYPE}
               styles={{
