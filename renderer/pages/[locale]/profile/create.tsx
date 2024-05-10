@@ -191,9 +191,7 @@ const CreateProfilePage: NextPage = () => {
             variant="filled"
           >
             <Dropzone
-              onDrop={(files) => {
-                handleFileChange(files);
-              }}
+              onDrop={(files) => handleFileChange(files)}
               onReject={(files) => handleImageRejection(files)}
               maxSize={avatarFileSize}
               accept={IMAGE_MIME_TYPE}

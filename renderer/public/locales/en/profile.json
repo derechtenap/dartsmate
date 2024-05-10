@@ -24,6 +24,7 @@
   },
   "buttons": {
     "createProfile": "Create Profile",
+    "resetAvatarImage": "Reset avatar image",
     "updateProfile": "Update Profile",
     "cancel": "Cancel"
   }

@@ -167,9 +167,7 @@ const EditProfilePage: NextPage = () => {
             variant="filled"
           >
             <Dropzone
-              onDrop={(files) => {
-                handleFileChange(files);
-              }}
+              onDrop={(files) => handleFileChange(files)}
               onReject={(files) => handleImageRejection(files)}
               maxSize={avatarFileSize}
               accept={IMAGE_MIME_TYPE}
@@ -194,7 +192,7 @@ const EditProfilePage: NextPage = () => {
             disabled={!form.values.avatarImage}
             onClick={() => form.setFieldValue("avatarImage", undefined)}
           >
-            RESET_AVATAR
+            {t("buttons.resetAvatarImage", { ns: "profile" })}
           </Button>
           <Group mx="auto">{swatches}</Group>
           <Group grow>
