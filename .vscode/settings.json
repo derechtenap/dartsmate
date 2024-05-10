@@ -29,9 +29,11 @@
     "mantine",
     "Marston",
     "nextron",
+    "Resizer",
     "tabler",
     "tanstack",
-    "toastify"
+    "toastify",
+    "WEBP"
   ],
   "cSpell.language": "de, en"
 }

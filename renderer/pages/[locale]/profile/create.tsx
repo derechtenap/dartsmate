@@ -34,8 +34,8 @@ import {
   IMAGE_MIME_TYPE,
   type FileRejection,
 } from "@mantine/dropzone";
-import Resizer from "react-image-file-resizer";
 import { notifications } from "@mantine/notifications";
+import resizeAvatarImage from "utils/avatars/resizeAvatarImage";
 
 const CreateProfilePage: NextPage = () => {
   const {
@@ -53,8 +53,6 @@ const CreateProfilePage: NextPage = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const avatarFileSize = 5 * 1024 ** 2; // 5MB
-  const avatarWidth = 128; // px
-  const avatarHeight = 128; // px
 
   const form = useForm<Profile>({
     initialValues: {
@@ -98,7 +96,7 @@ const CreateProfilePage: NextPage = () => {
       if (!e.target) return;
 
       try {
-        const resizedBase64 = await resizeImage(file);
+        const resizedBase64 = await resizeAvatarImage({ file: file });
         form.setFieldValue("avatarImage", resizedBase64);
       } catch (error) {
         console.error("Error resizing the file: ", error);
@@ -106,27 +104,6 @@ const CreateProfilePage: NextPage = () => {
     };
 
     reader.readAsDataURL(file);
-  };
-
-  const resizeImage = (file: Blob): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      Resizer.imageFileResizer(
-        file,
-        avatarWidth, // New width
-        avatarHeight, // New height
-        "WEBP", // Output format
-        75, // Quality
-        0, // Rotation
-        (uri) => {
-          if (typeof uri === "string") {
-            resolve(uri);
-          } else {
-            reject(new Error("Failed to resize image"));
-          }
-        },
-        "base64"
-      );
-    });
   };
 
   const handleImageRejection = (files: FileRejection[]) => {
