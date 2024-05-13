@@ -14,6 +14,7 @@ import {
   Group,
   Stack,
   TextInput,
+  Tooltip,
   useMantineTheme,
 } from "@mantine/core";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
@@ -73,17 +74,17 @@ const EditProfilePage: NextPage = () => {
   };
 
   const swatches = Object.keys(theme.colors).map((color) => (
-    <ColorSwatch
-      color={theme.colors[color][6]}
-      key={color}
-      style={{ cursor: "pointer" }}
-      onClick={() => updateAvatarColor(color)}
-      title={t(`color.${color}`)}
-    >
-      {color === avatarColor ? (
-        <CheckIcon width={15} style={{ color: "white" }} />
-      ) : null}
-    </ColorSwatch>
+    <Tooltip key={color} label={t(`color.${color}`)} withArrow>
+      <ColorSwatch
+        color={theme.colors[color][6]}
+        style={{ cursor: "pointer" }}
+        onClick={() => updateAvatarColor(color)}
+      >
+        {color === avatarColor ? (
+          <CheckIcon width={15} style={{ color: theme.white }} />
+        ) : null}
+      </ColorSwatch>
+    </Tooltip>
   ));
 
   const handleEditProfile = () => {
