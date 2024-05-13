@@ -132,7 +132,7 @@ const SettingsPage = () => {
 
   const handleProfileDeletion = () => {
     window.ipc.deleteDefaultUser();
-    void router.push(`/${locale}/profile/create`);
+    void router.push(`/${locale}/welcome`);
   };
 
   const renderTabs = () => {

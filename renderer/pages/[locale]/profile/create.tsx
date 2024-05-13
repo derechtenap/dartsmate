@@ -2,16 +2,13 @@ import type { NextPage } from "next";
 import { getStaticPaths, makeStaticProperties } from "lib/get-static";
 import {
   Avatar,
-  BackgroundImage,
+  Box,
   Button,
-  Center,
   CheckIcon,
   ColorSwatch,
   DefaultMantineColor,
   Divider,
-  Grid,
   Group,
-  Modal,
   Stack,
   Text,
   TextInput,
@@ -20,10 +17,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
-import { IconUserPlus } from "@tabler/icons-react";
 import { useTranslation } from "next-i18next";
-import sendIPC from "utils/ipc/send";
-import { useDisclosure } from "@mantine/hooks";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -51,8 +45,6 @@ const CreateProfilePage: NextPage = () => {
   const [avatarColor, setAvatarColor] = useState<DefaultMantineColor>(
     theme.primaryColor
   );
-
-  const [opened, { open, close }] = useDisclosure(false);
 
   const form = useForm<Profile>({
     initialValues: {
@@ -141,120 +133,92 @@ const CreateProfilePage: NextPage = () => {
   ));
 
   return (
-    <>
-      <Modal
-        component="form"
-        opened={opened}
-        onClose={close}
-        withCloseButton={false}
-        closeOnClickOutside={false}
-        fullScreen
-        onSubmit={(e) => {
-          e.preventDefault();
-          // TODO: Check if the creation was successful...
-          window.ipc.setDefaultUser(form.values);
-          void router.push(`/${locale}`);
-        }}
-      >
-        <Stack maw={600} mx="auto" gap="xl">
-          <Title>{t("profileCreation.title", { ns: "profile" })}</Title>
-          <Text>{t("profileCreation.description", { ns: "profile" })}</Text>
-          <Divider />
-          <Avatar
-            color={form.getValues().color}
-            src={form.values.avatarImage}
-            size="xl"
-            mx="auto"
-            variant="filled"
+    <Box
+      component="form"
+      h="100vh"
+      onSubmit={(e) => {
+        e.preventDefault();
+        // TODO: Check if the creation was successful...
+        window.ipc.setDefaultUser(form.values);
+        void router.push(`/${locale}`);
+      }}
+    >
+      <Stack maw={600} mx="auto" gap="lg" h="100%" justify="center">
+        <Title>{t("profileCreation.title", { ns: "profile" })}</Title>
+        <Text>{t("profileCreation.description", { ns: "profile" })}</Text>
+        <Divider />
+        <Avatar
+          color={form.getValues().color}
+          src={form.values.avatarImage}
+          size="xl"
+          mx="auto"
+          variant="filled"
+        >
+          <Dropzone
+            onDrop={(files) => handleFileChange(files)}
+            onReject={(files) => handleImageRejection(files)}
+            maxSize={DEFAULT_AVATAR_FILE_SIZE}
+            accept={IMAGE_MIME_TYPE}
+            styles={{
+              root: {
+                background: "transparent",
+                border: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+                height: "100%",
+              },
+            }}
+            maxFiles={1}
+            multiple={false}
           >
-            <Dropzone
-              onDrop={(files) => handleFileChange(files)}
-              onReject={(files) => handleImageRejection(files)}
-              maxSize={DEFAULT_AVATAR_FILE_SIZE}
-              accept={IMAGE_MIME_TYPE}
-              styles={{
-                root: {
-                  background: "transparent",
-                  border: 0,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "100%",
-                  height: "100%",
-                },
-              }}
-              maxFiles={1}
-              multiple={false}
-            >
-              {form.values.username ? (
-                getUsernameInitials(form.values.username)
-              ) : (
-                <>?</>
-              )}
-            </Dropzone>
-          </Avatar>
-          <Group>{swatches}</Group>
-          <Group grow>
-            <TextInput
-              data-autofocus
-              label={t("formLabels.firstName.label", { ns: "profile" })}
-              placeholder={t("formLabels.firstName.placeholder", {
-                ns: "profile",
-              })}
-              {...form.getInputProps("name.firstName")}
-            />
-            <TextInput
-              label={t("formLabels.lastName.label", { ns: "profile" })}
-              placeholder={t("formLabels.lastName.placeholder", {
-                ns: "profile",
-              })}
-              {...form.getInputProps("name.lastName")}
-            />
-          </Group>
+            {form.values.username ? (
+              getUsernameInitials(form.values.username)
+            ) : (
+              <>?</>
+            )}
+          </Dropzone>
+        </Avatar>
+        <Group>{swatches}</Group>
+        <Group grow>
           <TextInput
-            label={t("formLabels.username.label", { ns: "profile" })}
-            placeholder={t("formLabels.username.placeholder", {
+            data-autofocus
+            label={t("formLabels.firstName.label", { ns: "profile" })}
+            placeholder={t("formLabels.firstName.placeholder", {
               ns: "profile",
             })}
-            {...form.getInputProps("username")}
+            {...form.getInputProps("name.firstName")}
           />
-          <Divider />
-          <Group grow>
-            <Button type="submit" disabled={!form.isValid()}>
-              {t("buttons.createProfile", { ns: "profile" })}
-            </Button>
-            <Button variant="default" onClick={close}>
-              {t("buttons.cancel", { ns: "profile" })}
-            </Button>
-          </Group>
-        </Stack>
-      </Modal>
-      <Grid mah="100vh" p={0} m={0} gutter={0}>
-        <Grid.Col h="100vh" span={6} m={0} p={0}>
-          <BackgroundImage src="/images/dartboard.jpg" h="100%" />
-        </Grid.Col>
-        <Grid.Col span="auto">
-          <Center h="100vh" p="xl" maw={800}>
-            <Stack gap="xl">
-              <Title fw="bold">
-                {t("dartsmateWelcome.title", { ns: "profile" })}
-              </Title>
-              <Text c="dimmed" fz="xl">
-                {t("dartsmateWelcome.description", { ns: "profile" })}
-              </Text>
-              <Group>
-                <Button leftSection={<IconUserPlus />} onClick={open}>
-                  {t("buttons.createProfile", { ns: "profile" })}
-                </Button>
-                <Button variant="default" onClick={() => sendIPC("close-app")}>
-                  {t("closeApp")}
-                </Button>
-              </Group>
-            </Stack>
-          </Center>
-        </Grid.Col>
-      </Grid>
-    </>
+          <TextInput
+            label={t("formLabels.lastName.label", { ns: "profile" })}
+            placeholder={t("formLabels.lastName.placeholder", {
+              ns: "profile",
+            })}
+            {...form.getInputProps("name.lastName")}
+          />
+        </Group>
+        <TextInput
+          label={t("formLabels.username.label", { ns: "profile" })}
+          placeholder={t("formLabels.username.placeholder", {
+            ns: "profile",
+          })}
+          {...form.getInputProps("username")}
+        />
+        <Divider />
+        <Group grow>
+          <Button type="submit" disabled={!form.isValid()}>
+            {t("buttons.createProfile", { ns: "profile" })}
+          </Button>
+          <Button
+            variant="default"
+            onClick={() => void router.push(`/${locale}/welcome`)}
+          >
+            {t("buttons.cancel", { ns: "profile" })}
+          </Button>
+        </Group>
+      </Stack>
+    </Box>
   );
 };
 
