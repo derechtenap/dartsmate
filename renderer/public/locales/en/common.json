@@ -14,5 +14,50 @@
     "profile": "Profile",
     "statistics": "Statistics",
     "settings": "Settings"
+  },
+  "stats": {
+    "darts": "Darts",
+    "180s": "180s",
+    "matches": "Matches",
+    "trainings": "Trainings",
+    "avg": "AVG"
+  },
+  "color": {
+    "blue": "Blue",
+    "cyan": "Cyan",
+    "dark": "Dark",
+    "grape": "Grape",
+    "gray": "Gray",
+    "green": "Green",
+    "indigo": "Indigo",
+    "lime": "Lime",
+    "orange": "Orange",
+    "pink": "Pink",
+    "red": "Red",
+    "teal": "Teal",
+    "violet": "Violet",
+    "yellow": "Yellow"
+  },
+  "errors": {
+    "file-invalid-type": {
+      "title": "Invalid File Type",
+      "message": "The file type you have uploaded is not supported. Please upload files in the allowed formats."
+    },
+    "file-too-large": {
+      "title": "File Too Large",
+      "message": "The file you are trying to upload exceeds the maximum allowed size. Please reduce the file size and try again."
+    },
+    "file-too-small": {
+      "title": "File Too Small",
+      "message": "The file you are trying to upload is smaller than the minimum required size. Please check your file and try again."
+    },
+    "file-many-files": {
+      "title": "Too Many Files",
+      "message": "You have attempted to upload too many files at once. Please reduce the number of files and try again."
+    },
+    "too-many-files": {
+      "title": "Too Many Files",
+      "message": "You have exceeded the limit of maximum files allowed to upload. Please reduce the number of files and try again."
+    }
   }
 }

@@ -12,6 +12,20 @@
     "language": {
       "title": "Sprache",
       "text": "Wählen Sie Ihre bevorzugte Sprache für die App aus."
+    },
+    "dangerZone": {
+      "btn": {
+        "deleteProfile": "Profil löschen"
+      },
+      "title": "Gefahrenzone",
+      "text": "Achtung! Änderungen in diesem Bereich sind unumkehrbar.",
+      "section": {
+        "deleteProfile": {
+          "title": "Profil löschen",
+          "text": "Löschen Sie Ihr aktuelles Profil. Dies setzt keine weitere App-Einsteillungen zurück.",
+          "confirmText": "Möchten Sie ihr Profil wirklich löschen?"
+        }
+      }
     }
   },
   "languages": {

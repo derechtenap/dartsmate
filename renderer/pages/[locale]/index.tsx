@@ -5,9 +5,12 @@ import { getStaticPaths, makeStaticProperties } from "../../lib/get-static";
 import DefaultLayout from "@/components/layouts/Default";
 
 const IndexPage = () => {
-  const { t } = useTranslation();
+  const {
+    // t,
+    i18n: { language: locale },
+  } = useTranslation();
 
-  return <DefaultLayout withNavbarOpen>Index Route</DefaultLayout>;
+  return <DefaultLayout withNavbarOpen>Index Route ({locale})</DefaultLayout>;
 };
 
 export default IndexPage;

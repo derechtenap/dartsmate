@@ -1,13 +1,17 @@
 import type { DefaultMantineColor } from "@mantine/core";
-import type { UUID } from "crypto";
 
 declare type Profile = {
+  avatarImage?: string;
   bio: string;
   color: DefaultMantineColor;
   createdAt: number;
+  name: {
+    firstName: string;
+    lastName: string;
+  };
   username: string;
   updatedAt: number;
-  uuid: UUID;
+  uuid: string;
   // badges?: {
   //  isDeveloper: boolean;
   //  isAlphaUser: boolean;
