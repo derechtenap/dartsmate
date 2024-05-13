@@ -23,6 +23,10 @@ const handler = {
     void ipcRenderer.invoke("setDefaultUser", defaultUser);
   },
 
+  deleteDefaultUser() {
+    void ipcRenderer.invoke("deleteDefaultUser");
+  },
+
   getDefaultUser() {
     return ipcRenderer.invoke("getDefaultUser");
   },

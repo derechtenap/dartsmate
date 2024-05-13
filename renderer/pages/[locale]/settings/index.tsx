@@ -17,8 +17,12 @@ import {
   SegmentedControlProps,
   Select,
   ComboboxData,
+  Button,
+  Modal,
+  Group,
 } from "@mantine/core";
 import {
+  IconAlertTriangle,
   IconDeviceDesktop,
   IconLanguage,
   IconMoon,
@@ -27,10 +31,12 @@ import {
 } from "@tabler/icons-react";
 import { i18n as _i18n } from "../../.././../next-i18next.config";
 import { useRouter } from "next/router";
+import { useDisclosure } from "@mantine/hooks";
 
 const SettingsPage = () => {
   const iconStyles = { height: rem(20), width: rem(20) };
   const { colorScheme, setColorScheme } = useMantineColorScheme();
+  const [opened, { open, close }] = useDisclosure(false);
 
   const {
     t,
@@ -51,6 +57,13 @@ const SettingsPage = () => {
       }),
       tabValue: "la",
       icon: <IconLanguage style={iconStyles} />,
+    },
+    {
+      label: t("settings.dangerZone.title", {
+        ns: "settings",
+      }),
+      tabValue: "da",
+      icon: <IconAlertTriangle style={iconStyles} />,
     },
   ];
 
@@ -116,6 +129,11 @@ const SettingsPage = () => {
   const handleChangeLanguage = (newLanguage: string) => {
     const newPath = router.pathname.replace("[locale]", newLanguage);
     void router.push(newPath);
+  };
+
+  const handleProfileDeletion = () => {
+    window.ipc.deleteDefaultUser();
+    void router.push(`/${locale}/profile/create`);
   };
 
   const renderTabs = () => {
@@ -194,14 +212,82 @@ const SettingsPage = () => {
     );
   };
 
+  const renderDangerZoneTab = () => {
+    return (
+      <Tabs.Panel value="da">
+        <Stack>
+          <Title>
+            {t("settings.dangerZone.title", {
+              ns: "settings",
+            })}
+          </Title>
+          <Text>
+            {t("settings.dangerZone.text", {
+              ns: "settings",
+            })}
+          </Text>
+          <Title order={2}>
+            {t("settings.dangerZone.section.deleteProfile.title", {
+              ns: "settings",
+            })}
+          </Title>
+          <Text mb="lg">
+            {t("settings.dangerZone.section.deleteProfile.text", {
+              ns: "settings",
+            })}
+          </Text>
+          <Button onClick={open} w="fit-content">
+            {t("settings.dangerZone.btn.deleteProfile", {
+              ns: "settings",
+            })}
+          </Button>
+        </Stack>
+      </Tabs.Panel>
+    );
+  };
+
   return (
     <DefaultLayout withNavbarOpen>
+      <Modal
+        opened={opened}
+        onClose={close}
+        title={t("settings.dangerZone.section.deleteProfile.title", {
+          ns: "settings",
+        })}
+        centered
+        overlayProps={{
+          backgroundOpacity: 0.55,
+          blur: 3,
+        }}
+        withCloseButton={false}
+      >
+        <Stack>
+          <Text>
+            {t("settings.dangerZone.section.deleteProfile.confirmText", {
+              ns: "settings",
+            })}
+          </Text>
+          <Group>
+            <Button onClick={handleProfileDeletion}>
+              {t("settings.dangerZone.btn.deleteProfile", {
+                ns: "settings",
+              })}
+            </Button>
+            <Button onClick={close} variant="default">
+              {t("buttons.cancel", {
+                ns: "profile",
+              })}
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
       <Grid gutter={0}>
         {renderTabs()}
         <Grid.Col span="auto" px="xs">
           <Tabs value={activeTab}>
             {renderColorSchemeTab()}
             {renderLanguageTab()}
+            {renderDangerZoneTab()}
           </Tabs>
         </Grid.Col>
       </Grid>
@@ -211,6 +297,10 @@ const SettingsPage = () => {
 
 export default SettingsPage;
 
-export const getStaticProps = makeStaticProperties(["common", "settings"]);
+export const getStaticProps = makeStaticProperties([
+  "common",
+  "profile",
+  "settings",
+]);
 
 export { getStaticPaths };

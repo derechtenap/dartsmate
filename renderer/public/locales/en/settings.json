@@ -12,6 +12,20 @@
     "language": {
       "title": "Language",
       "text": "Choose your preferred language for the app."
+    },
+    "dangerZone": {
+      "btn": {
+        "deleteProfile": "Delete Profile"
+      },
+      "title": "Danger Zone",
+      "text": "Caution! Changes in this area are irreversible.",
+      "section": {
+        "deleteProfile": {
+          "title": "Delete Profile",
+          "text": "Delete your current profile. This does not reset any other app settings.",
+          "confirmText": "Are you sure you want to delete your profile?"
+        }
+      }
     }
   },
   "languages": {
