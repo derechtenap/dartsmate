@@ -6,7 +6,7 @@ import DefaultLayout from "@/components/layouts/Default";
 
 const IndexPage = () => {
   const {
-    t,
+    // t,
     i18n: { language: locale },
   } = useTranslation();
 
