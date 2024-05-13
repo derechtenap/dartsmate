@@ -37,6 +37,7 @@ const SettingsPage = () => {
   const iconStyles = { height: rem(20), width: rem(20) };
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const [opened, { open, close }] = useDisclosure(false);
+  const router = useRouter();
 
   const {
     t,
@@ -67,7 +68,7 @@ const SettingsPage = () => {
     },
   ];
 
-  const [activeTab, setActiveTab] = useState<string | null>(
+  const [activeTab, setActiveTab] = useState<string>(
     settingsRoutes[0].tabValue
   );
 
@@ -123,8 +124,6 @@ const SettingsPage = () => {
       ),
     },
   ];
-
-  const router = useRouter();
 
   const handleChangeLanguage = (newLanguage: string) => {
     const newPath = router.pathname.replace("[locale]", newLanguage);
@@ -246,6 +245,30 @@ const SettingsPage = () => {
     );
   };
 
+  const renderModalContent = () => {
+    return (
+      <Stack>
+        <Text>
+          {t("settings.dangerZone.section.deleteProfile.confirmText", {
+            ns: "settings",
+          })}
+        </Text>
+        <Group>
+          <Button onClick={handleProfileDeletion}>
+            {t("settings.dangerZone.btn.deleteProfile", {
+              ns: "settings",
+            })}
+          </Button>
+          <Button onClick={close} variant="default">
+            {t("buttons.cancel", {
+              ns: "profile",
+            })}
+          </Button>
+        </Group>
+      </Stack>
+    );
+  };
+
   return (
     <DefaultLayout withNavbarOpen>
       <Modal
@@ -261,25 +284,7 @@ const SettingsPage = () => {
         }}
         withCloseButton={false}
       >
-        <Stack>
-          <Text>
-            {t("settings.dangerZone.section.deleteProfile.confirmText", {
-              ns: "settings",
-            })}
-          </Text>
-          <Group>
-            <Button onClick={handleProfileDeletion}>
-              {t("settings.dangerZone.btn.deleteProfile", {
-                ns: "settings",
-              })}
-            </Button>
-            <Button onClick={close} variant="default">
-              {t("buttons.cancel", {
-                ns: "profile",
-              })}
-            </Button>
-          </Group>
-        </Stack>
+        {renderModalContent()}
       </Modal>
       <Grid gutter={0}>
         {renderTabs()}
