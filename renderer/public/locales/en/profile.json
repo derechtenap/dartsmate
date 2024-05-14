@@ -3,10 +3,6 @@
     "title": "Welcome! Let's Create Your Profile",
     "description": "Get started by entering your details. All data is stored locally and won't be uploaded to the internet!"
   },
-  "dartsmateWelcome": {
-    "title": "Welcome to Dartsmate!",
-    "description": "Your perfect companion for all things darts! Whether you're a casual player or a seasoned pro, Dartsmate is here to enhance your darting experience. Let the matches begin!"
-  },
   "editProfile": "Edit Profile",
   "formLabels": {
     "firstName": {

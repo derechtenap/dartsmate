@@ -34,11 +34,9 @@ const WelcomePage: NextPage = () => {
     return (
       <Center h={pageHeight} p="xl" maw={800}>
         <Stack gap="xl">
-          <Title fw="bold">
-            {t("dartsmateWelcome.title", { ns: "profile" })}
-          </Title>
+          <Title fw="bold">{t("title", { ns: "welcome" })}</Title>
           <Text c="dimmed" fz="xl">
-            {t("dartsmateWelcome.description", { ns: "profile" })}
+            {t("description", { ns: "welcome" })}
           </Text>
           <Group>
             <Button
@@ -68,6 +66,10 @@ const WelcomePage: NextPage = () => {
 
 export default WelcomePage;
 
-export const getStaticProps = makeStaticProperties(["common", "profile"]);
+export const getStaticProps = makeStaticProperties([
+  "common",
+  "profile",
+  "welcome",
+]);
 
 export { getStaticPaths };

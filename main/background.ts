@@ -58,13 +58,13 @@ void (async () => {
   const defaultUser = userStore.get("defaultUser", null);
 
   const port = process.argv[2];
-  const profileCreationURL = isProd
-    ? `app://./${locale}/profile/create`
-    : `http://localhost:${port}/${locale}/profile/create`;
+  const welcomeRoute = isProd
+    ? `app://./${locale}/welcome`
+    : `http://localhost:${port}/${locale}/welcome`;
 
   if (!defaultUser) {
     // Default profile is undefined, load url to create a new profile
-    await mainWindow.loadURL(profileCreationURL);
+    await mainWindow.loadURL(welcomeRoute);
   } else {
     if (isProd) {
       await mainWindow.loadURL(`app://./${locale}/`);
