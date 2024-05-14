@@ -17,12 +17,14 @@ import { useRouter } from "next/router";
 import OnlyControlsLayout, {
   headerHeightOnlyControls,
 } from "@/components/layouts/OnlyControlsLayout";
+import { APP_NAME } from "utils/constants";
 
 const WelcomePage: NextPage = () => {
   const {
     t,
     i18n: { language: locale },
   } = useTranslation();
+
   const router = useRouter();
   const pageHeight = `calc(100vh - ${headerHeightOnlyControls}px)`;
 
@@ -34,16 +36,14 @@ const WelcomePage: NextPage = () => {
     return (
       <Center h={pageHeight} p="xl" maw={800}>
         <Stack gap="xl">
-          <Title fw="bold">{t("title", { ns: "welcome" })}</Title>
-          <Text c="dimmed" fz="xl">
-            {t("description", { ns: "welcome" })}
-          </Text>
+          <Title fw="bold">{t("welcome:title", { APP_NAME: APP_NAME })}</Title>
+          <Text>{t("welcome:description", { APP_NAME: APP_NAME })}</Text>
           <Group>
             <Button
               leftSection={<IconUserPlus />}
               onClick={() => void router.push(`/${locale}/profile/create`)}
             >
-              {t("buttons.createProfile", { ns: "profile" })}
+              {t("profile:buttons.createProfile")}
             </Button>
             <Button variant="default" onClick={() => sendIPC("close-app")}>
               {t("closeApp")}
