@@ -14,6 +14,16 @@ ipcMain.handle("getDefaultProfile", () => {
   return profilesStore.get("defaultProfile");
 });
 
+ipcMain.handle("setGuestProfile", (_event, profile) => {
+  const profiles = profilesStore.get("guestProfiles");
+  const newProfiles = [...(profiles || []), profile];
+  profilesStore.set("guestProfiles", newProfiles);
+});
+
+ipcMain.handle("getGuestProfiles", () => {
+  return profilesStore.get("guestProfiles");
+});
+
 ipcMain.handle("deleteDefaultProfile", () => {
   return profilesStore.delete("defaultProfile");
 });

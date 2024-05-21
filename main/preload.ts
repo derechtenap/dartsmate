@@ -19,8 +19,8 @@ const handler = {
     void ipcRenderer.invoke(`setLocale`, locale);
   },
 
-  setDefaultProfile(DefaultProfile: Profile) {
-    void ipcRenderer.invoke("setDefaultProfile", DefaultProfile);
+  setDefaultProfile(defaultProfile: Profile) {
+    void ipcRenderer.invoke("setDefaultProfile", defaultProfile);
   },
 
   deleteDefaultProfile() {
@@ -29,6 +29,20 @@ const handler = {
 
   getDefaultProfile() {
     return ipcRenderer.invoke("getDefaultProfile");
+  },
+
+  setGuestProfile(profile: Profile) {
+    void ipcRenderer.invoke("setGuestProfile", profile);
+  },
+
+  deleteGuestProfile(profile: Profile) {
+    console.info("Deleting Profile", profile);
+    // TODO: Add return
+    // void ipcRenderer.invoke("setGuestProfile", profile)
+  },
+
+  getGuestProfiles() {
+    return ipcRenderer.invoke("getGuestProfiles");
   },
 };
 

@@ -56,13 +56,15 @@ const EditProfilePage: NextPage = () => {
 
   useEffect(() => {
     // Fetching the default user and setting the form values
-    void window.ipc.getDefaultUser().then((defaultUserData: Profile | null) => {
-      setDefaultUser(defaultUserData);
-      if (defaultUserData) {
-        form.setValues(defaultUserData);
-        setAvatarColor(defaultUserData.color);
-      }
-    });
+    void window.ipc
+      .getDefaultProfile()
+      .then((defaultUserData: Profile | null) => {
+        setDefaultUser(defaultUserData);
+        if (defaultUserData) {
+          form.setValues(defaultUserData);
+          setAvatarColor(defaultUserData.color);
+        }
+      });
   }, []);
 
   // Manually update the color, since the ...props method doesn't work on the color swatches
@@ -88,7 +90,7 @@ const EditProfilePage: NextPage = () => {
   ));
 
   const handleEditProfile = () => {
-    window.ipc.setDefaultUser({ ...form.values, updatedAt: Date.now() });
+    window.ipc.setDefaultProfile({ ...form.values, updatedAt: Date.now() });
     void router.push(`/${locale}/profile`);
   };
 

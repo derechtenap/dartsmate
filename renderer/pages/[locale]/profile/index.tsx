@@ -30,7 +30,7 @@ const ProfileIndexPage: NextPage = () => {
   const [defaultUser, setDefaultUser] = useState<Profile | null>(null);
 
   useEffect(() => {
-    void window.ipc.getDefaultUser().then(setDefaultUser);
+    void window.ipc.getDefaultProfile().then(setDefaultUser);
   }, []);
 
   if (defaultUser) {

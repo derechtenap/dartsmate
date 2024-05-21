@@ -148,8 +148,17 @@ const CreateProfilePage: NextPage = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    window.ipc.setDefaultProfile(form.values);
+    console.info("Is Guest?", isGuestProfile);
+
     // TODO: Check if the process was successful!
+    if (isGuestProfile) {
+      window.ipc.setGuestProfile(form.values);
+      void router.push(`/${locale}`);
+      return;
+    }
+
+    window.ipc.setDefaultProfile(form.values);
+
     void router.push(`/${locale}`);
   };
   return (
