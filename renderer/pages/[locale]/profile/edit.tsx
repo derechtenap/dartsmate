@@ -172,28 +172,24 @@ const EditProfilePage: NextPage = () => {
             disabled={!form.values.avatarImage}
             onClick={() => form.setFieldValue("avatarImage", undefined)}
           >
-            {t("buttons.resetAvatarImage", { ns: "profile" })}
+            {t("profile:buttons.resetAvatarImage")}
           </Button>
           <Group mx="auto">{swatches}</Group>
           <Group grow>
             <TextInput
               data-autofocus
-              label={t("formLabels.firstName.label", { ns: "profile" })}
-              placeholder={t("formLabels.firstName.placeholder", {
-                ns: "profile",
-              })}
+              label={t("profile:formLabels.firstName.label")}
+              placeholder={t("profile:formLabels.firstName.placeholder")}
               {...form.getInputProps("name.firstName")}
             />
             <TextInput
-              label={t("formLabels.lastName.label", { ns: "profile" })}
-              placeholder={t("formLabels.lastName.placeholder", {
-                ns: "profile",
-              })}
+              label={t("profile:formLabels.lastName.label")}
+              placeholder={t("profile:formLabels.lastName.placeholder")}
               {...form.getInputProps("name.lastName")}
             />
           </Group>
           <TextInput
-            label={t("formLabels.username.label", { ns: "profile" })}
+            label={t("profile:formLabels.username.label")}
             placeholder={t("formLabels.username.placeholder", {
               ns: "profile",
             })}
@@ -205,13 +201,13 @@ const EditProfilePage: NextPage = () => {
               leftSection={<IconUserEdit />}
               onClick={handleEditProfile}
             >
-              {t("buttons.updateProfile", { ns: "profile" })}
+              {t("profile:buttons.updateProfile")}
             </Button>
             <Button
               variant="default"
               onClick={() => void router.push(`/${locale}/profile`)}
             >
-              {t("buttons.cancel", { ns: "profile" })}
+              {t("profile:buttons.cancel")}
             </Button>
           </Group>
         </Stack>

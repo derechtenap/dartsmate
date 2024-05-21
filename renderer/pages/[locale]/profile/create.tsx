@@ -135,8 +135,8 @@ const CreateProfilePage: NextPage = () => {
   const renderStepHeader = (title: string, description: string) => {
     return (
       <Paper p="lg" withBorder>
-        <Title>{t(title, { ns: "profile" })}</Title>
-        <Text c="dimmed">{t(description, { ns: "profile" })}</Text>
+        <Title>{t(title)}</Title>
+        <Text c="dimmed">{t(description)}</Text>
       </Paper>
     );
   };
@@ -147,8 +147,6 @@ const CreateProfilePage: NextPage = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    console.info("Is Guest?", isGuestProfile);
 
     // TODO: Check if the process was successful!
     if (isGuestProfile) {
@@ -172,61 +170,53 @@ const CreateProfilePage: NextPage = () => {
           >
             <Stepper.Step
               icon={<IconForms style={stepIconsStyles} />}
-              label={t("step.label.profile", { ns: "profile" })}
+              label={t("profile:profile.step.label.profile")}
             >
               {renderStepHeader(
-                "profileCreation.title",
-                "profileCreation.description"
+                "profile:profileCreation.title",
+                "profile:profileCreation.description"
               )}
               {JSON.stringify(router.query)}{" "}
               <Stack my="lg">
                 <Group grow>
                   <TextInput
                     data-autofocus
-                    label={t("formLabels.firstName.label", { ns: "profile" })}
-                    placeholder={t("formLabels.firstName.placeholder", {
-                      ns: "profile",
-                    })}
+                    label={t("profile:formLabels.firstName.label")}
+                    placeholder={t("profile:formLabels.firstName.placeholder")}
                     {...form.getInputProps("name.firstName")}
                   />
                   <TextInput
-                    label={t("formLabels.lastName.label", { ns: "profile" })}
-                    placeholder={t("formLabels.lastName.placeholder", {
-                      ns: "profile",
-                    })}
+                    label={t("profile:formLabels.lastName.label")}
+                    placeholder={t("profile:formLabels.lastName.placeholder")}
                     {...form.getInputProps("name.lastName")}
                   />
                 </Group>
                 <TextInput
-                  label={t("formLabels.username.label", { ns: "profile" })}
-                  placeholder={t("formLabels.username.placeholder", {
-                    ns: "profile",
-                  })}
+                  label={t("profile:formLabels.username.label")}
+                  placeholder={t("profile:formLabels.username.placeholder")}
                   {...form.getInputProps("username")}
                 />
                 <Textarea
-                  label={t("formLabels.bio.label", { ns: "profile" })}
-                  placeholder={t("formLabels.bio.placeholder", {
-                    ns: "profile",
-                  })}
+                  label={t("profile:formLabels.bio.label")}
+                  placeholder={t("profile:formLabels.bio.placeholder")}
                   {...form.getInputProps("bio")}
                 />
               </Stack>
             </Stepper.Step>
-            <Stepper.Step label={t("step.label.misc", { ns: "profile" })}>
+            <Stepper.Step label={t("profile:step.label.misc")}>
               {renderStepHeader(
-                "stepsProfileCreation.misc.title",
-                "stepsProfileCreation.misc.description"
+                "profile:stepsProfileCreation.misc.title",
+                "profile:stepsProfileCreation.misc.description"
               )}
               <Group mt="lg">{swatches}</Group>
             </Stepper.Step>
             <Stepper.Step
               icon={<IconUserCircle style={stepIconsStyles} />}
-              label={t("step.label.avatar", { ns: "profile" })}
+              label={t("profile:step.label.avatar")}
             >
               {renderStepHeader(
-                "stepsProfileCreation.avatar.title",
-                "stepsProfileCreation.avatar.description"
+                "profile:stepsProfileCreation.avatar.title",
+                "profile:stepsProfileCreation.avatar.description"
               )}
               <Avatar
                 color={form.values.color}
@@ -244,12 +234,12 @@ const CreateProfilePage: NextPage = () => {
                   leftSection={<IconCamera stroke={1.5} />}
                   variant="default"
                 >
-                  {t("webcam", { ns: "profile" })}
+                  {t("profile:webcam")}
                 </Button>
                 <FileButton
                   onChange={setFile}
                   accept="image/png,image/jpeg"
-                  aria-label={t("photoUpload", { ns: "profile" })}
+                  aria-label={t("profile:photoUpload")}
                   multiple={false}
                 >
                   {(props) => (
@@ -258,7 +248,7 @@ const CreateProfilePage: NextPage = () => {
                       leftSection={<IconPhotoUp stroke={1.5} />}
                       variant="default"
                     >
-                      {t("photoUpload", { ns: "profile" })}
+                      {t("profile:photoUpload")}
                     </Button>
                   )}
                 </FileButton>
@@ -270,23 +260,22 @@ const CreateProfilePage: NextPage = () => {
                     void form.setFieldValue("avatarImage", undefined)
                   }
                 >
-                  {t("removePhotoUpload", { ns: "profile" })}
+                  {t("profile:removePhotoUpload")}
                 </Button>
               </Group>
             </Stepper.Step>
             <Stepper.Completed>
               <Group grow>
                 <Button type="submit" disabled={!form.isValid()}>
-                  {t("buttons.createProfile", { ns: "profile" })}
+                  {t("profile:buttons.createProfile")}
                 </Button>
                 <Button
                   variant="default"
                   onClick={() => void router.push(`/${locale}/welcome`)}
                 >
-                  {t("buttons.cancel", { ns: "profile" })}
+                  {t("profile:buttons.cancel")}
                 </Button>
               </Group>
-              {JSON.stringify(form.values)}
             </Stepper.Completed>
           </Stepper>
           <Paper component={Group} p="xs" withBorder justify="space-between">

@@ -54,7 +54,7 @@ const ProfileIndexPage: NextPage = () => {
                 <Text c="dimmed">{defaultUser.username}</Text>
               </Stack>
               <Group ml="auto">
-                <Tooltip label={t("editProfile", { ns: "profile" })} withArrow>
+                <Tooltip label={t("profile:editProfile")} withArrow>
                   <ActionIcon
                     onClick={() => void router.push(`/${locale}/profile/edit`)}
                     variant="filled"
