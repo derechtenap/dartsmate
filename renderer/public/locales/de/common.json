@@ -1,6 +1,8 @@
 {
   "yes": "Ja",
   "no": "Nein",
+  "back": "Zurück",
+  "next": "Weiter",
   "toggleNavigation": "Navigation umschalten",
   "minimizeApp": "Minimieren",
   "fullscreenMode": "Vollbild",

@@ -1,6 +1,8 @@
 {
   "yes": "Yes",
   "no": "No",
+  "back": "Back",
+  "next": "Next",
   "toggleNavigation": "Toggle Navigation",
   "minimizeApp": "Minimize",
   "fullscreenMode": "Fullscreen",
