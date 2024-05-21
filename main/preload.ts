@@ -19,16 +19,16 @@ const handler = {
     void ipcRenderer.invoke(`setLocale`, locale);
   },
 
-  setDefaultUser(defaultUser: Profile) {
-    void ipcRenderer.invoke("setDefaultUser", defaultUser);
+  setDefaultProfile(DefaultProfile: Profile) {
+    void ipcRenderer.invoke("setDefaultProfile", DefaultProfile);
   },
 
-  deleteDefaultUser() {
-    void ipcRenderer.invoke("deleteDefaultUser");
+  deleteDefaultProfile() {
+    void ipcRenderer.invoke("deleteDefaultProfile");
   },
 
-  getDefaultUser() {
-    return ipcRenderer.invoke("getDefaultUser");
+  getDefaultProfile() {
+    return ipcRenderer.invoke("getDefaultProfile");
   },
 };
 

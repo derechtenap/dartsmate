@@ -12,7 +12,7 @@ const ProfileAvatar = ({
   ...mantineAvatarProps
 }: ProfileAvatarProps) => {
   return (
-    <Avatar color={profile.color} {...mantineAvatarProps}>
+    <Avatar color={profile.color} {...mantineAvatarProps} variant="filled">
       {getUsernameInitials(profile.username)}
     </Avatar>
   );

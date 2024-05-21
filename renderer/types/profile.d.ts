@@ -5,6 +5,7 @@ declare type Profile = {
   bio: string;
   color: DefaultMantineColor;
   createdAt: number;
+  isGuestProfile?: boolean;
   name: {
     firstName: string;
     lastName: string;
