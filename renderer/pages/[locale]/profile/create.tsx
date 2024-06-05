@@ -170,13 +170,12 @@ const CreateProfilePage: NextPage = () => {
           >
             <Stepper.Step
               icon={<IconForms style={stepIconsStyles} />}
-              label={t("profile:profile.step.label.profile")}
+              label={t("profile:step.label.profile")}
             >
               {renderStepHeader(
                 "profile:profileCreation.title",
                 "profile:profileCreation.description"
               )}
-              {JSON.stringify(router.query)}{" "}
               <Stack my="lg">
                 <Group grow>
                   <TextInput
@@ -273,7 +272,7 @@ const CreateProfilePage: NextPage = () => {
                   variant="default"
                   onClick={() => void router.push(`/${locale}/welcome`)}
                 >
-                  {t("profile:buttons.cancel")}
+                  {t("cancel")}
                 </Button>
               </Group>
             </Stepper.Completed>

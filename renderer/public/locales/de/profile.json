@@ -1,10 +1,14 @@
 {
   "profileCreation": {
-    "title": "Willkommen! Erstellen wir Ihr Profil",
-    "description": "Beginnen Sie, indem Sie Ihre Daten eingeben. Alle Daten werden lokal gespeichert und nicht ins Internet hochgeladen!"
+    "title": "Willkommen! Lassen Sie uns Ihr Profil erstellen.",
+    "description": "Geben Sie Ihre persönlichen Angaben ein, um Ihr Profil zu erstellen."
   },
   "editProfile": "Profil bearbeiten",
   "formLabels": {
+    "bio": {
+      "label": "Biografie",
+      "placeholder": "Erzählen Sie uns etwas über sich..."
+    },
     "firstName": {
       "label": "Vorname",
       "placeholder": "John"
@@ -21,7 +25,34 @@
   "buttons": {
     "createProfile": "Profil erstellen",
     "resetAvatarImage": "Avatar zurücksetzen",
-    "updateProfile": "Profil aktualisieren",
-    "cancel": "Abbrechen"
-  }
+    "updateProfile": "Profil aktualisieren"
+  },
+  "stepsProfileCreation": {
+    "profile": {
+      "title": "Profilinformationen",
+      "description": "Geben Sie Ihre grundlegenden Informationen ein."
+    },
+    "misc": {
+      "title": "Weitere Einstellungen",
+      "description": "Geben Sie zusätzliche Informationen ein."
+    },
+    "avatar": {
+      "title": "Ihr Avatar",
+      "description": "Erstellen Sie einen Avatar mit Ihren Initialen oder einem Profilbild."
+    },
+    "completed": {
+      "title": "Fertig",
+      "description": "Ihr Profil ist erstellt."
+    }
+  },
+  "step": {
+    "label": {
+      "profile": "Profil",
+      "misc": "Verschiedenes",
+      "avatar": "Avatar"
+    }
+  },
+  "photoUpload": "Bild auswählen",
+  "webcam": "Webcam",
+  "removePhotoUpload": "Bild entfernen"
 }
