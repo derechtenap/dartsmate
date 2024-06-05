@@ -131,7 +131,7 @@ const SettingsPage = () => {
   };
 
   const handleProfileDeletion = () => {
-    window.ipc.deleteDefaultUser();
+    window.ipc.deleteDefaultProfile();
     void router.push(`/${locale}/welcome`);
   };
 

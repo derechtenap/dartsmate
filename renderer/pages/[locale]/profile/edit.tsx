@@ -38,7 +38,7 @@ const EditProfilePage: NextPage = () => {
   const theme = useMantineTheme();
   const router = useRouter();
 
-  const [defaultUser, setDefaultUser] = useState<Profile | null>(null);
+  const [defaultProfile, setDefaultProfile] = useState<Profile | null>(null);
 
   const [avatarColor, setAvatarColor] = useState<DefaultMantineColor | null>(
     null
@@ -58,11 +58,11 @@ const EditProfilePage: NextPage = () => {
     // Fetching the default user and setting the form values
     void window.ipc
       .getDefaultProfile()
-      .then((defaultUserData: Profile | null) => {
-        setDefaultUser(defaultUserData);
-        if (defaultUserData) {
-          form.setValues(defaultUserData);
-          setAvatarColor(defaultUserData.color);
+      .then((defaultProfileData: Profile | null) => {
+        setDefaultProfile(defaultProfileData);
+        if (defaultProfileData) {
+          form.setValues(defaultProfileData);
+          setAvatarColor(defaultProfileData.color);
         }
       });
   }, []);
@@ -135,7 +135,7 @@ const EditProfilePage: NextPage = () => {
     });
   };
 
-  if (defaultUser) {
+  if (defaultProfile) {
     return (
       <DefaultLayout withNavbarOpen>
         <Stack gap="xl" mt="xl">

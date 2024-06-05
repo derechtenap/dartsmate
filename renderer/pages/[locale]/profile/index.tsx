@@ -27,31 +27,31 @@ const ProfileIndexPage: NextPage = () => {
   } = useTranslation();
   const router = useRouter();
 
-  const [defaultUser, setDefaultUser] = useState<Profile | null>(null);
+  const [defaultProfile, setDefaultProfile] = useState<Profile | null>(null);
 
   useEffect(() => {
-    void window.ipc.getDefaultProfile().then(setDefaultUser);
+    void window.ipc.getDefaultProfile().then(setDefaultProfile);
   }, []);
 
-  if (defaultUser) {
+  if (defaultProfile) {
     return (
       <DefaultLayout withNavbarOpen>
         <Paper component="header" radius={0} p="xl" m={0}>
           <Stack>
             <Group align="start">
               <Avatar
-                color={defaultUser.color}
-                src={defaultUser.avatarImage}
+                color={defaultProfile.color}
+                src={defaultProfile.avatarImage}
                 size="xl"
                 variant="filled"
               >
-                {getUsernameInitials(defaultUser.username)}
+                {getUsernameInitials(defaultProfile.username)}
               </Avatar>
               <Stack gap={0}>
                 <Title>
-                  {defaultUser.name.firstName} {defaultUser.name.lastName}
+                  {defaultProfile.name.firstName} {defaultProfile.name.lastName}
                 </Title>
-                <Text c="dimmed">{defaultUser.username}</Text>
+                <Text c="dimmed">{defaultProfile.username}</Text>
               </Stack>
               <Group ml="auto">
                 <Tooltip label={t("profile:editProfile")} withArrow>
