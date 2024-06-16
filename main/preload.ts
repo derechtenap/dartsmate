@@ -41,6 +41,10 @@ const handler = {
     // void ipcRenderer.invoke("setGuestProfile", profile)
   },
 
+  deleteAllGuestProfiles() {
+    console.info("Deleting all Guest Profiles");
+  },
+
   getGuestProfiles() {
     return ipcRenderer.invoke("getGuestProfiles");
   },
