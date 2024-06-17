@@ -7,6 +7,7 @@ import {
   Flex,
   Grid,
   Group,
+  LoadingOverlay,
   NumberFormatter,
   Progress,
   SimpleGrid,
@@ -85,8 +86,7 @@ const PlayingPage: NextPage = () => {
   };
 
   if (!matchSessionData) {
-    // TODO: Add better loading state if matchData is not available yet
-    return <div>Loading...</div>;
+    return <LoadingOverlay />;
   }
 
   const renderName = (name: Player["name"]) => {
