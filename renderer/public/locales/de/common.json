@@ -65,5 +65,9 @@
       "title": "Zu viele Dateien",
       "message": "Sie haben die maximale Anzahl von Dateien, die hochgeladen werden dürfen, überschritten. Bitte reduzieren Sie die Anzahl der Dateien und versuchen Sie es erneut."
     }
+  },
+  "defaultEmptyState": {
+    "text": "Schauen Sie später gerne noch einmal vorbei. Wenn das Problem weiterhin besteht, kontaktieren Sie bitte den Support für Unterstützung.",
+    "title": "Oops! Es scheint, als gäbe es momentan keine Daten zum Anzeigen."
   }
 }

@@ -65,5 +65,9 @@
       "title": "Too Many Files",
       "message": "You have exceeded the limit of maximum files allowed to upload. Please reduce the number of files and try again."
     }
+  },
+  "defaultEmptyState": {
+    "text": "Feel free to check back later. If the issue persists, please contact support for assistance.",
+    "title": "Oops! It seems like there's no data to display at the moment."
   }
 }

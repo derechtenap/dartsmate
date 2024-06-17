@@ -12,18 +12,24 @@ import {
   Stack,
   Text,
   Title,
+  Tooltip,
   rem,
 } from "@mantine/core";
 import type { Profile } from "types/profile";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
 import { useDisclosure, useListState, useSessionStorage } from "@mantine/hooks";
-import { IconUserMinus, IconUserPlus } from "@tabler/icons-react";
+import {
+  IconUserMinus,
+  IconUserPlus,
+  IconUserQuestion,
+} from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { useForm } from "@mantine/form";
 import { Match } from "types/match";
 import { APP_VERSION } from "utils/constants";
 import { v4 as uuidv4 } from "uuid";
 import getFormattedName from "utils/misc/getFormattedName";
+import EmptyState from "@/components/content/EmptyState";
 
 const NewGamePage = () => {
   const {
@@ -130,43 +136,53 @@ const NewGamePage = () => {
           </Text>
         </Group>
         {selectedProfiles.includes(profile) ? (
-          <ActionIcon
-            onClick={() => handleRemovePlayer(profile.uuid)}
-            disabled={false}
-            variant="default"
+          <Tooltip
+            label={t("lobby:removePlayerFromLobby", {
+              PLAYER_NAME: profile.username,
+            })}
+            withArrow
           >
-            <IconUserMinus
-              style={{
-                height: rem(18),
-                width: rem(18),
-              }}
-            />
-          </ActionIcon>
+            <ActionIcon
+              onClick={() => handleRemovePlayer(profile.uuid)}
+              disabled={false}
+              variant="default"
+            >
+              <IconUserMinus
+                style={{
+                  height: rem(18),
+                  width: rem(18),
+                }}
+              />
+            </ActionIcon>
+          </Tooltip>
         ) : (
-          <ActionIcon
-            onClick={() => handleAddPlayer(profile)}
-            disabled={false}
-            variant="default"
+          <Tooltip
+            label={t("lobby:addPlayerToLobby", {
+              PLAYER_NAME: profile.username,
+            })}
+            withArrow
           >
-            <IconUserPlus
-              style={{
-                height: rem(18),
-                width: rem(18),
-              }}
-            />
-          </ActionIcon>
+            <ActionIcon
+              onClick={() => handleAddPlayer(profile)}
+              disabled={false}
+              variant="default"
+            >
+              <IconUserPlus
+                style={{
+                  height: rem(18),
+                  width: rem(18),
+                }}
+              />
+            </ActionIcon>
+          </Tooltip>
         )}
       </Group>
     );
   };
 
   return (
-    <DefaultLayout withNavbarOpen>
-      <Drawer
-        opened={opened}
-        onClose={close}
-        title={t("lobby:btn.addGuestPlayer")}
-      >
+    <DefaultLayout withNavbarOpen={false}>
+      <Drawer opened={opened} onClose={close} title={t("lobby:addPlayer")}>
         <ScrollArea pr="xl" h="auto">
           <Stack>
             <Button
@@ -195,14 +211,18 @@ const NewGamePage = () => {
             <Group>
               <Title>{t("lobby:title.players")}</Title>
               <Button ml="auto" size="xs" variant="default" onClick={open}>
-                {t("lobby:btn.addGuestPlayer")}
+                {t("lobby:addPlayer")}
               </Button>
             </Group>
             {selectedProfiles.map((player) => (
               <div key={player.uuid}>{renderPlayer(player)}</div>
             ))}
             {selectedProfiles.length === 0 ? (
-              <>EMPTY_STATE_NO_PLAYER_SELECTED</>
+              <EmptyState
+                icon={<IconUserQuestion size={64} opacity={0.6} />}
+                title={t("lobby:emptyLobbyState.title")}
+                text={t("lobby:emptyLobbyState.text")}
+              />
             ) : undefined}
           </Stack>
         </Grid.Col>
@@ -214,7 +234,7 @@ const NewGamePage = () => {
             onClick={() => handleStartMatch()}
             mt="auto"
           >
-            {t("lobby:btn.startMatch")}
+            {t("lobby:startMatch")}
           </Button>
         </Grid.Col>
       </Grid>
