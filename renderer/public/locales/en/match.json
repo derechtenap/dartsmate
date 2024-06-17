@@ -5,5 +5,6 @@
     "triple": "Triple"
   },
   "removeThrows": "Delete last entry",
-  "nextPlayer": "Next Player"
+  "nextPlayer": "Next Player",
+  "abortMatch": "Abort Match"
 }

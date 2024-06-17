@@ -53,11 +53,15 @@ import { applyScoreMultiplier } from "utils/match/helper/applyScoreMultiplier";
 import isNonMultipleScore from "utils/match/helper/isNonMultipleScore";
 import { getTotalMatchAvg } from "utils/match/getTotalMatchAvg";
 import getFormattedName from "utils/misc/getFormattedName";
+import { useRouter } from "next/router";
 
 const PlayingPage: NextPage = () => {
   const theme = useMantineTheme();
 
-  const { t } = useTranslation();
+  const {
+    t,
+    i18n: { language: locale },
+  } = useTranslation();
   const [matchSessionData, setMatchSessionData] = useSessionStorage<Match>({
     defaultValue: undefined,
     key: "currentMatch",
@@ -72,6 +76,7 @@ const PlayingPage: NextPage = () => {
     triple: boolean;
   }>({ double: false, triple: false });
   const [matchRound, setMatchRound] = useState<DartThrow[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     if (matchSessionData) {
@@ -268,9 +273,10 @@ const PlayingPage: NextPage = () => {
     return highestScore;
   };
 
-  const getCardBackgroundColor = (color: string, index: number) => {
-    console.info(colorScheme);
-
+  const getCardBackgroundColor = (
+    color: string,
+    index: number
+  ): string | undefined => {
     if (index === currentPlayerIndex) {
       if (colorScheme === "dark") {
         return darken(getThemeColor(color, theme), 0.7);
@@ -282,6 +288,11 @@ const PlayingPage: NextPage = () => {
     }
 
     return undefined;
+  };
+
+  const handleAbortMatch = (): void => {
+    // TODO: Open Modal and save match to electron store
+    void router.push(`/${locale}/lobby`);
   };
 
   return (
@@ -474,6 +485,10 @@ const PlayingPage: NextPage = () => {
               onClick={() => handleRoundUpdate()}
             >
               {t("match:nextPlayer")}
+            </Button>
+            <Divider />
+            <Button onClick={() => handleAbortMatch()} variant="default">
+              {t("match:abortMatch")}
             </Button>
           </Stack>
         </Grid.Col>
