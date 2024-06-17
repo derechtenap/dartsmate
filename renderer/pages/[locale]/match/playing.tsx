@@ -8,6 +8,7 @@ import {
   Grid,
   Group,
   LoadingOverlay,
+  type MantineColorScheme,
   NumberFormatter,
   Progress,
   SimpleGrid,
@@ -16,6 +17,7 @@ import {
   Tooltip,
   darken,
   getThemeColor,
+  lighten,
   rem,
   useMantineTheme,
 } from "@mantine/core";
@@ -32,7 +34,11 @@ import type {
   Player,
 } from "types/match";
 import { useEffect, useState } from "react";
-import { useListState, useSessionStorage } from "@mantine/hooks";
+import {
+  useListState,
+  useLocalStorage,
+  useSessionStorage,
+} from "@mantine/hooks";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
 import {
   DARTBOARD_ZONES,
@@ -56,7 +62,9 @@ const PlayingPage: NextPage = () => {
     defaultValue: undefined,
     key: "currentMatch",
   });
-
+  const [colorScheme] = useLocalStorage<MantineColorScheme>({
+    key: "mantine-color-scheme-value",
+  });
   const [players, playersActions] = useListState<Player>([]);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
   const [scoreMultiplier, setScoreMultiplier] = useState<{
@@ -260,6 +268,22 @@ const PlayingPage: NextPage = () => {
     return highestScore;
   };
 
+  const getCardBackgroundColor = (color: string, index: number) => {
+    console.info(colorScheme);
+
+    if (index === currentPlayerIndex) {
+      if (colorScheme === "dark") {
+        return darken(getThemeColor(color, theme), 0.7);
+      }
+
+      if (colorScheme === "light") {
+        return lighten(getThemeColor(color, theme), 0.7);
+      }
+    }
+
+    return undefined;
+  };
+
   return (
     <OnlyControlsLayout>
       <Grid gutter={0}>
@@ -281,11 +305,7 @@ const PlayingPage: NextPage = () => {
                     px={0}
                     pb={0}
                     m="lg"
-                    bg={
-                      _idx === currentPlayerIndex
-                        ? darken(getThemeColor(player.color, theme), 0.7) // TODO: Add better support for light-mode
-                        : undefined
-                    }
+                    bg={getCardBackgroundColor(player.color, _idx)}
                   >
                     {player.isWinner ? (
                       <Tooltip
