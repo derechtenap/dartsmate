@@ -289,7 +289,9 @@ const PlayingPage: NextPage = () => {
                   >
                     {player.isWinner ? (
                       <Tooltip
-                        label={`${player.username} won the match!`}
+                        label={t("match:playerWon", {
+                          PLAYER_NAME: player.username,
+                        })}
                         withArrow
                       >
                         <IconCrown
@@ -341,7 +343,7 @@ const PlayingPage: NextPage = () => {
                         </Tooltip>
                       </Stack>
                       <Divider
-                        label={t("common:routes.statistics")}
+                        label={t("routes.statistics")}
                         color={
                           _idx === currentPlayerIndex ? player.color : undefined
                         }
@@ -358,16 +360,19 @@ const PlayingPage: NextPage = () => {
                         justify="space-between"
                       >
                         {/* TODO: Calc first nine average... */}
-                        <span>First 9 Average: 0</span>
                         <span>
-                          Highest Score:{" "}
+                          {t("stats.firstNineAvg")}
+                          {""}: 0
+                        </span>
+                        <span>
+                          {t("stats.highestScore")}:{" "}
                           <NumberFormatter
                             defaultValue={0}
                             value={getMatchHighestScore(players[_idx].rounds)}
                           />
                         </span>
                         <span>
-                          Darts Throws:{" "}
+                          {t("stats.dartsThrown")}:{" "}
                           {/* TODO: Lazy way... Not handling 1 or 2 dart inputs */}
                           {players[_idx].rounds.length * THROWS_PER_ROUND}
                         </span>
@@ -426,15 +431,15 @@ const PlayingPage: NextPage = () => {
                 onClick={() => handleMultiplierToggle("double")}
                 variant={scoreMultiplier.double ? undefined : "default"}
               >
-                Double
+                {t("match:multipliers.double")}
               </Button>
               <Button
                 onClick={() => handleMultiplierToggle("triple")}
                 variant={scoreMultiplier.triple ? undefined : "default"}
               >
-                Triple
+                {t("match:multipliers.triple")}
               </Button>
-              <Tooltip label={t("removeThrows")} withArrow>
+              <Tooltip label={t("match:removeThrows")} withArrow>
                 <Button
                   disabled={matchRound.length === 0}
                   onClick={() => handleRemoveLastThrow()}
@@ -448,7 +453,7 @@ const PlayingPage: NextPage = () => {
               disabled={matchSessionData.matchStatus === "finished"}
               onClick={() => handleRoundUpdate()}
             >
-              Next Player
+              {t("match:nextPlayer")}
             </Button>
           </Stack>
         </Grid.Col>
@@ -459,6 +464,6 @@ const PlayingPage: NextPage = () => {
 
 export default PlayingPage;
 
-export const getStaticProps = makeStaticProperties(["common"]);
+export const getStaticProps = makeStaticProperties(["common", "match"]);
 
 export { getStaticPaths };

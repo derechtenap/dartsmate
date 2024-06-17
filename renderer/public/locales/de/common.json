@@ -23,7 +23,10 @@
     "180s": "180er",
     "matches": "Spiele",
     "trainings": "Trainings",
-    "avg": "Durchschnitt"
+    "avg": "Durchschnitt",
+    "firstNineAvg": "Ersten 9 Darts-Durchschnitt",
+    "dartsThrown": "Darts geworfen",
+    "highestScore": "Höchste Aufnahme"
   },
   "color": {
     "blue": "Blau",

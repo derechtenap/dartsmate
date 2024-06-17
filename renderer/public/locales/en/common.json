@@ -23,7 +23,10 @@
     "180s": "180s",
     "matches": "Matches",
     "trainings": "Trainings",
-    "avg": "AVG"
+    "avg": "Average",
+    "firstNineAvg": "First 9 Average",
+    "dartsThrown": "Darts Thrown",
+    "highestScore": "Highest Score"
   },
   "color": {
     "blue": "Blue",

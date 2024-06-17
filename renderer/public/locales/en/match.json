@@ -1,0 +1,9 @@
+{
+  "playerWon": "{{PLAYER_NAME}} won the match!",
+  "multipliers": {
+    "double": "Double",
+    "triple": "Triple"
+  },
+  "removeThrows": "Delete last entry",
+  "nextPlayer": "Next Player"
+}
