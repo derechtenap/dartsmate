@@ -23,6 +23,7 @@ import { useForm } from "@mantine/form";
 import { Match } from "types/match";
 import { APP_VERSION } from "utils/constants";
 import { v4 as uuidv4 } from "uuid";
+import getFormattedName from "utils/misc/getFormattedName";
 
 const NewGamePage = () => {
   const {
@@ -122,7 +123,7 @@ const NewGamePage = () => {
             size="lg"
           />
           <Text>
-            {profile.name.firstName} {profile.name.lastName}{" "}
+            {getFormattedName(profile.name)}{" "}
             <Text component="span" c="dimmed" display="block" size="xs">
               {profile.username}
             </Text>

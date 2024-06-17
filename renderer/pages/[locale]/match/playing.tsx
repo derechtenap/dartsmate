@@ -46,6 +46,7 @@ import { getScores, getTotalRoundScore } from "utils/match/getTotalRoundScore";
 import { applyScoreMultiplier } from "utils/match/helper/applyScoreMultiplier";
 import isNonMultipleScore from "utils/match/helper/isNonMultipleScore";
 import { getTotalMatchAvg } from "utils/match/getTotalMatchAvg";
+import getFormattedName from "utils/misc/getFormattedName";
 
 const PlayingPage: NextPage = () => {
   const theme = useMantineTheme();
@@ -88,10 +89,6 @@ const PlayingPage: NextPage = () => {
   if (!matchSessionData) {
     return <LoadingOverlay />;
   }
-
-  const renderName = (name: Player["name"]) => {
-    return `${name.firstName} ${name.lastName}`;
-  };
 
   const handleMultiplierToggle = (
     multiplierType: "double" | "triple"
@@ -312,7 +309,7 @@ const PlayingPage: NextPage = () => {
                         <ProfileAvatar size="lg" profile={player} />
                         <Stack align="start" gap={0}>
                           <Text opacity={0.6} fz="xs">
-                            {renderName(player.name)}
+                            {getFormattedName(player.name)}
                           </Text>
                           <Text fz="h2" fw="bold">
                             {player.username}

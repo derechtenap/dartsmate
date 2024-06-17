@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 import { Profile } from "types/profile";
 import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import Stat from "@/components/content/Stat";
+import getFormattedName from "utils/misc/getFormattedName";
 
 const ProfileIndexPage: NextPage = () => {
   const {
@@ -48,9 +49,7 @@ const ProfileIndexPage: NextPage = () => {
                 {getUsernameInitials(defaultProfile.username)}
               </Avatar>
               <Stack gap={0}>
-                <Title>
-                  {defaultProfile.name.firstName} {defaultProfile.name.lastName}
-                </Title>
+                <Title>{getFormattedName(defaultProfile.name)}</Title>
                 <Text c="dimmed">{defaultProfile.username}</Text>
               </Stack>
               <Group ml="auto">
