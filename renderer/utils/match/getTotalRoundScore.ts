@@ -1,3 +1,5 @@
+import type { DartThrow } from "types/match";
+
 /**
  *
  * Calculates the total score for a darts round by summing up an
@@ -18,4 +20,12 @@ export const getTotalRoundScore = (scores: number[]): number => {
     (accumulator, currentValue) => accumulator + currentValue,
     0 // Fallback to `0`, when the given array is empty
   );
+};
+
+export const getScores = (rounds: DartThrow[]): number[] => {
+  if (rounds.length === 0) return [];
+
+  return rounds.map((round) => {
+    return round.score;
+  });
 };

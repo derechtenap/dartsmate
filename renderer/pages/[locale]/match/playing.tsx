@@ -23,7 +23,13 @@ import { useTranslation } from "next-i18next";
 
 import OnlyControlsLayout from "@/components/layouts/OnlyControlsLayout";
 
-import { DartThrow, MatchRound, type Match, type Player } from "types/match";
+import type {
+  Checkout,
+  DartThrow,
+  Match,
+  MatchRound,
+  Player,
+} from "types/match";
 import { useEffect, useState } from "react";
 import { useListState, useSessionStorage } from "@mantine/hooks";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
@@ -34,8 +40,11 @@ import {
   SCORE_OUTER_BULL,
   THROWS_PER_ROUND,
 } from "utils/constants";
-import { IconEraser } from "@tabler/icons-react";
-import { getTotalRoundScore } from "utils/match/getTotalRoundScore";
+import { IconCrown, IconEraser } from "@tabler/icons-react";
+import { getScores, getTotalRoundScore } from "utils/match/getTotalRoundScore";
+import { applyScoreMultiplier } from "utils/match/helper/applyScoreMultiplier";
+import isNonMultipleScore from "utils/match/helper/isNonMultipleScore";
+import { getTotalMatchAvg } from "utils/match/getTotalMatchAvg";
 
 const PlayingPage: NextPage = () => {
   const theme = useMantineTheme();
@@ -56,14 +65,20 @@ const PlayingPage: NextPage = () => {
 
   useEffect(() => {
     if (matchSessionData) {
-      const updatedPlayers = matchSessionData.players.map((player) => ({
-        ...player,
-        scoreLeft: matchSessionData.initialScore, // Set initial scoreLeft
-      }));
+      // Indicates the game hasn't started jet
+      if (matchSessionData.players[0].scoreLeft === -1) {
+        const updatedPlayers = matchSessionData.players.map((player) => ({
+          ...player,
+          scoreLeft: matchSessionData.initialScore,
+        }));
 
-      playersActions.setState(updatedPlayers);
+        playersActions.setState(updatedPlayers);
+      }
     }
   }, [matchSessionData]);
+
+  const scores = getScores(matchRound);
+  const totalRoundScore = getTotalRoundScore(scores);
 
   const handleUpdateCurrentPlayerIndex = () => {
     setCurrentPlayerIndex((prevIndex) => (prevIndex + 1) % players.length);
@@ -89,33 +104,19 @@ const PlayingPage: NextPage = () => {
     }));
   };
 
-  const isScoreInSpecialZone = (score: number): boolean => {
-    return (
-      score === SCORE_BULLSEYE ||
-      score === SCORE_OUTER_BULL ||
-      score === SCORE_MISSED
-    );
-  };
-
-  const applyScoreMultiplier = (score: number): number => {
-    if (isScoreInSpecialZone(score)) return score;
-
-    return scoreMultiplier.double
-      ? score * 2
-      : scoreMultiplier.triple
-      ? score * 3
-      : score;
-  };
-
   const handleDartThrow = (score: number): void => {
     if (matchRound.length >= THROWS_PER_ROUND) return;
 
     const roundData: DartThrow = {
       dartboardZone: score,
-      score: applyScoreMultiplier(score),
+      score: applyScoreMultiplier(
+        scoreMultiplier.double,
+        scoreMultiplier.triple,
+        score
+      ),
       isBullseye: score === SCORE_BULLSEYE,
-      isDouble: isScoreInSpecialZone(score) ? false : scoreMultiplier.double,
-      isTriple: isScoreInSpecialZone(score) ? false : scoreMultiplier.triple,
+      isDouble: isNonMultipleScore(score) ? false : scoreMultiplier.double,
+      isTriple: isNonMultipleScore(score) ? false : scoreMultiplier.triple,
       isMissed: score === SCORE_MISSED,
       isOuterBull: score === SCORE_OUTER_BULL,
     };
@@ -135,11 +136,132 @@ const PlayingPage: NextPage = () => {
     setMatchRound(updatedRounds);
   };
 
-  const scores = matchRound.map((round) => {
-    return round.score;
-  });
+  const isLastThrowCheckout = (
+    checkout: Checkout,
+    scoreLeft: number,
+    throwedScore: number
+  ): boolean => {
+    if (matchRound.length === 0) {
+      // Can't win without a throw
+      return false;
+    }
 
-  const totalRoundScore = getTotalRoundScore(scores);
+    if (scoreLeft - throwedScore !== 0) {
+      // Remaining score was not 0!
+      return false;
+    }
+
+    const lastThrow = matchRound[matchRound.length - 1];
+
+    if (!lastThrow) {
+      // Just an additional safeguard, should not occur due to previous checks
+      return false;
+    }
+
+    if (checkout === "Double") {
+      return lastThrow.isDouble || lastThrow.isBullseye;
+    }
+
+    if (checkout === "Triple") {
+      return lastThrow.isTriple;
+    }
+
+    // If checkout type is "Any" or not specified
+    return true;
+  };
+
+  const handleRoundUpdate = (): void => {
+    if (matchRound.length > THROWS_PER_ROUND) return;
+
+    const { matchCheckout: checkout } = matchSessionData;
+
+    const currentPlayer = players[currentPlayerIndex];
+
+    const isWinner = isLastThrowCheckout(
+      checkout,
+      currentPlayer.scoreLeft,
+      totalRoundScore
+    );
+
+    const emptyRoundData: DartThrow = {
+      dartboardZone: 0,
+      isBullseye: false,
+      isDouble: false,
+      isMissed: true,
+      isOuterBull: false,
+      isTriple: false,
+      score: 0,
+    };
+
+    const filledThrowDetails = [
+      ...matchRound,
+      ...Array.from(
+        { length: THROWS_PER_ROUND - matchRound.length },
+        () => emptyRoundData
+      ),
+    ];
+
+    const newScoreLeft = currentPlayer.scoreLeft - totalRoundScore;
+
+    const updatedMatchRound: MatchRound = {
+      elapsedTime: 0, // TODO: Currently set to 0, will be implemented later
+      isBust: newScoreLeft < 0 ? true : false,
+      roundAverage:
+        matchRound.length > 0 ? totalRoundScore / matchRound.length : 0,
+      roundTotal: totalRoundScore,
+
+      throwDetails:
+        isWinner && newScoreLeft === 0
+          ? matchRound
+          : filledThrowDetails.slice(0, THROWS_PER_ROUND),
+    };
+
+    const updatedCurrentPlayer: Player = {
+      ...currentPlayer,
+      rounds: [...currentPlayer.rounds, updatedMatchRound],
+      isWinner: isWinner,
+
+      scoreLeft:
+        isWinner && newScoreLeft === 0
+          ? 0
+          : newScoreLeft > 0
+          ? newScoreLeft
+          : currentPlayer.scoreLeft,
+    };
+
+    // Update the players array with the updated current player data
+    const updatedPlayers = players.map((player, index) =>
+      index === currentPlayerIndex ? updatedCurrentPlayer : player
+    );
+
+    playersActions.setState(updatedPlayers);
+
+    // Update the match session data with the updated players array
+    setMatchSessionData({
+      ...matchSessionData,
+      matchStatus: isWinner ? "finished" : "started",
+      players: updatedPlayers,
+    });
+
+    handleUpdateCurrentPlayerIndex();
+    setMatchRound([]);
+  };
+
+  // Function to find the highest score across all rounds
+  const getMatchHighestScore = (matchRounds: MatchRound[]): number => {
+    let highestScore = 0;
+
+    // Iterate through each MatchRound
+    matchRounds.forEach((matchRound) => {
+      // Iterate through each DartThrow in throwDetails of the current MatchRound
+
+      if (matchRound.roundTotal > highestScore) {
+        highestScore = matchRound.roundTotal;
+      }
+    });
+
+    return highestScore;
+  };
 
   return (
     <OnlyControlsLayout>
@@ -168,6 +290,23 @@ const PlayingPage: NextPage = () => {
                         : undefined
                     }
                   >
+                    {player.isWinner ? (
+                      <Tooltip
+                        label={`${player.username} won the match!`}
+                        withArrow
+                      >
+                        <IconCrown
+                          style={{
+                            position: "absolute",
+                            right: 16,
+                            top: 16,
+                          }}
+                          color="gold"
+                          size={32}
+                        />
+                      </Tooltip>
+                    ) : undefined}
+
                     <Stack>
                       <Group px="lg">
                         <ProfileAvatar size="lg" profile={player} />
@@ -199,7 +338,7 @@ const PlayingPage: NextPage = () => {
                           >
                             <NumberFormatter
                               decimalScale={2}
-                              value={1321 / 28}
+                              value={getTotalMatchAvg(players[_idx].rounds)}
                             />
                           </Text>
                         </Tooltip>
@@ -221,9 +360,20 @@ const PlayingPage: NextPage = () => {
                         opacity={0.7}
                         justify="space-between"
                       >
+                        {/* TODO: Calc first nine average... */}
                         <span>First 9 Average: 0</span>
-                        <span>Highest Score: 0</span>
-                        <span>Darts Throws: 0</span>
+                        <span>
+                          Highest Score:{" "}
+                          <NumberFormatter
+                            defaultValue={0}
+                            value={getMatchHighestScore(players[_idx].rounds)}
+                          />
+                        </span>
+                        <span>
+                          Darts Throws:{" "}
+                          {/* TODO: Lazy way... Not handling 1 or 2 dart inputs */}
+                          {players[_idx].rounds.length * THROWS_PER_ROUND}
+                        </span>
                       </Flex>
                       <Progress
                         color={player.color}
@@ -297,10 +447,12 @@ const PlayingPage: NextPage = () => {
                 </Button>
               </Tooltip>
             </SimpleGrid>
-            <Button onClick={handleUpdateCurrentPlayerIndex}>
+            <Button
+              disabled={matchSessionData.matchStatus === "finished"}
+              onClick={() => handleRoundUpdate()}
+            >
               Next Player
             </Button>
-            {JSON.stringify(matchRound, undefined, 2)}
           </Stack>
         </Grid.Col>
       </Grid>
