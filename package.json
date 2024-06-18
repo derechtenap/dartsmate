@@ -27,6 +27,7 @@
     "electron-store": "^8.1.0"
   },
   "devDependencies": {
+    "@mantine/charts": "^7.10.1",
     "@mantine/core": "^7.10.1",
     "@mantine/dropzone": "^7.10.1",
     "@mantine/form": "^7.10.1",
@@ -62,6 +63,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-image-file-resizer": "^0.4.8",
+    "recharts": "^2.12.7",
     "uuid": "^9.0.1"
   }
 }
