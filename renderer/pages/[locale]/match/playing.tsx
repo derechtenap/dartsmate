@@ -54,6 +54,7 @@ import isNonMultipleScore from "utils/match/helper/isNonMultipleScore";
 import { getTotalMatchAvg } from "utils/match/getTotalMatchAvg";
 import getFormattedName from "utils/misc/getFormattedName";
 import { useRouter } from "next/router";
+import { useElapsedTime } from "use-elapsed-time";
 
 const PlayingPage: NextPage = () => {
   const theme = useMantineTheme();
@@ -77,6 +78,10 @@ const PlayingPage: NextPage = () => {
   }>({ double: false, triple: false });
   const [matchRound, setMatchRound] = useState<DartThrow[]>([]);
   const router = useRouter();
+  const { elapsedTime, reset: resetTimer } = useElapsedTime({
+    isPlaying: true,
+    updateInterval: 1, // Interval in seconds
+  });
 
   useEffect(() => {
     if (matchSessionData) {
@@ -214,7 +219,6 @@ const PlayingPage: NextPage = () => {
     const newScoreLeft = currentPlayer.scoreLeft - totalRoundScore;
 
     const updatedMatchRound: MatchRound = {
-      elapsedTime: 0, // TODO: Currently set to 0, will be implemented later
       isBust: newScoreLeft < 0 ? true : false,
       roundAverage:
         matchRound.length > 0 ? totalRoundScore / matchRound.length : 0,
