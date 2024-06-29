@@ -5,7 +5,6 @@ import { getStaticPaths, makeStaticProperties } from "../../../lib/get-static";
 import DefaultLayout from "@/components/layouts/Default";
 import {
   ActionIcon,
-  Avatar,
   Divider,
   Group,
   Paper,
@@ -17,9 +16,9 @@ import {
 import { IconEdit } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { Profile } from "types/profile";
-import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import Stat from "@/components/content/Stat";
 import getFormattedName from "utils/misc/getFormattedName";
+import ProfileAvatar from "@/components/content/ProfileAvatar";
 
 const ProfileIndexPage: NextPage = () => {
   const {
@@ -40,14 +39,12 @@ const ProfileIndexPage: NextPage = () => {
         <Paper component="header" radius={0} p="xl" m={0}>
           <Stack>
             <Group align="start">
-              <Avatar
+              <ProfileAvatar
                 color={defaultProfile.color}
-                src={defaultProfile.avatarImage}
+                profile={defaultProfile}
                 size="xl"
                 variant="filled"
-              >
-                {getUsernameInitials(defaultProfile.username)}
-              </Avatar>
+              />
               <Stack gap={0}>
                 <Title>{getFormattedName(defaultProfile.name)}</Title>
                 <Text c="dimmed">{defaultProfile.username}</Text>
