@@ -187,7 +187,7 @@ const EditProfilePage: NextPage = () => {
               variant="default"
               onClick={() => void router.push(`/${locale}/profile`)}
             >
-              {t("profile:buttons.cancel")}
+              {t("cancel")}
             </Button>
           </Group>
         </Stack>
