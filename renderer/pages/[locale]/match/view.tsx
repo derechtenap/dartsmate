@@ -25,7 +25,7 @@ import getHighestScore from "utils/match/stats/getHighestScore";
 import getNumberOfRoundsAboveThreshold from "utils/match/stats/getScoresAbove";
 import { getTotalMatchAvg } from "utils/match/stats/getTotalMatchAvg";
 import { getLocaleDate } from "utils/misc/getLocalDate";
-import { DonutChart, type DonutChartCell, LineChart } from "@mantine/charts";
+import { DonutChart, type DonutChartCell } from "@mantine/charts";
 import getCategorizedThrows from "utils/match/stats/getCategorizedThrows";
 
 const ViewMatchPage: NextPage = () => {
@@ -100,33 +100,6 @@ const ViewMatchPage: NextPage = () => {
       </Table.Tr>
     ));
 
-  // Initialize data with the initial scores
-  const data = [
-    {
-      round: "Start",
-      ...matchData.players.reduce((acc, player) => {
-        acc[player.username] = matchData.initialScore;
-        return acc;
-      }, {}),
-    },
-  ];
-
-  // TODO: FIX BUG WHEN PLAYER WAS BUSTED IN ONE OR MORE ROUNDS AND GET NEGATIVE CHART SCORE VALUES
-  // Append rounds data
-  matchData.players[0].rounds.forEach((_, roundIndex) => {
-    const roundData = { round: `Round ${roundIndex + 1}` };
-    matchData.players.forEach((player) => {
-      // Start with the initial score
-      let scoreLeft = matchData.initialScore;
-      // Subtract the total of each round up to the current round
-      player.rounds.slice(0, roundIndex + 1).forEach((round) => {
-        scoreLeft -= round.roundTotal;
-      });
-      roundData[player.username] = scoreLeft;
-    });
-    data.push(roundData);
-  });
-
   return (
     <DefaultLayout withNavbarOpen>
       <Title>Match Results</Title>
@@ -163,6 +136,7 @@ const ViewMatchPage: NextPage = () => {
         </Tabs.Panel>
         <Tabs.Panel value="charts">
           <Title>{t("results:chartTitle.gameProgression")}</Title>
+          {/* 
           <LineChart
             p="lg"
             h={500}
@@ -181,6 +155,7 @@ const ViewMatchPage: NextPage = () => {
               domain: [0, matchData.initialScore], // Set Chart y axis min/max value
             }}
           />
+          */}
         </Tabs.Panel>
         <Tabs.Panel value="playerStats">
           <Tabs defaultValue={matchData.players[0].uuid} orientation="vertical">
