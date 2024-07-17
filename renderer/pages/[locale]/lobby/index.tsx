@@ -5,10 +5,13 @@ import DefaultLayout from "@/components/layouts/Default";
 import {
   ActionIcon,
   Button,
+  Divider,
   Drawer,
   Grid,
   Group,
+  NumberInput,
   ScrollArea,
+  Select,
   Stack,
   Text,
   Title,
@@ -26,7 +29,11 @@ import {
 import { useRouter } from "next/router";
 import { useForm } from "@mantine/form";
 import { Match } from "types/match";
-import { APP_VERSION } from "utils/constants";
+import {
+  APP_VERSION,
+  DEFAULT_MATCH_SETTINGS,
+  MATCH_SCORE,
+} from "utils/constants";
 import { v4 as uuidv4 } from "uuid";
 import getFormattedName from "utils/misc/getFormattedName";
 import EmptyState from "@/components/content/EmptyState";
@@ -63,7 +70,6 @@ const NewGamePage = () => {
 
   const matchUUID = uuidv4();
 
-  // const [matchStorage, setMatchStorage] = useSessionStorage<Match>({
   const [, setMatchStorage] = useSessionStorage<Match>({
     key: "currentMatch",
     defaultValue: undefined,
@@ -73,9 +79,9 @@ const NewGamePage = () => {
     initialValues: {
       appVersion: APP_VERSION,
       createdAt: Date.now(),
-      initialScore: 501,
-      matchCheckout: "Double",
-      matchStatus: "started",
+      initialScore: DEFAULT_MATCH_SETTINGS.SCORE,
+      matchCheckout: DEFAULT_MATCH_SETTINGS.CHECKOUT,
+      matchStatus: DEFAULT_MATCH_SETTINGS.STATUS,
       matchUUID: matchUUID,
       players: [],
       updatedAt: Date.now(),
@@ -227,15 +233,30 @@ const NewGamePage = () => {
           </Stack>
         </Grid.Col>
         <Grid.Col span={4} px="xs" h="100%">
-          <Title>{t("lobby:title.matchSettings")}</Title>
-          {/* TODO: Add settings... */}
-          <Button
-            disabled={selectedProfiles.length === 0}
-            onClick={() => handleStartMatch()}
-            mt="auto"
-          >
-            {t("lobby:startMatch")}
-          </Button>
+          <Stack>
+            <Title>{t("lobby:title.matchSettings")}</Title>
+            <NumberInput
+              label={t("lobby:score")}
+              min={MATCH_SCORE.MIN}
+              max={MATCH_SCORE.MAX}
+              {...matchSettings.getInputProps("initialScore")}
+            />
+            <Select
+              label={t("lobby:checkout")}
+              {...matchSettings.getInputProps("matchCheckout")}
+              defaultValue={matchSettings.values.matchCheckout}
+              data={["Any", "Single", "Double", "Triple"]}
+            />
+            <Divider />
+            <Button
+              disabled={selectedProfiles.length === 0}
+              onClick={() => handleStartMatch()}
+              mt="auto"
+            >
+              {t("lobby:startMatch")}
+            </Button>
+            {JSON.stringify(matchSettings.values, null, 2)}
+          </Stack>
         </Grid.Col>
       </Grid>
     </DefaultLayout>
