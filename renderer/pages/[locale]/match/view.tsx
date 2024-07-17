@@ -27,6 +27,7 @@ import { getTotalMatchAvg } from "utils/match/stats/getTotalMatchAvg";
 import { getLocaleDate } from "utils/misc/getLocalDate";
 import { DonutChart, type DonutChartCell, LineChart } from "@mantine/charts";
 import getCategorizedThrows from "utils/match/stats/getCategorizedThrows";
+import { Stats } from "fs";
 const ViewMatchPage: NextPage = () => {
   const {
     t,
@@ -133,13 +134,13 @@ const ViewMatchPage: NextPage = () => {
       <Tabs defaultValue="result">
         <Tabs.List>
           <Tabs.Tab leftSection={<IconListNumbers />} value="result">
-            {t("tabs.title.result")}
+            {t("results:tabs.title.result")}
           </Tabs.Tab>
           <Tabs.Tab leftSection={<IconChartHistogram />} value="charts">
-            {t("tabs.title.charts")}
+            {t("results:tabs.title.charts")}
           </Tabs.Tab>
           <Tabs.Tab leftSection={<IconUsers />} value="playerStats">
-            {t("tabs.title.playerStats")}
+            {t("results:tabs.title.playerStats")}
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="result">
@@ -161,7 +162,7 @@ const ViewMatchPage: NextPage = () => {
           </Table>
         </Tabs.Panel>
         <Tabs.Panel value="charts">
-          <Title>{t("chartTitle.gameProgression")}</Title>
+          <Title>{t("results:chartTitle.gameProgression")}</Title>
           <LineChart
             p="lg"
             h={500}
@@ -174,8 +175,8 @@ const ViewMatchPage: NextPage = () => {
             curveType="step"
             withLegend
             legendProps={{ verticalAlign: "bottom", height: 50 }}
-            xAxisLabel="Round"
-            yAxisLabel="Score"
+            xAxisLabel={t("stats.rounds")}
+            yAxisLabel={t("lobby:score")}
             yAxisProps={{
               domain: [0, matchData.initialScore], // Set Chart y axis min/max value
             }}
@@ -193,29 +194,28 @@ const ViewMatchPage: NextPage = () => {
             {matchData.players.map((player) => {
               const categorizedThrows = getCategorizedThrows(player.rounds);
 
-              // Prepare data array for DonutChart
               const data: DonutChartCell[] = [
                 {
+                  color: "yellow",
+                  name: t("stats.singles"),
+                  value: categorizedThrows.normals,
+                },
+                {
                   color: "blue",
-                  name: "Doubles",
+                  name: t("stats.doubles"),
                   value: categorizedThrows.doubles,
                 },
                 {
                   color: "green",
-                  name: "Triples",
+                  name: t("stats.triples"),
                   value: categorizedThrows.triples,
                 },
-                {
-                  color: "yellow",
-                  name: "Singles",
-                  value: categorizedThrows.normals,
-                },
+
                 {
                   color: "red",
-                  name: "Missed",
+                  name: t("stats.missed"),
                   value: categorizedThrows.missed,
                 },
-                // Add more categories as needed
               ];
 
               return (
@@ -246,6 +246,7 @@ export const getStaticProps = makeStaticProperties([
   "common",
   "lobby",
   "match",
+  "results",
 ]);
 
 export { getStaticPaths };

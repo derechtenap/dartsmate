@@ -26,7 +26,13 @@
     "avg": "Durchschnitt",
     "firstNineAvg": "Ersten 9 Darts-Durchschnitt",
     "dartsThrown": "Darts geworfen",
-    "highestScore": "Höchste Aufnahme"
+    "highestScore": "Höchste Aufnahme",
+    "scoreLeft": "Restpunktzahl",
+    "singles": "Singles",
+    "doubles": "Doubles",
+    "triples": "Triples",
+    "missed": "Nicht getroffen",
+    "rounds": "Runden"
   },
   "color": {
     "blue": "Blau",

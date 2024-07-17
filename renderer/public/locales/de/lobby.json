@@ -11,5 +11,7 @@
   "emptyLobbyState": {
     "title": "Leere Lobby",
     "text": "Aktuell sind keine Spieler in der Lobby. Füge einige Spieler hinzu, um das Spiel zu starten."
-  }
+  },
+  "score": "Punktzahl",
+  "checkout": "Checkout"
 }

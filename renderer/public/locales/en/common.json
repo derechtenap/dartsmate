@@ -26,7 +26,13 @@
     "avg": "Average",
     "firstNineAvg": "First 9 Average",
     "dartsThrown": "Darts Thrown",
-    "highestScore": "Highest Score"
+    "highestScore": "Highest Score",
+    "scoreLeft": "Score Left",
+    "singles": "Singles",
+    "doubles": "Doubles",
+    "triples": "Triples",
+    "missed": "Missed",
+    "rounds": "Rounds"
   },
   "color": {
     "blue": "Blue",
