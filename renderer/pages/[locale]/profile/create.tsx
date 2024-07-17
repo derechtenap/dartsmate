@@ -1,7 +1,6 @@
 import type { NextPage } from "next";
 import { getStaticPaths, makeStaticProperties } from "lib/get-static";
 import {
-  Avatar,
   Box,
   Button,
   CheckIcon,
@@ -22,14 +21,12 @@ import {
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { useTranslation } from "next-i18next";
-import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import { FormEvent, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/router";
 import type { Profile } from "types/profile";
-
+import ProfileAvatar from "@/components/content/ProfileAvatar";
 import resizeAvatarImage from "utils/avatars/resizeAvatarImage";
-
 import OnlyControlsLayout, {
   headerHeightOnlyControls,
 } from "@/components/layouts/OnlyControlsLayout";
@@ -217,16 +214,12 @@ const CreateProfilePage: NextPage = () => {
                 "profile:stepsProfileCreation.avatar.title",
                 "profile:stepsProfileCreation.avatar.description"
               )}
-              <Avatar
-                color={form.values.color}
-                src={form.values.avatarImage}
+              <ProfileAvatar
+                profile={form.values}
                 size="xl"
                 mt="lg"
                 mx="auto"
-                variant="filled"
-              >
-                {getUsernameInitials(form.values.username)}
-              </Avatar>
+              />
               <Group justify="center" mt="lg">
                 <Button
                   disabled
