@@ -1,45 +1,46 @@
 import type { NextPage } from "next";
 import { getStaticPaths, makeStaticProperties } from "lib/get-static";
 import {
-  Avatar,
-  BackgroundImage,
+  Box,
   Button,
-  Center,
   CheckIcon,
   ColorSwatch,
   DefaultMantineColor,
-  Divider,
-  Grid,
+  FileButton,
   Group,
-  Modal,
+  Paper,
   Stack,
+  Stepper,
   Text,
   TextInput,
+  Textarea,
   Title,
   Tooltip,
+  rem,
   useMantineTheme,
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
-import { IconUserPlus } from "@tabler/icons-react";
 import { useTranslation } from "next-i18next";
-import sendIPC from "utils/ipc/send";
-import { useDisclosure } from "@mantine/hooks";
-import { getUsernameInitials } from "utils/misc/getUsernameInitials";
-import { useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/router";
 import type { Profile } from "types/profile";
-import {
-  Dropzone,
-  type FileWithPath,
-  IMAGE_MIME_TYPE,
-  type FileRejection,
-} from "@mantine/dropzone";
-import { notifications } from "@mantine/notifications";
+import ProfileAvatar from "@/components/content/ProfileAvatar";
 import resizeAvatarImage from "utils/avatars/resizeAvatarImage";
-import { DEFAULT_AVATAR_FILE_SIZE } from "utils/avatars/constants";
+import OnlyControlsLayout, {
+  headerHeightOnlyControls,
+} from "@/components/layouts/OnlyControlsLayout";
+import {
+  IconCamera,
+  IconForms,
+  IconPhotoUp,
+  IconPhotoX,
+  IconUserCircle,
+} from "@tabler/icons-react";
+import { useSearchParams } from "next/navigation";
 
 const CreateProfilePage: NextPage = () => {
+  const params = useSearchParams();
   const {
     t,
     i18n: { language: locale },
@@ -52,13 +53,14 @@ const CreateProfilePage: NextPage = () => {
     theme.primaryColor
   );
 
-  const [opened, { open, close }] = useDisclosure(false);
+  const isGuestProfile = params.get("isGuest") ? true : false;
 
   const form = useForm<Profile>({
     initialValues: {
       avatarImage: undefined,
       bio: "",
       createdAt: Date.now(),
+      isGuestProfile: isGuestProfile,
       updatedAt: Date.now(),
       color: avatarColor,
       name: {
@@ -84,10 +86,8 @@ const CreateProfilePage: NextPage = () => {
       color: color,
     });
   };
-
-  const handleFileChange = (files: FileWithPath[]) => {
-    const file = files[0];
-
+  const [file, setFile] = useState<File | null>(null);
+  const handleFileChange = (file: File | null) => {
     if (!file) return;
 
     const reader = new FileReader();
@@ -106,26 +106,6 @@ const CreateProfilePage: NextPage = () => {
     reader.readAsDataURL(file);
   };
 
-  const handleImageRejection = (files: FileRejection[]) => {
-    /**
-     * We expect that the array contains only one file since the dropzone
-     * is configured to accept a single file at a time. Nonetheless, we
-     * check if files array is not empty to prevent accessing undefined.
-     */
-    if (files.length === 0) {
-      console.error("Expected one image file, but the file array was empty.");
-      return;
-    }
-
-    const file = files[0];
-
-    notifications.show({
-      autoClose: 20000, // 20 seconds
-      title: t(`errors.${file.errors[0].code}.title`),
-      message: t(`errors.${file.errors[0].code}.message`),
-    });
-  };
-
   const swatches = Object.keys(theme.colors).map((color) => (
     <Tooltip key={color} label={t(`color.${color}`)} withArrow>
       <ColorSwatch
@@ -140,121 +120,174 @@ const CreateProfilePage: NextPage = () => {
     </Tooltip>
   ));
 
+  const pageHeight = `calc(100vh - ${headerHeightOnlyControls}px)`;
+
+  const [active, setActive] = useState(0);
+  const nextStep = () =>
+    setActive((current) => (current < 3 ? current + 1 : current));
+  const prevStep = () =>
+    setActive((current) => (current > 0 ? current - 1 : current));
+  const stepIconsStyles = { width: rem(18), height: rem(18) };
+
+  const renderStepHeader = (title: string, description: string) => {
+    return (
+      <Paper p="lg" withBorder>
+        <Title>{t(title)}</Title>
+        <Text c="dimmed">{t(description)}</Text>
+      </Paper>
+    );
+  };
+
+  useEffect(() => {
+    handleFileChange(file);
+  }, [file, setFile]);
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // TODO: Check if the process was successful!
+    if (isGuestProfile) {
+      window.ipc.setGuestProfile(form.values);
+      void router.push(`/${locale}`);
+      return;
+    }
+
+    window.ipc.setDefaultProfile(form.values);
+
+    void router.push(`/${locale}`);
+  };
   return (
-    <>
-      <Modal
-        component="form"
-        opened={opened}
-        onClose={close}
-        withCloseButton={false}
-        closeOnClickOutside={false}
-        fullScreen
-        onSubmit={(e) => {
-          e.preventDefault();
-          // TODO: Check if the creation was successful...
-          window.ipc.setDefaultUser(form.values);
-          void router.push(`/${locale}`);
-        }}
-      >
-        <Stack maw={600} mx="auto" gap="xl">
-          <Title>{t("profileCreation.title", { ns: "profile" })}</Title>
-          <Text>{t("profileCreation.description", { ns: "profile" })}</Text>
-          <Divider />
-          <Avatar
-            color={form.getValues().color}
-            src={form.values.avatarImage}
-            size="xl"
-            mx="auto"
-            variant="filled"
+    <OnlyControlsLayout>
+      <Box component="form" h={pageHeight} onSubmit={(e) => handleSubmit(e)}>
+        <Stack p="lg" justify="space-between" maw={1200} mx="auto" h="100%">
+          <Stepper
+            active={active}
+            allowNextStepsSelect={false}
+            onStepClick={setActive}
           >
-            <Dropzone
-              onDrop={(files) => handleFileChange(files)}
-              onReject={(files) => handleImageRejection(files)}
-              maxSize={DEFAULT_AVATAR_FILE_SIZE}
-              accept={IMAGE_MIME_TYPE}
-              styles={{
-                root: {
-                  background: "transparent",
-                  border: 0,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "100%",
-                  height: "100%",
-                },
-              }}
-              maxFiles={1}
-              multiple={false}
+            <Stepper.Step
+              icon={<IconForms style={stepIconsStyles} />}
+              label={t("profile:step.label.profile")}
             >
-              {form.values.username ? (
-                getUsernameInitials(form.values.username)
-              ) : (
-                <>?</>
+              {renderStepHeader(
+                "profile:profileCreation.title",
+                "profile:profileCreation.description"
               )}
-            </Dropzone>
-          </Avatar>
-          <Group>{swatches}</Group>
-          <Group grow>
-            <TextInput
-              data-autofocus
-              label={t("formLabels.firstName.label", { ns: "profile" })}
-              placeholder={t("formLabels.firstName.placeholder", {
-                ns: "profile",
-              })}
-              {...form.getInputProps("name.firstName")}
-            />
-            <TextInput
-              label={t("formLabels.lastName.label", { ns: "profile" })}
-              placeholder={t("formLabels.lastName.placeholder", {
-                ns: "profile",
-              })}
-              {...form.getInputProps("name.lastName")}
-            />
-          </Group>
-          <TextInput
-            label={t("formLabels.username.label", { ns: "profile" })}
-            placeholder={t("formLabels.username.placeholder", {
-              ns: "profile",
-            })}
-            {...form.getInputProps("username")}
-          />
-          <Divider />
-          <Group grow>
-            <Button type="submit" disabled={!form.isValid()}>
-              {t("buttons.createProfile", { ns: "profile" })}
-            </Button>
-            <Button variant="default" onClick={close}>
-              {t("buttons.cancel", { ns: "profile" })}
-            </Button>
-          </Group>
-        </Stack>
-      </Modal>
-      <Grid mah="100vh" p={0} m={0} gutter={0}>
-        <Grid.Col h="100vh" span={6} m={0} p={0}>
-          <BackgroundImage src="/images/dartboard.jpg" h="100%" />
-        </Grid.Col>
-        <Grid.Col span="auto">
-          <Center h="100vh" p="xl" maw={800}>
-            <Stack gap="xl">
-              <Title fw="bold">
-                {t("dartsmateWelcome.title", { ns: "profile" })}
-              </Title>
-              <Text c="dimmed" fz="xl">
-                {t("dartsmateWelcome.description", { ns: "profile" })}
-              </Text>
-              <Group>
-                <Button leftSection={<IconUserPlus />} onClick={open}>
-                  {t("buttons.createProfile", { ns: "profile" })}
+              <Stack my="lg">
+                <Group grow>
+                  <TextInput
+                    data-autofocus
+                    label={t("profile:formLabels.firstName.label")}
+                    placeholder={t("profile:formLabels.firstName.placeholder")}
+                    {...form.getInputProps("name.firstName")}
+                  />
+                  <TextInput
+                    label={t("profile:formLabels.lastName.label")}
+                    placeholder={t("profile:formLabels.lastName.placeholder")}
+                    {...form.getInputProps("name.lastName")}
+                  />
+                </Group>
+                <TextInput
+                  label={t("profile:formLabels.username.label")}
+                  placeholder={t("profile:formLabels.username.placeholder")}
+                  {...form.getInputProps("username")}
+                />
+                <Textarea
+                  label={t("profile:formLabels.bio.label")}
+                  placeholder={t("profile:formLabels.bio.placeholder")}
+                  {...form.getInputProps("bio")}
+                />
+              </Stack>
+            </Stepper.Step>
+            <Stepper.Step label={t("profile:step.label.misc")}>
+              {renderStepHeader(
+                "profile:stepsProfileCreation.misc.title",
+                "profile:stepsProfileCreation.misc.description"
+              )}
+              <Group mt="lg">{swatches}</Group>
+            </Stepper.Step>
+            <Stepper.Step
+              icon={<IconUserCircle style={stepIconsStyles} />}
+              label={t("profile:step.label.avatar")}
+            >
+              {renderStepHeader(
+                "profile:stepsProfileCreation.avatar.title",
+                "profile:stepsProfileCreation.avatar.description"
+              )}
+              <ProfileAvatar
+                profile={form.values}
+                size="xl"
+                mt="lg"
+                mx="auto"
+              />
+              <Group justify="center" mt="lg">
+                <Button
+                  disabled
+                  leftSection={<IconCamera stroke={1.5} />}
+                  variant="default"
+                >
+                  {t("profile:webcam")}
                 </Button>
-                <Button variant="default" onClick={() => sendIPC("close-app")}>
-                  {t("closeApp")}
+                <FileButton
+                  onChange={setFile}
+                  accept="image/png,image/jpeg"
+                  aria-label={t("profile:photoUpload")}
+                  multiple={false}
+                >
+                  {(props) => (
+                    <Button
+                      {...props}
+                      leftSection={<IconPhotoUp stroke={1.5} />}
+                      variant="default"
+                    >
+                      {t("profile:photoUpload")}
+                    </Button>
+                  )}
+                </FileButton>
+                <Button
+                  variant="default"
+                  leftSection={<IconPhotoX stroke={1.5} />}
+                  disabled={!form.values.avatarImage}
+                  onClick={() =>
+                    void form.setFieldValue("avatarImage", undefined)
+                  }
+                >
+                  {t("profile:removePhotoUpload")}
                 </Button>
               </Group>
-            </Stack>
-          </Center>
-        </Grid.Col>
-      </Grid>
-    </>
+            </Stepper.Step>
+            <Stepper.Completed>
+              <Group grow>
+                <Button type="submit" disabled={!form.isValid()}>
+                  {t("profile:buttons.createProfile")}
+                </Button>
+                <Button
+                  variant="default"
+                  onClick={() => void router.push(`/${locale}/welcome`)}
+                >
+                  {t("cancel")}
+                </Button>
+              </Group>
+            </Stepper.Completed>
+          </Stepper>
+          <Paper component={Group} p="xs" withBorder justify="space-between">
+            <Button
+              variant="default"
+              disabled={active === 0}
+              onClick={prevStep}
+            >
+              {t("back")}
+            </Button>
+            <Button
+              disabled={active === 3 || !form.isValid()}
+              onClick={nextStep}
+            >
+              {t("next")}
+            </Button>
+          </Paper>
+        </Stack>
+      </Box>
+    </OnlyControlsLayout>
   );
 };
 

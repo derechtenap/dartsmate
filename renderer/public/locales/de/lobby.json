@@ -1,0 +1,17 @@
+{
+  "title": {
+    "players": "Spieler",
+    "matchSettings": "Einstellungen"
+  },
+  "addPlayer": "Spieler hinzufügen",
+  "createGuestPlayer": "Gast-Profil erstellen",
+  "startMatch": "Spiel starten",
+  "addPlayerToLobby": "{{PLAYER_NAME}} zum Spiel hinzufügen",
+  "removePlayerFromLobby": "{{PLAYER_NAME}} vom Spiel entfernen",
+  "emptyLobbyState": {
+    "title": "Leere Lobby",
+    "text": "Aktuell sind keine Spieler in der Lobby. Füge einige Spieler hinzu, um das Spiel zu starten."
+  },
+  "score": "Punktzahl",
+  "checkout": "Checkout"
+}

@@ -19,16 +19,34 @@ const handler = {
     void ipcRenderer.invoke(`setLocale`, locale);
   },
 
-  setDefaultUser(defaultUser: Profile) {
-    void ipcRenderer.invoke("setDefaultUser", defaultUser);
+  setDefaultProfile(defaultProfile: Profile) {
+    void ipcRenderer.invoke("setDefaultProfile", defaultProfile);
   },
 
-  deleteDefaultUser() {
-    void ipcRenderer.invoke("deleteDefaultUser");
+  deleteDefaultProfile() {
+    void ipcRenderer.invoke("deleteDefaultProfile");
   },
 
-  getDefaultUser() {
-    return ipcRenderer.invoke("getDefaultUser");
+  getDefaultProfile() {
+    return ipcRenderer.invoke("getDefaultProfile");
+  },
+
+  setGuestProfile(profile: Profile) {
+    void ipcRenderer.invoke("setGuestProfile", profile);
+  },
+
+  deleteGuestProfile(profile: Profile) {
+    console.info("Deleting Profile", profile);
+    // TODO: Add return
+    // void ipcRenderer.invoke("setGuestProfile", profile)
+  },
+
+  deleteAllGuestProfiles() {
+    console.info("Deleting all Guest Profiles");
+  },
+
+  getGuestProfiles() {
+    return ipcRenderer.invoke("getGuestProfiles");
   },
 };
 

@@ -11,11 +11,12 @@ import { Notifications } from "@mantine/notifications";
 // All packages except `@mantine/hooks` require styles imports!
 import "@mantine/core/styles.css";
 import "@mantine/dropzone/styles.css";
+import "@mantine/notifications/styles.css";
+import "@mantine/charts/styles.css";
 
 // Put overrides with custom stylesheets here
 import "../styles/globals.css";
 import "../styles/scrollbar.css";
-import "@mantine/notifications/styles.css";
 
 const App = ({
   Component,

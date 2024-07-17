@@ -1,6 +1,9 @@
 {
   "yes": "Yes",
   "no": "No",
+  "cancel": "Cancel",
+  "back": "Back",
+  "next": "Next",
   "toggleNavigation": "Toggle Navigation",
   "minimizeApp": "Minimize",
   "fullscreenMode": "Fullscreen",
@@ -20,7 +23,16 @@
     "180s": "180s",
     "matches": "Matches",
     "trainings": "Trainings",
-    "avg": "AVG"
+    "avg": "Average",
+    "firstNineAvg": "First 9 Average",
+    "dartsThrown": "Darts Thrown",
+    "highestScore": "Highest Score",
+    "scoreLeft": "Score Left",
+    "singles": "Singles",
+    "doubles": "Doubles",
+    "triples": "Triples",
+    "missed": "Missed",
+    "rounds": "Rounds"
   },
   "color": {
     "blue": "Blue",
@@ -59,5 +71,9 @@
       "title": "Too Many Files",
       "message": "You have exceeded the limit of maximum files allowed to upload. Please reduce the number of files and try again."
     }
+  },
+  "defaultEmptyState": {
+    "text": "Feel free to check back later. If the issue persists, please contact support for assistance.",
+    "title": "Oops! It seems like there's no data to display at the moment."
   }
 }

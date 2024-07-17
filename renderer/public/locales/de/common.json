@@ -1,6 +1,9 @@
 {
   "yes": "Ja",
   "no": "Nein",
+  "cancel": "Abbrechen",
+  "back": "Zurück",
+  "next": "Weiter",
   "toggleNavigation": "Navigation umschalten",
   "minimizeApp": "Minimieren",
   "fullscreenMode": "Vollbild",
@@ -20,7 +23,16 @@
     "180s": "180er",
     "matches": "Spiele",
     "trainings": "Trainings",
-    "avg": "Durchschnitt"
+    "avg": "Durchschnitt",
+    "firstNineAvg": "Ersten 9 Darts-Durchschnitt",
+    "dartsThrown": "Darts geworfen",
+    "highestScore": "Höchste Aufnahme",
+    "scoreLeft": "Restpunktzahl",
+    "singles": "Singles",
+    "doubles": "Doubles",
+    "triples": "Triples",
+    "missed": "Nicht getroffen",
+    "rounds": "Runden"
   },
   "color": {
     "blue": "Blau",
@@ -59,5 +71,9 @@
       "title": "Zu viele Dateien",
       "message": "Sie haben die maximale Anzahl von Dateien, die hochgeladen werden dürfen, überschritten. Bitte reduzieren Sie die Anzahl der Dateien und versuchen Sie es erneut."
     }
+  },
+  "defaultEmptyState": {
+    "text": "Schauen Sie später gerne noch einmal vorbei. Wenn das Problem weiterhin besteht, kontaktieren Sie bitte den Support für Unterstützung.",
+    "title": "Oops! Es scheint, als gäbe es momentan keine Daten zum Anzeigen."
   }
 }

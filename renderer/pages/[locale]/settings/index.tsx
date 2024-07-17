@@ -131,8 +131,8 @@ const SettingsPage = () => {
   };
 
   const handleProfileDeletion = () => {
-    window.ipc.deleteDefaultUser();
-    void router.push(`/${locale}/profile/create`);
+    window.ipc.deleteDefaultProfile();
+    void router.push(`/${locale}/welcome`);
   };
 
   const renderTabs = () => {

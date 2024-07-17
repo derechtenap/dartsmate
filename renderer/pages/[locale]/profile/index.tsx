@@ -5,7 +5,6 @@ import { getStaticPaths, makeStaticProperties } from "../../../lib/get-static";
 import DefaultLayout from "@/components/layouts/Default";
 import {
   ActionIcon,
-  Avatar,
   Divider,
   Group,
   Paper,
@@ -17,8 +16,9 @@ import {
 import { IconEdit } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { Profile } from "types/profile";
-import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import Stat from "@/components/content/Stat";
+import getFormattedName from "utils/misc/getFormattedName";
+import ProfileAvatar from "@/components/content/ProfileAvatar";
 
 const ProfileIndexPage: NextPage = () => {
   const {
@@ -27,34 +27,30 @@ const ProfileIndexPage: NextPage = () => {
   } = useTranslation();
   const router = useRouter();
 
-  const [defaultUser, setDefaultUser] = useState<Profile | null>(null);
+  const [defaultProfile, setDefaultProfile] = useState<Profile | null>(null);
 
   useEffect(() => {
-    void window.ipc.getDefaultUser().then(setDefaultUser);
+    void window.ipc.getDefaultProfile().then(setDefaultProfile);
   }, []);
 
-  if (defaultUser) {
+  if (defaultProfile) {
     return (
       <DefaultLayout withNavbarOpen>
         <Paper component="header" radius={0} p="xl" m={0}>
           <Stack>
             <Group align="start">
-              <Avatar
-                color={defaultUser.color}
-                src={defaultUser.avatarImage}
+              <ProfileAvatar
+                color={defaultProfile.color}
+                profile={defaultProfile}
                 size="xl"
                 variant="filled"
-              >
-                {getUsernameInitials(defaultUser.username)}
-              </Avatar>
+              />
               <Stack gap={0}>
-                <Title>
-                  {defaultUser.name.firstName} {defaultUser.name.lastName}
-                </Title>
-                <Text c="dimmed">{defaultUser.username}</Text>
+                <Title>{getFormattedName(defaultProfile.name)}</Title>
+                <Text c="dimmed">{defaultProfile.username}</Text>
               </Stack>
               <Group ml="auto">
-                <Tooltip label={t("editProfile", { ns: "profile" })} withArrow>
+                <Tooltip label={t("profile:editProfile")} withArrow>
                   <ActionIcon
                     onClick={() => void router.push(`/${locale}/profile/edit`)}
                     variant="filled"

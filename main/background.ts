@@ -2,9 +2,9 @@ import { app } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
 import path from "path";
-import { userStore } from "./helpers/user-store";
 import i18next from "../next-i18next.config.js";
 import log from "electron-log";
+import { appSettingsStore, profilesStore } from "./helpers/stores";
 
 export const isProd: boolean = process.env.NODE_ENV === "production";
 
@@ -53,19 +53,20 @@ void (async () => {
   }
 
   // Get stored locale or try to match the client os locale
-  const locale = userStore.get("locale", preferredLocale) as string;
-
-  const defaultUser = userStore.get("defaultUser", null);
+  const locale = appSettingsStore.get("locale", preferredLocale);
+  const defaultProfile = profilesStore.get("defaultProfile");
 
   const port = process.argv[2];
-  const profileCreationURL = isProd
-    ? `app://./${locale}/profile/create`
-    : `http://localhost:${port}/${locale}/profile/create`;
+  const welcomeRoute = isProd
+    ? `app://./${locale}/welcome`
+    : `http://localhost:${port}/${locale}/welcome`;
 
-  if (!defaultUser) {
+  if (!defaultProfile) {
     // Default profile is undefined, load url to create a new profile
-    await mainWindow.loadURL(profileCreationURL);
+    log.info("Default profile is undefined. Redirect user to welcome route.");
+    await mainWindow.loadURL(welcomeRoute);
   } else {
+    log.info("Found default profile. Direct user to index route.");
     if (isProd) {
       await mainWindow.loadURL(`app://./${locale}/`);
     } else {

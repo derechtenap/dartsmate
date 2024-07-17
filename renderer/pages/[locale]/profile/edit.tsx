@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import type { Profile } from "types/profile";
 import { isNotEmpty, useForm } from "@mantine/form";
 import {
-  Avatar,
   Button,
   CheckIcon,
   ColorSwatch,
@@ -17,7 +16,6 @@ import {
   Tooltip,
   useMantineTheme,
 } from "@mantine/core";
-import { getUsernameInitials } from "utils/misc/getUsernameInitials";
 import { IconUserEdit } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import {
@@ -29,6 +27,7 @@ import {
 import { notifications } from "@mantine/notifications";
 import resizeAvatarImage from "utils/avatars/resizeAvatarImage";
 import { DEFAULT_AVATAR_FILE_SIZE } from "utils/avatars/constants";
+import ProfileAvatar from "@/components/content/ProfileAvatar";
 
 const EditProfilePage: NextPage = () => {
   const {
@@ -38,7 +37,7 @@ const EditProfilePage: NextPage = () => {
   const theme = useMantineTheme();
   const router = useRouter();
 
-  const [defaultUser, setDefaultUser] = useState<Profile | null>(null);
+  const [defaultProfile, setDefaultProfile] = useState<Profile | null>(null);
 
   const [avatarColor, setAvatarColor] = useState<DefaultMantineColor | null>(
     null
@@ -56,13 +55,15 @@ const EditProfilePage: NextPage = () => {
 
   useEffect(() => {
     // Fetching the default user and setting the form values
-    void window.ipc.getDefaultUser().then((defaultUserData: Profile | null) => {
-      setDefaultUser(defaultUserData);
-      if (defaultUserData) {
-        form.setValues(defaultUserData);
-        setAvatarColor(defaultUserData.color);
-      }
-    });
+    void window.ipc
+      .getDefaultProfile()
+      .then((defaultProfileData: Profile | null) => {
+        setDefaultProfile(defaultProfileData);
+        if (defaultProfileData) {
+          form.setValues(defaultProfileData);
+          setAvatarColor(defaultProfileData.color);
+        }
+      });
   }, []);
 
   // Manually update the color, since the ...props method doesn't work on the color swatches
@@ -88,7 +89,7 @@ const EditProfilePage: NextPage = () => {
   ));
 
   const handleEditProfile = () => {
-    window.ipc.setDefaultUser({ ...form.values, updatedAt: Date.now() });
+    window.ipc.setDefaultProfile({ ...form.values, updatedAt: Date.now() });
     void router.push(`/${locale}/profile`);
   };
 
@@ -133,68 +134,43 @@ const EditProfilePage: NextPage = () => {
     });
   };
 
-  if (defaultUser) {
+  if (defaultProfile) {
     return (
       <DefaultLayout withNavbarOpen>
         <Stack gap="xl" mt="xl">
-          <Avatar
-            color={form.getValues().color}
-            src={form.values.avatarImage}
-            size="xl"
-            mx="auto"
-            variant="filled"
+          <Dropzone
+            onDrop={(files) => handleFileChange(files)}
+            onReject={(files) => handleImageRejection(files)}
+            maxSize={DEFAULT_AVATAR_FILE_SIZE}
+            accept={IMAGE_MIME_TYPE}
+            maxFiles={1}
+            multiple={false}
           >
-            <Dropzone
-              onDrop={(files) => handleFileChange(files)}
-              onReject={(files) => handleImageRejection(files)}
-              maxSize={DEFAULT_AVATAR_FILE_SIZE}
-              accept={IMAGE_MIME_TYPE}
-              styles={{
-                root: {
-                  background: "transparent",
-                  border: 0,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "100%",
-                  height: "100%",
-                },
-              }}
-              maxFiles={1}
-              multiple={false}
-            >
-              {getUsernameInitials(form.values.username)}
-            </Dropzone>
-          </Avatar>
+            <ProfileAvatar profile={form.values} size="xl" mx="auto" />
+          </Dropzone>
           <Button
             disabled={!form.values.avatarImage}
             onClick={() => form.setFieldValue("avatarImage", undefined)}
           >
-            {t("buttons.resetAvatarImage", { ns: "profile" })}
+            {t("profile:buttons.resetAvatarImage")}
           </Button>
           <Group mx="auto">{swatches}</Group>
           <Group grow>
             <TextInput
               data-autofocus
-              label={t("formLabels.firstName.label", { ns: "profile" })}
-              placeholder={t("formLabels.firstName.placeholder", {
-                ns: "profile",
-              })}
+              label={t("profile:formLabels.firstName.label")}
+              placeholder={t("profile:formLabels.firstName.placeholder")}
               {...form.getInputProps("name.firstName")}
             />
             <TextInput
-              label={t("formLabels.lastName.label", { ns: "profile" })}
-              placeholder={t("formLabels.lastName.placeholder", {
-                ns: "profile",
-              })}
+              label={t("profile:formLabels.lastName.label")}
+              placeholder={t("profile:formLabels.lastName.placeholder")}
               {...form.getInputProps("name.lastName")}
             />
           </Group>
           <TextInput
-            label={t("formLabels.username.label", { ns: "profile" })}
-            placeholder={t("formLabels.username.placeholder", {
-              ns: "profile",
-            })}
+            label={t("profile:formLabels.username.label")}
+            placeholder={t("profile:formLabels.username.placeholder")}
             {...form.getInputProps("username")}
           />
           <Group>
@@ -203,13 +179,13 @@ const EditProfilePage: NextPage = () => {
               leftSection={<IconUserEdit />}
               onClick={handleEditProfile}
             >
-              {t("buttons.updateProfile", { ns: "profile" })}
+              {t("profile:buttons.updateProfile")}
             </Button>
             <Button
               variant="default"
               onClick={() => void router.push(`/${locale}/profile`)}
             >
-              {t("buttons.cancel", { ns: "profile" })}
+              {t("cancel")}
             </Button>
           </Group>
         </Stack>

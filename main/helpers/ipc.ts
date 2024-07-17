@@ -1,21 +1,31 @@
 import { BrowserWindow, app, ipcMain } from "electron";
-import { userStore } from "./user-store";
+import { appSettingsStore, profilesStore } from "./stores";
 import log from "electron-log";
 
 ipcMain.handle("setLocale", (_event, locale) => {
-  userStore.set("locale", locale);
+  appSettingsStore.set("locale", locale);
 });
 
-ipcMain.handle("setDefaultUser", (_event, defaultUser) => {
-  userStore.set("defaultUser", defaultUser);
+ipcMain.handle("setDefaultProfile", (_event, defaultProfile) => {
+  profilesStore.set("defaultProfile", defaultProfile);
 });
 
-ipcMain.handle("getDefaultUser", () => {
-  return userStore.get("defaultUser");
+ipcMain.handle("getDefaultProfile", () => {
+  return profilesStore.get("defaultProfile");
 });
 
-ipcMain.handle("deleteDefaultUser", () => {
-  return userStore.delete("defaultUser");
+ipcMain.handle("setGuestProfile", (_event, profile) => {
+  const profiles = profilesStore.get("guestProfiles");
+  const newProfiles = [...(profiles || []), profile];
+  profilesStore.set("guestProfiles", newProfiles);
+});
+
+ipcMain.handle("getGuestProfiles", () => {
+  return profilesStore.get("guestProfiles");
+});
+
+ipcMain.handle("deleteDefaultProfile", () => {
+  return profilesStore.delete("defaultProfile");
 });
 
 ipcMain.on("minimize-app-window", () => {
