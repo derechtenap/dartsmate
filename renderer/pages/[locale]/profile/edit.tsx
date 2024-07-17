@@ -170,9 +170,7 @@ const EditProfilePage: NextPage = () => {
           </Group>
           <TextInput
             label={t("profile:formLabels.username.label")}
-            placeholder={t("formLabels.username.placeholder", {
-              ns: "profile",
-            })}
+            placeholder={t("profile:formLabels.username.placeholder")}
             {...form.getInputProps("username")}
           />
           <Group>
