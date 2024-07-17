@@ -216,7 +216,7 @@ const NewGamePage = () => {
           <Stack gap="lg">
             <Group>
               <Title>{t("lobby:title.players")}</Title>
-              <Button ml="auto" size="xs" variant="default" onClick={open}>
+              <Button ml="auto" size="xs" onClick={open}>
                 {t("lobby:addPlayer")}
               </Button>
             </Group>
