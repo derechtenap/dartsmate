@@ -27,11 +27,11 @@ import { getTotalMatchAvg } from "utils/match/stats/getTotalMatchAvg";
 import { getLocaleDate } from "utils/misc/getLocalDate";
 import { DonutChart, type DonutChartCell, LineChart } from "@mantine/charts";
 import getCategorizedThrows from "utils/match/stats/getCategorizedThrows";
-import { Stats } from "fs";
+
 const ViewMatchPage: NextPage = () => {
   const {
     t,
-    i18n: { language: locale },
+    // i18n: { language: locale },
   } = useTranslation();
 
   const [matchData] = useSessionStorage<Match>({
