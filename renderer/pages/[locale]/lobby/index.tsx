@@ -255,7 +255,6 @@ const NewGamePage = () => {
             >
               {t("lobby:startMatch")}
             </Button>
-            {JSON.stringify(matchSettings.values, null, 2)}
           </Stack>
         </Grid.Col>
       </Grid>
