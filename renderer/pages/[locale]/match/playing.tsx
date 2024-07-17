@@ -48,17 +48,19 @@ import {
   THROWS_PER_ROUND,
 } from "utils/constants";
 import { IconCrown, IconEraser } from "@tabler/icons-react";
-import { getScores, getTotalRoundScore } from "utils/match/getTotalRoundScore";
+import {
+  getScores,
+  getTotalRoundScore,
+} from "utils/match/stats/getTotalRoundScore";
 import { applyScoreMultiplier } from "utils/match/helper/applyScoreMultiplier";
 import isNonMultipleScore from "utils/match/helper/isNonMultipleScore";
-import { getTotalMatchAvg } from "utils/match/getTotalMatchAvg";
+import { getTotalMatchAvg } from "utils/match/stats/getTotalMatchAvg";
 import getFormattedName from "utils/misc/getFormattedName";
 import { useRouter } from "next/router";
 import { useElapsedTime } from "use-elapsed-time";
 
 const PlayingPage: NextPage = () => {
   const theme = useMantineTheme();
-
   const {
     t,
     i18n: { language: locale },
@@ -219,6 +221,7 @@ const PlayingPage: NextPage = () => {
     const newScoreLeft = currentPlayer.scoreLeft - totalRoundScore;
 
     const updatedMatchRound: MatchRound = {
+      elapsedTime: elapsedTime,
       isBust: newScoreLeft < 0 ? true : false,
       roundAverage:
         matchRound.length > 0 ? totalRoundScore / matchRound.length : 0,
@@ -259,6 +262,7 @@ const PlayingPage: NextPage = () => {
 
     handleUpdateCurrentPlayerIndex();
     setMatchRound([]);
+    resetTimer();
   };
 
   // Function to find the highest score across all rounds
@@ -296,7 +300,7 @@ const PlayingPage: NextPage = () => {
 
   const handleAbortMatch = (): void => {
     // TODO: Open Modal and save match to electron store
-    void router.push(`/${locale}/lobby`);
+    void router.push(`/${locale}/match/view`);
   };
 
   return (
