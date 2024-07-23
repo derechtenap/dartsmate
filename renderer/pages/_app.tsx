@@ -7,6 +7,7 @@ import { QueryClient } from "@tanstack/query-core";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { DehydratedState } from "@tanstack/react-query";
 import { Notifications } from "@mantine/notifications";
+import { ModalsProvider } from "@mantine/modals";
 
 // All packages except `@mantine/hooks` require styles imports!
 import "@mantine/core/styles.css";
@@ -36,7 +37,9 @@ const App = ({
       >
         <Notifications position="top-right" limit={5} />
         <Hydrate state={pageProps.dehydratedState}>
-          <Component {...pageProps} />
+          <ModalsProvider>
+            <Component {...pageProps} />
+          </ModalsProvider>
         </Hydrate>
       </MantineProvider>
       <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />

@@ -18,9 +18,8 @@ import {
   Select,
   ComboboxData,
   Button,
-  Modal,
-  Group,
 } from "@mantine/core";
+import { modals } from "@mantine/modals";
 import {
   IconAlertTriangle,
   IconDeviceDesktop,
@@ -31,12 +30,10 @@ import {
 } from "@tabler/icons-react";
 import { i18n as _i18n } from "../../.././../next-i18next.config";
 import { useRouter } from "next/router";
-import { useDisclosure } from "@mantine/hooks";
 
 const SettingsPage = () => {
   const iconStyles = { height: rem(20), width: rem(20) };
   const { colorScheme, setColorScheme } = useMantineColorScheme();
-  const [opened, { open, close }] = useDisclosure(false);
   const router = useRouter();
 
   const {
@@ -134,6 +131,27 @@ const SettingsPage = () => {
     window.ipc.deleteDefaultProfile();
     void router.push(`/${locale}/welcome`);
   };
+
+  const openDeleteModal = () =>
+    modals.openConfirmModal({
+      title: t("settings:settings.dangerZone.section.deleteProfile.title"),
+      centered: true,
+      children: (
+        <Text size="sm">
+          {t("settings:settings.dangerZone.section.deleteProfile.confirmText")}
+        </Text>
+      ),
+      labels: {
+        confirm: t("settings:settings.dangerZone.btn.deleteProfile"),
+        cancel: t("cancel"),
+      },
+      overlayProps: {
+        backgroundOpacity: 0.75,
+        blur: 3,
+      },
+      confirmProps: { color: "red" },
+      onConfirm: () => handleProfileDeletion(),
+    });
 
   const renderTabs = () => {
     return (
@@ -235,7 +253,7 @@ const SettingsPage = () => {
               ns: "settings",
             })}
           </Text>
-          <Button onClick={open} w="fit-content">
+          <Button onClick={openDeleteModal} w="fit-content">
             {t("settings.dangerZone.btn.deleteProfile", {
               ns: "settings",
             })}
@@ -245,47 +263,8 @@ const SettingsPage = () => {
     );
   };
 
-  const renderModalContent = () => {
-    return (
-      <Stack>
-        <Text>
-          {t("settings.dangerZone.section.deleteProfile.confirmText", {
-            ns: "settings",
-          })}
-        </Text>
-        <Group>
-          <Button onClick={handleProfileDeletion}>
-            {t("settings.dangerZone.btn.deleteProfile", {
-              ns: "settings",
-            })}
-          </Button>
-          <Button onClick={close} variant="default">
-            {t("buttons.cancel", {
-              ns: "profile",
-            })}
-          </Button>
-        </Group>
-      </Stack>
-    );
-  };
-
   return (
     <DefaultLayout withNavbarOpen>
-      <Modal
-        opened={opened}
-        onClose={close}
-        title={t("settings.dangerZone.section.deleteProfile.title", {
-          ns: "settings",
-        })}
-        centered
-        overlayProps={{
-          backgroundOpacity: 0.55,
-          blur: 3,
-        }}
-        withCloseButton={false}
-      >
-        {renderModalContent()}
-      </Modal>
       <Grid gutter={0}>
         {renderTabs()}
         <Grid.Col span="auto" px="xs">
