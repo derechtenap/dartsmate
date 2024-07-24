@@ -28,6 +28,7 @@ import { notifications } from "@mantine/notifications";
 import resizeAvatarImage from "utils/avatars/resizeAvatarImage";
 import { DEFAULT_AVATAR_FILE_SIZE } from "utils/avatars/constants";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
+import useDefaultProfileContext from "hooks/useDefaultProfile";
 
 const EditProfilePage: NextPage = () => {
   const {
@@ -37,7 +38,7 @@ const EditProfilePage: NextPage = () => {
   const theme = useMantineTheme();
   const router = useRouter();
 
-  const [defaultProfile, setDefaultProfile] = useState<Profile | null>(null);
+  const { defaultProfile, handleEditProfile } = useDefaultProfileContext();
 
   const [avatarColor, setAvatarColor] = useState<DefaultMantineColor | null>(
     null
@@ -54,16 +55,9 @@ const EditProfilePage: NextPage = () => {
   });
 
   useEffect(() => {
-    // Fetching the default user and setting the form values
-    void window.ipc
-      .getDefaultProfile()
-      .then((defaultProfileData: Profile | null) => {
-        setDefaultProfile(defaultProfileData);
-        if (defaultProfileData) {
-          form.setValues(defaultProfileData);
-          setAvatarColor(defaultProfileData.color);
-        }
-      });
+    if (defaultProfile) {
+      form.setValues(defaultProfile);
+    }
   }, []);
 
   // Manually update the color, since the ...props method doesn't work on the color swatches
@@ -88,8 +82,8 @@ const EditProfilePage: NextPage = () => {
     </Tooltip>
   ));
 
-  const handleEditProfile = () => {
-    window.ipc.setDefaultProfile({ ...form.values, updatedAt: Date.now() });
+  const handleEdit = () => {
+    handleEditProfile({ ...form.values, updatedAt: Date.now() });
     void router.push(`/${locale}/profile`);
   };
 
@@ -177,7 +171,7 @@ const EditProfilePage: NextPage = () => {
             <Button
               disabled={!form.isValid() || !form.isTouched()}
               leftSection={<IconUserEdit />}
-              onClick={handleEditProfile}
+              onClick={handleEdit}
             >
               {t("profile:buttons.updateProfile")}
             </Button>

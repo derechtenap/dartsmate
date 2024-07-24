@@ -37,6 +37,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import getFormattedName from "utils/misc/getFormattedName";
 import EmptyState from "@/components/content/EmptyState";
+import useDefaultProfileContext from "hooks/useDefaultProfile";
 
 const NewGamePage = () => {
   const {
@@ -48,6 +49,8 @@ const NewGamePage = () => {
     []
   );
 
+  const { defaultProfile } = useDefaultProfileContext();
+
   const [opened, { open, close }] = useDisclosure(false);
 
   const router = useRouter();
@@ -57,9 +60,9 @@ const NewGamePage = () => {
     selectedProfilesActions.setState([]);
     availableProfilesActions.setState([]);
 
-    void window.ipc
-      .getDefaultProfile()
-      .then((profile: Profile) => availableProfilesActions.append(profile));
+    if (defaultProfile) {
+      availableProfilesActions.append(defaultProfile);
+    }
 
     void window.ipc.getGuestProfiles().then((profiles: Profile[]) => {
       profiles.forEach((profile) => {

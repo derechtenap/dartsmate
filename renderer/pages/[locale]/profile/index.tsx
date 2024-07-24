@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useTranslation } from "next-i18next";
 import type { NextPage } from "next";
 import { getStaticPaths, makeStaticProperties } from "../../../lib/get-static";
@@ -15,10 +15,10 @@ import {
 } from "@mantine/core";
 import { IconEdit } from "@tabler/icons-react";
 import { useRouter } from "next/router";
-import { Profile } from "types/profile";
 import Stat from "@/components/content/Stat";
 import getFormattedName from "utils/misc/getFormattedName";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
+import useDefaultProfileContext from "hooks/useDefaultProfile";
 
 const ProfileIndexPage: NextPage = () => {
   const {
@@ -27,11 +27,7 @@ const ProfileIndexPage: NextPage = () => {
   } = useTranslation();
   const router = useRouter();
 
-  const [defaultProfile, setDefaultProfile] = useState<Profile | null>(null);
-
-  useEffect(() => {
-    void window.ipc.getDefaultProfile().then(setDefaultProfile);
-  }, []);
+  const { defaultProfile } = useDefaultProfileContext();
 
   if (defaultProfile) {
     return (
