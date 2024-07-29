@@ -28,7 +28,7 @@ import { notifications } from "@mantine/notifications";
 import resizeAvatarImage from "utils/avatars/resizeAvatarImage";
 import { DEFAULT_AVATAR_FILE_SIZE } from "utils/avatars/constants";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
-import useDefaultProfileContext from "hooks/useDefaultProfile";
+import useProfileContext from "hooks/useProfiles";
 
 const EditProfilePage: NextPage = () => {
   const {
@@ -38,7 +38,7 @@ const EditProfilePage: NextPage = () => {
   const theme = useMantineTheme();
   const router = useRouter();
 
-  const { defaultProfile, handleEditProfile } = useDefaultProfileContext();
+  const { defaultProfile, updateDefaultProfile } = useProfileContext();
 
   const [avatarColor, setAvatarColor] = useState<DefaultMantineColor | null>(
     null
@@ -83,7 +83,7 @@ const EditProfilePage: NextPage = () => {
   ));
 
   const handleEdit = () => {
-    handleEditProfile({ ...form.values, updatedAt: Date.now() });
+    updateDefaultProfile({ ...form.values });
     void router.push(`/${locale}/profile`);
   };
 

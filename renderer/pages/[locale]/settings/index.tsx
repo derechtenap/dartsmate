@@ -30,14 +30,14 @@ import {
 } from "@tabler/icons-react";
 import { i18n as _i18n } from "../../.././../next-i18next.config";
 import { useRouter } from "next/router";
-import useDefaultProfileContext from "hooks/useDefaultProfile";
+import useProfilesContext from "hooks/useProfiles";
 
 const SettingsPage = () => {
   const iconStyles = { height: rem(20), width: rem(20) };
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const router = useRouter();
 
-  const { handleDeleteProfile } = useDefaultProfileContext();
+  const { deleteDefaultProfile } = useProfilesContext();
 
   const {
     t,
@@ -131,7 +131,7 @@ const SettingsPage = () => {
   };
 
   const handleProfileDeletion = () => {
-    handleDeleteProfile();
+    deleteDefaultProfile();
     void router.push(`/${locale}/welcome`);
   };
 

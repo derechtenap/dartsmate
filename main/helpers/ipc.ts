@@ -14,6 +14,10 @@ ipcMain.handle("getDefaultProfile", () => {
   return profilesStore.get("defaultProfile");
 });
 
+ipcMain.handle("deleteDefaultProfile", () => {
+  return profilesStore.delete("defaultProfile");
+});
+
 ipcMain.handle("setGuestProfile", (_event, profile) => {
   const profiles = profilesStore.get("guestProfiles");
   const newProfiles = [...(profiles || []), profile];
@@ -22,10 +26,6 @@ ipcMain.handle("setGuestProfile", (_event, profile) => {
 
 ipcMain.handle("getGuestProfiles", () => {
   return profilesStore.get("guestProfiles");
-});
-
-ipcMain.handle("deleteDefaultProfile", () => {
-  return profilesStore.delete("defaultProfile");
 });
 
 ipcMain.on("minimize-app-window", () => {
