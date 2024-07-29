@@ -58,6 +58,7 @@ import { getTotalMatchAvg } from "utils/match/stats/getTotalMatchAvg";
 import getFormattedName from "utils/misc/getFormattedName";
 import { useRouter } from "next/router";
 import { useElapsedTime } from "use-elapsed-time";
+import { modals } from "@mantine/modals";
 
 const PlayingPage: NextPage = () => {
   const theme = useMantineTheme();
@@ -298,9 +299,26 @@ const PlayingPage: NextPage = () => {
     return undefined;
   };
 
+  const openAbortModal = () =>
+    modals.openConfirmModal({
+      title: t("match:modalAbortMatch:title"),
+      centered: true,
+      children: <Text size="sm">{t("match:modalAbortMatch:text")}</Text>,
+      labels: {
+        confirm: t("match:abortMatch"),
+        cancel: t("match:modalAbortMatch:cancelButton"),
+      },
+      overlayProps: {
+        backgroundOpacity: 0.75,
+        blur: 3,
+      },
+      confirmProps: { color: "red" },
+      // TODO: Save to electron-store
+      onConfirm: () => void router.push(`/${locale}/match/view`),
+    });
+
   const handleAbortMatch = (): void => {
-    // TODO: Open Modal and save match to electron store
-    void router.push(`/${locale}/match/view`);
+    openAbortModal();
   };
 
   return (
