@@ -2,8 +2,8 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import { getStaticPaths, makeStaticProperties } from "../../lib/get-static";
 import DefaultLayout from "@/components/layouts/Default";
-import { Title } from "@mantine/core";
 import useDefaultProfileContext from "hooks/useDefaultProfile";
+import { Text, Title } from "@mantine/core";
 
 const IndexPage = () => {
   const { t } = useTranslation();
@@ -12,9 +12,10 @@ const IndexPage = () => {
   if (defaultProfile) {
     return (
       <DefaultLayout withNavbarOpen>
-        <Title mb="lg">
-          {t("welcomeGreeting", { FIRST_NAME: defaultProfile.name.firstName })}
+        <Title>
+          {t("greetingText", { FIRST_NAME: defaultProfile.name.firstName })}
         </Title>
+        <Text>{t("greetingSubtext")}</Text>
       </DefaultLayout>
     );
   }

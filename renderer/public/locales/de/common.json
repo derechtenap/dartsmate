@@ -75,5 +75,7 @@
   "defaultEmptyState": {
     "text": "Schauen Sie später gerne noch einmal vorbei. Wenn das Problem weiterhin besteht, kontaktieren Sie bitte den Support für Unterstützung.",
     "title": "Oops! Es scheint, als gäbe es momentan keine Daten zum Anzeigen."
-  }
+  },
+  "greetingText": "Hallo, {{FIRST_NAME}}!",
+  "greetingSubtext": "Lass uns eine Runde Darts spielen."
 }
