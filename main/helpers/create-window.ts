@@ -7,6 +7,7 @@ import {
 } from "electron";
 import Store from "electron-store";
 import { isProd, minWindowSize } from "../background";
+import log from "electron-log";
 
 export default (
   windowName: string,
@@ -98,6 +99,29 @@ export default (
   }
 
   win.on("close", saveState);
+
+  // https://stackoverflow.com/questions/66257921/how-to-disable-next-previous-key-from-mouse-in-electron
+  const disableMouseNavigation = async (): Promise<void> => {
+    const disableNavigationScript = `
+    document.addEventListener('mouseup', (event) => {
+      if (event.button === 3 || event.button === 4) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    });
+  `;
+
+    try {
+      await win.webContents.executeJavaScript(disableNavigationScript);
+      log.info("Disabled mouse navigation!");
+    } catch (error) {
+      log.error("Failed to disable mouse navigation:", error);
+    }
+  };
+
+  win.webContents.on("dom-ready", () => {
+    void disableMouseNavigation();
+  });
 
   return win;
 };
