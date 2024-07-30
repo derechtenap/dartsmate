@@ -102,6 +102,9 @@ export default (
 
   // https://stackoverflow.com/questions/66257921/how-to-disable-next-previous-key-from-mouse-in-electron
   const disableMouseNavigation = async (): Promise<void> => {
+    // Allow mouse navigation in dev mode
+    if (!isProd) return;
+
     const disableNavigationScript = `
     document.addEventListener('mouseup', (event) => {
       if (event.button === 3 || event.button === 4) {
