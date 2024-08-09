@@ -43,6 +43,7 @@ const EditProfilePage: NextPage = () => {
 
   const form = useForm<Profile>({
     validate: {
+      color: isNotEmpty(),
       name: {
         firstName: isNotEmpty(),
         lastName: isNotEmpty(),
@@ -62,6 +63,17 @@ const EditProfilePage: NextPage = () => {
     setAvatarColor(color);
     form.setValues({
       color: color,
+    });
+
+    /*
+     * Set form to dirty and touched, so the user can submit the form
+     * without updating or clicking a form field
+     */
+    form.setDirty({
+      color: true,
+    });
+    form.setTouched({
+      color: true,
     });
   };
 
