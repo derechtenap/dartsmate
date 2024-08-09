@@ -5,3 +5,4 @@ app
 dist
 .env
 TODO
+next-env.d.ts
