@@ -97,11 +97,18 @@ const DefaultLayout = ({
   ];
 
   const isActiveRoute = (route: string) => {
-    if (route === "/") {
-      return `/${locale + route}` === router.asPath;
-    }
+    const currentRoute = router.asPath;
+    const localizedRoute = `/${locale}${route}`;
 
-    return `/${locale + route}/` === router.asPath;
+    /*
+     * Check if the current route is exactly equal to the localized one.
+     * Or handle the case case where the current route is sub-route of
+     * the base route.
+     */
+    return (
+      currentRoute === localizedRoute ||
+      currentRoute.startsWith(`${localizedRoute}/`)
+    );
   };
 
   return (
