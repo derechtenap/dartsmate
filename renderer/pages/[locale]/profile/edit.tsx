@@ -31,10 +31,7 @@ import ProfileAvatar from "@/components/content/ProfileAvatar";
 import useProfileContext from "hooks/useProfiles";
 
 const EditProfilePage: NextPage = () => {
-  const {
-    t,
-    i18n: { language: locale },
-  } = useTranslation();
+  const { t } = useTranslation();
   const theme = useMantineTheme();
   const router = useRouter();
 
@@ -84,7 +81,7 @@ const EditProfilePage: NextPage = () => {
 
   const handleEdit = () => {
     updateDefaultProfile({ ...form.values });
-    void router.push(`/${locale}/profile`);
+    void router.back();
   };
 
   const handleFileChange = (files: FileWithPath[]) => {
@@ -175,10 +172,7 @@ const EditProfilePage: NextPage = () => {
             >
               {t("profile:buttons.updateProfile")}
             </Button>
-            <Button
-              variant="default"
-              onClick={() => void router.push(`/${locale}/profile`)}
-            >
+            <Button variant="default" onClick={() => void router.back()}>
               {t("cancel")}
             </Button>
           </Group>
