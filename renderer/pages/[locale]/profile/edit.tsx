@@ -38,7 +38,7 @@ const EditProfilePage: NextPage = () => {
   const { defaultProfile, updateDefaultProfile } = useProfileContext();
 
   const [avatarColor, setAvatarColor] = useState<DefaultMantineColor | null>(
-    null
+    defaultProfile?.color || null
   );
 
   const form = useForm<Profile>({
