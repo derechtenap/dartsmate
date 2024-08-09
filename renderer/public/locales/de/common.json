@@ -8,6 +8,11 @@
   "minimizeApp": "Minimieren",
   "fullscreenMode": "Vollbild",
   "windowedMode": "Fenstermodus",
+  "networkStatus": {
+    "text": "Netzwerk-Status",
+    "online": "Verbunden",
+    "offline": "Offline"
+  },
   "closeApp": "Schließen",
   "routes": {
     "home": "Startseite",

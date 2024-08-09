@@ -8,6 +8,11 @@
   "minimizeApp": "Minimize",
   "fullscreenMode": "Fullscreen",
   "windowedMode": "Windowed Mode",
+  "networkStatus": {
+    "text": "Network Status",
+    "online": "Online",
+    "offline": "Offline"
+  },
   "closeApp": "Close",
   "routes": {
     "home": "Home",
