@@ -54,5 +54,6 @@
   },
   "photoUpload": "Select Photo",
   "webcam": "Webcam",
-  "removePhotoUpload": "Remove Photo"
+  "removePhotoUpload": "Remove Photo",
+  "exportProfile": "Export Profile"
 }
