@@ -17,7 +17,7 @@ import {
   IconListNumbers,
   IconUsers,
 } from "@tabler/icons-react";
-import { getStaticPaths, makeStaticProperties } from "lib/get-static";
+import { getStaticPaths, makeStaticProperties } from "@/lib/getStatic";
 import type { NextPage } from "next";
 import { useTranslation } from "next-i18next";
 import { Match } from "types/match";

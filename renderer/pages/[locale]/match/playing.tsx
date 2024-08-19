@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { getStaticPaths, makeStaticProperties } from "lib/get-static";
+import { getStaticPaths, makeStaticProperties } from "@/lib/getStatic";
 import {
   Button,
   Card,

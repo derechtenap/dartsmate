@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useTranslation } from "next-i18next";
-import { getStaticPaths, makeStaticProperties } from "../../../lib/get-static";
+import { getStaticPaths, makeStaticProperties } from "@/lib/getStatic";
 import DefaultLayout from "@/components/layouts/Default";
 import {
   ActionIcon,

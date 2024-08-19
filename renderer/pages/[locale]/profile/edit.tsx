@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import DefaultLayout from "@/components/layouts/Default";
-import { getStaticPaths, makeStaticProperties } from "lib/get-static";
+import { getStaticPaths, makeStaticProperties } from "@/lib/getStatic";
 import { useTranslation } from "next-i18next";
 import { useEffect, useState } from "react";
 import type { Profile } from "types/profile";

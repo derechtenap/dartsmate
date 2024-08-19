@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { getStaticPaths, makeStaticProperties } from "../../lib/get-static";
+import { getStaticPaths, makeStaticProperties } from "@/lib/getStatic";
 import DefaultLayout from "@/components/layouts/Default";
 import { Text, Title } from "@mantine/core";
 import useProfileContext from "hooks/useProfiles";
