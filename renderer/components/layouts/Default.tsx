@@ -24,7 +24,7 @@ import {
   IconSquareX,
   IconSquaresDiagonal,
 } from "@tabler/icons-react";
-import { i18n, useTranslation } from "next-i18next";
+import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { APP_NAME, APP_VERSION } from "utils/constants";
 import navbarRoutes from "utils/content/navbarRoutes";
@@ -49,8 +49,11 @@ const DefaultLayout = ({
   const NETWORK_STATUS = useNetwork();
 
   const router = useRouter();
-  const locale = i18n?.language as string;
-  const { t } = useTranslation(["common"]);
+
+  const {
+    t,
+    i18n: { language: locale },
+  } = useTranslation(["common"]);
 
   const isActiveRoute = (route: string) => {
     const currentRoute = router.asPath;
