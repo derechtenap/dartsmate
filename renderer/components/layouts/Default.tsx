@@ -18,22 +18,16 @@ import {
   useOs,
 } from "@mantine/hooks";
 import {
-  IconBarbell,
-  IconChartBar,
-  IconHistory,
-  IconHome,
   IconMenu2,
   IconMinus,
-  IconSettings,
   IconSquare,
   IconSquareX,
   IconSquaresDiagonal,
-  IconTarget,
-  IconUser,
 } from "@tabler/icons-react";
 import { i18n, useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { APP_NAME, APP_VERSION } from "utils/constants";
+import navbarRoutes from "utils/content/navbarRoutes";
 import sendIPC from "utils/ipc/send";
 
 type DefaultLayoutProps = {
@@ -57,44 +51,6 @@ const DefaultLayout = ({
   const router = useRouter();
   const locale = i18n?.language as string;
   const { t } = useTranslation(["common"]);
-
-  const navbarRoutes = [
-    {
-      icon: <IconHome />,
-      label: t("routes.home"),
-      route: "/",
-    },
-    {
-      icon: <IconTarget />,
-      label: t("routes.newMatch"),
-      route: "/lobby",
-    },
-    {
-      icon: <IconBarbell />,
-      label: t("routes.practice"),
-      route: "/practice",
-    },
-    {
-      icon: <IconHistory />,
-      label: t("routes.history"),
-      route: "/history",
-    },
-    {
-      icon: <IconUser />,
-      label: t("routes.profile"),
-      route: "/profile",
-    },
-    {
-      icon: <IconChartBar />,
-      label: t("routes.statistics"),
-      route: "/statistics",
-    },
-    {
-      icon: <IconSettings />,
-      label: t("routes.settings"),
-      route: "/settings",
-    },
-  ];
 
   const isActiveRoute = (route: string) => {
     const currentRoute = router.asPath;
@@ -195,7 +151,7 @@ const DefaultLayout = ({
             <NavLink
               active={isActiveRoute(route.route)}
               key={route.route}
-              label={route.label}
+              label={t(route.label)}
               leftSection={route.icon}
               variant="filled"
               onClick={() => void router.push(`/${locale + route.route}`)}
