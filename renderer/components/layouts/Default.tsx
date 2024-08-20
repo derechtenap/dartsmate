@@ -46,7 +46,7 @@ const DefaultLayout = ({
   const [isNavbarOpened, { toggle: toggleNavbar }] =
     useDisclosure(withNavbarOpen);
   const CLIENT_OS = useOs();
-  const NETWORK_STATUS = useNetwork();
+  const { online: NETWORK_STATUS } = useNetwork();
 
   const router = useRouter();
 
@@ -172,7 +172,7 @@ const DefaultLayout = ({
             </Text>
             <Text component="span" fz="xs" display="block">
               {t("networkStatus.text")}:{" "}
-              {NETWORK_STATUS.online
+              {NETWORK_STATUS
                 ? t("networkStatus.online")
                 : t("networkStatus.offline")}
             </Text>
