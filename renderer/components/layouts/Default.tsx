@@ -29,6 +29,7 @@ import { useRouter } from "next/router";
 import { APP_NAME, APP_VERSION } from "utils/constants";
 import navbarRoutes from "utils/content/navbarRoutes";
 import sendIPC from "utils/ipc/send";
+import formatLocalizedRoute from "utils/navigation/formatLocalizedRoute";
 
 type DefaultLayoutProps = {
   children: React.ReactNode;
@@ -57,7 +58,10 @@ const DefaultLayout = ({
 
   const isActiveRoute = (route: string) => {
     const currentRoute = router.asPath;
-    const localizedRoute = `/${locale}${route}`;
+    const localizedRoute = formatLocalizedRoute({
+      locale,
+      route,
+    });
 
     /*
      * Check if the current route is exactly equal to the localized one.
@@ -157,7 +161,14 @@ const DefaultLayout = ({
               label={t(route.label)}
               leftSection={route.icon}
               variant="filled"
-              onClick={() => void router.push(`/${locale + route.route}`)}
+              onClick={() =>
+                void router.push(
+                  formatLocalizedRoute({
+                    locale,
+                    route: route.route,
+                  })
+                )
+              }
             />
           ))}
         </AppShell.Section>
