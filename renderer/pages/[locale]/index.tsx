@@ -2,9 +2,10 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import { getStaticPaths, makeStaticProperties } from "@/lib/getStatic";
 import DefaultLayout from "@/components/layouts/Default";
-import { Grid, Title } from "@mantine/core";
+import { Box, Stack, Title } from "@mantine/core";
 import useProfileContext from "hooks/useProfiles";
 import DarkenedText from "@/components/content/DarkenedText";
+import HorizontalScrollContainer from "@/components/content/horizontalScroll/HorizontalScrollContainer";
 
 const IndexPage = () => {
   const { t } = useTranslation();
@@ -13,14 +14,15 @@ const IndexPage = () => {
   if (defaultProfile) {
     return (
       <DefaultLayout withNavbarOpen={false}>
-        <Grid p="xs">
-          <Grid.Col span={12}>
+        <Stack>
+          <Box component="header">
             <Title fz="h1">
               {t("greetingText", { FIRST_NAME: defaultProfile.name.firstName })}
             </Title>
             <DarkenedText>{t("greetingSubtext")}</DarkenedText>
-          </Grid.Col>
-        </Grid>
+          </Box>
+          <HorizontalScrollContainer></HorizontalScrollContainer>
+        </Stack>
       </DefaultLayout>
     );
   }
