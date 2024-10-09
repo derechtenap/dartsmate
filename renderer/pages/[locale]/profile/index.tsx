@@ -1,4 +1,3 @@
-import React from "react";
 import { useTranslation } from "next-i18next";
 import type { NextPage } from "next";
 import { getStaticPaths, makeStaticProperties } from "@/lib/getStatic";
