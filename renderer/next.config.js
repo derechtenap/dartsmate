@@ -4,11 +4,13 @@
  *
  */
 module.exports = {
+  output: "export",
+  distDir: process.env.NODE_ENV === "production" ? "../app" : ".next",
+  trailingSlash: true,
   images: {
     unoptimized: true,
   },
-  trailingSlash: true,
   webpack: (config) => {
-    return config;
+    return config
   }
 };
