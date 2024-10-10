@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import Stat from "@/components/content/Stat";
 import getFormattedName from "utils/misc/getFormattedName";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
-import useProfilesContext from "hooks/useProfiles";
+import { useDefaultProfile } from "hooks/useDefaultProfile";
 
 const ProfileIndexPage: NextPage = () => {
   const {
@@ -26,7 +26,7 @@ const ProfileIndexPage: NextPage = () => {
   } = useTranslation();
   const router = useRouter();
 
-  const { defaultProfile } = useProfilesContext();
+  const { data: defaultProfile } = useDefaultProfile();
 
   if (defaultProfile) {
     return (

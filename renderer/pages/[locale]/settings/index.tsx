@@ -2,16 +2,23 @@ import { useTranslation } from "next-i18next";
 import { getStaticPaths, makeStaticProperties } from "@/lib/getStatic";
 import { Button, Group, Stack, Text, Title } from "@mantine/core";
 import SettingsLayout from "@/components/layouts/SettingsLayout";
-import useProfilesContext from "hooks/useProfiles";
+
 import ProfileAvatar from "@/components/content/ProfileAvatar";
 import getFormattedName from "utils/misc/getFormattedName";
 import { IconUserDown, IconUserEdit, IconUserMinus } from "@tabler/icons-react";
 import { modals } from "@mantine/modals";
 import { useRouter } from "next/router";
 import getDefaultIconSize from "utils/misc/getDefaultIconSize";
+import {
+  useDefaultProfile,
+  useDeleteDefaultProfile,
+} from "hooks/useDefaultProfile";
+import { notifications } from "@mantine/notifications";
 
 const SettingsPage = () => {
-  const { deleteDefaultProfile, defaultProfile } = useProfilesContext();
+  const { data: defaultProfile } = useDefaultProfile();
+  const { mutate: deleteProfile } = useDeleteDefaultProfile();
+
   const router = useRouter();
   const {
     t,
@@ -31,8 +38,24 @@ const SettingsPage = () => {
         blur: 3,
       },
       onConfirm: () => {
-        deleteDefaultProfile();
-        void router.push(`/${locale}/welcome`);
+        // TODO: Add translation keys here
+        deleteProfile(undefined, {
+          onSuccess: () => {
+            notifications.show({
+              title: "Profile deleted!",
+              message: "Hopefully we see you again!",
+            });
+
+            void router.push(`/${locale}/welcome`);
+          },
+          onError: (err) => {
+            console.error("Failed to delete profile: ", err);
+            notifications.show({
+              title: "Unable to delete Profile!",
+              message: "",
+            });
+          },
+        });
       },
     });
   };

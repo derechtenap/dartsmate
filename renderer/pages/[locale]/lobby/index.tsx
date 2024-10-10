@@ -37,7 +37,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import getFormattedName from "utils/misc/getFormattedName";
 import EmptyState from "@/components/content/EmptyState";
-import useProfileContext from "hooks/useProfiles";
+import { useDefaultProfile } from "hooks/useDefaultProfile";
 
 const NewGamePage = () => {
   const {
@@ -49,7 +49,7 @@ const NewGamePage = () => {
     []
   );
 
-  const { defaultProfile, guestProfiles } = useProfileContext();
+  const { data: defaultProfile } = useDefaultProfile();
 
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -64,9 +64,11 @@ const NewGamePage = () => {
       availableProfilesActions.append(defaultProfile);
     }
 
+    /*
     guestProfiles.forEach((profile) => {
       availableProfilesActions.append(profile);
-    });
+    }); 
+    */
   }, []);
 
   const matchUUID = uuidv4();
