@@ -1,0 +1,28 @@
+{
+  "colorSchemes": {
+    "light": "Hell",
+    "dark": "Dunkel",
+    "auto": "System"
+  },
+  "profile": {
+    "title": "Profil",
+    "text": "Hier können Sie ihr aktuelles Profil bearbeiten oder löschen."
+  },
+  "colorScheme": {
+    "title": "Farbschema",
+    "text": "Wählen Sie ein helles oder dunkles Farbschema, um Ihre Erfahrung zu personalisieren. Sie können auch \"System\" auswählen, um das Farbschema der App basierend auf den Einstellungen Ihres Betriebssystems zu wählen."
+  },
+  "language": {
+    "title": "Sprache",
+    "text": "Wählen Sie Ihre bevorzugte Sprache für die App aus."
+  },
+  "deleteProfile": {
+    "title": "Profil löschen",
+    "text": "Löschen Sie Ihr aktuelles Profil. Dies setzt keine weitere App-Einsteillungen zurück.",
+    "confirmText": "Möchten Sie ihr Profil wirklich löschen?"
+  },
+  "languages": {
+    "de": "Deutsch",
+    "en": "Englisch"
+  }
+}

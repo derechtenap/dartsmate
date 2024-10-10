@@ -1,0 +1,15 @@
+{
+  "playerWon": "{{PLAYER_NAME}} hat das Spiel gewonnen!",
+  "multipliers": {
+    "double": "Double",
+    "triple": "Triple"
+  },
+  "removeThrows": "Letzte Eingabe löschen",
+  "nextPlayer": "Nächster Spieler",
+  "abortMatch": "Spiel abbrechen",
+  "modalAbortMatch": {
+    "title": "Möchten Sie das Spiel wirklich abbrechen?",
+    "text": "Das Spiel wird endgültig abgebrochen und kann nicht mehr fortgesetzt werden. Sind Sie sicher, dass Sie fortfahren möchten?",
+    "cancelButton": "Spiel fortsetzen"
+  }
+}

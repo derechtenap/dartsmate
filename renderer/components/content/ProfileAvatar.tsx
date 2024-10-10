@@ -1,20 +1,23 @@
 import { Avatar } from "@mantine/core";
 import type { AvatarProps } from "@mantine/core";
-import { Profile } from "types/profile";
-import { getUsernameInitials } from "utils/misc/getUsernameInitials";
+import type { Profile } from "types/profile";
 
-interface ProfileAvatarProps extends AvatarProps {
+type ProfileAvatarProps = AvatarProps & {
   profile: Profile;
-}
+};
 
 const ProfileAvatar = ({
   profile,
   ...mantineAvatarProps
 }: ProfileAvatarProps) => {
   return (
-    <Avatar color={profile.color} {...mantineAvatarProps}>
-      {getUsernameInitials(profile.username)}
-    </Avatar>
+    <Avatar
+      color={profile.color}
+      name={profile.username}
+      src={profile.avatarImage}
+      variant="filled"
+      {...mantineAvatarProps}
+    />
   );
 };
 
