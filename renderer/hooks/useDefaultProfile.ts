@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Profile } from "types/profile";
 
 export const key = "defaultProfile" as const;
@@ -28,6 +28,8 @@ export const useDefaultProfile = () => {
 };
 
 export const useMutateDefaultProfile = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     networkMode: "always",
     mutationKey: [key],
@@ -43,6 +45,14 @@ export const useMutateDefaultProfile = () => {
           reject(err);
         }
       });
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: [key],
+      });
+    },
+    onError: (err) => {
+      console.error(err);
     },
   });
 };
@@ -61,6 +71,12 @@ export const useDeleteDefaultProfile = () => {
           reject(err);
         }
       });
+    },
+    onSuccess: () => {
+      // TODO: Do something on success?! :)
+    },
+    onError: (err) => {
+      console.error(err);
     },
   });
 };
