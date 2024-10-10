@@ -38,7 +38,7 @@ import {
   IconUserCircle,
 } from "@tabler/icons-react";
 import { useSearchParams } from "next/navigation";
-import useProfileContext from "hooks/useProfiles";
+import { useMutateDefaultProfile } from "hooks/useDefaultProfile";
 
 const CreateProfilePage: NextPage = () => {
   const params = useSearchParams();
@@ -54,7 +54,7 @@ const CreateProfilePage: NextPage = () => {
     theme.primaryColor
   );
 
-  const { updateDefaultProfile } = useProfileContext();
+  const { mutate } = useMutateDefaultProfile();
   const isGuestProfile = params.get("isGuest") ? true : false;
 
   const form = useForm<Profile>({
@@ -154,7 +154,7 @@ const CreateProfilePage: NextPage = () => {
       return;
     }
 
-    updateDefaultProfile(form.values);
+    mutate(form.values);
 
     void router.push(`/${locale}`);
   };
