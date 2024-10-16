@@ -1,30 +1,34 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Profile } from "types/profile";
 import log from "electron-log/renderer";
+import { NIL as NIL_UUID } from "uuid";
 
 export const key = "defaultProfile" as const;
 
 export const useDefaultProfile = () => {
   return useQuery<Profile>({
-    /*
-     * The query runs regardless of network status, since the data is
-     * fetched locally from the client's system
-     */
-    networkMode: "always",
     queryKey: [key],
     queryFn: () => {
       try {
         return window.ipc.getDefaultProfile();
       } catch (err) {
         log.error("Unable to get default profile! Error: ", err);
-        throw err;
+        return {
+          avatarImage: undefined,
+          bio: "",
+          color: "blue",
+          createdAt: 0,
+          isGuestProfile: false,
+          name: {
+            firstName: "",
+            lastName: "",
+          },
+          updatedAt: 0,
+          username: "",
+          uuid: NIL_UUID,
+        };
       }
     },
-    /*
-     * The data is considered always fresh and will not refetch
-     * automatically
-     */
-    staleTime: Infinity,
   });
 };
 
@@ -32,7 +36,6 @@ export const useMutateDefaultProfile = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    networkMode: "always",
     mutationKey: [key],
     mutationFn: (newProfileData: Profile) => {
       return new Promise((resolve, reject) => {
@@ -60,7 +63,6 @@ export const useMutateDefaultProfile = () => {
 
 export const useDeleteDefaultProfile = () => {
   return useMutation({
-    networkMode: "always",
     mutationKey: [key],
     mutationFn: () => {
       return new Promise((resolve, reject) => {
