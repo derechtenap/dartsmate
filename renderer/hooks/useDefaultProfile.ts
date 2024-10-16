@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Profile } from "types/profile";
+import log from "electron-log/renderer";
 
 export const key = "defaultProfile" as const;
 
@@ -15,7 +16,7 @@ export const useDefaultProfile = () => {
       try {
         return window.ipc.getDefaultProfile();
       } catch (err) {
-        console.error("Unable to get default profile! Error: ", err);
+        log.error("Unable to get default profile! Error: ", err);
         throw err;
       }
     },
@@ -41,7 +42,7 @@ export const useMutateDefaultProfile = () => {
           const result = window.ipc.setDefaultProfile(updatedProfile);
           resolve(result);
         } catch (err) {
-          console.error("Failed to update default profile! Error: ", err);
+          log.error("Failed to update default profile! Error: ", err);
           reject(err);
         }
       });
@@ -52,7 +53,7 @@ export const useMutateDefaultProfile = () => {
       });
     },
     onError: (err) => {
-      console.error(err);
+      log.error(err);
     },
   });
 };
@@ -67,7 +68,7 @@ export const useDeleteDefaultProfile = () => {
           const result = window.ipc.deleteDefaultProfile();
           resolve(result);
         } catch (err) {
-          console.error("Failed to delete default profile! Error: ", err);
+          log.error("Failed to delete default profile! Error: ", err);
           reject(err);
         }
       });
@@ -76,7 +77,7 @@ export const useDeleteDefaultProfile = () => {
       // TODO: Do something on success?! :)
     },
     onError: (err) => {
-      console.error(err);
+      log.error(err);
     },
   });
 };

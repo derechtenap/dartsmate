@@ -14,6 +14,7 @@ import {
   useDeleteDefaultProfile,
 } from "hooks/useDefaultProfile";
 import { notifications } from "@mantine/notifications";
+import log from "electron-log/renderer";
 
 const SettingsPage = () => {
   const { data: defaultProfile } = useDefaultProfile();
@@ -49,7 +50,7 @@ const SettingsPage = () => {
             void router.push(`/${locale}/welcome`);
           },
           onError: (err) => {
-            console.error("Failed to delete profile: ", err);
+            log.error("Failed to delete profile: ", err);
             notifications.show({
               title: "Unable to delete Profile!",
               message: "",

@@ -33,6 +33,7 @@ import {
   useMutateDefaultProfile,
 } from "hooks/useDefaultProfile";
 import { useQueryClient } from "@tanstack/react-query";
+import log from "electron-log/renderer";
 
 const EditProfilePage: NextPage = () => {
   const { t } = useTranslation();
@@ -121,7 +122,7 @@ const EditProfilePage: NextPage = () => {
         const resizedBase64 = await resizeAvatarImage({ file: file });
         form.setFieldValue("avatarImage", resizedBase64);
       } catch (error) {
-        console.error("Error resizing the file: ", error);
+        log.error("Error resizing the file: ", error);
       }
     };
 
@@ -135,7 +136,7 @@ const EditProfilePage: NextPage = () => {
      * check if files array is not empty to prevent accessing undefined.
      */
     if (files.length === 0) {
-      console.error("Expected one image file, but the file array was empty.");
+      log.error("Expected one image file, but the file array was empty.");
       return;
     }
 

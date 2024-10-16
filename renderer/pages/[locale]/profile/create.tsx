@@ -39,6 +39,7 @@ import {
 } from "@tabler/icons-react";
 import { useSearchParams } from "next/navigation";
 import { useMutateDefaultProfile } from "hooks/useDefaultProfile";
+import log from "electron-log/renderer";
 
 const CreateProfilePage: NextPage = () => {
   const params = useSearchParams();
@@ -101,7 +102,7 @@ const CreateProfilePage: NextPage = () => {
         const resizedBase64 = await resizeAvatarImage({ file: file });
         form.setFieldValue("avatarImage", resizedBase64);
       } catch (error) {
-        console.error("Error resizing the file: ", error);
+        log.error("Error resizing the file: ", error);
       }
     };
 

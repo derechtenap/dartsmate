@@ -1,6 +1,7 @@
 import type { IpcRendererEvent } from "electron";
 import { contextBridge, ipcRenderer } from "electron";
 import { Profile } from "../renderer/types/profile";
+import log from "electron-log/main";
 
 const handler = {
   send(channel: string, value: unknown) {
@@ -36,13 +37,13 @@ const handler = {
   },
 
   deleteGuestProfile(profile: Profile) {
-    console.info("Deleting Profile", profile);
+    log.info("Deleting Profile", profile);
     // TODO: Add return
     // void ipcRenderer.invoke("setGuestProfile", profile)
   },
 
   deleteAllGuestProfiles() {
-    console.info("Deleting all Guest Profiles");
+    log.info("Deleting all Guest Profiles");
   },
 
   getGuestProfiles() {
