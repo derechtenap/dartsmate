@@ -5,7 +5,7 @@ import path from "path";
 import i18next from "../next-i18next.config.js";
 import log from "electron-log";
 import { appSettingsStore, profilesStore } from "./helpers/stores";
-import { getSystemVersion } from "process";
+import logSystemInfo from "./helpers/utils/logSystemInfo";
 
 export const isProd: boolean = process.env.NODE_ENV === "production";
 
@@ -25,19 +25,12 @@ const sessionId = new Date().valueOf();
 log.transports.file.resolvePathFn = () => {
   return path.join(app.getPath("logs"), `${sessionId}.log`);
 };
+  log.transports.file.resolvePathFn = () => {
 
 void (async () => {
-  await app.whenReady().then(() => {
-    const clientSystemData = {
-      appName: app.getName(),
-      appVersion: app.getVersion(),
-      isProduction: isProd,
-      platform: process.platform,
-      arch: process.arch,
-      systemVersion: getSystemVersion(),
-    };
 
-    log.info(`Client System`, JSON.stringify(clientSystemData));
+  await app.whenReady().then(() => {
+    logSystemInfo();
 
     //  Initialize the logger for renderer process
     log.initialize();
