@@ -32,8 +32,7 @@ void (async () => {
   await app.whenReady().then(() => {
     logSystemInfo();
 
-    //  Initialize the logger for renderer process
-    log.initialize();
+    log.initialize(); // Initialize the logger for renderer process
   });
 
   const mainWindow = createWindow("main", {

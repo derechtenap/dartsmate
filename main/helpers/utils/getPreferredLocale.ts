@@ -25,7 +25,6 @@ const getPreferredLocale = (): string => {
     return appLocale;
   }
 
-  // If the user's locale is not supported, fallback to default locale
   log.warn(
     `User's preferred locale is not included in the i18n locales config. Falling back to default locale: ${defaultLocale}!`
   );
