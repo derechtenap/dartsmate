@@ -66,7 +66,7 @@ void (async () => {
       await mainWindow.loadURL(`app://./${locale}/`);
     } else {
       await mainWindow.loadURL(`http://localhost:${port}/${locale}`);
-      mainWindow.webContents.openDevTools();
+      mainWindow.webContents.openDevTools({ mode: "detach" });
     }
   }
 })();
