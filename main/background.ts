@@ -4,8 +4,7 @@ import { createWindow } from "./helpers";
 import path from "path";
 import log from "electron-log";
 import { appSettingsStore, profilesStore } from "./helpers/stores";
-import logSystemInfo from "./helpers/utils/logSystemInfo";
-import getPreferredLocale from "./helpers/utils/getPreferredLocale";
+import { getPreferredLocale, logSystemInfo } from "./helpers/utils";
 
 export const isProd: boolean = process.env.NODE_ENV === "production";
 
