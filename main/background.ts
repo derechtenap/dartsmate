@@ -72,5 +72,8 @@ void (async () => {
 })();
 
 app.on("window-all-closed", () => {
-  app.quit();
+  // On macOS, apps typically remain active after closing all windows
+  if (process.platform !== "darwin") {
+    app.quit();
+  }
 });
