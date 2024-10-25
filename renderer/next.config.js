@@ -12,5 +12,6 @@ module.exports = {
   },
   webpack: (config) => {
     return config
-  }
+  },
+  transpilePackages: ["localbase"]
 };

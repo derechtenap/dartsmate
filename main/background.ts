@@ -13,21 +13,19 @@ export const minWindowSize = {
   width: 1024,
 };
 
+const sessionId = new Date().valueOf();
+
 if (isProd) {
   serve({ directory: "app" });
+
+  log.transports.file.resolvePathFn = () => {
+    return path.join(app.getPath("logs"), `${sessionId}.log`);
+  };
 } else {
   app.setPath("userData", `${app.getPath("userData")} (development)`);
 }
 
-const sessionId = new Date().valueOf();
-
-log.transports.file.resolvePathFn = () => {
-  return path.join(app.getPath("logs"), `${sessionId}.log`);
-};
-  log.transports.file.resolvePathFn = () => {
-
 void (async () => {
-
   await app.whenReady().then(() => {
     logSystemInfo();
 
