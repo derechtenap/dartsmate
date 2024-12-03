@@ -3,4 +3,6 @@ import { APP_NAME } from "utils/constants";
 
 const lowerCasedAppName = APP_NAME.toLowerCase();
 
-export const database = new Localbase(lowerCasedAppName);
+const database = new Localbase(lowerCasedAppName);
+
+export default database;

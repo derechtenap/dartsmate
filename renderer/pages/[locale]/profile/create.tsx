@@ -38,8 +38,8 @@ import {
   IconUserCircle,
 } from "@tabler/icons-react";
 import { useSearchParams } from "next/navigation";
-import { useMutateDefaultProfile } from "hooks/useDefaultProfile";
 import log from "electron-log/renderer";
+import addProfileToDatabase from "@/lib/db/profiles/addProfile";
 
 const CreateProfilePage: NextPage = () => {
   const params = useSearchParams();
@@ -55,7 +55,6 @@ const CreateProfilePage: NextPage = () => {
     theme.primaryColor
   );
 
-  const { mutate } = useMutateDefaultProfile();
   const isGuestProfile = params.get("isGuest") ? true : false;
 
   const form = useForm<Profile>({
@@ -148,15 +147,8 @@ const CreateProfilePage: NextPage = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // TODO: Check if the process was successful!
-    if (isGuestProfile) {
-      window.ipc.setGuestProfile(form.values);
-      void router.push(`/${locale}`);
-      return;
-    }
-
-    mutate(form.values);
-
+    window.ipc.setDefaultProfileUUID(form.values.uuid);
+    addProfileToDatabase(form.values);
     void router.push(`/${locale}`);
   };
   return (

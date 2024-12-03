@@ -3,7 +3,7 @@ import serve from "electron-serve";
 import { createWindow } from "./helpers";
 import path from "path";
 import log from "electron-log";
-import { appSettingsStore, profilesStore } from "./helpers/stores";
+import { appSettingsStore } from "./helpers/stores";
 import { getPreferredLocale, logSystemInfo } from "./helpers/utils";
 
 export const isProd: boolean = process.env.NODE_ENV === "production";
@@ -47,7 +47,7 @@ void (async () => {
   // Retrieve the stored locale from app settings, or use the client's preferred locale
   const preferredLocale = getPreferredLocale();
   const locale = appSettingsStore.get("locale", preferredLocale);
-  const defaultProfile = profilesStore.get("defaultProfile");
+  const defaultProfile = appSettingsStore.get("defaultProfileUUID");
 
   const port = process.argv[2];
   const welcomeRoute = isProd
