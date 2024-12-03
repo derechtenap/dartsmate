@@ -10,9 +10,10 @@ import { modals } from "@mantine/modals";
 import { useRouter } from "next/router";
 import getDefaultIconSize from "utils/misc/getDefaultIconSize";
 
-import { notifications } from "@mantine/notifications";
-import log from "electron-log/renderer";
+// import { notifications } from "@mantine/notifications";
+// import log from "electron-log/renderer";
 import useDefaultProfile from "hooks/getDefaultProfile";
+import deleteProfileFromDatabase from "@/lib/db/profiles/deleteProfile";
 
 const SettingsPage = () => {
   const defaultProfile = useDefaultProfile();
@@ -36,24 +37,14 @@ const SettingsPage = () => {
         blur: 3,
       },
       onConfirm: () => {
-        // TODO: Add translation keys here
-        deleteProfile(undefined, {
-          onSuccess: () => {
-            notifications.show({
-              title: "Profile deleted!",
-              message: "Hopefully we see you again!",
-            });
+        if (!defaultProfile) throw new Error("Unable to delete the profile!");
 
-            void router.push(`/${locale}/welcome`);
-          },
-          onError: (err) => {
-            log.error("Failed to delete profile: ", err);
-            notifications.show({
-              title: "Unable to delete Profile!",
-              message: "",
-            });
-          },
+        deleteProfileFromDatabase(defaultProfile.uuid).catch((e) => {
+          console.error(e);
         });
+
+        window.ipc.removeDefaultProfileUUID();
+        void router.push(`/${locale}/welcome`);
       },
     });
   };

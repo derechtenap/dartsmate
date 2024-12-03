@@ -17,7 +17,7 @@ ipcMain.handle("getDefaultProfileUUID", (): string | undefined => {
 });
 
 ipcMain.handle("removeDefaultProfileUUID", () => {
-  appSettingsStore.reset("defaultProfileUUID");
+  appSettingsStore.delete("defaultProfileUUID");
 });
 
 ipcMain.on("minimize-app-window", () => {
