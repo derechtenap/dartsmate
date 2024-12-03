@@ -9,16 +9,13 @@ import { IconUserDown, IconUserEdit, IconUserMinus } from "@tabler/icons-react";
 import { modals } from "@mantine/modals";
 import { useRouter } from "next/router";
 import getDefaultIconSize from "utils/misc/getDefaultIconSize";
-import {
-  useDefaultProfile,
-  useDeleteDefaultProfile,
-} from "hooks/useDefaultProfile";
+
 import { notifications } from "@mantine/notifications";
 import log from "electron-log/renderer";
+import useDefaultProfile from "hooks/getDefaultProfile";
 
 const SettingsPage = () => {
-  const { data: defaultProfile } = useDefaultProfile();
-  const { mutate: deleteProfile } = useDeleteDefaultProfile();
+  const defaultProfile = useDefaultProfile();
 
   const router = useRouter();
   const {

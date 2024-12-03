@@ -15,10 +15,16 @@ const handler = {
     };
   },
   setLocale(locale: string) {
-    void ipcRenderer.invoke(`setLocale`, locale);
+    void ipcRenderer.invoke("setLocale", locale);
   },
   setDefaultProfileUUID(uuid: string) {
     void ipcRenderer.invoke("setDefaultProfileUUID", uuid);
+  },
+  getDefaultProfileUUID() {
+    return ipcRenderer.invoke("getDefaultProfileUUID"); // Use invoke here
+  },
+  removeDefaultProfileUUID() {
+    void ipcRenderer.invoke("removeDefaultProfileUUID");
   },
 };
 

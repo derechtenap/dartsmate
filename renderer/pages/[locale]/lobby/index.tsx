@@ -37,7 +37,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import getFormattedName from "utils/misc/getFormattedName";
 import EmptyState from "@/components/content/EmptyState";
-import { useDefaultProfile } from "hooks/useDefaultProfile";
+import useDefaultProfile from "hooks/getDefaultProfile";
 
 const NewGamePage = () => {
   const {
@@ -49,7 +49,7 @@ const NewGamePage = () => {
     []
   );
 
-  const { data: defaultProfile } = useDefaultProfile();
+  const defaultProfile = useDefaultProfile();
 
   const [opened, { open, close }] = useDisclosure(false);
 

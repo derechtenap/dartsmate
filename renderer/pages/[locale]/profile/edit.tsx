@@ -28,21 +28,16 @@ import { notifications } from "@mantine/notifications";
 import resizeAvatarImage from "utils/avatars/resizeAvatarImage";
 import { DEFAULT_AVATAR_FILE_SIZE } from "utils/avatars/constants";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
-import {
-  useDefaultProfile,
-  useMutateDefaultProfile,
-} from "hooks/useDefaultProfile";
-import { useQueryClient } from "@tanstack/react-query";
 import log from "electron-log/renderer";
+import useDefaultProfile from "hooks/getDefaultProfile";
 
 const EditProfilePage: NextPage = () => {
   const { t } = useTranslation();
   const theme = useMantineTheme();
   const router = useRouter();
 
-  const queryClient = useQueryClient();
-  const { data: defaultProfile } = useDefaultProfile();
-  const { mutate } = useMutateDefaultProfile();
+  const defaultProfile = useDefaultProfile();
+  // const { mutate } = useMutateDefaultProfile();
 
   const [avatarColor, setAvatarColor] = useState<
     DefaultMantineColor | undefined
@@ -61,7 +56,7 @@ const EditProfilePage: NextPage = () => {
 
   useEffect(() => {
     if (defaultProfile) form.setValues(defaultProfile);
-  }, []);
+  }, [defaultProfile]);
 
   // Manually update the color, since the ...props method doesn't work on the color swatches
   const updateAvatarColor = (color: DefaultMantineColor) => {
@@ -97,15 +92,7 @@ const EditProfilePage: NextPage = () => {
   ));
 
   const handleEdit = () => {
-    mutate(
-      { ...form.values },
-      {
-        onSuccess: () => {
-          void queryClient.invalidateQueries();
-          router.back();
-        },
-      }
-    );
+    return;
   };
 
   const handleFileChange = (files: FileWithPath[]) => {
