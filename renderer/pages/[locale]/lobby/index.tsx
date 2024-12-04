@@ -37,7 +37,8 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import getFormattedName from "utils/misc/getFormattedName";
 import EmptyState from "@/components/content/EmptyState";
-import useDefaultProfile from "hooks/getDefaultProfile";
+import getAllProfilesFromDatabase from "@/lib/db/profiles/getAllProfiles";
+import { notifications } from "@mantine/notifications";
 
 const NewGamePage = () => {
   const {
@@ -49,7 +50,19 @@ const NewGamePage = () => {
     []
   );
 
-  const defaultProfile = useDefaultProfile();
+  const getAllProfiles = () =>
+    getAllProfilesFromDatabase()
+      .then((profiles) => {
+        profiles.forEach((profile) => {
+          availableProfilesActions.append(profile);
+        });
+      })
+      .catch((e) => {
+        notifications.show({
+          title: "Error!",
+          message: e as string,
+        });
+      });
 
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -60,15 +73,7 @@ const NewGamePage = () => {
     selectedProfilesActions.setState([]);
     availableProfilesActions.setState([]);
 
-    if (defaultProfile) {
-      availableProfilesActions.append(defaultProfile);
-    }
-
-    /*
-    guestProfiles.forEach((profile) => {
-      availableProfilesActions.append(profile);
-    }); 
-    */
+    void getAllProfiles();
   }, []);
 
   const matchUUID = uuidv4();
