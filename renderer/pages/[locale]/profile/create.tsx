@@ -147,7 +147,14 @@ const CreateProfilePage: NextPage = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    window.ipc.setDefaultProfileUUID(form.values.uuid);
+    /*
+     * Update the app's default profile UUID only if the current
+     * profile is not a guest profile.
+     */
+    if (!isGuestProfile) {
+      window.ipc.setDefaultProfileUUID(form.values.uuid);
+    }
+
     addProfileToDatabase(form.values);
     void router.push(`/${locale}`);
   };
