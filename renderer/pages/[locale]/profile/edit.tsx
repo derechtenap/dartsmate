@@ -30,9 +30,13 @@ import { DEFAULT_AVATAR_FILE_SIZE } from "utils/avatars/constants";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
 import log from "electron-log/renderer";
 import useDefaultProfile from "hooks/getDefaultProfile";
+import updateProfileFromDatabase from "@/lib/db/profiles/updateProfile";
 
 const EditProfilePage: NextPage = () => {
-  const { t } = useTranslation();
+  const {
+    t,
+    i18n: { language: locale },
+  } = useTranslation();
   const theme = useMantineTheme();
   const router = useRouter();
 
@@ -91,8 +95,24 @@ const EditProfilePage: NextPage = () => {
     </Tooltip>
   ));
 
+  // TODO: Add translations
   const handleEdit = () => {
-    return;
+    updateProfileFromDatabase(form.values, form.values.uuid)
+      .then(() => {
+        notifications.show({
+          title: "Updated the profile!",
+          message: "All done!",
+        });
+
+        void router.push(`/${locale}/profile`);
+      })
+      .catch((e) => {
+        // TODO: Show a better error message
+        notifications.show({
+          title: "Unable to update the profile!",
+          message: e as string,
+        });
+      });
   };
 
   const handleFileChange = (files: FileWithPath[]) => {
