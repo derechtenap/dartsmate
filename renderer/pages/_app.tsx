@@ -1,10 +1,6 @@
 import type { AppProps } from "next/app";
 import { MantineProvider } from "@mantine/core";
 import { appWithTranslation } from "next-i18next";
-import { HydrationBoundary, QueryClientProvider } from "@tanstack/react-query";
-import { QueryClient } from "@tanstack/query-core";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import type { DehydratedState } from "@tanstack/react-query";
 import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 
@@ -18,31 +14,19 @@ import "@mantine/charts/styles.css";
 import "../styles/globals.css";
 import "../styles/scrollbar.css";
 
-const queryClient = new QueryClient();
-
-const App = ({
-  Component,
-  pageProps,
-}: AppProps<{
-  dehydratedState: DehydratedState;
-}>) => {
+const App = ({ Component, pageProps }: AppProps) => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <MantineProvider
-        defaultColorScheme="auto"
-        theme={{
-          primaryColor: "red",
-        }}
-      >
-        <Notifications position="top-right" limit={5} />
-        <HydrationBoundary state={pageProps.dehydratedState}>
-          <ModalsProvider>
-            <Component {...pageProps} />
-          </ModalsProvider>
-        </HydrationBoundary>
-      </MantineProvider>
-      <ReactQueryDevtools initialIsOpen={false} position="bottom" />
-    </QueryClientProvider>
+    <MantineProvider
+      defaultColorScheme="auto"
+      theme={{
+        primaryColor: "red",
+      }}
+    >
+      <Notifications position="top-right" limit={5} />
+      <ModalsProvider>
+        <Component {...pageProps} />
+      </ModalsProvider>
+    </MantineProvider>
   );
 };
 

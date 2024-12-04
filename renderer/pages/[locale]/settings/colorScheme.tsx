@@ -13,6 +13,7 @@ import { IconDeviceDesktop, IconMoon, IconSun } from "@tabler/icons-react";
 import { getStaticPaths, makeStaticProperties } from "@/lib/getStatic";
 import { useTranslation } from "next-i18next";
 import getDefaultIconSize from "utils/misc/getDefaultIconSize";
+import log from "electron-log/renderer";
 
 const colorSchemePage = () => {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
@@ -61,7 +62,7 @@ const colorSchemePage = () => {
       setColorScheme(newScheme);
       return;
     }
-    console.warn("A invalid color scheme was provided:", newScheme);
+    log.error("A invalid color scheme was provided:", newScheme);
   };
 
   return (

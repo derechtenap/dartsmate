@@ -40,7 +40,7 @@ const SettingsLayout = ({ children, route }: SettingsLayoutProps) => {
     {
       activeRoute: "language",
       icon: <IconLanguage style={getDefaultIconSize()} />,
-      href: "/language",
+      href: "/language/",
       label: t("settings:language.title"),
     },
   ];
@@ -56,7 +56,7 @@ const SettingsLayout = ({ children, route }: SettingsLayoutProps) => {
               leftSection={navLink.icon}
               key={navLink.href}
               onClick={() =>
-                void router.push(`/${locale}/settings/${navLink.href}`)
+                void router.push(`/${locale}/settings${navLink.href}`)
               }
               variant="filled"
             />

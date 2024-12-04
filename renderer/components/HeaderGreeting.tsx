@@ -10,8 +10,6 @@ type HeaderGreetingProps = BoxComponentProps & {
 const HeaderGreeting = ({ firstName, ...props }: HeaderGreetingProps) => {
   const { t } = useTranslation(["common"]);
 
-  console.info(firstName);
-
   if (!firstName) {
     return (
       <Box component="header" {...props}>

@@ -28,20 +28,20 @@ import { notifications } from "@mantine/notifications";
 import resizeAvatarImage from "utils/avatars/resizeAvatarImage";
 import { DEFAULT_AVATAR_FILE_SIZE } from "utils/avatars/constants";
 import ProfileAvatar from "@/components/content/ProfileAvatar";
-import {
-  useDefaultProfile,
-  useMutateDefaultProfile,
-} from "hooks/useDefaultProfile";
-import { useQueryClient } from "@tanstack/react-query";
+import log from "electron-log/renderer";
+import useDefaultProfile from "hooks/getDefaultProfile";
+import updateProfileFromDatabase from "@/lib/db/profiles/updateProfile";
 
 const EditProfilePage: NextPage = () => {
-  const { t } = useTranslation();
+  const {
+    t,
+    i18n: { language: locale },
+  } = useTranslation();
   const theme = useMantineTheme();
   const router = useRouter();
 
-  const queryClient = useQueryClient();
-  const { data: defaultProfile } = useDefaultProfile();
-  const { mutate } = useMutateDefaultProfile();
+  const defaultProfile = useDefaultProfile();
+  // const { mutate } = useMutateDefaultProfile();
 
   const [avatarColor, setAvatarColor] = useState<
     DefaultMantineColor | undefined
@@ -60,7 +60,7 @@ const EditProfilePage: NextPage = () => {
 
   useEffect(() => {
     if (defaultProfile) form.setValues(defaultProfile);
-  }, []);
+  }, [defaultProfile]);
 
   // Manually update the color, since the ...props method doesn't work on the color swatches
   const updateAvatarColor = (color: DefaultMantineColor) => {
@@ -95,16 +95,24 @@ const EditProfilePage: NextPage = () => {
     </Tooltip>
   ));
 
+  // TODO: Add translations
   const handleEdit = () => {
-    mutate(
-      { ...form.values },
-      {
-        onSuccess: () => {
-          void queryClient.invalidateQueries();
-          router.back();
-        },
-      }
-    );
+    updateProfileFromDatabase(form.values, form.values.uuid)
+      .then(() => {
+        notifications.show({
+          title: "Updated the profile!",
+          message: "All done!",
+        });
+
+        void router.push(`/${locale}/profile`);
+      })
+      .catch((e) => {
+        // TODO: Show a better error message
+        notifications.show({
+          title: "Unable to update the profile!",
+          message: e as string,
+        });
+      });
   };
 
   const handleFileChange = (files: FileWithPath[]) => {
@@ -121,7 +129,7 @@ const EditProfilePage: NextPage = () => {
         const resizedBase64 = await resizeAvatarImage({ file: file });
         form.setFieldValue("avatarImage", resizedBase64);
       } catch (error) {
-        console.error("Error resizing the file: ", error);
+        log.error("Error resizing the file: ", error);
       }
     };
 
@@ -135,7 +143,7 @@ const EditProfilePage: NextPage = () => {
      * check if files array is not empty to prevent accessing undefined.
      */
     if (files.length === 0) {
-      console.error("Expected one image file, but the file array was empty.");
+      log.error("Expected one image file, but the file array was empty.");
       return;
     }
 

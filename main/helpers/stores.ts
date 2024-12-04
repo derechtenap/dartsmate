@@ -1,27 +1,14 @@
 import Store from "electron-store";
 import pkg from "../../package.json";
-import type { Profile } from "../../renderer/types/profile";
 
-type ProfileStoreType = {
-  defaultProfile?: Profile;
-  guestProfiles?: Profile[];
+type AppSettingsStoreType = {
+  defaultProfileUUID?: string;
+  locale?: string;
 };
 
 const lowerCasedProductName = pkg.productName.toLowerCase();
 const storePrefix = `store.${lowerCasedProductName}`;
 
-export const profilesStore = new Store<ProfileStoreType>({
-  name: `${storePrefix}.profiles`,
-});
-
-export const defaultProfileStore = new Store<Profile>({
-  name: `${storePrefix}.defaultProfile`,
-});
-
-export const matchHistoryStore = new Store({
-  name: `${storePrefix}.matchHistory`,
-});
-
-export const appSettingsStore = new Store<{ locale?: string }>({
+export const appSettingsStore = new Store<AppSettingsStoreType>({
   name: `${storePrefix}.appSettings`,
 });

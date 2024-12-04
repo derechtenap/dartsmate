@@ -1,31 +1,23 @@
 import { BrowserWindow, app, ipcMain } from "electron";
-import { appSettingsStore, profilesStore } from "./stores";
+import { appSettingsStore } from "./stores";
 import log from "electron-log";
 
-ipcMain.handle("setLocale", (_event, locale) => {
+ipcMain.handle("setLocale", (_, locale: { locale: string }) => {
   appSettingsStore.set("locale", locale);
 });
 
-ipcMain.handle("setDefaultProfile", (_event, defaultProfile) => {
-  profilesStore.set("defaultProfile", defaultProfile);
+ipcMain.handle("setDefaultProfileUUID", (_, uuid: { uuid: string }) => {
+  appSettingsStore.set("defaultProfileUUID", uuid);
 });
 
-ipcMain.handle("getDefaultProfile", () => {
-  return profilesStore.get("defaultProfile");
+ipcMain.handle("getDefaultProfileUUID", (): string | undefined => {
+  const uuid = appSettingsStore.get("defaultProfileUUID");
+
+  return uuid;
 });
 
-ipcMain.handle("deleteDefaultProfile", () => {
-  return profilesStore.delete("defaultProfile");
-});
-
-ipcMain.handle("setGuestProfile", (_event, profile) => {
-  const profiles = profilesStore.get("guestProfiles");
-  const newProfiles = [...(profiles || []), profile];
-  profilesStore.set("guestProfiles", newProfiles);
-});
-
-ipcMain.handle("getGuestProfiles", () => {
-  return profilesStore.get("guestProfiles");
+ipcMain.handle("removeDefaultProfileUUID", () => {
+  appSettingsStore.delete("defaultProfileUUID");
 });
 
 ipcMain.on("minimize-app-window", () => {

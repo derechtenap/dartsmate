@@ -1,6 +1,5 @@
 import type { IpcRendererEvent } from "electron";
 import { contextBridge, ipcRenderer } from "electron";
-import { Profile } from "../renderer/types/profile";
 
 const handler = {
   send(channel: string, value: unknown) {
@@ -16,37 +15,16 @@ const handler = {
     };
   },
   setLocale(locale: string) {
-    void ipcRenderer.invoke(`setLocale`, locale);
+    void ipcRenderer.invoke("setLocale", locale);
   },
-
-  setDefaultProfile(defaultProfile: Profile) {
-    void ipcRenderer.invoke("setDefaultProfile", defaultProfile);
+  setDefaultProfileUUID(uuid: string) {
+    void ipcRenderer.invoke("setDefaultProfileUUID", uuid);
   },
-
-  deleteDefaultProfile() {
-    void ipcRenderer.invoke("deleteDefaultProfile");
+  getDefaultProfileUUID() {
+    return ipcRenderer.invoke("getDefaultProfileUUID"); // Use invoke here
   },
-
-  getDefaultProfile() {
-    return ipcRenderer.invoke("getDefaultProfile");
-  },
-
-  setGuestProfile(profile: Profile) {
-    void ipcRenderer.invoke("setGuestProfile", profile);
-  },
-
-  deleteGuestProfile(profile: Profile) {
-    console.info("Deleting Profile", profile);
-    // TODO: Add return
-    // void ipcRenderer.invoke("setGuestProfile", profile)
-  },
-
-  deleteAllGuestProfiles() {
-    console.info("Deleting all Guest Profiles");
-  },
-
-  getGuestProfiles() {
-    return ipcRenderer.invoke("getGuestProfiles");
+  removeDefaultProfileUUID() {
+    void ipcRenderer.invoke("removeDefaultProfileUUID");
   },
 };
 
