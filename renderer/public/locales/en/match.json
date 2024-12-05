@@ -11,5 +11,6 @@
     "title": "Do you really want to abort the game?",
     "text": "The game will be permanently aborted and cannot be resumed. Are you sure you want to continue?",
     "cancelButton": "Continue playing"
-  }
+  },
+  "closeFinishedMatch": "Close completed game"
 }

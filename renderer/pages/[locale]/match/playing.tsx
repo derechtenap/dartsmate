@@ -59,6 +59,7 @@ import getFormattedName from "utils/misc/getFormattedName";
 import { useRouter } from "next/router";
 import { useElapsedTime } from "use-elapsed-time";
 import { modals } from "@mantine/modals";
+import addMatchToDatabase from "@/lib/db/matches/addMatch";
 
 const PlayingPage: NextPage = () => {
   const theme = useMantineTheme();
@@ -313,12 +314,19 @@ const PlayingPage: NextPage = () => {
         blur: 3,
       },
       confirmProps: { color: "red" },
-      // TODO: Save to electron-store
-      onConfirm: () => void router.push(`/${locale}/match/view`),
+      onConfirm: () => {
+        addMatchToDatabase({ ...matchSessionData, matchStatus: "aborted" });
+        void router.push(`/${locale}/match/view`);
+      },
     });
 
   const handleAbortMatch = (): void => {
     openAbortModal();
+  };
+
+  const handleFinishedMatch = (): void => {
+    addMatchToDatabase({ ...matchSessionData, matchStatus: "finished" });
+    void router.push(`/${locale}/match/view`);
   };
 
   return (
@@ -513,9 +521,15 @@ const PlayingPage: NextPage = () => {
               {t("match:nextPlayer")}
             </Button>
             <Divider />
-            <Button onClick={() => handleAbortMatch()} variant="default">
-              {t("match:abortMatch")}
-            </Button>
+            {players[currentPlayerIndex].isWinner ? (
+              <Button onClick={() => handleFinishedMatch()}>
+                {t("match:closeFinishedMatch")}
+              </Button>
+            ) : (
+              <Button onClick={() => handleAbortMatch()}>
+                {t("match:abortMatch")}
+              </Button>
+            )}
           </Stack>
         </Grid.Col>
       </Grid>
