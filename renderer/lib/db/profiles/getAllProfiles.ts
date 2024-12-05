@@ -5,9 +5,12 @@
 import type { Profile } from "types/profile";
 
 import database from "../database";
+import collections from "../collections";
 
 const getAllProfilesFromDatabase = async (): Promise<Profile[]> => {
-  const profile: Profile[] = await database.collection("profiles").get();
+  const profile: Profile[] = await database
+    .collection(collections.profiles)
+    .get();
 
   return profile;
 };

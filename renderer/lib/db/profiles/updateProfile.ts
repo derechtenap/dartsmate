@@ -4,6 +4,7 @@
 import type { Profile } from "types/profile";
 
 import database from "../database";
+import collections from "../collections";
 
 //  Prevent overriding `uuid` in the update payload
 type PartialProfile = Omit<Partial<Profile>, "uuid">;
@@ -13,7 +14,7 @@ const updateProfileFromDatabase = async (
   uuid: Profile["uuid"]
 ) => {
   await database
-    .collection("profiles")
+    .collection(collections.profiles)
     .doc({ uuid })
     .update(updatedProfileData);
 };

@@ -5,12 +5,13 @@
 import type { Profile } from "types/profile";
 
 import database from "../database";
+import collections from "../collections";
 
 const getProfileFromDatabase = async (
   uuid: Profile["uuid"]
 ): Promise<Profile> => {
   const profile: Profile = await database
-    .collection("profiles")
+    .collection(collections.profiles)
     .doc({ uuid })
     .get();
 

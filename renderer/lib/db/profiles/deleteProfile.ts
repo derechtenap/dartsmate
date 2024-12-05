@@ -4,9 +4,10 @@
 import type { Profile } from "types/profile";
 
 import database from "../database";
+import collections from "../collections";
 
 const deleteProfileFromDatabase = async (uuid: Profile["uuid"]) => {
-  await database.collection("profiles").doc({ uuid }).delete();
+  await database.collection(collections.profiles).doc({ uuid }).delete();
 };
 
 export default deleteProfileFromDatabase;
