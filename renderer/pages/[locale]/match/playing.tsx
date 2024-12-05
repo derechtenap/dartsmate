@@ -521,7 +521,7 @@ const PlayingPage: NextPage = () => {
               {t("match:nextPlayer")}
             </Button>
             <Divider />
-            {players[currentPlayerIndex].isWinner ? (
+            {players[currentPlayerIndex]?.isWinner ? (
               <Button onClick={() => handleFinishedMatch()}>
                 {t("match:closeFinishedMatch")}
               </Button>
