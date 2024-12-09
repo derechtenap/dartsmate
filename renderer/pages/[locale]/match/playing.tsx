@@ -315,7 +315,10 @@ const PlayingPage: NextPage = () => {
       },
       confirmProps: { color: "red" },
       onConfirm: () => {
-        addMatchToDatabase({ ...matchSessionData, matchStatus: "aborted" });
+        void addMatchToDatabase({
+          ...matchSessionData,
+          matchStatus: "aborted",
+        });
         void router.push(`/${locale}/match/view`);
       },
     });
@@ -325,7 +328,7 @@ const PlayingPage: NextPage = () => {
   };
 
   const handleFinishedMatch = (): void => {
-    addMatchToDatabase({ ...matchSessionData, matchStatus: "finished" });
+    void addMatchToDatabase({ ...matchSessionData, matchStatus: "finished" });
     void router.push(`/${locale}/match/view`);
   };
 
