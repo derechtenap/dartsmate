@@ -40,6 +40,8 @@ import {
 import { useSearchParams } from "next/navigation";
 import log from "electron-log/renderer";
 import addProfileToDatabase from "@/lib/db/profiles/addProfile";
+import { notifications } from "@mantine/notifications";
+import formatLocalizedRoute from "utils/navigation/formatLocalizedRoute";
 
 const CreateProfilePage: NextPage = () => {
   const params = useSearchParams();
@@ -155,8 +157,24 @@ const CreateProfilePage: NextPage = () => {
       window.ipc.setDefaultProfileUUID(form.values.uuid);
     }
 
-    addProfileToDatabase(form.values);
-    void router.push(`/${locale}`);
+    addProfileToDatabase(form.values)
+      .then(() => {
+        log.info(
+          "Created Profile with these values:",
+          JSON.stringify(form.values)
+        );
+        void router.push(formatLocalizedRoute({ locale, route: "/" }));
+      })
+      .catch((err) => {
+        log.error("Error creating profile:", err);
+
+        // TODO: Add localizations
+        notifications.show({
+          title: "Profile creation failed!",
+          message:
+            "Something went wrong while creating your profile. Please try again later.",
+        });
+      });
   };
   return (
     <OnlyControlsLayout>

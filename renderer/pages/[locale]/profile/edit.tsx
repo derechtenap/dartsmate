@@ -41,7 +41,6 @@ const EditProfilePage: NextPage = () => {
   const router = useRouter();
 
   const defaultProfile = useDefaultProfile();
-  // const { mutate } = useMutateDefaultProfile();
 
   const [avatarColor, setAvatarColor] = useState<
     DefaultMantineColor | undefined
@@ -97,7 +96,10 @@ const EditProfilePage: NextPage = () => {
 
   // TODO: Add translations
   const handleEdit = () => {
-    updateProfileFromDatabase(form.values, form.values.uuid)
+    updateProfileFromDatabase(
+      { ...form.values, updatedAt: Date.now() },
+      form.values.uuid
+    )
       .then(() => {
         notifications.show({
           title: "Updated the profile!",

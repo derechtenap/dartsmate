@@ -16,7 +16,7 @@ declare type Match = {
   players: Player[];
   matchCheckout: Checkout;
   matchStatus: MatchStatus;
-  matchUUID: string; // Unique identifier for the match (UUID format: eg. 1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed)
+  uuid: string; // Unique identifier for the match (UUID format: eg. 1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed)
   updatedAt: number;
 };
 

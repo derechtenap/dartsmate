@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
 import type { Profile } from "types/profile";
 
 import database from "../database";
@@ -12,10 +9,7 @@ const updateProfileFromDatabase = async (
   updatedProfileData: PartialProfile,
   uuid: Profile["uuid"]
 ) => {
-  await database
-    .collection("profiles")
-    .doc({ uuid })
-    .update(updatedProfileData);
+  await database.profiles.where("uuid").equals(uuid).modify(updatedProfileData);
 };
 
 export default updateProfileFromDatabase;
