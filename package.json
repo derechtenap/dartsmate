@@ -43,6 +43,8 @@
     "@typescript-eslint/parser": "^5.62.0",
     "autoprefixer": "^10.4.16",
     "dayjs": "^1.11.10",
+    "dexie": "^4.0.10",
+    "dexie-react-hooks": "^1.1.7",
     "electron": "^29.0.0-beta.4",
     "electron-builder": "^24.9.1",
     "embla-carousel-react": "^7.1.0",

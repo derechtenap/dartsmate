@@ -76,7 +76,7 @@ const NewGamePage = () => {
     void getAllProfiles();
   }, []);
 
-  const matchUUID = uuidv4();
+  const uuid = uuidv4();
 
   const [, setMatchStorage] = useSessionStorage<Match>({
     key: "currentMatch",
@@ -90,7 +90,7 @@ const NewGamePage = () => {
       initialScore: DEFAULT_MATCH_SETTINGS.SCORE,
       matchCheckout: DEFAULT_MATCH_SETTINGS.CHECKOUT,
       matchStatus: DEFAULT_MATCH_SETTINGS.STATUS,
-      matchUUID: matchUUID,
+      uuid: uuid,
       players: [],
       updatedAt: Date.now(),
     },
