@@ -15,6 +15,7 @@ import {
  * the app's localization files.
  */
 const navbarRoutes = [
+  // TODO: Reactivate the disabled routes once their corresponding pages are implemented and functional.
   {
     icon: <IconHome />,
     label: "routes.home",
@@ -25,11 +26,13 @@ const navbarRoutes = [
     label: "routes.newMatch",
     route: "/lobby",
   },
+  /*
   {
     icon: <IconBarbell />,
     label: "routes.practice",
     route: "/practice",
   },
+  */
   {
     icon: <IconHistory />,
     label: "routes.history",
@@ -40,11 +43,13 @@ const navbarRoutes = [
     label: "routes.profile",
     route: "/profile",
   },
+  /*
   {
     icon: <IconChartBar />,
     label: "routes.statistics",
     route: "/statistics",
   },
+  */
   {
     icon: <IconSettings />,
     label: "routes.settings",
