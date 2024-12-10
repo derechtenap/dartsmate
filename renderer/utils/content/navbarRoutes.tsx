@@ -1,6 +1,6 @@
 import {
-  IconBarbell,
-  IconChartBar,
+  // IconBarbell,
+  // IconChartBar,
   IconHistory,
   IconHome,
   IconSettings,
