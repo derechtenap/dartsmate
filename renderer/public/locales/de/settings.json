@@ -1,0 +1,59 @@
+{
+  "colorSchemes": {
+    "light": "Hell",
+    "dark": "Dunkel",
+    "auto": "System"
+  },
+  "profile": {
+    "title": "Profil",
+    "text": "Hier können Sie ihr aktuelles Profil bearbeiten oder löschen."
+  },
+  "colorScheme": {
+    "title": "Farbschema",
+    "text": "Wählen Sie ein helles oder dunkles Farbschema, um Ihre Erfahrung zu personalisieren. Sie können auch \"System\" auswählen, um das Farbschema der App basierend auf den Einstellungen Ihres Betriebssystems zu wählen."
+  },
+  "language": {
+    "title": "Sprache",
+    "text": "Wählen Sie Ihre bevorzugte Sprache für die App aus."
+  },
+  "deleteProfile": {
+    "title": "Profil löschen",
+    "text": "Löschen Sie Ihr aktuelles Profil. Dies setzt keine weitere App-Einsteillungen zurück.",
+    "confirmText": "Möchten Sie ihr Profil wirklich löschen?"
+  },
+  "storage": {
+    "title": "Speicherplatz",
+    "text": "Löschen Sie Profile und gespeicherte Spieldaten, um Speicherplatz freizugeben.",
+    "dangerZoneTitle": "Achtung!",
+    "dangerZoneText": "Änderungen in diesem Bereich können nicht rückgängig gemacht werden!",
+    "dangerZone": {
+      "btn": {
+        "label": {
+          "deleteAllProfiles": "Alle Profile löschen",
+          "deleteAllMatches": "Alle Spiele löschen",
+          "resetApp": "App zurücksetzen"
+        }
+      }
+    },
+    "modals": {
+      "confirmDeleteAllProfilesTitle": "Möchten Sie wirklich alle Profile löschen?",
+      "confirmDeleteAllProfilesText": "Diese Aktion kann nicht rückgängig gemacht werden!",
+      "confirmDeleteAllMatchesTitle": "Möchten Sie wirklich alle Spiele löschen?",
+      "confirmDeleteAllMatchesText": "Diese Aktion kann nicht rückgängig gemacht werden!",
+      "confirmResetAppTitle": "Möchten Sie die App wirklich zurücksetzen?",
+      "confirmResetAppText": "Dies setzt die App in den ursprünglichen Zustand zurück. Dies kann helfen, falls beim Benutzen der App Fehler auftreten."
+    },
+    "notifications": {
+      "successDeleteAllProfilesTitle": "Profile gelöscht!",
+      "successDeleteAllProfilesText": "Alle Profile wurden erfolgreich gelöscht!",
+      "successDeleteAllMatchesTitle": "Spiele gelöscht!",
+      "successDeleteAllMatchesText": "Alle Spiele wurden erfolgreich gelöscht!",
+      "successResetAppTitle": "App zurückgesetzt!",
+      "successResetAppText": "Alle Einstellungen wurden zurückgesetzt"
+    }
+  },
+  "languages": {
+    "de": "Deutsch",
+    "en": "Englisch"
+  }
+}

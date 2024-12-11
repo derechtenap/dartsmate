@@ -1,4 +1,3 @@
-import type { UUID } from "crypto";
 import type { Profile } from "./profile";
 
 interface Player extends Profile {
@@ -11,13 +10,13 @@ declare type Checkout = "Any" | "Double" | "Single" | "Triple";
 declare type MatchStatus = "aborted" | "finished" | "started" | "undefined";
 
 declare type Match = {
-  appVersion: string;
-  createdAt: number;
+  appVersion: string; // Semantic versioning string (e.g., "1.0.0")
+  createdAt: number; // Timestamp when the match was created (UNIX timestamp)
   initialScore: number;
   players: Player[];
   matchCheckout: Checkout;
   matchStatus: MatchStatus;
-  matchUUID: UUID;
+  uuid: string; // Unique identifier for the match (UUID format: eg. 1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed)
   updatedAt: number;
 };
 

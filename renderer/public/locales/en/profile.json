@@ -1,0 +1,59 @@
+{
+  "profileCreation": {
+    "title": "Welcome! Let's Create Your Profile.",
+    "description": "Enter your personal details to create your profile."
+  },
+  "editProfile": "Edit Profile",
+  "formLabels": {
+    "bio": {
+      "label": "Biography",
+      "placeholder": "Tell us something about yourself..."
+    },
+    "firstName": {
+      "label": "First Name",
+      "placeholder": "John"
+    },
+    "lastName": {
+      "label": "Last Name",
+      "placeholder": "Marston"
+    },
+    "username": {
+      "label": "Username",
+      "placeholder": "Johnny Boy"
+    }
+  },
+  "buttons": {
+    "createProfile": "Create Profile",
+    "resetAvatarImage": "Reset Avatar",
+    "updateProfile": "Update Profile"
+  },
+  "stepsProfileCreation": {
+    "profile": {
+      "title": "Profile Information",
+      "description": "Enter your basic information."
+    },
+    "misc": {
+      "title": "Additional Settings",
+      "description": "Enter additional information."
+    },
+    "avatar": {
+      "title": "Your Avatar",
+      "description": "Create an avatar with your initials or a profile picture."
+    },
+    "completed": {
+      "title": "Completed",
+      "description": "Your profile is created."
+    }
+  },
+  "step": {
+    "label": {
+      "profile": "Profile",
+      "misc": "Miscellaneous",
+      "avatar": "Avatar"
+    }
+  },
+  "photoUpload": "Select Photo",
+  "webcam": "Webcam",
+  "removePhotoUpload": "Remove Photo",
+  "exportProfile": "Export Profile"
+}

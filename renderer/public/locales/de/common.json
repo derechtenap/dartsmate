@@ -1,0 +1,92 @@
+{
+  "yes": "Ja",
+  "no": "Nein",
+  "cancel": "Abbrechen",
+  "back": "Zurück",
+  "next": "Weiter",
+  "confirm": "Bestätigen",
+  "toggleNavigation": "Navigation umschalten",
+  "minimizeApp": "Minimieren",
+  "fullscreenMode": "Vollbild",
+  "windowedMode": "Fenstermodus",
+  "player": "Spieler",
+  "player_plural": "Spieler",
+  "date": "Datum",
+  "match": "Spiel",
+  "match_plural": "Spiele",
+  "networkStatus": {
+    "text": "Netzwerk-Status",
+    "online": "Verbunden",
+    "offline": "Offline"
+  },
+  "closeApp": "Schließen",
+  "routes": {
+    "home": "Startseite",
+    "newMatch": "Neues Spiel",
+    "practice": "Übung",
+    "history": "Spielverlauf",
+    "profile": "Profil",
+    "statistics": "Statistiken",
+    "settings": "Einstellungen"
+  },
+  "stats": {
+    "darts": "Darts",
+    "180s": "180er",
+    "matches": "Spiele",
+    "trainings": "Trainings",
+    "avg": "Durchschnitt",
+    "firstNineAvg": "Ersten 9 Darts-Durchschnitt",
+    "dartsThrown": "Darts geworfen",
+    "highestScore": "Höchste Aufnahme",
+    "scoreLeft": "Restpunktzahl",
+    "singles": "Singles",
+    "doubles": "Doubles",
+    "triples": "Triples",
+    "missed": "Nicht getroffen",
+    "rounds": "Runden"
+  },
+  "color": {
+    "blue": "Blau",
+    "cyan": "Türkis",
+    "dark": "Dunkel",
+    "grape": "Traube",
+    "gray": "Grau",
+    "green": "Grün",
+    "indigo": "Indigo",
+    "lime": "Limette",
+    "orange": "Orange",
+    "pink": "Rosa",
+    "red": "Rot",
+    "teal": "Blaugrün",
+    "violet": "Violett",
+    "yellow": "Gelb"
+  },
+  "errors": {
+    "file-invalid-type": {
+      "title": "Ungültiger Dateityp",
+      "message": "Der von Ihnen hochgeladene Dateityp wird nicht unterstützt. Bitte laden Sie Dateien in den zulässigen Formaten hoch."
+    },
+    "file-too-large": {
+      "title": "Datei zu groß",
+      "message": "Die Datei, die Sie hochladen möchten, überschreitet die maximal zulässige Größe. Bitte verringern Sie die Dateigröße und versuchen Sie es erneut."
+    },
+    "file-too-small": {
+      "title": "Datei zu klein",
+      "message": "Die Datei, die Sie hochladen möchten, ist kleiner als die erforderliche Mindestgröße. Bitte überprüfen Sie Ihre Datei und versuchen Sie es erneut."
+    },
+    "file-many-files": {
+      "title": "Zu viele Dateien",
+      "message": "Sie haben versucht, zu viele Dateien auf einmal hochzuladen. Bitte reduzieren Sie die Anzahl der Dateien und versuchen Sie es erneut."
+    },
+    "too-many-files": {
+      "title": "Zu viele Dateien",
+      "message": "Sie haben die maximale Anzahl von Dateien, die hochgeladen werden dürfen, überschritten. Bitte reduzieren Sie die Anzahl der Dateien und versuchen Sie es erneut."
+    }
+  },
+  "defaultEmptyState": {
+    "text": "Schauen Sie später gerne noch einmal vorbei. Wenn das Problem weiterhin besteht, kontaktieren Sie bitte den Support für Unterstützung.",
+    "title": "Oops! Es scheint, als gäbe es momentan keine Daten zum Anzeigen."
+  },
+  "greetingText": "Hallo, {{FIRST_NAME}}!",
+  "greetingSubtext": "Lass uns eine Runde Darts spielen."
+}

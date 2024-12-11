@@ -1,0 +1,36 @@
+{
+  "playerWon": "{{PLAYER_NAME}} hat das Spiel gewonnen!",
+  "multipliers": {
+    "double": "Double",
+    "triple": "Triple"
+  },
+  "removeThrows": "Letzte Eingabe löschen",
+  "nextPlayer": "Nächster Spieler",
+  "abortMatch": "Spiel abbrechen",
+  "modalAbortMatch": {
+    "title": "Möchten Sie das Spiel wirklich abbrechen?",
+    "text": "Das Spiel wird endgültig abgebrochen und kann nicht mehr fortgesetzt werden. Sind Sie sicher, dass Sie fortfahren möchten?",
+    "cancelButton": "Spiel fortsetzen"
+  },
+  "closeFinishedMatch": "Spiel schließen",
+  "displayName": "{{score}} {{checkout}}-Out",
+  "matchStatus": {
+    "aborted": "Abgebrochen",
+    "finished": "Beendet",
+    "started": "Gestartet",
+    "undefined": "Unbekannt"
+  },
+  "matchResult": "Spielergebnis",
+  "historyEmptyState": {
+    "title": "Keine Spiele gefunden",
+    "text": "Es wurden noch keine Spiele gespielt. Beginnen Sie ein neues Spiel, um die Ergebnisse hier zu sehen."
+  },
+  "modals": {
+    "deleteMatchTitle": "Spiel wirklich löschen?",
+    "deleteMatchText": "Möchten Sie das Spiel wirklich löschen?"
+  },
+  "notifications": {
+    "successDeleteMatchTitle": "Spiel gelöscht",
+    "successDeleteMatchText": "Das Spiel wurde erfolgreich gelöscht."
+  }
+}

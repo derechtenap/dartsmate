@@ -1,0 +1,59 @@
+{
+  "colorSchemes": {
+    "light": "Light",
+    "dark": "Dark",
+    "auto": "System"
+  },
+  "profile": {
+    "title": "Profile",
+    "text": "Here you can delete or edit your current profile."
+  },
+  "colorScheme": {
+    "title": "Color Scheme",
+    "text": "Choose a light or dark color scheme to personalize your experience. You can also select \"System\" to choose the color scheme for the app based on your operating system settings."
+  },
+  "language": {
+    "title": "Language",
+    "text": "Choose your preferred language for the app."
+  },
+  "deleteProfile": {
+    "title": "Delete Profile",
+    "text": "Delete your current profile. This does not reset any other app settings.",
+    "confirmText": "Are you sure you want to delete your profile?"
+  },
+  "storage": {
+    "title": "Storage",
+    "text": "Delete profiles and saved game data to free up storage space.",
+    "dangerZoneTitle": "Warning!",
+    "dangerZoneText": "Changes in this area cannot be undone!",
+    "dangerZone": {
+      "btn": {
+        "label": {
+          "deleteAllProfiles": "Delete All Profiles",
+          "deleteAllMatches": "Delete All Matches",
+          "resetApp": "Reset App"
+        }
+      }
+    },
+    "modals": {
+      "confirmDeleteAllProfilesTitle": "Are you sure you want to delete all profiles?",
+      "confirmDeleteAllProfilesText": "This action cannot be undone!",
+      "confirmDeleteAllMatchesTitle": "Are you sure you want to delete all matches?",
+      "confirmDeleteAllMatchesText": "This action cannot be undone!",
+      "confirmResetAppTitle": "Are you sure you want to reset the app?",
+      "confirmResetAppText": "This will reset the app to its original state. This can help resolve issues encountered while using the app."
+    },
+    "notifications": {
+      "successDeleteAllProfilesTitle": "Profiles Deleted!",
+      "successDeleteAllProfilesText": "All profiles have been successfully deleted!",
+      "successDeleteAllMatchesTitle": "Matches Deleted!",
+      "successDeleteAllMatchesText": "All matches have been successfully deleted!",
+      "successResetAppTitle": "App Reset!",
+      "successResetAppText": "All settings have been reset."
+    }
+  },
+  "languages": {
+    "de": "Deutsch",
+    "en": "English"
+  }
+}

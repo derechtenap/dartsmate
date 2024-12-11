@@ -23,15 +23,18 @@
     "dayjs",
     "derechtenap",
     "Deres",
+    "dexie",
+    "Dexie",
     "embla",
     "esnext",
-    "filesize",
     "mantine",
     "Marston",
     "nextron",
+    "resizer",
+    "Resizer",
     "tabler",
-    "tanstack",
-    "toastify"
+    "toastify",
+    "WEBP"
   ],
   "cSpell.language": "de, en"
 }

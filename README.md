@@ -5,12 +5,13 @@
 :warning: The project is currently still a work in progress. Many functions and ideas are not implemented yet!
 
 ## :sparkles: Features
-**Explore the Future:** Dive into our [project roadmap](https://github.com/derechtenap/dartsmate/wiki/Roadmap) to discover exciting upcoming features!
 
+**Explore the Future:** Dive into our [project roadmap](https://github.com/derechtenap/dartsmate/wiki/Roadmap) to discover exciting upcoming features!
 
 - **Create & Manage Profiles:** Easily create and manage player profiles for your matches.
 - **Create A Match:** Set up a game with and customize various game settings.
 - **Analyze Your Latest Matches:** Gain valuable insights into your performance and track your progress.
+- **Multi-Language Support:** DartsMate supports multiple languages, allowing users to enjoy the app in their preferred language.
 
 ## :robot: Scripts
 

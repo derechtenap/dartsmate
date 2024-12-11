@@ -1,0 +1,12 @@
+{
+  "tabs": {
+    "title": {
+      "result": "Ergebnisse",
+      "charts": "Diagramme",
+      "playerStats": "Spieler Statistiken"
+    }
+  },
+  "chartTitle": {
+    "gameProgression": "Spielverlauf"
+  }
+}

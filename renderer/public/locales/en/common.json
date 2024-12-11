@@ -1,0 +1,92 @@
+{
+  "yes": "Yes",
+  "no": "No",
+  "cancel": "Cancel",
+  "back": "Back",
+  "next": "Next",
+  "confirm": "Confirm",
+  "toggleNavigation": "Toggle Navigation",
+  "minimizeApp": "Minimize",
+  "fullscreenMode": "Fullscreen",
+  "windowedMode": "Windowed Mode",
+  "player": "Player",
+  "player_plural": "Players",
+  "date": "Date",
+  "match": "Match",
+  "match_plural": "Matches",
+  "networkStatus": {
+    "text": "Network Status",
+    "online": "Online",
+    "offline": "Offline"
+  },
+  "closeApp": "Close",
+  "routes": {
+    "home": "Home",
+    "newMatch": "New Match",
+    "practice": "Practice",
+    "history": "Match History",
+    "profile": "Profile",
+    "statistics": "Statistics",
+    "settings": "Settings"
+  },
+  "stats": {
+    "darts": "Darts",
+    "180s": "180s",
+    "matches": "Matches",
+    "trainings": "Trainings",
+    "avg": "Average",
+    "firstNineAvg": "First 9 Average",
+    "dartsThrown": "Darts Thrown",
+    "highestScore": "Highest Score",
+    "scoreLeft": "Score Left",
+    "singles": "Singles",
+    "doubles": "Doubles",
+    "triples": "Triples",
+    "missed": "Missed",
+    "rounds": "Rounds"
+  },
+  "color": {
+    "blue": "Blue",
+    "cyan": "Cyan",
+    "dark": "Dark",
+    "grape": "Grape",
+    "gray": "Gray",
+    "green": "Green",
+    "indigo": "Indigo",
+    "lime": "Lime",
+    "orange": "Orange",
+    "pink": "Pink",
+    "red": "Red",
+    "teal": "Teal",
+    "violet": "Violet",
+    "yellow": "Yellow"
+  },
+  "errors": {
+    "file-invalid-type": {
+      "title": "Invalid File Type",
+      "message": "The file type you have uploaded is not supported. Please upload files in the allowed formats."
+    },
+    "file-too-large": {
+      "title": "File Too Large",
+      "message": "The file you are trying to upload exceeds the maximum allowed size. Please reduce the file size and try again."
+    },
+    "file-too-small": {
+      "title": "File Too Small",
+      "message": "The file you are trying to upload is smaller than the minimum required size. Please check your file and try again."
+    },
+    "file-many-files": {
+      "title": "Too Many Files",
+      "message": "You have attempted to upload too many files at once. Please reduce the number of files and try again."
+    },
+    "too-many-files": {
+      "title": "Too Many Files",
+      "message": "You have exceeded the limit of maximum files allowed to upload. Please reduce the number of files and try again."
+    }
+  },
+  "defaultEmptyState": {
+    "text": "Feel free to check back later. If the issue persists, please contact support for assistance.",
+    "title": "Oops! It seems like there's no data to display at the moment."
+  },
+  "greetingText": "Hello, {{FIRST_NAME}}!",
+  "greetingSubtext": "Let's play a game of darts."
+}
