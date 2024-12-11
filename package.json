@@ -34,7 +34,7 @@
     "@mantine/hooks": "^7.15.0",
     "@mantine/modals": "^7.15.0",
     "@mantine/notifications": "^7.15.0",
-    "@next/eslint-plugin-next": "^14.2.15",
+    "@next/eslint-plugin-next": "^14.2.20",
     "@tabler/icons-react": "^3.24.0",
     "@types/node": "^20.17.10",
     "@types/react": "^18.3.16",
