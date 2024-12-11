@@ -96,7 +96,6 @@ const EditProfilePage: NextPage = () => {
     </Tooltip>
   ));
 
-  // TODO: Add translations
   const handleEdit = () => {
     updateProfileFromDatabase(
       { ...form.values, updatedAt: Date.now() },
@@ -104,17 +103,17 @@ const EditProfilePage: NextPage = () => {
     )
       .then(() => {
         notifications.show({
-          title: "Updated the profile!",
-          message: "All done!",
+          title: t("profile:notifications.updateProfileSuccess.title"),
+          message: t("profile:notifications.updateProfileSuccess.text"),
         });
 
         void router.push(`/${locale}/profile`);
       })
-      .catch((e) => {
-        // TODO: Show a better error message
+      .catch((err) => {
+        log.error("Failed to updated profile. Error:", err);
         notifications.show({
-          title: "Unable to update the profile!",
-          message: e as string,
+          title: t("profile:notifications.updateProfileError.title"),
+          message: t("profile:notifications.updateProfileError.text"),
         });
       });
   };

@@ -55,5 +55,19 @@
   "photoUpload": "Select Photo",
   "webcam": "Webcam",
   "removePhotoUpload": "Remove Photo",
-  "exportProfile": "Export Profile"
+  "exportProfile": "Export Profile",
+  "notifications": {
+    "updateProfileSuccess": {
+      "title": "Profile successfully updated!",
+      "text": "You can now start a game."
+    },
+    "updateProfileError": {
+      "title": "Error updating profile!",
+      "text": "Please try again later."
+    },
+    "createProfileError": {
+      "title": "Profile could not be created!",
+      "text": "Please try again later."
+    }
+  }
 }

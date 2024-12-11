@@ -171,11 +171,9 @@ const CreateProfilePage: NextPage = () => {
       .catch((err) => {
         log.error("Error creating profile:", err);
 
-        // TODO: Add localizations
         notifications.show({
-          title: "Profile creation failed!",
-          message:
-            "Something went wrong while creating your profile. Please try again later.",
+          title: t("profile:notifications.createProfileError.title"),
+          message: t("profile:notifications.createProfileError.text"),
         });
       });
   };
