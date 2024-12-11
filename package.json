@@ -51,7 +51,7 @@
     "eslint-config-standard-with-typescript": "^34.0.1",
     "eslint-plugin-prettier": "^4.2.1",
     "next": "^14.2.20",
-    "next-i18next": "^15.3.1",
+    "next-i18next": "^15.4.0",
     "nextron": "^9.4.0",
     "postcss": "^8.4.47",
     "postcss-preset-mantine": "^1.17.0",
