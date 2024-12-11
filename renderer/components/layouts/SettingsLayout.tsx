@@ -1,6 +1,11 @@
 import { Grid, NavLink } from "@mantine/core";
 import DefaultLayout from "./Default";
-import { IconLanguage, IconPalette, IconUser } from "@tabler/icons-react";
+import {
+  IconFileDatabase,
+  IconLanguage,
+  IconPalette,
+  IconUser,
+} from "@tabler/icons-react";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import getDefaultIconSize from "utils/misc/getDefaultIconSize";
@@ -42,6 +47,12 @@ const SettingsLayout = ({ children, route }: SettingsLayoutProps) => {
       icon: <IconLanguage style={getDefaultIconSize()} />,
       href: "/language/",
       label: t("settings:language.title"),
+    },
+    {
+      activeRoute: "storage",
+      icon: <IconFileDatabase style={getDefaultIconSize()} />,
+      href: "/storage/",
+      label: t("settings:storage.title"),
     },
   ];
 

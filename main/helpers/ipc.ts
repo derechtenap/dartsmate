@@ -6,6 +6,10 @@ ipcMain.handle("setLocale", (_, locale: { locale: string }) => {
   appSettingsStore.set("locale", locale);
 });
 
+ipcMain.handle("removeAppSettings", () => {
+  appSettingsStore.clear();
+});
+
 ipcMain.handle("setDefaultProfileUUID", (_, uuid: { uuid: string }) => {
   appSettingsStore.set("defaultProfileUUID", uuid);
 });

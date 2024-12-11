@@ -21,10 +21,13 @@ const handler = {
     void ipcRenderer.invoke("setDefaultProfileUUID", uuid);
   },
   getDefaultProfileUUID() {
-    return ipcRenderer.invoke("getDefaultProfileUUID"); // Use invoke here
+    return ipcRenderer.invoke("getDefaultProfileUUID");
   },
   removeDefaultProfileUUID() {
     void ipcRenderer.invoke("removeDefaultProfileUUID");
+  },
+  removeAppSettings() {
+    void ipcRenderer.invoke("removeAppSettings");
   },
 };
 
