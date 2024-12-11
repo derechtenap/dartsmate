@@ -44,7 +44,7 @@
     "dexie": "^4.0.10",
     "dexie-react-hooks": "^1.1.7",
     "electron": "^33.2.1",
-    "electron-builder": "^24.9.1",
+    "electron-builder": "^24.13.3",
     "embla-carousel-react": "^7.1.0",
     "eslint": "^8.55.0",
     "eslint-config-prettier": "^8.10.0",
