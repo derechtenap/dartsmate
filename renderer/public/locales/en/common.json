@@ -9,6 +9,11 @@
   "minimizeApp": "Minimize",
   "fullscreenMode": "Fullscreen",
   "windowedMode": "Windowed Mode",
+  "player": "Player",
+  "player_plural": "Players",
+  "date": "Date",
+  "match": "Match",
+  "match_plural": "Matches",
   "networkStatus": {
     "text": "Network Status",
     "online": "Online",

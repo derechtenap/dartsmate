@@ -10,7 +10,7 @@ const IndexPage = () => {
   // const { data: defaultProfile } = useDefaultProfile();
 
   return (
-    <DefaultLayout withNavbarOpen={false}>
+    <DefaultLayout withNavbarOpen>
       <Stack my="lg">
         {/*<HeaderGreeting firstName={defaultProfile?.name.firstName} />*/}
         <HorizontalScrollContainer></HorizontalScrollContainer>
