@@ -12,6 +12,7 @@ import {
   DefaultMantineColor,
   Group,
   Stack,
+  Textarea,
   TextInput,
   Tooltip,
   useMantineTheme,
@@ -197,6 +198,11 @@ const EditProfilePage: NextPage = () => {
             label={t("profile:formLabels.username.label")}
             placeholder={t("profile:formLabels.username.placeholder")}
             {...form.getInputProps("username")}
+          />
+          <Textarea
+            label={t("profile:formLabels.bio.label")}
+            placeholder={t("profile:formLabels.bio.placeholder")}
+            {...form.getInputProps("bio")}
           />
           <Group>
             <Button
