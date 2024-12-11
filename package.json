@@ -41,7 +41,6 @@
     "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
-    "dayjs": "^1.11.10",
     "dexie": "^4.0.10",
     "dexie-react-hooks": "^1.1.7",
     "electron": "^29.0.0-beta.4",
