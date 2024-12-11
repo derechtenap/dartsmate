@@ -35,7 +35,7 @@ const ProfileIndexPage: NextPage = () => {
   return (
     <DefaultLayout withNavbarOpen>
       <Paper component="header" radius={0} p="xl" m={0}>
-        <Stack>
+        <Stack gap="lg">
           <Group align="start">
             <ProfileAvatar
               color={defaultProfile.color}
@@ -58,7 +58,19 @@ const ProfileIndexPage: NextPage = () => {
               </Tooltip>
             </Group>
           </Group>
-          <Group gap="xl" ta="center" grow mt="lg">
+          <Paper>
+            <Text
+              fs={defaultProfile.bio ? "" : "italic"}
+              c={defaultProfile.bio ? "" : "dimmed"}
+            >
+              {defaultProfile.bio ||
+                t("profile:emptyBioPlaceholder", {
+                  FIRST_NAME: defaultProfile.name.firstName,
+                })}
+            </Text>
+          </Paper>
+          <Divider />
+          <Group gap="xl" ta="center" grow>
             <Stat text={t("stats.darts")} value={0} />
             <Stat text={t("stats.180s")} value={0} />
             <Stat text={t("stats.matches")} value={0} />
@@ -71,9 +83,9 @@ const ProfileIndexPage: NextPage = () => {
               }}
             />
           </Group>
+          <Divider />
         </Stack>
       </Paper>
-      <Divider />
     </DefaultLayout>
   );
 };
