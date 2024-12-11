@@ -19,7 +19,7 @@ import {
   rem,
   useMantineTheme,
 } from "@mantine/core";
-import { isNotEmpty, useForm } from "@mantine/form";
+import { useForm } from "@mantine/form";
 import { useTranslation } from "next-i18next";
 import { FormEvent, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -75,11 +75,14 @@ const CreateProfilePage: NextPage = () => {
       uuid: userUUID,
     },
     validate: {
+      // Error messages are currently not used. The form only proceeds if all fields are valid.
       name: {
-        firstName: isNotEmpty(),
-        lastName: isNotEmpty(),
+        firstName: (value) =>
+          value.length < 3 ? "ERR_FIRST_NAME_TO_SHORT" : null,
+        lastName: (value) =>
+          value.length < 3 ? "ERR_LAST_NAME_TO_SHORT" : null,
       },
-      username: isNotEmpty(),
+      username: (value) => (value.length < 3 ? "ERR_USERNAME_TO_SHORT" : null),
     },
   });
 

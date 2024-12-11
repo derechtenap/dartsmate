@@ -4,7 +4,7 @@ import { getStaticPaths, makeStaticProperties } from "@/lib/getStatic";
 import { useTranslation } from "next-i18next";
 import { useEffect, useState } from "react";
 import type { Profile } from "types/profile";
-import { isNotEmpty, useForm } from "@mantine/form";
+import { useForm } from "@mantine/form";
 import {
   Button,
   CheckIcon,
@@ -48,12 +48,14 @@ const EditProfilePage: NextPage = () => {
 
   const form = useForm<Profile>({
     validate: {
-      color: isNotEmpty(),
+      // Error messages are currently not used. The form only proceeds if all fields are valid.
       name: {
-        firstName: isNotEmpty(),
-        lastName: isNotEmpty(),
+        firstName: (value) =>
+          value.length < 3 ? "ERR_FIRST_NAME_TO_SHORT" : null,
+        lastName: (value) =>
+          value.length < 3 ? "ERR_LAST_NAME_TO_SHORT" : null,
       },
-      username: isNotEmpty(),
+      username: (value) => (value.length < 3 ? "ERR_USERNAME_TO_SHORT" : null),
     },
   });
 
