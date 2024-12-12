@@ -60,6 +60,7 @@ import { useRouter } from "next/router";
 import { useElapsedTime } from "use-elapsed-time";
 import { modals } from "@mantine/modals";
 import addMatchToDatabase from "@/lib/db/matches/addMatch";
+import getFirstNineAverage from "@/lib/playing/stats/getFirstNineAverage";
 
 const PlayingPage: NextPage = () => {
   const theme = useMantineTheme();
@@ -427,10 +428,13 @@ const PlayingPage: NextPage = () => {
                         opacity={0.7}
                         justify="space-between"
                       >
-                        {/* TODO: Calc first nine average... */}
                         <span>
-                          {t("stats.firstNineAvg")}
-                          {""}: 0
+                          {t("stats.firstNineAvg")}:{" "}
+                          <NumberFormatter
+                            decimalScale={2}
+                            defaultValue={0}
+                            value={getFirstNineAverage(players[_idx].rounds)}
+                          />
                         </span>
                         <span>
                           {t("stats.highestScore")}:{" "}
