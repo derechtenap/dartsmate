@@ -178,6 +178,10 @@ const PlayingPage: NextPage = () => {
       return false;
     }
 
+    if (checkout === "Single") {
+      return !lastThrow.isDouble && !lastThrow.isTriple;
+    }
+
     if (checkout === "Double") {
       return lastThrow.isDouble || lastThrow.isBullseye;
     }
