@@ -60,6 +60,8 @@ import { useRouter } from "next/router";
 import { useElapsedTime } from "use-elapsed-time";
 import { modals } from "@mantine/modals";
 import addMatchToDatabase from "@/lib/db/matches/addMatch";
+import getFirstNineAverage from "@/lib/playing/stats/getFirstNineAverage";
+import isBust from "@/lib/playing/stats/isBust";
 
 const PlayingPage: NextPage = () => {
   const theme = useMantineTheme();
@@ -177,6 +179,10 @@ const PlayingPage: NextPage = () => {
       return false;
     }
 
+    if (checkout === "Single") {
+      return !lastThrow.isDouble && !lastThrow.isTriple;
+    }
+
     if (checkout === "Double") {
       return lastThrow.isDouble || lastThrow.isBullseye;
     }
@@ -224,7 +230,7 @@ const PlayingPage: NextPage = () => {
 
     const updatedMatchRound: MatchRound = {
       elapsedTime: elapsedTime,
-      isBust: newScoreLeft < 0 ? true : false,
+      isBust: isBust(checkout, newScoreLeft),
       roundAverage:
         matchRound.length > 0 ? totalRoundScore / matchRound.length : 0,
       roundTotal: totalRoundScore,
@@ -234,7 +240,6 @@ const PlayingPage: NextPage = () => {
           ? matchRound
           : filledThrowDetails.slice(0, THROWS_PER_ROUND),
     };
-
     const updatedCurrentPlayer: Player = {
       ...currentPlayer,
       rounds: [...currentPlayer.rounds, updatedMatchRound],
@@ -243,7 +248,8 @@ const PlayingPage: NextPage = () => {
       scoreLeft:
         isWinner && newScoreLeft === 0
           ? 0
-          : newScoreLeft > 0
+          : // Update score only if >0 and is not a bust!
+          newScoreLeft > 0 && !isBust(checkout, newScoreLeft)
           ? newScoreLeft
           : currentPlayer.scoreLeft,
     };
@@ -427,10 +433,13 @@ const PlayingPage: NextPage = () => {
                         opacity={0.7}
                         justify="space-between"
                       >
-                        {/* TODO: Calc first nine average... */}
                         <span>
-                          {t("stats.firstNineAvg")}
-                          {""}: 0
+                          {t("stats.firstNineAvg")}:{" "}
+                          <NumberFormatter
+                            decimalScale={2}
+                            defaultValue={0}
+                            value={getFirstNineAverage(players[_idx].rounds)}
+                          />
                         </span>
                         <span>
                           {t("stats.highestScore")}:{" "}

@@ -12,6 +12,7 @@ import {
   DefaultMantineColor,
   Group,
   Stack,
+  Textarea,
   TextInput,
   Tooltip,
   useMantineTheme,
@@ -47,6 +48,22 @@ const EditProfilePage: NextPage = () => {
   >(defaultProfile?.color);
 
   const form = useForm<Profile>({
+    /*
+     * Providing initial values prevents runtime errors by ensuring the validate
+     * function has data to work with, even before user input.
+     */
+    initialValues: {
+      bio: "",
+      color: "red",
+      createdAt: 0,
+      name: {
+        firstName: "",
+        lastName: "",
+      },
+      username: "",
+      updatedAt: 0,
+      uuid: "",
+    },
     validate: {
       // Error messages are currently not used. The form only proceeds if all fields are valid.
       name: {
@@ -197,6 +214,11 @@ const EditProfilePage: NextPage = () => {
             label={t("profile:formLabels.username.label")}
             placeholder={t("profile:formLabels.username.placeholder")}
             {...form.getInputProps("username")}
+          />
+          <Textarea
+            label={t("profile:formLabels.bio.label")}
+            placeholder={t("profile:formLabels.bio.placeholder")}
+            {...form.getInputProps("bio")}
           />
           <Group>
             <Button
