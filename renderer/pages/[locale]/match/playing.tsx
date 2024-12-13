@@ -230,7 +230,7 @@ const PlayingPage: NextPage = () => {
       throwDetails:
         isWinner && newScoreLeft === 0
           ? matchRound
-          : filledThrowDetails.slice(0, THROWS_PER_ROUND),
+          : CURRENT_MATCH_ROUND.slice(0, THROWS_PER_ROUND),
     };
     const updatedCurrentPlayer: Player = {
       ...currentPlayer,
