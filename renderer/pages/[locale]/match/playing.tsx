@@ -61,7 +61,7 @@ import { useElapsedTime } from "use-elapsed-time";
 import { modals } from "@mantine/modals";
 import addMatchToDatabase from "@/lib/db/matches/addMatch";
 import getFirstNineAverage from "@/lib/playing/stats/getFirstNineAverage";
-import isBust from "@/lib/playing/stats/isBust";
+import isBust from "@/lib/playing/game/isBust";
 
 const PlayingPage: NextPage = () => {
   const theme = useMantineTheme();
