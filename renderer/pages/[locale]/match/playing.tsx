@@ -62,6 +62,7 @@ import { modals } from "@mantine/modals";
 import addMatchToDatabase from "@/lib/db/matches/addMatch";
 import getFirstNineAverage from "@/lib/playing/stats/getFirstNineAverage";
 import isBust from "@/lib/playing/game/isBust";
+import { MISSED_THROW } from "@/lib/playing/game/contants";
 
 const PlayingPage: NextPage = () => {
   const theme = useMantineTheme();
@@ -208,21 +209,12 @@ const PlayingPage: NextPage = () => {
       totalRoundScore
     );
 
-    const emptyRoundData: DartThrow = {
-      dartboardZone: 0,
-      isBullseye: false,
-      isDouble: false,
-      isMissed: true,
-      isOuterBull: false,
-      isTriple: false,
-      score: 0,
-    };
-
-    const filledThrowDetails = [
+    const CURRENT_MATCH_ROUND = [
       ...matchRound,
+      // Fill any remaining slots with empty throws.
       ...Array.from(
         { length: THROWS_PER_ROUND - matchRound.length },
-        () => emptyRoundData
+        () => MISSED_THROW
       ),
     ];
 
