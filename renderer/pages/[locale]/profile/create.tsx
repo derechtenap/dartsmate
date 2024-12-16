@@ -5,6 +5,7 @@ import {
   Button,
   CheckIcon,
   ColorSwatch,
+  Container,
   DefaultMantineColor,
   FileButton,
   Group,
@@ -21,7 +22,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useTranslation } from "next-i18next";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/router";
 import type { Profile } from "types/profile";
@@ -42,6 +43,9 @@ import log from "electron-log/renderer";
 import addProfileToDatabase from "@/lib/db/profiles/addProfile";
 import { notifications } from "@mantine/notifications";
 import formatLocalizedRoute from "utils/navigation/formatLocalizedRoute";
+import getWebcamDevices from "hooks/getWebcamDevices";
+import { modals } from "@mantine/modals";
+import Webcam from "react-webcam";
 
 const CreateProfilePage: NextPage = () => {
   const params = useSearchParams();
@@ -177,6 +181,56 @@ const CreateProfilePage: NextPage = () => {
         });
       });
   };
+
+  const { webcamDevices } = getWebcamDevices();
+
+  const webcamRef = useRef<Webcam>(null);
+  const capture = useCallback(() => {
+    const imageBlob = webcamRef?.current?.getScreenshot();
+
+    if (imageBlob) {
+      form.setValues({ avatarImage: imageBlob });
+      modals.closeAll();
+
+      notifications.show({
+        title: t("profile:notifications.TakeWebcamImageSuccessTitle"),
+        message: t("profile:notifications.TakeWebcamImageSuccessText"),
+      });
+      return;
+    }
+
+    notifications.show({
+      title: t("profile:notifications.TakeWebcamImageErrorTitle"),
+      message: t("profile:notifications.TakeWebcamImageErrorText"),
+    });
+  }, [webcamRef]);
+
+  const handleWebcamModal = () => {
+    modals.open({
+      title: t("profile:modalTakeAvatarWithWebcamTitle"),
+      children: (
+        <Container>
+          <Webcam
+            audio={false}
+            ref={webcamRef}
+            screenshotFormat="image/jpeg"
+            videoConstraints={{
+              facingMode: "user",
+            }}
+          />
+          <Text>
+            {t("profile:modalTakeAvatarWithWebcamDeviceInfoLabel", {
+              DEVICE_NAME: webcamDevices[0].label,
+            })}
+            - {webcamDevices[0].label}
+          </Text>
+          <Button onClick={capture}>Capture photo</Button>
+        </Container>
+      ),
+      fullScreen: true,
+    });
+  };
+
   return (
     <OnlyControlsLayout>
       <Box component="form" h={pageHeight} onSubmit={(e) => handleSubmit(e)}>
@@ -243,8 +297,9 @@ const CreateProfilePage: NextPage = () => {
               />
               <Group justify="center" mt="lg">
                 <Button
-                  disabled
+                  disabled={webcamDevices.length === 0}
                   leftSection={<IconCamera stroke={1.5} />}
+                  onClick={() => handleWebcamModal()}
                   variant="default"
                 >
                   {t("profile:webcam")}
